@@ -12,10 +12,10 @@ public class OriginalPopulationModel implements PopulationModel {
 	}
 
 	@Override
-	public void switchGenerations() {
+	public void switchGenerations(ArrayList<Agent> agents) {
 		
 		previousGeneration = currentGeneration;
-		currentGeneration = new ArrayList<Agent>();
+		currentGeneration = agents;
 		
 	}
 
@@ -52,9 +52,38 @@ public class OriginalPopulationModel implements PopulationModel {
 	}
 
 	@Override
+	public ArrayList<Agent> getAncestors(Agent agent){
+		return getNeighbours(agent, 2);
+	}
+	
+	@Override
 	public ArrayList<Agent> getAncestors(Agent agent, int distance) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		int location = currentGeneration.indexOf(agent);
+
+		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
+		
+		retValAgents.add(previousGeneration.get(location));
+		
+		for(int i = 1; i <= distance; i++){
+
+			int neighbour1 = location - i;
+			int neighbour2 = location + i;
+			
+			if(neighbour1 < 0){
+				neighbour1 = currentGeneration.size() + neighbour1;
+			}
+			
+			if(neighbour2 >= currentGeneration.size()){
+				neighbour2 = neighbour2 - currentGeneration.size();
+			}
+			
+			retValAgents.add(previousGeneration.get(neighbour1));
+			retValAgents.add(previousGeneration.get(neighbour2));
+			
+		}
+
+		return retValAgents;
 	}
 	
 	public static void main(String[] args){
@@ -65,9 +94,11 @@ public class OriginalPopulationModel implements PopulationModel {
 			agents.add(new Agent(i));
 		}
 		
-		OriginalPopulationModel test = new OriginalPopulationModel(agents);
 		
-		ArrayList<Agent> neighbours = test.getNeighbours(agents.get(196), 5);
+		OriginalPopulationModel test = new OriginalPopulationModel(agents);
+		test.switchGenerations(agents);
+		
+		ArrayList<Agent> neighbours = test.getAncestors(agents.get(99), 3);
 		
 		for(Agent agent : neighbours){
 			System.out.println("Agent " + agent.id);
