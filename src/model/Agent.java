@@ -13,9 +13,11 @@ public class Agent {
 	public ArrayList<allele> chromosome;
 	public int learningResource;
 	public int fitness;
+	public int id;
 	//public ILanguage;
 	
-	public Agent() {
+	public Agent(int id) {
+		this.id = id;
 		chromosome = new ArrayList<allele>();
 		learningResource = DEFAULT_LEARNING_RESOURCE;
 		fitness = DEFAULT_FITNESS;
