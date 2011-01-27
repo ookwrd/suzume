@@ -1,3 +1,4 @@
+package model;
 import java.util.ArrayList;
 
 
@@ -6,8 +7,8 @@ public class OriginalPopulationModel implements PopulationModel {
 	private ArrayList<Agent> previousGeneration = new ArrayList<Agent>();
 	private ArrayList<Agent> currentGeneration = new ArrayList<Agent>();
 	
-	public OriginalPopulationModel(int size){
-		
+	public OriginalPopulationModel(ArrayList<Agent> agents){
+		currentGeneration = agents;
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class OriginalPopulationModel implements PopulationModel {
 		
 		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
 		
-		for(int i = 1; i < distance; i++){
+		for(int i = 1; i <= distance; i++){
 			int neighbour1 = location - i;
 			int neighbour2 = location + i;
 			
@@ -39,7 +40,7 @@ public class OriginalPopulationModel implements PopulationModel {
 				neighbour1 = currentGeneration.size() + neighbour1;
 			}
 			
-			if(neighbour2 < currentGeneration.size()){
+			if(neighbour2 >= currentGeneration.size()){
 				neighbour2 = neighbour2 - currentGeneration.size();
 			}
 			
@@ -56,5 +57,20 @@ public class OriginalPopulationModel implements PopulationModel {
 		return null;
 	}
 	
-	
+	public static void main(String[] args){
+		
+		ArrayList<Agent> agents = new ArrayList<Agent>();
+		
+		for(int i = 1; i <= 200; i++){
+			agents.add(new Agent(i));
+		}
+		
+		OriginalPopulationModel test = new OriginalPopulationModel(agents);
+		
+		ArrayList<Agent> neighbours = test.getNeighbours(agents.get(196), 5);
+		
+		for(Agent agent : neighbours){
+			System.out.println("Agent " + agent.id);
+		}
+	}
 }
