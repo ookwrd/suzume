@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.Random;
 
 import model.World.Allele;
 
@@ -19,15 +20,19 @@ public class Agent {
 	public Agent(int id) {
 		this.id = id;
 		chromosome = new ArrayList<Allele>();
-		for (int i = 0; i < chromosome.size(); i++) {
+		for (int i = 0; i < chromosome.size(); i++) { // all alleles are initially set to # i.e. the null value 
 			chromosome.set(i, Allele.NULL);
 		}	
 		learningResource = DEFAULT_LEARNING_RESOURCE;
 		fitness = DEFAULT_FITNESS;
 	}
 	
+	
 	public Utterance utter() {
-		Utterance u = new Utterance();
+		int index = random(chromosome.size());
+		Allele value;
+		if (random()) value = Allele.ONE; else value = Allele.ZERO;
+		Utterance u = new Utterance(index, value);
 		return u;
 	}
 	
@@ -58,5 +63,34 @@ public class Agent {
 		//TODO
 	}
 	
+	/**
+	 * Return a random integer r such that 0 <= r <= limit
+	 * 
+	 * @param limit
+	 */
+	public static int random(int limit) {
+		Random r = new Random(); //TODO extract to a new class
+		return r.nextInt() % (limit+1);
+	}
+	
+	/**
+	 * Return a random boolean
+	 * 
+	 */
+	public static boolean random() {
+		return (random(1) == 0); 
+	}
+	
+	public static void main(String[] args) {
+		
+		// quick test for random()
+		double a = 0;
+		double b = 0;
+		for (int i = 0; i < 20000000; i++) {
+			if (random()) a++; else b++;
+		}
+		System.out.println(a/10000000+" -- "+b/10000000);
+		
+	}
 	
 }
