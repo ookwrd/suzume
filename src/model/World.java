@@ -1,10 +1,22 @@
 package model;
 public class World {
 
-	public enum allele {
+	public enum Allele {
 		ZERO, ONE, NULL;
 	}
-
+	
+	public void learn(Agent teacher, Agent learner) {
+		//TODO
+	}
+	
+	public void communicate(Agent agent1, Agent agent2) {
+		//TODO
+	}
+	
+	public void reproduce() {
+		//TODO
+	}
+	
 	/**
 	 * @param args
 	 */
