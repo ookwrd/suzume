@@ -4,9 +4,12 @@ import model.World.*;
 
 public class Utterance {
 
-	public Utterance() {
-		int index;
-		//Allele;
+	int index;
+	Allele value;
+	
+	public Utterance(int index, Allele value) {
+		this.index = index;
+		this.value = value;
 	}
 
 }
