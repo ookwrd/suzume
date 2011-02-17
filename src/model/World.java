@@ -22,6 +22,18 @@ public class World {
 		populationModel = new OriginalPopulationModel(initialPopulation);
 	}
 	
+	public void runLearning() {
+		
+		ArrayList<Agent> currentPopulation = populationModel.getCurrentGeneration();
+		/*for (Agent agent : currentPopulation) {
+			for (int i = 0; i < 5; i++) {
+				Agent ancestor = populationModel.getRandomAgentFrom(populationModel.getAncestors(agent));
+			}
+		}*/
+		
+		
+	}
+	
 	public void learn(Agent teacher, Agent learner) {
 		//TODO
 	}
@@ -50,6 +62,20 @@ public class World {
 	 */
 	private Agent createAgent() {
 		return new Agent(nextAgentID++);
+	}
+	
+	/**
+	 * Return n agents at random from a list of agents
+	 * 
+	 * @param agents
+	 * @return
+	 */
+	public static ArrayList<Agent> getRandomAgentFrom(ArrayList<Agent> agents) {
+		ArrayList<Agent> retAgents = new ArrayList();
+		
+		//for
+		//	agents.get
+		return agents;
 	}
 	
 	/**

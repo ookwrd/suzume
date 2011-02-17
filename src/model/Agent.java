@@ -8,8 +8,9 @@ import model.World.Allele;
 
 public class Agent {
 	
-	private static final int DEFAULT_LEARNING_RESOURCE = 24;
-	private static final int DEFAULT_FITNESS = 1;
+	private static final int LEARNING_RESOURCE = 24;
+	private static final int FITNESS = 1;
+	private static final int CHROMOSOME_SIZE = 12;
 	
 	public ArrayList<Allele> chromosome;
 	public int learningResource;
@@ -19,12 +20,12 @@ public class Agent {
 	
 	public Agent(int id) {
 		this.id = id;
-		chromosome = new ArrayList<Allele>();
+		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < chromosome.size(); i++) { // all alleles are initially set to # i.e. the null value 
 			chromosome.set(i, Allele.NULL);
 		}	
-		learningResource = DEFAULT_LEARNING_RESOURCE;
-		fitness = DEFAULT_FITNESS;
+		learningResource = LEARNING_RESOURCE;
+		fitness = FITNESS;
 	}
 	
 	
