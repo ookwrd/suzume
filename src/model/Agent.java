@@ -82,6 +82,14 @@ public class Agent {
 		return (random(1) == 0); 
 	}
 	
+	public int getFitness(){
+		return fitness;
+	}
+	
+	public void setFitness(int fitness){
+		this.fitness = fitness;
+	}
+	
 	public static void main(String[] args) {
 		
 		// quick test for random()

@@ -2,44 +2,74 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * Population model corresponding to a cyclical distribution of agents as seen in:
+ * Relaxation of selection, Niche Construction, and the Baldwin Eﬀect in Language 
+ * Evolution - Hajime Yamauchi & Takashi Hashimoto
+ * 
+ * @author Luke McCrohon
+ *
+ */
 public class OriginalPopulationModel implements PopulationModel {
 
 	private ArrayList<Agent> previousGeneration = new ArrayList<Agent>();
 	private ArrayList<Agent> currentGeneration = new ArrayList<Agent>();
 
-	public OriginalPopulationModel(ArrayList<Agent> agents) {
-		currentGeneration = agents;
+	/**
+	 * Create new population with the specified agents as the currentGeneration.
+	 * 
+	 * @param agents
+	 */
+	public OriginalPopulationModel(ArrayList<Agent> currentGeneration) {
+		this.currentGeneration = currentGeneration;
+		previousGeneration = new ArrayList<Agent>();
+	}
+	
+	/**
+	 * Create new population with the specified agents as the currentGeneration and previousGeneration.
+	 * 
+	 * @param agents
+	 */
+	public OriginalPopulationModel(ArrayList<Agent> currentGeneration, ArrayList<Agent> previousGeneration) {
+		this.currentGeneration = currentGeneration;
+		this.previousGeneration = previousGeneration;
 	}
 
 	@Override
-	public void switchGenerations(ArrayList<Agent> newAgents) {
+	public void switchGenerations(ArrayList<Agent> newGeneration) {
 
 		previousGeneration = currentGeneration;
-		currentGeneration = newAgents;
+		currentGeneration = newGeneration;
 
 	}
 
 	@Override
-	public ArrayList<Agent> getNeighbours(Agent agent) {
+	public ArrayList<Agent> getNeighbors(Agent agent) {
 
-		return getNeighbours(agent, 1);
+		return getNeighbors(agent, 1);
 	}
 
+	/**
+	 * 
+	 * size of returnValue = distance*2 
+	 * 
+	 */
 	@Override
-	public ArrayList<Agent> getNeighbours(Agent agent, int distance) {
+	public ArrayList<Agent> getNeighbors(Agent agent, int distance) {
 
 		int location = currentGeneration.indexOf(agent);
 
 		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
 
 		for (int i = 1; i <= distance; i++) {
+			//Add pair of agents distance i from the central agent
 			int neighbour1 = location - i;
 			int neighbour2 = location + i;
 
+			//wrap around ends of arrays
 			if (neighbour1 < 0) {
 				neighbour1 = currentGeneration.size() + neighbour1;
 			}
-
 			if (neighbour2 >= currentGeneration.size()) {
 				neighbour2 = neighbour2 - currentGeneration.size();
 			}
@@ -53,9 +83,13 @@ public class OriginalPopulationModel implements PopulationModel {
 
 	@Override
 	public ArrayList<Agent> getAncestors(Agent agent) {
-		return getNeighbours(agent, 2);
+		return getAncestors(agent, 0);
 	}
 
+	/**
+	 * 
+	 * size of return = agents*2 + 1
+	 */
 	@Override
 	public ArrayList<Agent> getAncestors(Agent agent, int distance) {
 
@@ -63,17 +97,19 @@ public class OriginalPopulationModel implements PopulationModel {
 
 		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
 
+		//add the ancestor at the same point as the specified agent
 		retValAgents.add(previousGeneration.get(location));
 
 		for (int i = 1; i <= distance; i++) {
-
+			//Add pair of agents distance i from the central agent
+			
 			int neighbour1 = location - i;
 			int neighbour2 = location + i;
 
+			//wrap around the end of arrays
 			if (neighbour1 < 0) {
 				neighbour1 = currentGeneration.size() + neighbour1;
 			}
-
 			if (neighbour2 >= currentGeneration.size()) {
 				neighbour2 = neighbour2 - currentGeneration.size();
 			}
