@@ -4,26 +4,39 @@ import java.util.ArrayList;
 
 public class ModelController {
 
+	private static int POPULATION_SIZE = 200;
+	private static int SELECTION_SIZE = 100; //TODO check this as a default value
+	
 	private PopulationModel population;
 	
 	public ModelController(){
 		
+
+		
+		population = new OriginalPopulationModel(getIntialAgents());
+		
+	}
+	
+	private ArrayList<Agent> getIntialAgents(){
+		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 
-		for (int i = 1; i <= 200; i++) {
+		for (int i = 1; i <= POPULATION_SIZE; i++) {
 			agents.add(new Agent(i));
 		}
 		
-		population = new OriginalPopulationModel(agents);
+		return agents;
+	}
+	
+	public void iterateGeneration(){
+		
+		training();
 		
 	}
 	
-	public void singleGeneration(){
-		
-		
-		
-	}
-	
+	/**
+	 * Training and invention phase.
+	 */
 	private void training(){
 		
 		for(Agent agent : population.getCurrentGeneration()){
@@ -34,8 +47,27 @@ public class ModelController {
 		
 	}
 	
-	private void calculateFitness(){
+	/**
+	 * Communication Phase (calculates fitness)
+	 */
+	private void communication(){
 		
+	}
+	
+	/**
+	 * Selection and construction of the new generation.
+	 * 
+	 * @return
+	 */
+	private ArrayList<Agent> selection(){
+		
+		ArrayList<Agent> selected = select(SELECTION_SIZE, population.getCurrentGeneration());
+		
+		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
+		
+		
+		
+		return null;
 	}
 	
 	/**
