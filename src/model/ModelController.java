@@ -2,8 +2,42 @@ package model;
 
 import java.util.ArrayList;
 
-public class Selector {
+public class ModelController {
 
+	private PopulationModel population;
+	
+	public ModelController(){
+		
+		ArrayList<Agent> agents = new ArrayList<Agent>();
+
+		for (int i = 1; i <= 200; i++) {
+			agents.add(new Agent(i));
+		}
+		
+		population = new OriginalPopulationModel(agents);
+		
+	}
+	
+	public void singleGeneration(){
+		
+		
+		
+	}
+	
+	private void training(){
+		
+		for(Agent agent : population.getCurrentGeneration()){
+			ArrayList<Agent> teachers = population.getAncestors(agent, 2);
+			
+			
+		}
+		
+	}
+	
+	private void calculateFitness(){
+		
+	}
+	
 	/**
 	 * TODO optimize this class
 	 * TODO allow ability to disable the selection of multiples
@@ -45,7 +79,7 @@ public class Selector {
 	
 	public static void main(String[] args){
 		
-		Selector selector = new Selector();
+		ModelController selector = new ModelController();
 		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 
