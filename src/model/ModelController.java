@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 
 public class ModelController {
+	
+	private static int GENERATION_COUNT = 2000; 
 
 	private static int POPULATION_SIZE = 200;
 	private static int SELECTION_SIZE = 100; //TODO check this as a default value
@@ -28,9 +30,25 @@ public class ModelController {
 		return agents;
 	}
 	
-	public void iterateGeneration(){
+	public void runSimulation(){
+		
+		for(int i = 0; i < GENERATION_COUNT; i++){
+			
+			iterateGeneration();
+			
+		}
+	}
+	
+	/**
+	 * Runs a single round of the simulation.
+	 * 
+	 */
+	private void iterateGeneration(){
 		
 		training();
+		communication();
+		
+		population.switchGenerations(selection());
 		
 	}
 	
@@ -52,6 +70,11 @@ public class ModelController {
 	 */
 	private void communication(){
 		
+		for(Agent agent : population.getCurrentGeneration()){
+			ArrayList<Agent> neighboursAgents = population.getNeighbors(agent, 2);
+		
+			
+		}
 	}
 	
 	/**
