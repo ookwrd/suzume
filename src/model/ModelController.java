@@ -112,11 +112,6 @@ public class ModelController {
 				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
 					Utterance utterance = neighbour.getRandomUtterance();
 					
-					System.out.println(agent.grammar.size());
-					System.out.println(utterance.index);
-					System.out.println(agent.grammar.get(utterance.index) == null);
-					System.out.println("hello");
-					
 					//If agent and neighbour agree update fitness.
 					if(!utterance.isNull() && agent.grammar.get(utterance.index) == utterance.value){
 						agent.fitness += 1;
@@ -125,12 +120,6 @@ public class ModelController {
 			}
 			
 		}
-	}
-	
-	public void communicate(Agent agent1, Agent agent2) {
-		//TODO
-		
-		//benefits both speaker and reciever... 
 	}
 	
 	/**
