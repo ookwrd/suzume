@@ -98,8 +98,7 @@ public class Agent {
 	 */
 	public static int random(int limit) {
 		Random r = new Random(); //TODO extract to a new class
-		int retVal = r.nextInt() % (limit+1);
-		if(retVal < 0) System.out.println(limit +" This shouldnt be happening" + retVal);
+		int retVal = Math.abs(r.nextInt() % (limit+1));
 		return retVal;
 	}
 	
