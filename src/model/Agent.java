@@ -31,7 +31,7 @@ public class Agent {
 		}
 		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++){
-			grammar.add(/*Allele.NULL*/chromosome.get(i));//TODO should set blank
+			grammar.add(Allele.NULL);
 		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = FITNESS;
@@ -65,7 +65,7 @@ public class Agent {
 		
 		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int j = 0; j < CHROMOSOME_SIZE; j++){
-			grammar.add(/*Allele.NULL*/chromosome.get(j));//TODO should set blank
+			grammar.add(Allele.NULL);
 		}
 		
 		//Mutation
@@ -93,13 +93,15 @@ public class Agent {
 	 */
 	public void invent() {
 		
-		while(!grammar.contains(Allele.NULL) && learningResource > 0){
+		while(grammar.contains(Allele.NULL) && learningResource > 0){
+			
 			learningResource--;
 			if(Math.random() < INVENTION_PROBABILITY){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
 				for(int i = 0; i < grammar.size(); i++){
+					
 					Allele allele = grammar.get(i);
 					if(allele == Allele.NULL){
 						nullIndexes.add(i);
