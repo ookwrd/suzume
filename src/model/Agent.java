@@ -1,15 +1,14 @@
 package model;
 import java.util.ArrayList;
 import java.util.Random;
-
 import model.ModelController.Allele;
-
-
-
 
 public class Agent {
 	
 	private static final int LEARNING_RESOURCE = 24;
+	private static final int MATCHING_LEARNING_COST = 1;
+	private static final int NON_MATCHING_LEARNING_COST = 4;
+	
 	private static final int FITNESS = 1;
 	private static final int CHROMOSOME_SIZE = 12;
 	
@@ -122,7 +121,7 @@ public class Agent {
 	 * @param learner the agent being taught
 	 */
 	public void teach(Agent learner) {
-		//TODO
+		learner.learnUtterance(getRandomUtterance());
 	}
 	
 	/**
@@ -133,7 +132,20 @@ public class Agent {
 	 * @param utterance the utterance taught
 	 */
 	public void learnUtterance(Utterance u) {
-		//TODO
+		
+		//agents agree on value or NULL utterance
+		if(u.value == grammar.get(u.index) || u.value == Allele.NULL){
+			return;
+		}
+		
+		if(u.value == chromosome.get(u.index)){//Matches this agents UG
+			grammar.set(u.index, u.value);
+			learningResource -= MATCHING_LEARNING_COST;
+		}else{//Doesn't match this agents UG
+			grammar.set(u.index, u.value);
+			learningResource -= NON_MATCHING_LEARNING_COST;
+		}
+		
 	}
 	
 	/**
