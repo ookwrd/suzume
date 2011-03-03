@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 2000; 
-	
-	private static final int POPULATION_SIZE = 200;
+	private static final int GENERATION_COUNT = 200; 
+	private static final int POPULATION_SIZE = 50; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
@@ -37,10 +36,18 @@ public class ModelController {
 		return agents;
 	}
 	
+	/**
+	 * Creates an agent with a new ID and a random genome.
+	 * 
+	 * @return
+	 */
 	private Agent createRandomAgent(){
 		return new Agent(nextAgentID++);
 	}
 	
+	/**
+	 * Main method to run the simulation once constructed. 
+	 */
 	public void runSimulation(){
 		
 		for(int i = 0; i < GENERATION_COUNT; i++){
@@ -49,14 +56,15 @@ public class ModelController {
 	}
 	
 	/**
-	 * Runs a single round of the simulation.
-	 * 
+	 * Runs a single round of the simulation. 
 	 */
 	private void iterateGeneration(){
 		
 		training();
 		
 		communication();
+		
+		gatherStatistics();
 		
 		population.switchGenerations(selection());
 		
@@ -67,7 +75,10 @@ public class ModelController {
 	 */
 	private void training(){
 		
+		//for each agent
 		for(Agent learner : population.getCurrentGeneration()){
+			
+			//get its ancestors (teachers)
 			ArrayList<Agent> teachers = population.getAncestors(learner, 2);
 			
 			for(int i = 0; i < CRITICAL_PERIOD; i++){
@@ -178,38 +189,32 @@ public class ModelController {
 		return toReturn;
 	}
 	
+	/**
+	 * Gather statistics on the population at this point.
+	 */
+	private void gatherStatistics(){
+		//TODO
+	}
+	
 	public static void main(String[] args){
 		
 		//Test selection
 		ModelController selector = new ModelController();
 		
-		/*for( Agent agent :selector.population.getCurrentGeneration()){
-			
-			for(int i = 0; i < agent.grammar.size(); i++){
-				
-				agent.grammar.set(i, Allele.ZERO);
-				
-			}
-			
-		}*/
-		
-		//selector.communication();
 		selector.runSimulation();
 		
 		selector.training();
 		selector.communication();
 		
+		System.out.println("Grammars:");
 		for(Agent agent : selector.population.getCurrentGeneration()){
 			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.grammar);
 		}
-		
-		
-		/*ArrayList<Agent> results = selector.selection();
-
-		System.out.println("Size: " + results.size());
-		
-		for (Agent agent : results) {
-			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
-		}*/
+		System.out.println();
+		System.out.println("Genomes:");
+		for(Agent agent : selector.population.getCurrentGeneration()){
+			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.chromosome);
+		}
+	
 	}
 }
