@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 200; 
-	private static final int POPULATION_SIZE = 50; //Should be 200
+	private static final int GENERATION_COUNT = 2000; 
+	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
