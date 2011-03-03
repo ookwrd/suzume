@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 200; 
-	private static final int POPULATION_SIZE = 10; //Should be 200
+	private static final int GENERATION_COUNT = 5000; 
+	private static final int POPULATION_SIZE = 100; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
@@ -20,6 +20,7 @@ public class ModelController {
 	private ArrayList<Integer> maxFitnesses = new ArrayList<Integer>();
 	private ArrayList<Integer> learningIntensities = new ArrayList<Integer>();
 	private ArrayList<Integer> geneGrammarMatches = new ArrayList<Integer>();
+	private ArrayList<Integer> numberNulls = new ArrayList<Integer>();
 	
 	private int nextAgentID = 0; // keeps count of all the next agents from this world
 	private PopulationModel population;
@@ -206,6 +207,8 @@ public class ModelController {
 		int learningIntensity = 0;
 		int totalFitness = 0;
 		int genomeGrammarMatch = 0;
+		int numberNull = 0;
+		
 		for(Agent agent : population.getCurrentGeneration()){
 			totalFitness += agent.fitness;
 			learningIntensity += agent.learningResource;
@@ -214,14 +217,18 @@ public class ModelController {
 			ArrayList<Allele> grammarArrayList = agent.grammar;
 			for(int i = 0; i < genomeArrayList.size(); i++){
 				genomeGrammarMatch += (genomeArrayList.get(i) == grammarArrayList.get(i)?1:0);
+				
+				if(grammarArrayList.get(i) == Allele.NULL){
+					numberNull++;
+				}
 			}
 		}
 		
 		maxFitnesses.add(totalFitness);
 		learningIntensities.add(learningIntensity);
 		geneGrammarMatches.add(genomeGrammarMatch);
+		numberNulls.add(numberNull);
 		
-		//TODO
 	}
 	
 	public static void main(String[] args){
@@ -245,24 +252,10 @@ public class ModelController {
 
 	
 		System.out.println();
-		System.out.println("Fitnesses");
-		for(Integer fitnessInteger : selector.maxFitnesses){
-			System.out.println(fitnessInteger);
+		System.out.println("Fitnesses\tlearningResc\tGeneGrammarMatch\tNulls");
+		for(int i = 0; i < selector.learningIntensities.size(); i++){
+			System.out.println(selector.maxFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i));
 		}
-		
-		
-		System.out.println();
-		System.out.println("Learning intensity");
-		
-		for(Integer learningIntensityInteger : selector.learningIntensities){
-			System.out.println(learningIntensityInteger);
-		}
-		
-		System.out.println();
-		System.out.println("Genome Grammar match:");
-		
-		for(Integer genomeGrammarMatch : selector.geneGrammarMatches){
-			System.out.println(genomeGrammarMatch);
-		}
+
 	}
 }

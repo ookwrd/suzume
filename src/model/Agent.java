@@ -141,6 +141,12 @@ public class Agent {
 			grammar.set(u.index, u.value);
 			learningResource -= MATCHING_LEARNING_COST;
 		}else{//Doesn't match this agents UG
+			//TODO what do we do if we can't afford this anymore? Check with jimmy
+			if(learningResource < NON_MATCHING_LEARNING_COST){
+				learningResource = 0;
+				return;
+			}
+			
 			grammar.set(u.index, u.value);
 			learningResource -= NON_MATCHING_LEARNING_COST;
 		}
