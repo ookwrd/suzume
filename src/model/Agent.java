@@ -96,10 +96,9 @@ public class Agent {
 	 * 
 	 * @param limit
 	 */
-	public static int random(int limit) {
+	public static int random(int limit) { //TODO clean this up.
 		Random r = new Random(); //TODO extract to a new class
-		int retVal = Math.abs(r.nextInt() % (limit+1));
-		return retVal;
+		return Math.abs(r.nextInt() % (limit+1));
 	}
 	
 	/**
