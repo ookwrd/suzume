@@ -23,12 +23,12 @@ public class Agent {
 	public Agent(int id) {
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
-		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to # i.e. the null value 
-			chromosome.add(Allele.NULL);//TODO these should be set to 0 or 1 randomly
+		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to a random value initially
+			chromosome.add(random()?Allele.ZERO:Allele.ONE);
 		}
 		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++){
-			grammar.add(Allele.NULL);
+			grammar.add(/*Allele.NULL*/chromosome.get(i));
 		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = FITNESS;
