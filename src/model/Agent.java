@@ -2,7 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
-import model.World.Allele;
+import model.ModelController.Allele;
+
 
 
 
@@ -25,7 +26,7 @@ public class Agent {
 		for (int i = 0; i < chromosome.size(); i++) { // all alleles are initially set to # i.e. the null value 
 			chromosome.set(i, Allele.NULL);//TODO these should be set to 0 or 1 randomly
 		}
-		grammar = new ArrayList<World.Allele>(CHROMOSOME_SIZE);
+		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < grammar.size(); i++){
 			grammar.set(i, Allele.NULL);
 		}

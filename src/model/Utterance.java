@@ -1,6 +1,7 @@
 package model;
 
-import model.World.*;
+import model.ModelController.Allele;
+
 
 public class Utterance {
 
