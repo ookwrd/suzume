@@ -9,7 +9,6 @@ public class Agent {
 	private static final int MATCHING_LEARNING_COST = 1;
 	private static final int NON_MATCHING_LEARNING_COST = 4;
 	
-	private static final int FITNESS = 1;
 	private static final int CHROMOSOME_SIZE = 12;
 	
 	private static final double MUTATION_RATE = 0.00025;
@@ -33,7 +32,7 @@ public class Agent {
 			grammar.add(Allele.NULL);
 		}
 		learningResource = LEARNING_RESOURCE;
-		fitness = FITNESS;
+		fitness = 0;
 	}
 	
 	/**
@@ -48,7 +47,7 @@ public class Agent {
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		learningResource = LEARNING_RESOURCE;
-		fitness = FITNESS;
+		fitness = 0;
 		
 		//Crossover
 		int crossoverPoint = (int)(Math.random()*CHROMOSOME_SIZE);
