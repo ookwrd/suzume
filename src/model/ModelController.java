@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 2000; 
-	private static final int POPULATION_SIZE = 200; //Should be 200
+	private static final int GENERATION_COUNT = 200; 
+	private static final int POPULATION_SIZE = 10; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
@@ -16,16 +16,25 @@ public class ModelController {
 		ZERO, ONE, NULL;
 	}
 	
-	private int nextAgentID = 0; // keeps count of all the next agents from this world
+	//statistics
+	private ArrayList<Integer> maxFitnesses = new ArrayList<Integer>();
+	private ArrayList<Integer> learningIntensities = new ArrayList<Integer>();
+	private ArrayList<Integer> geneGrammarMatches = new ArrayList<Integer>();
 	
+	private int nextAgentID = 0; // keeps count of all the next agents from this world
 	private PopulationModel population;
 	
+	private int currentGeneration = 0;
+	
 	public ModelController(){
-		
 		population = new OriginalPopulationModel(createIntialAgents());
-		
 	}
 	
+	/**
+	 * Initialize an initial population of agents.
+	 * 
+	 * @return
+	 */
 	private ArrayList<Agent> createIntialAgents(){
 		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
@@ -50,7 +59,7 @@ public class ModelController {
 	 */
 	public void runSimulation(){
 		
-		for(int i = 0; i < GENERATION_COUNT; i++){
+		for(; currentGeneration < GENERATION_COUNT; currentGeneration++){
 			iterateGeneration();	
 		}
 	}
@@ -117,7 +126,7 @@ public class ModelController {
 			//Communicate with all neighbours
 			for(Agent neighbour : neighbouringAgents){
 				
-				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
+				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){//TODO the devide by 2 and th adjusting neighbour fitness below is a crude fix
 					Utterance utterance = neighbour.getRandomUtterance();
 
 					//If agent and neighbour agree update fitness.
@@ -193,6 +202,25 @@ public class ModelController {
 	 * Gather statistics on the population at this point.
 	 */
 	private void gatherStatistics(){
+		
+		int learningIntensity = 0;
+		int totalFitness = 0;
+		int genomeGrammarMatch = 0;
+		for(Agent agent : population.getCurrentGeneration()){
+			totalFitness += agent.fitness;
+			learningIntensity += agent.learningResource;
+			
+			ArrayList<Allele> genomeArrayList = agent.chromosome; 
+			ArrayList<Allele> grammarArrayList = agent.grammar;
+			for(int i = 0; i < genomeArrayList.size(); i++){
+				genomeGrammarMatch += (genomeArrayList.get(i) == grammarArrayList.get(i)?1:0);
+			}
+		}
+		
+		maxFitnesses.add(totalFitness);
+		learningIntensities.add(learningIntensity);
+		geneGrammarMatches.add(genomeGrammarMatch);
+		
 		//TODO
 	}
 	
@@ -208,13 +236,33 @@ public class ModelController {
 		
 		System.out.println("Grammars:");
 		for(Agent agent : selector.population.getCurrentGeneration()){
-			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.grammar);
+			
+			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness );
+			System.out.println(agent.grammar);
+			System.out.println(agent.chromosome);
+			System.out.println();
 		}
-		System.out.println();
-		System.out.println("Genomes:");
-		for(Agent agent : selector.population.getCurrentGeneration()){
-			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.chromosome);
-		}
+
 	
+		System.out.println();
+		System.out.println("Fitnesses");
+		for(Integer fitnessInteger : selector.maxFitnesses){
+			System.out.println(fitnessInteger);
+		}
+		
+		
+		System.out.println();
+		System.out.println("Learning intensity");
+		
+		for(Integer learningIntensityInteger : selector.learningIntensities){
+			System.out.println(learningIntensityInteger);
+		}
+		
+		System.out.println();
+		System.out.println("Genome Grammar match:");
+		
+		for(Integer genomeGrammarMatch : selector.geneGrammarMatches){
+			System.out.println(genomeGrammarMatch);
+		}
 	}
 }
