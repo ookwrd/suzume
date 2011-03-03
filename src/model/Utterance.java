@@ -12,5 +12,9 @@ public class Utterance {
 		this.index = index;
 		this.value = value;
 	}
+	
+	public boolean isNull(){
+		return value == Allele.NULL;
+	}
 
 }

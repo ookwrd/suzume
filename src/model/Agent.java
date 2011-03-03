@@ -23,15 +23,18 @@ public class Agent {
 	public Agent(int id) {
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
-		for (int i = 0; i < chromosome.size(); i++) { // all alleles are initially set to # i.e. the null value 
-			chromosome.set(i, Allele.NULL);//TODO these should be set to 0 or 1 randomly
+		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to # i.e. the null value 
+			chromosome.add(Allele.NULL);//TODO these should be set to 0 or 1 randomly
 		}
 		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
-		for (int i = 0; i < grammar.size(); i++){
-			grammar.set(i, Allele.NULL);
+		for (int i = 0; i < CHROMOSOME_SIZE; i++){
+			grammar.add(Allele.NULL);
 		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = FITNESS;
+		
+
+		System.out.println(grammar.size());
 	}
 	
 	/**
@@ -95,7 +98,9 @@ public class Agent {
 	 */
 	public static int random(int limit) {
 		Random r = new Random(); //TODO extract to a new class
-		return r.nextInt() % (limit+1);
+		int retVal = r.nextInt() % (limit+1);
+		if(retVal < 0) System.out.println(limit +" This shouldnt be happening" + retVal);
+		return retVal;
 	}
 	
 	/**

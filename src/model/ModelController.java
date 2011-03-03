@@ -10,6 +10,7 @@ public class ModelController {
 	private static final int SELECTION_SIZE = 100; //TODO check this as a default value
 	
 	private static final int BASE_FITNESS = 1;
+	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
 	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
 	
@@ -60,6 +61,7 @@ public class ModelController {
 	private void iterateGeneration(){
 		
 		training();
+		
 		communication();
 		
 		population.switchGenerations(selection());
@@ -78,10 +80,13 @@ public class ModelController {
 				
 				//Get random teacher
 				Agent teacher = teachers.get((int)(Math.random()*teachers.size()));
-				
+	
 				teacher.teach(learner);
+				
+				//TODO break on extinguished learning resource.
 			}
-			
+	
+			//Use leftover learning resource to potentially invent new grammar items.
 			learner.invent();
 		}
 		
@@ -93,11 +98,31 @@ public class ModelController {
 	private void communication(){
 		
 		for(Agent agent : population.getCurrentGeneration()){
-			ArrayList<Agent> neighboursAgents = population.getNeighbors(agent, 2);
+		
+			//TODO this is redundant, as the affect of agent n on n+1 are symetrical. 
+			
+			ArrayList<Agent> neighbouringAgents = population.getNeighbors(agent, 1);
 		
 			//Set the agents fitness to the default base level 
 			agent.fitness = BASE_FITNESS;
 			
+			//Communicate with all neighbours
+			for(Agent neighbour : neighbouringAgents){
+				
+				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
+					Utterance utterance = neighbour.getRandomUtterance();
+					
+					System.out.println(agent.grammar.size());
+					System.out.println(utterance.index);
+					System.out.println(agent.grammar.get(utterance.index) == null);
+					System.out.println("hello");
+					
+					//If agent and neighbour agree update fitness.
+					if(!utterance.isNull() && agent.grammar.get(utterance.index) == utterance.value){
+						agent.fitness += 1;
+					}
+				}
+			}
 			
 		}
 	}
@@ -165,22 +190,29 @@ public class ModelController {
 	
 	public static void main(String[] args){
 		
+		//Test selection
 		ModelController selector = new ModelController();
 		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 
-		for (int i = 1; i <= 200; i++) {
+		for (int i = 1; i <= 100; i++) {
 			Agent toAdd = new Agent(i);
-			toAdd.setFitness(10);
+			//toAdd.setFitness(10);
 			agents.add(toAdd);
 		}
 		
-		ArrayList<Agent> results = selector.select(50, agents);
+		selector.communication();
+		
+		for(Agent agent : selector.population.getCurrentGeneration()){
+			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
+		}
+		
+		/*ArrayList<Agent> results = selector.select(50, agents);
 
 		System.out.println("Size: " + results.size());
 		
 		for (Agent agent : results) {
 			System.out.println("Agent " + agent.id);
-		}
+		}*/
 	}
 }
