@@ -140,6 +140,7 @@ public class ModelController {
 			Agent parent2 = selected.get((int)(Math.random() * selected.size()));
 			
 			newGenerationAgents.add(new Agent(parent1, parent2, nextAgentID++));
+			
 		}
 		
 		return newGenerationAgents;
@@ -199,10 +200,13 @@ public class ModelController {
 			
 		}*/
 		
-		selector.communication();
+		//selector.communication();
+		for(int i = 0; i < 1000; i++){
+			selector.iterateGeneration();
+		}
 		
 		for(Agent agent : selector.population.getCurrentGeneration()){
-			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
+			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.grammar);
 		}
 		
 		/*ArrayList<Agent> results = selector.selection();

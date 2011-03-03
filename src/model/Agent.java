@@ -28,7 +28,7 @@ public class Agent {
 		}
 		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++){
-			grammar.add(/*Allele.NULL*/chromosome.get(i));
+			grammar.add(/*Allele.NULL*/chromosome.get(i));//TODO should set blank
 		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = FITNESS;
@@ -41,11 +41,30 @@ public class Agent {
 	 * @param Parent2
 	 * @param id
 	 */
-	public Agent(Agent parent1, Agent Parent2, int id){
+	public Agent(Agent parent1, Agent parent2, int id){
 		
 		//TODO
+		this.id = id;
+		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
+		learningResource = LEARNING_RESOURCE;
+		fitness = FITNESS;
 		
 		//Crossover
+		int crossoverPoint = (int)(Math.random()*CHROMOSOME_SIZE);
+		int i = 0;
+		while(i < crossoverPoint){
+			chromosome.add(parent1.chromosome.get(i));
+			i++;
+		}
+		while(i < CHROMOSOME_SIZE){
+			chromosome.add(parent2.chromosome.get(i));
+			i++;
+		}
+		
+		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
+		for (int j = 0; j < CHROMOSOME_SIZE; j++){
+			grammar.add(/*Allele.NULL*/chromosome.get(j));//TODO should set blank
+		}
 		
 		//Mutation
 		

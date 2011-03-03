@@ -23,6 +23,12 @@ public class OriginalPopulationModel implements PopulationModel {
 	public OriginalPopulationModel(ArrayList<Agent> currentGeneration) {
 		this.currentGeneration = currentGeneration;
 		previousGeneration = new ArrayList<Agent>();
+		
+		while(previousGeneration.size() < currentGeneration.size()){
+			previousGeneration.add(new Agent(-1));
+		}
+		
+		System.out.println(previousGeneration.size());
 	}
 	
 	/**
