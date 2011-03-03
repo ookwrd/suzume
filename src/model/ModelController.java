@@ -196,9 +196,13 @@ public class ModelController {
 		//selector.communication();
 		selector.runSimulation();
 		
+		selector.training();
+		selector.communication();
+		
 		for(Agent agent : selector.population.getCurrentGeneration()){
 			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.grammar);
 		}
+		
 		
 		/*ArrayList<Agent> results = selector.selection();
 
