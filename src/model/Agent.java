@@ -13,6 +13,8 @@ public class Agent {
 	private static final int FITNESS = 1;
 	private static final int CHROMOSOME_SIZE = 12;
 	
+	private static final double MUTATION_RATE = 0.00025;
+	
 	public ArrayList<Allele> chromosome;
 	public ArrayList<Allele> grammar;
 	
@@ -67,7 +69,11 @@ public class Agent {
 		}
 		
 		//Mutation
-		
+		for(int j = 0; j < CHROMOSOME_SIZE; j++){
+			if(Math.random() < MUTATION_RATE){
+				chromosome.set(j, random()?Allele.ZERO:Allele.ONE);
+			}
+		}
 	}
 	
 	/**
