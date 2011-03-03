@@ -14,6 +14,7 @@ public class Agent {
 	private static final int CHROMOSOME_SIZE = 12;
 	
 	private static final double MUTATION_RATE = 0.00025;
+	private static final double INVENTION_PROBABILITY = 0.01;
 	
 	public ArrayList<Allele> chromosome;
 	public ArrayList<Allele> grammar;
@@ -45,7 +46,6 @@ public class Agent {
 	 */
 	public Agent(Agent parent1, Agent parent2, int id){
 		
-		//TODO
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		learningResource = LEARNING_RESOURCE;
@@ -92,7 +92,26 @@ public class Agent {
 	 * The agent has a probability of 0.01 to turn an empty value to a 0 or a 1   
 	 */
 	public void invent() {
-		//TODO
+		
+		while(!grammar.contains(Allele.NULL) && learningResource > 0){
+			learningResource--;
+			if(Math.random() < INVENTION_PROBABILITY){
+				
+				//Collect indexes of all null elements
+				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
+				for(int i = 0; i < grammar.size(); i++){
+					Allele allele = grammar.get(i);
+					if(allele == Allele.NULL){
+						nullIndexes.add(i);
+					}
+				}
+				
+				//Choose a random null element to invent a new value for
+				Integer index = nullIndexes.get((int)(Math.random()*nullIndexes.size()));
+				
+				grammar.set(index, random()?Allele.ZERO:Allele.ONE);
+			}
+		}
 	}
 	
 	/**
