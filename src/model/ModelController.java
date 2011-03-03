@@ -100,6 +100,7 @@ public class ModelController {
 		for(Agent agent : population.getCurrentGeneration()){
 		
 			//TODO this is redundant, as the affect of agent n on n+1 are symetrical. 
+			//TODO also doesn't match the paper as potential for different utterances used for calculating fitness of agent n and n+1 
 			
 			ArrayList<Agent> neighbouringAgents = population.getNeighbors(agent, 1);
 		
@@ -110,10 +111,10 @@ public class ModelController {
 			for(Agent neighbour : neighbouringAgents){
 				
 				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
-					Utterance utterance = neighbour.getRandomUtterance();
-					
+					Utterance utterance = neighbour.getRandomUtterance();//TODO fix the getRandomUtterance method
+
 					//If agent and neighbour agree update fitness.
-					if(!utterance.isNull() && agent.grammar.get(utterance.index) == utterance.value){
+					if(!utterance.isNull() && (agent.grammar.get(utterance.index) == utterance.value)){
 						agent.fitness += 1;
 					}
 				}
@@ -153,7 +154,7 @@ public class ModelController {
 		//Calculate total fitness of all agents.
 		int totalFitness = 0;
 		for(Agent agent : agents){
-			totalFitness += agent.getFitness();
+			totalFitness += agent.fitness;
 		}
 		
 		//Loop once for each individual
@@ -164,7 +165,7 @@ public class ModelController {
 
 			for(Agent agent : agents){
 				//move the pointer along to the next agents borderline
-				pointer += agent.getFitness();
+				pointer += agent.fitness;
 				
 				//have we gone past the selectionPoint?
 				if(pointer > selectionPoint){
@@ -182,12 +183,14 @@ public class ModelController {
 		//Test selection
 		ModelController selector = new ModelController();
 		
-		ArrayList<Agent> agents = new ArrayList<Agent>();
-
-		for (int i = 1; i <= 100; i++) {
-			Agent toAdd = new Agent(i);
-			//toAdd.setFitness(10);
-			agents.add(toAdd);
+		for( Agent agent :selector.population.getCurrentGeneration()){
+			
+			for(int i = 0; i < agent.grammar.size(); i++){
+				
+				agent.grammar.set(i, Allele.ZERO);
+				
+			}
+			
 		}
 		
 		selector.communication();
