@@ -7,7 +7,6 @@ public class ModelController {
 	private static final int GENERATION_COUNT = 2000; 
 
 	private static final int POPULATION_SIZE = 200;
-	private static final int SELECTION_SIZE = 100; //TODO check this as a default value
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
@@ -24,33 +23,28 @@ public class ModelController {
 	
 	public ModelController(){
 		
-
-		
-		population = new OriginalPopulationModel(getIntialAgents());
+		population = new OriginalPopulationModel(createIntialAgents());
 		
 	}
 	
-	private ArrayList<Agent> getIntialAgents(){
+	private ArrayList<Agent> createIntialAgents(){
 		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
-
 		for (int i = 1; i <= POPULATION_SIZE; i++) {
-			agents.add(getRandomAgent());
+			agents.add(createRandomAgent());
 		}
 		
 		return agents;
 	}
 	
-	private Agent getRandomAgent(){
+	private Agent createRandomAgent(){
 		return new Agent(nextAgentID++);
 	}
 	
 	public void runSimulation(){
 		
 		for(int i = 0; i < GENERATION_COUNT; i++){
-			
-			iterateGeneration();
-			
+			iterateGeneration();	
 		}
 	}
 	
@@ -83,7 +77,9 @@ public class ModelController {
 	
 				teacher.teach(learner);
 				
-				//TODO break on extinguished learning resource.
+				if(learner.learningResource <= 0){
+					break;
+				}
 			}
 	
 			//Use leftover learning resource to potentially invent new grammar items.
@@ -130,17 +126,14 @@ public class ModelController {
 	 */
 	private ArrayList<Agent> selection(){
 		
-		ArrayList<Agent> selected = select(SELECTION_SIZE, population.getCurrentGeneration());
+		ArrayList<Agent> selected = select(POPULATION_SIZE*2, population.getCurrentGeneration());
 		
 		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
-		
+		int i = 0;
 		while(newGenerationAgents.size() < POPULATION_SIZE){
-
-			Agent parent1 = selected.get((int)(Math.random() * selected.size()));
-			Agent parent2 = selected.get((int)(Math.random() * selected.size()));
-			
+			Agent parent1 = selected.get(i++);
+			Agent parent2 = selected.get(i++);
 			newGenerationAgents.add(new Agent(parent1, parent2, nextAgentID++));
-			
 		}
 		
 		return newGenerationAgents;
@@ -201,9 +194,7 @@ public class ModelController {
 		}*/
 		
 		//selector.communication();
-		for(int i = 0; i < 1000; i++){
-			selector.iterateGeneration();
-		}
+		selector.runSimulation();
 		
 		for(Agent agent : selector.population.getCurrentGeneration()){
 			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness + " " + agent.grammar);
