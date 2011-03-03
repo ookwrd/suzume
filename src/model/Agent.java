@@ -32,9 +32,6 @@ public class Agent {
 		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = FITNESS;
-		
-
-		System.out.println(grammar.size());
 	}
 	
 	/**
@@ -54,13 +51,15 @@ public class Agent {
 		
 	}
 	
-	
+	/**
+	 * Returns a random utterance from this agents grammar.
+	 * 
+	 * @return
+	 */
 	public Utterance getRandomUtterance() {
-		int index = random(chromosome.size());
-		Allele value;
-		if (random()) value = Allele.ONE; else value = Allele.ZERO;
-		Utterance u = new Utterance(index, value);
-		return u;
+		int index = random(chromosome.size() - 1);
+		Allele value = grammar.get(index);
+		return new Utterance(index, value);
 	}
 	
 	/**
@@ -107,14 +106,6 @@ public class Agent {
 	 */
 	public static boolean random() {
 		return (random(1) == 0); 
-	}
-	
-	public int getFitness(){
-		return fitness;
-	}
-	
-	public void setFitness(int fitness){
-		this.fitness = fitness;
 	}
 	
 	public static void main(String[] args) {
