@@ -189,7 +189,7 @@ public class ModelController {
 		//Test selection
 		ModelController selector = new ModelController();
 		
-		for( Agent agent :selector.population.getCurrentGeneration()){
+		/*for( Agent agent :selector.population.getCurrentGeneration()){
 			
 			for(int i = 0; i < agent.grammar.size(); i++){
 				
@@ -197,16 +197,20 @@ public class ModelController {
 				
 			}
 			
-		}
+		}*/
 		
 		selector.communication();
 		
-		ArrayList<Agent> results = selector.selection();
+		for(Agent agent : selector.population.getCurrentGeneration()){
+			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
+		}
+		
+		/*ArrayList<Agent> results = selector.selection();
 
 		System.out.println("Size: " + results.size());
 		
 		for (Agent agent : results) {
 			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
-		}
+		}*/
 	}
 }
