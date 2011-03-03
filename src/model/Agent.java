@@ -18,7 +18,6 @@ public class Agent {
 	public int learningResource;
 	public int fitness;
 	public int id;
-	//public ILanguage;
 	
 	public Agent(int id) {
 		this.id = id;
@@ -52,7 +51,7 @@ public class Agent {
 	}
 	
 	
-	public Utterance utter() {
+	public Utterance getRandomUtterance() {
 		int index = random(chromosome.size());
 		Allele value;
 		if (random()) value = Allele.ONE; else value = Allele.ZERO;
@@ -61,6 +60,7 @@ public class Agent {
 	}
 	
 	/**
+	 * Use the remainder of the learning resource to potentially invent parts of the grammar.
 	 * The agent has a probability of 0.01 to turn an empty value to a 0 or a 1   
 	 */
 	public void invent() {
