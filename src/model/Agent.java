@@ -13,6 +13,8 @@ public class Agent {
 	private static final int CHROMOSOME_SIZE = 12;
 	
 	public ArrayList<Allele> chromosome;
+	public ArrayList<Allele> grammar;
+	
 	public int learningResource;
 	public int fitness;
 	public int id;
@@ -22,10 +24,31 @@ public class Agent {
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < chromosome.size(); i++) { // all alleles are initially set to # i.e. the null value 
-			chromosome.set(i, Allele.NULL);
-		}	
+			chromosome.set(i, Allele.NULL);//TODO these should be set to 0 or 1 randomly
+		}
+		grammar = new ArrayList<World.Allele>(CHROMOSOME_SIZE);
+		for (int i = 0; i < grammar.size(); i++){
+			grammar.set(i, Allele.NULL);
+		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = FITNESS;
+	}
+	
+	/**
+	 * Sexual reproduction of a new agent.
+	 * 
+	 * @param parent1
+	 * @param Parent2
+	 * @param id
+	 */
+	public Agent(Agent parent1, Agent Parent2, int id){
+		
+		//TODO
+		
+		//Crossover
+		
+		//Mutation
+		
 	}
 	
 	
