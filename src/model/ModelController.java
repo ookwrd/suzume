@@ -111,7 +111,7 @@ public class ModelController {
 			for(Agent neighbour : neighbouringAgents){
 				
 				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
-					Utterance utterance = neighbour.getRandomUtterance();//TODO fix the getRandomUtterance method
+					Utterance utterance = neighbour.getRandomUtterance();
 
 					//If agent and neighbour agree update fitness.
 					if(!utterance.isNull() && (agent.grammar.get(utterance.index) == utterance.value)){
@@ -134,9 +134,15 @@ public class ModelController {
 		
 		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
 		
+		while(newGenerationAgents.size() < POPULATION_SIZE){
+
+			Agent parent1 = selected.get((int)(Math.random() * selected.size()));
+			Agent parent2 = selected.get((int)(Math.random() * selected.size()));
+			
+			newGenerationAgents.add(new Agent(parent1, parent2, nextAgentID++));
+		}
 		
-		
-		return null;
+		return newGenerationAgents;
 	}
 	
 	/**
@@ -195,16 +201,12 @@ public class ModelController {
 		
 		selector.communication();
 		
-		for(Agent agent : selector.population.getCurrentGeneration()){
-			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
-		}
-		
-		/*ArrayList<Agent> results = selector.select(50, agents);
+		ArrayList<Agent> results = selector.selection();
 
 		System.out.println("Size: " + results.size());
 		
 		for (Agent agent : results) {
-			System.out.println("Agent " + agent.id);
-		}*/
+			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness);
+		}
 	}
 }
