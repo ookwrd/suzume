@@ -27,8 +27,6 @@ public class OriginalPopulationModel implements PopulationModel {
 		while(previousGeneration.size() < currentGeneration.size()){
 			previousGeneration.add(new Agent(-1));
 		}
-		
-		System.out.println(previousGeneration.size());
 	}
 	
 	/**

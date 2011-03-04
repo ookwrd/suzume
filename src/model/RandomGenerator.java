@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class RandomGenerator {
 
-	public static final long randomSeed = 9111111222111775807L;
+	public static long randomSeed = 9111111222111775807L;
 	
 	public static RandomGenerator randomGenerator;
 	private Random random;
@@ -32,6 +32,10 @@ public class RandomGenerator {
 	
 	public boolean randomBoolean(){
 		return random.nextBoolean();
+	}
+	
+	public long getSeed(){
+		return randomSeed;
 	}
 	
 	public static RandomGenerator getGenerator(){
