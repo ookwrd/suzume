@@ -256,13 +256,15 @@ public class ModelController {
 		
 		//Test selection
 		ModelController selector = new ModelController();
+
+		System.out.println("Using seed:" + selector.randomGenerator.getSeed());
+		System.out.println();
 		
 		selector.runSimulation();
 		
 		selector.training();
 		selector.communication();
 		
-		System.out.println("Grammars:");
 		for(Agent agent : selector.population.getCurrentGeneration()){
 			
 			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness );
