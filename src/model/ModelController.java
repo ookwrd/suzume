@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 5000; 
+	private static final int GENERATION_COUNT = 5000; //TODO reset to 5000 
 	private static final int POPULATION_SIZE = 100; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -17,7 +17,7 @@ public class ModelController {
 	}
 	
 	//statistics
-	private ArrayList<Integer> maxFitnesses = new ArrayList<Integer>();
+	private ArrayList<Integer> totalFitnesses = new ArrayList<Integer>();
 	private ArrayList<Integer> learningIntensities = new ArrayList<Integer>();
 	private ArrayList<Integer> geneGrammarMatches = new ArrayList<Integer>();
 	private ArrayList<Integer> numberNulls = new ArrayList<Integer>();
@@ -204,14 +204,14 @@ public class ModelController {
 	 */
 	private void gatherStatistics(){
 		
-		int learningIntensity = 0;
+		int antiLearningIntensity = 0;
 		int totalFitness = 0;
 		int genomeGrammarMatch = 0;
 		int numberNull = 0;
 		
 		for(Agent agent : population.getCurrentGeneration()){
 			totalFitness += agent.fitness;
-			learningIntensity += agent.learningResource;
+			antiLearningIntensity += agent.learningResource;
 			
 			ArrayList<Allele> genomeArrayList = agent.chromosome; 
 			ArrayList<Allele> grammarArrayList = agent.grammar;
@@ -224,10 +224,29 @@ public class ModelController {
 			}
 		}
 		
-		maxFitnesses.add(totalFitness);
+		int learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
+		
+		totalFitnesses.add(totalFitness);
 		learningIntensities.add(learningIntensity);
 		geneGrammarMatches.add(genomeGrammarMatch);
 		numberNulls.add(numberNull);
+		
+		//totalFitnesses.add(new Integer((int) (new Double(totalFitness)/POPULATION_SIZE)));
+		//learningIntensities.add(new Integer((int) (new Double(learningIntensity)/POPULATION_SIZE)));
+		//geneGrammarMatches.add(new Integer((int) (new Double(genomeGrammarMatch)/POPULATION_SIZE)));
+		//numberNulls.add(new Integer((int) (new Double(numberNull)/POPULATION_SIZE)));
+		
+	}
+	
+	/**
+	 * Show all plots
+	 */
+	private void plot() {
+		
+		ModelPlot.plot(learningIntensities, "Learning Intensities");
+		ModelPlot.plot(numberNulls, "Number of Nulls");
+		ModelPlot.plot(geneGrammarMatches, "Gene Grammar Matches");
+		ModelPlot.plot(totalFitnesses, "Total Fitnesses");
 		
 	}
 	
@@ -249,13 +268,15 @@ public class ModelController {
 			System.out.println(agent.chromosome);
 			System.out.println();
 		}
-
-	
+		
 		System.out.println();
 		System.out.println("Fitnesses\tlearningResc\tGeneGrammarMatch\tNulls");
 		for(int i = 0; i < selector.learningIntensities.size(); i++){
-			System.out.println(selector.maxFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i));
+			System.out.println(selector.totalFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i));
 		}
-
+		
+		//Plot
+		selector.plot();
 	}
+
 }
