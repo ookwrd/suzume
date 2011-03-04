@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 5000; //TODO reset to 5000 
-	private static final int POPULATION_SIZE = 100; //Should be 200
+	private static final int GENERATION_COUNT = 50000; //TODO reset to 5000 
+	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
