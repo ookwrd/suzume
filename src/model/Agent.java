@@ -21,11 +21,13 @@ public class Agent {
 	public int fitness;
 	public int id;
 	
+	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
+	
 	public Agent(int id) {
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to a random value initially
-			chromosome.add(random()?Allele.ZERO:Allele.ONE);
+			chromosome.add(randomGenerator.randomBoolean()?Allele.ZERO:Allele.ONE);
 		}
 		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++){
@@ -50,7 +52,7 @@ public class Agent {
 		fitness = 0;
 		
 		//Crossover
-		int crossoverPoint = (int)(Math.random()*CHROMOSOME_SIZE);
+		int crossoverPoint = randomGenerator.randomInt(CHROMOSOME_SIZE);
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
@@ -68,8 +70,8 @@ public class Agent {
 		
 		//Mutation
 		for(int j = 0; j < CHROMOSOME_SIZE; j++){
-			if(Math.random() < MUTATION_RATE){
-				chromosome.set(j, random()?Allele.ZERO:Allele.ONE);
+			if(randomGenerator.random() < MUTATION_RATE){
+				chromosome.set(j, randomGenerator.randomBoolean()?Allele.ZERO:Allele.ONE);
 			}
 		}
 	}
@@ -80,7 +82,7 @@ public class Agent {
 	 * @return
 	 */
 	public Utterance getRandomUtterance() {
-		int index = random(chromosome.size() - 1);
+		int index = randomGenerator.randomInt(chromosome.size());
 		Allele value = grammar.get(index);
 		return new Utterance(index, value);
 	}
@@ -94,7 +96,7 @@ public class Agent {
 		while(grammar.contains(Allele.NULL) && learningResource > 0){
 			
 			learningResource--;
-			if(Math.random() < INVENTION_PROBABILITY){
+			if(randomGenerator.random() < INVENTION_PROBABILITY){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -107,9 +109,9 @@ public class Agent {
 				}
 				
 				//Choose a random null element to invent a new value for
-				Integer index = nullIndexes.get((int)(Math.random()*nullIndexes.size()));
+				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, random()?Allele.ZERO:Allele.ONE);
+				grammar.set(index, randomGenerator.randomBoolean()?Allele.ZERO:Allele.ONE);
 			}
 		}
 	}
@@ -152,35 +154,4 @@ public class Agent {
 		}
 		
 	}
-	
-	/**
-	 * Return a random integer r such that 0 <= r <= limit
-	 * 
-	 * @param limit
-	 */
-	public static int random(int limit) { //TODO clean this up.
-		Random r = new Random(); //TODO extract to a new class
-		return Math.abs(r.nextInt() % (limit+1));
-	}
-	
-	/**
-	 * Return a random boolean
-	 * 
-	 */
-	public static boolean random() {
-		return (random(1) == 0); 
-	}
-	
-	public static void main(String[] args) {
-		
-		// quick test for random()
-		double a = 0;
-		double b = 0;
-		for (int i = 0; i < 20000000; i++) {
-			if (random()) a++; else b++;
-		}
-		System.out.println(a/10000000+" -- "+b/10000000);
-		
-	}
-	
 }
