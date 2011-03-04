@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 50000; //TODO reset to 5000 
+	private static final int GENERATION_COUNT = 500; //TODO reset to 5000 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -26,6 +26,8 @@ public class ModelController {
 	private PopulationModel population;
 	
 	private int currentGeneration = 0;
+	
+	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
 	
 	public ModelController(){
 		population = new OriginalPopulationModel(createIntialAgents());
@@ -94,7 +96,7 @@ public class ModelController {
 			for(int i = 0; i < CRITICAL_PERIOD; i++){
 				
 				//Get random teacher
-				Agent teacher = teachers.get((int)(Math.random()*teachers.size()));
+				Agent teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
 	
 				teacher.teach(learner);
 				
@@ -181,7 +183,7 @@ public class ModelController {
 		//Loop once for each individual
 		for(int i = 0; i < toSelect; i++){
 		
-			int selectionPoint = (int)(Math.random() * totalFitness);
+			int selectionPoint = randomGenerator.randomInt(totalFitness);
 			int pointer = 0;
 
 			for(Agent agent : agents){
