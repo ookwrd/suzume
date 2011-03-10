@@ -250,10 +250,10 @@ public class ModelController {
 	 */
 	private void plot() {
 		
-		ModelPlot.plot(learningIntensities, "Learning Intensities");
-		ModelPlot.plot(numberNulls, "Number of Nulls");
-		ModelPlot.plot(geneGrammarMatches, "Gene Grammar Matches");
-		ModelPlot.plot(totalFitnesses, "Total Fitnesses");
+		ModelStatistics.plot(learningIntensities, "Learning Intensities");
+		ModelStatistics.plot(numberNulls, "Number of Nulls");
+		ModelStatistics.plot(geneGrammarMatches, "Gene Grammar Matches");
+		ModelStatistics.plot(totalFitnesses, "Total Fitnesses");
 		
 	}
 	
