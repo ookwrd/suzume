@@ -23,17 +23,17 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-public class ModelPlot extends Panel {
+public class ModelStatistics extends Panel {
 	
 	private BufferedImage image;
 	public static String title;
 	XYSeries series;
 	
 	public static void plot(ArrayList<Integer> data, String title) {
-		ModelPlot mp = new ModelPlot(title, data);
+		ModelStatistics mp = new ModelStatistics(title, data);
 	}
 	
-	public ModelPlot(String title, ArrayList<Integer> data) {
+	public ModelStatistics(String title, ArrayList<Integer> data) {
 		this.title = title;
 		plot(data);
 	}
@@ -65,8 +65,8 @@ public class ModelPlot extends Panel {
 
 		JFreeChart chart = ChartFactory.createXYLineChart(
 				title, // Title
-				title, // X-Axis label
-				"Generation", // Y-Axis label
+				"Generation", // X-Axis label
+				title, // Y-Axis label
 				xyDataset, // Dataset
 				PlotOrientation.VERTICAL, // Plot orientation 
 				true, // Show legend
