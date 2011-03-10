@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 500; //TODO reset to 5000 
+	private static final int GENERATION_COUNT = 50000; //TODO reset to 5000 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -63,7 +63,12 @@ public class ModelController {
 	public void runSimulation(){
 		
 		for(; currentGeneration < GENERATION_COUNT; currentGeneration++){
-			iterateGeneration();	
+			iterateGeneration();
+			
+			//Print progress information
+			if(currentGeneration % 1000 == 0){
+				System.out.println("Generation " + currentGeneration);
+			}
 		}
 	}
 	
