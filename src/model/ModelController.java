@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private enum AgentType { OriginalAgent, BiasAgent };
-	private AgentType currentAgentType = AgentType.OriginalAgent;
+	private enum AgentType { OriginalAgent, BiasAgent, TestAgent };
+	//public AgentType currentAgentType = AgentType.OriginalAgent;
+	public AgentType currentAgentType = AgentType.BiasAgent;
+	//public AgentType currentAgentType = AgentType.TestAgent;
 	
 	private static final int GENERATION_COUNT = 5000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
@@ -29,7 +31,7 @@ public class ModelController {
 	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
 	
 	public ModelController(){
-		population = new OriginalPopulationModel(createIntialAgents());
+		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}
 	
 	/**
@@ -61,6 +63,8 @@ public class ModelController {
 		
 		if(currentAgentType == AgentType.OriginalAgent){
 			return new OriginalAgent(nextAgentID++);
+		}else if (currentAgentType == AgentType.BiasAgent){
+			return new BiasAgent(nextAgentID++);
 		}else{
 			System.err.println("Unsupported Agent type");
 			return null;
@@ -173,6 +177,8 @@ public class ModelController {
 			Agent parent2 = selected.get(i++);
 			if(currentAgentType == AgentType.OriginalAgent){
 				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
+			}else if (currentAgentType == AgentType.BiasAgent){
+				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++));
 			}else{
 				System.err.println("Unsupported Agent type");
 				return null;
