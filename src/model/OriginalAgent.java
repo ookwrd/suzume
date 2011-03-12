@@ -1,39 +1,29 @@
 package model;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class OriginalAgent implements Agent {
+public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	private static final int LEARNING_RESOURCE = 24;
 	private static final int MATCHING_LEARNING_COST = 1;
 	private static final int NON_MATCHING_LEARNING_COST = 4;
 	
-	private static final int CHROMOSOME_SIZE = 12;
-	
 	private static final double MUTATION_RATE = 0.00025;
 	private static final double INVENTION_PROBABILITY = 0.01;
 	
 	private ArrayList<Integer> chromosome;
-	private ArrayList<Integer> grammar;
 	
 	private int learningResource;
-	private int fitness;
-	private int id;
+
 	
 	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
 	
 	public OriginalAgent(int id) {
-		this.id = id;
+		super(id);
 		chromosome = new ArrayList<Integer>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
-		grammar = new ArrayList<Integer>(CHROMOSOME_SIZE);
-		for (int i = 0; i < CHROMOSOME_SIZE; i++){
-			grammar.add(Utterance.NULL_VALUE);
-		}
 		learningResource = LEARNING_RESOURCE;
-		fitness = 0;
 	}
 	
 	/**
@@ -44,11 +34,9 @@ public class OriginalAgent implements Agent {
 	 * @param id
 	 */
 	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id){
-		
-		this.id = id;
+		super(id);
 		chromosome = new ArrayList<Integer>(CHROMOSOME_SIZE);
 		learningResource = LEARNING_RESOURCE;
-		fitness = 0;
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(CHROMOSOME_SIZE);
@@ -60,11 +48,6 @@ public class OriginalAgent implements Agent {
 		while(i < CHROMOSOME_SIZE){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
-		}
-		
-		grammar = new ArrayList<Integer>(CHROMOSOME_SIZE);
-		for (int j = 0; j < CHROMOSOME_SIZE; j++){
-			grammar.add(Utterance.NULL_VALUE);
 		}
 		
 		//Mutation
@@ -166,26 +149,6 @@ public class OriginalAgent implements Agent {
 		System.out.println(chromosome);
 		
 	}
-	
-	@Override
-	public int getId(){
-		return id;
-	}
-
-	@Override
-	public int getFitness() {
-		return fitness;
-	}
-	
-	@Override
-	public void setFitness(int fitness){
-		this.fitness = fitness;
-	}
-
-	@Override
-	public ArrayList<Integer> getGrammar() {
-		return grammar;
-	}
 
 	@Override
 	public boolean canStillLearn() {
@@ -204,21 +167,6 @@ public class OriginalAgent implements Agent {
 		}
 		
 		return count;
-	}
-	
-	@Override
-	public int numberOfNulls(){
-		
-		int count = 0;
-		
-		for(int i = 0; i < CHROMOSOME_SIZE; i++){
-			if(grammar.get(i).equals(Utterance.NULL_VALUE)){
-				count++;
-			}
-		}
-		
-		return count;
-		
 	}
 
 	@Override
