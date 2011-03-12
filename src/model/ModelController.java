@@ -12,10 +12,6 @@ public class ModelController {
 	
 	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
 	
-	public enum Allele {
-		ZERO, ONE, NULL;
-	}
-	
 	//statistics
 	private ArrayList<Integer> totalFitnesses = new ArrayList<Integer>();
 	private ArrayList<Integer> learningIntensities = new ArrayList<Integer>();
@@ -62,7 +58,7 @@ public class ModelController {
 	 */
 	public void runSimulation(){
 		
-		for(; currentGeneration < GENERATION_COUNT; currentGeneration++){
+		for(currentGeneration = 0; currentGeneration < GENERATION_COUNT; currentGeneration++){
 			iterateGeneration();
 			
 			//Print progress information
