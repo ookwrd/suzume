@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private static final int GENERATION_COUNT = 50000; //TODO reset to 5000 
+	private enum AgentType { OriginalAgent, BiasAgent };
+	private AgentType currentAgentType = AgentType.OriginalAgent;
+	
+	private static final int GENERATION_COUNT = 5000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -50,7 +53,18 @@ public class ModelController {
 	 * @return
 	 */
 	private Agent createRandomAgent(){
-		return new OriginalAgent(nextAgentID++);//TODO change this to use a constructor.
+		
+		/*
+		 * When adding new agent types make sure to add a sexual reproduction 
+		 * constructor as well in the "selection " method.
+		 */
+		
+		if(currentAgentType == AgentType.OriginalAgent){
+			return new OriginalAgent(nextAgentID++);
+		}else{
+			System.err.println("Unsupported Agent type");
+			return null;
+		}
 	}
 	
 	/**
@@ -130,7 +144,7 @@ public class ModelController {
 			//Communicate with all neighbours
 			for(Agent neighbour : neighbouringAgents){
 				
-				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){//TODO the devide by 2 and th adjusting neighbour fitness below is a crude fix
+				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
 					Utterance utterance = neighbour.getRandomUtterance();
 
 					//If agent and neighbour agree update fitness.
@@ -157,7 +171,12 @@ public class ModelController {
 		while(newGenerationAgents.size() < POPULATION_SIZE){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
-			newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));//TODO make this work with multiple agent types!
+			if(currentAgentType == AgentType.OriginalAgent){
+				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
+			}else{
+				System.err.println("Unsupported Agent type");
+				return null;
+			}
 		}
 		
 		return newGenerationAgents;
