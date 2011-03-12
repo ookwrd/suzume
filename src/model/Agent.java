@@ -18,7 +18,7 @@ public interface Agent {
 	
 	
 	//Statistics
-	public int geneGrammarMatch();
+	public double geneGrammarMatch();
 	public int numberOfNulls();
 	public int learningIntensity(); //TODO how do i make this more general??
 	

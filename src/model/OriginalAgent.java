@@ -193,7 +193,7 @@ public class OriginalAgent implements Agent {
 	}
 	
 	@Override
-	public int geneGrammarMatch(){
+	public double geneGrammarMatch(){
 		
 		int count = 0;
 		
