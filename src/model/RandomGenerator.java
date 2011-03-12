@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class RandomGenerator {
 
-	public static long randomSeed = 9111111222111775807L;
+	public static long randomSeed = System.currentTimeMillis();//9111111222111775807L;
 	
 	public static RandomGenerator randomGenerator;
 	private Random random;

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import model.ModelController.Allele;
 
-public class Agent {
+public class OriginalAgent implements Agent {
 	
 	private static final int LEARNING_RESOURCE = 24;
 	private static final int MATCHING_LEARNING_COST = 1;
@@ -14,16 +14,16 @@ public class Agent {
 	private static final double MUTATION_RATE = 0.00025;
 	private static final double INVENTION_PROBABILITY = 0.01;
 	
-	public ArrayList<Allele> chromosome;
-	public ArrayList<Allele> grammar;
+	private ArrayList<Allele> chromosome;
+	private ArrayList<Allele> grammar;
 	
-	public int learningResource;
-	public int fitness;
-	public int id;
+	private int learningResource;
+	private int fitness;
+	private int id;
 	
 	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
 	
-	public Agent(int id) {
+	public OriginalAgent(int id) {
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to a random value initially
@@ -44,7 +44,7 @@ public class Agent {
 	 * @param Parent2
 	 * @param id
 	 */
-	public Agent(Agent parent1, Agent parent2, int id){
+	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id){
 		
 		this.id = id;
 		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
@@ -81,6 +81,7 @@ public class Agent {
 	 * 
 	 * @return
 	 */
+	@Override
 	public Utterance getRandomUtterance() {
 		int index = randomGenerator.randomInt(chromosome.size());
 		Allele value = grammar.get(index);
@@ -91,6 +92,7 @@ public class Agent {
 	 * Use the remainder of the learning resource to potentially invent parts of the grammar.
 	 * The agent has a probability of 0.01 to turn an empty value to a 0 or a 1   
 	 */
+	@Override
 	public void invent() {
 		
 		while(grammar.contains(Allele.NULL) && learningResource > 0){
@@ -121,6 +123,7 @@ public class Agent {
 	 * 
 	 * @param learner the agent being taught
 	 */
+	@Override
 	public void teach(Agent learner) {
 		learner.learnUtterance(getRandomUtterance());
 	}
@@ -132,6 +135,7 @@ public class Agent {
 	 * @param teacher the agent teaching
 	 * @param utterance the utterance taught
 	 */
+	@Override
 	public void learnUtterance(Utterance u) {
 		
 		//agents agree on value or NULL utterance
@@ -153,5 +157,74 @@ public class Agent {
 			learningResource -= NON_MATCHING_LEARNING_COST;
 		}
 		
+	}
+	
+	@Override
+	public void printAgent(){
+		
+		System.out.println("Agent " + getId() + " has fitness of " + getFitness() );
+		System.out.println(grammar);
+		System.out.println(chromosome);
+		
+	}
+	
+	@Override
+	public int getId(){
+		return id;
+	}
+
+	@Override
+	public int getFitness() {
+		return fitness;
+	}
+	
+	@Override
+	public void setFitness(int fitness){
+		this.fitness = fitness;
+	}
+
+	@Override
+	public ArrayList<Allele> getGrammar() {
+		return grammar;
+	}
+
+	@Override
+	public boolean canStillLearn() {
+		return learningResource > 0;
+	}
+	
+	@Override
+	public int geneGrammarMatch(){
+		
+		int count = 0;
+		
+		for(int i = 0; i < CHROMOSOME_SIZE; i++){
+			if(chromosome.get(i).equals(grammar.get(i))){
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	@Override
+	public int numberOfNulls(){
+		
+		int count = 0;
+		
+		for(int i = 0; i < CHROMOSOME_SIZE; i++){
+			if(grammar.get(i).equals(Allele.NULL)){
+				count++;
+			}
+		}
+		
+		return count;
+		
+	}
+
+	@Override
+	public int learningIntensity() {
+		// TODO Some better more general way of measuring this...
+		return learningResource;
 	}
 }

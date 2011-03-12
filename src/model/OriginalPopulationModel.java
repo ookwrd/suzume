@@ -25,7 +25,7 @@ public class OriginalPopulationModel implements PopulationModel {
 		previousGeneration = new ArrayList<Agent>();
 		
 		while(previousGeneration.size() < currentGeneration.size()){
-			previousGeneration.add(new Agent(-1));
+			previousGeneration.add(new OriginalAgent(-1));
 		}
 	}
 	
@@ -141,7 +141,7 @@ public class OriginalPopulationModel implements PopulationModel {
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 
 		for (int i = 1; i <= 200; i++) {
-			agents.add(new Agent(i));
+			agents.add(new OriginalAgent(i));
 		}
 
 		OriginalPopulationModel test = new OriginalPopulationModel(agents);
@@ -150,7 +150,7 @@ public class OriginalPopulationModel implements PopulationModel {
 		ArrayList<Agent> neighbours = test.getAncestors(agents.get(99), 3);
 
 		for (Agent agent : neighbours) {
-			System.out.println("Agent " + agent.id);
+			System.out.println("Agent " + agent.getId());
 		}
 	}
 
