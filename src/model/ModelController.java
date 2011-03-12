@@ -54,7 +54,7 @@ public class ModelController {
 	 * @return
 	 */
 	private Agent createRandomAgent(){
-		return new Agent(nextAgentID++);
+		return new OriginalAgent(nextAgentID++);//TODO change this to use a constructor.
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class ModelController {
 	
 				teacher.teach(learner);
 				
-				if(learner.learningResource <= 0){
+				if(!learner.canStillLearn()){
 					break;
 				}
 			}
@@ -129,7 +129,7 @@ public class ModelController {
 			ArrayList<Agent> neighbouringAgents = population.getNeighbors(agent, 1);
 		
 			//Set the agents fitness to the default base level 
-			agent.fitness = BASE_FITNESS;
+			agent.setFitness(BASE_FITNESS);
 			
 			//Communicate with all neighbours
 			for(Agent neighbour : neighbouringAgents){
@@ -138,8 +138,8 @@ public class ModelController {
 					Utterance utterance = neighbour.getRandomUtterance();
 
 					//If agent and neighbour agree update fitness.
-					if(!utterance.isNull() && (agent.grammar.get(utterance.index) == utterance.value)){
-						agent.fitness += 1;
+					if(!utterance.isNull() && (agent.getGrammar().get(utterance.index) == utterance.value)){
+						agent.setFitness(agent.getFitness()+1);
 					}
 				}
 			}
@@ -161,7 +161,7 @@ public class ModelController {
 		while(newGenerationAgents.size() < POPULATION_SIZE){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
-			newGenerationAgents.add(new Agent(parent1, parent2, nextAgentID++));
+			newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));//TODO make this work with multiple agent types!
 		}
 		
 		return newGenerationAgents;
@@ -182,7 +182,7 @@ public class ModelController {
 		//Calculate total fitness of all agents.
 		int totalFitness = 0;
 		for(Agent agent : agents){
-			totalFitness += agent.fitness;
+			totalFitness += agent.getFitness();
 		}
 		
 		//Loop once for each individual
@@ -193,7 +193,7 @@ public class ModelController {
 
 			for(Agent agent : agents){
 				//move the pointer along to the next agents borderline
-				pointer += agent.fitness;
+				pointer += agent.getFitness();
 				
 				//have we gone past the selectionPoint?
 				if(pointer > selectionPoint){
@@ -217,18 +217,11 @@ public class ModelController {
 		int numberNull = 0;
 		
 		for(Agent agent : population.getCurrentGeneration()){
-			totalFitness += agent.fitness;
-			antiLearningIntensity += agent.learningResource;
+			totalFitness += agent.getFitness();
+			antiLearningIntensity += agent.learningIntensity();
 			
-			ArrayList<Allele> genomeArrayList = agent.chromosome; 
-			ArrayList<Allele> grammarArrayList = agent.grammar;
-			for(int i = 0; i < genomeArrayList.size(); i++){
-				genomeGrammarMatch += (genomeArrayList.get(i) == grammarArrayList.get(i)?1:0);
-				
-				if(grammarArrayList.get(i) == Allele.NULL){
-					numberNull++;
-				}
-			}
+			numberNull += agent.numberOfNulls();
+			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 		
 		int learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
@@ -272,9 +265,7 @@ public class ModelController {
 		
 		for(Agent agent : selector.population.getCurrentGeneration()){
 			
-			System.out.println("Agent " + agent.id + " has fitness of " + agent.fitness );
-			System.out.println(agent.grammar);
-			System.out.println(agent.chromosome);
+			agent.printAgent();
 			System.out.println();
 		}
 		
