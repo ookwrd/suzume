@@ -110,16 +110,16 @@ public class BiasAgent extends AbstractAgent implements Agent{
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				int dimensionIndex = 0;
+				int dimensionIndex = -1;
 				double seenSoFar = 0;
 				double threshold = randomGenerator.random();
 				do{
-					seenSoFar += chromosome.get(index)[dimensionIndex];
 					dimensionIndex++;
+					seenSoFar += chromosome.get(index)[dimensionIndex];
 				}
 				while(seenSoFar < threshold);
 
-				grammar.set(index, dimensionIndex-1);
+				grammar.set(index, dimensionIndex);
 				
 			}
 		}

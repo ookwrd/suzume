@@ -29,16 +29,16 @@ public class ModelStatistics extends Panel {
 	public static String title;
 	XYSeries series;
 	
-	public static void plot(ArrayList<Integer> data, String title) {
+	public static void plot(ArrayList<Double> data, String title) {
 		ModelStatistics mp = new ModelStatistics(title, data);
 	}
 	
-	public ModelStatistics(String title, ArrayList<Integer> data) {
+	public ModelStatistics(String title, ArrayList<Double> data) {
 		this.title = title;
 		plot(data);
 	}
 
-	public void plot(ArrayList<Integer> data) {
+	public void plot(ArrayList<Double> data) {
 		
 		series = new XYSeries(title);
 		

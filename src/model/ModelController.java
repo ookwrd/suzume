@@ -5,23 +5,23 @@ import java.util.ArrayList;
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, TestAgent };
-	//public AgentType currentAgentType = AgentType.OriginalAgent;
-	public AgentType currentAgentType = AgentType.BiasAgent;
+	public AgentType currentAgentType = AgentType.OriginalAgent;
+	//public AgentType currentAgentType = AgentType.BiasAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 5000; 
+	private static final int GENERATION_COUNT = 50000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 12; //Number of utterances available to learners
 	
 	//statistics
-	private ArrayList<Integer> totalFitnesses = new ArrayList<Integer>();
-	private ArrayList<Integer> learningIntensities = new ArrayList<Integer>();
-	private ArrayList<Integer> geneGrammarMatches = new ArrayList<Integer>();
-	private ArrayList<Integer> numberNulls = new ArrayList<Integer>();
+	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
+	private ArrayList<Double> learningIntensities = new ArrayList<Double>();
+	private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
+	private ArrayList<Double> numberNulls = new ArrayList<Double>();
 	
 	private int nextAgentID = 0; // keeps count of all the next agents from this world
 	private PopulationModel population;
@@ -232,10 +232,10 @@ public class ModelController {
 	 */
 	private void gatherStatistics(){
 		
-		int antiLearningIntensity = 0;
-		int totalFitness = 0;
-		int genomeGrammarMatch = 0;
-		int numberNull = 0;
+		double antiLearningIntensity = 0;
+		double totalFitness = 0;
+		double genomeGrammarMatch = 0;
+		double numberNull = 0;
 		
 		for(Agent agent : population.getCurrentGeneration()){
 			totalFitness += agent.getFitness();
@@ -245,7 +245,7 @@ public class ModelController {
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 		
-		int learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
+		double learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
 		
 		totalFitnesses.add(totalFitness);
 		learningIntensities.add(learningIntensity);
@@ -277,6 +277,8 @@ public class ModelController {
 		ModelController selector = new ModelController();
 
 		System.out.println("Using seed:" + selector.randomGenerator.getSeed());
+		
+		//TODO print other simulation parameters
 		System.out.println();
 		
 		selector.runSimulation();
