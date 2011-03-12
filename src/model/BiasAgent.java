@@ -6,7 +6,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	private static final int DIMENSIONS = 2;
 	
 	private static final double MUTATION_RATE = 0.00025;
-	private static final double INVENTION_PROBABILITY = 0.01;
+	private static final double INVENTION_PROBABILITY = 0.1;
 	
 	public ArrayList<double[]> chromosome;
 	
@@ -110,9 +110,17 @@ public class BiasAgent extends AbstractAgent implements Agent{
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
+				int dimensionIndex = 0;
+				double seenSoFar = 0;
+				double threshold = randomGenerator.random();
+				do{
+					seenSoFar += chromosome.get(index)[dimensionIndex];
+					dimensionIndex++;
+				}
+				while(seenSoFar < threshold);
+
+				grammar.set(index, dimensionIndex-1);
 				
-				//TODO make this work with higher dimensions... will need to get rid of Allele enum
-				grammar.set(index, randomGenerator.random()>chromosome.get(index)[0]?0:1);
 			}
 		}
 	}
@@ -130,12 +138,10 @@ public class BiasAgent extends AbstractAgent implements Agent{
 			return;
 		}
 		
-		if(randomGenerator.random() < chromosome.get(u.index)[u.value==Utterance.NULL_VALUE?0:1]){//TODO make this work in general case without alleles
-			
+		double random = randomGenerator.random();
+		if(chromosome.get(u.index)[u.value] <= random){
 			grammar.set(u.index, u.value);
-			
 		}
-		
 		
 	}
 	
@@ -176,8 +182,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 
 	@Override
 	public boolean canStillLearn() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 
