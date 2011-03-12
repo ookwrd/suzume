@@ -14,20 +14,6 @@ public class OriginalPopulationModel implements PopulationModel {
 
 	private ArrayList<Agent> previousGeneration = new ArrayList<Agent>();
 	private ArrayList<Agent> currentGeneration = new ArrayList<Agent>();
-
-	/**
-	 * Create new population with the specified agents as the currentGeneration.
-	 * 
-	 * @param agents
-	 */
-	public OriginalPopulationModel(ArrayList<Agent> currentGeneration) {
-		this.currentGeneration = currentGeneration;
-		previousGeneration = new ArrayList<Agent>();
-		
-		while(previousGeneration.size() < currentGeneration.size()){
-			previousGeneration.add(new OriginalAgent(-1));
-		}
-	}
 	
 	/**
 	 * Create new population with the specified agents as the currentGeneration and previousGeneration.
@@ -143,8 +129,14 @@ public class OriginalPopulationModel implements PopulationModel {
 		for (int i = 1; i <= 200; i++) {
 			agents.add(new OriginalAgent(i));
 		}
+		
+		ArrayList<Agent> agents1 = new ArrayList<Agent>();
 
-		OriginalPopulationModel test = new OriginalPopulationModel(agents);
+		for (int i = 1; i <= 200; i++) {
+			agents1.add(new OriginalAgent(i));
+		}
+
+		OriginalPopulationModel test = new OriginalPopulationModel(agents, agents1);
 		test.switchGenerations(agents);
 
 		ArrayList<Agent> neighbours = test.getAncestors(agents.get(99), 3);
