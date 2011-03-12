@@ -1,20 +1,19 @@
 package model;
 
-import model.ModelController.Allele;
-
-
 public class Utterance {
 
-	int index;
-	Allele value;
+	public static final int NULL_VALUE = -1;
 	
-	public Utterance(int index, Allele value) {
-		this.index = index;
-		this.value = value;
+	int index;
+	int value;
+	
+	public Utterance(int meaningIndex, int signalValue) {
+		this.index = meaningIndex;
+		this.value = signalValue;
 	}
 	
 	public boolean isNull(){
-		return value == Allele.NULL;
+		return value == NULL_VALUE;
 	}
 
 }

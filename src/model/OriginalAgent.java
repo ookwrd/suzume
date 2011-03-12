@@ -1,7 +1,6 @@
 package model;
 import java.util.ArrayList;
 import java.util.Random;
-import model.ModelController.Allele;
 
 public class OriginalAgent implements Agent {
 	
@@ -14,8 +13,8 @@ public class OriginalAgent implements Agent {
 	private static final double MUTATION_RATE = 0.00025;
 	private static final double INVENTION_PROBABILITY = 0.01;
 	
-	private ArrayList<Allele> chromosome;
-	private ArrayList<Allele> grammar;
+	private ArrayList<Integer> chromosome;
+	private ArrayList<Integer> grammar;
 	
 	private int learningResource;
 	private int fitness;
@@ -25,13 +24,13 @@ public class OriginalAgent implements Agent {
 	
 	public OriginalAgent(int id) {
 		this.id = id;
-		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
+		chromosome = new ArrayList<Integer>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomBoolean()?Allele.ZERO:Allele.ONE);
+			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
-		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
+		grammar = new ArrayList<Integer>(CHROMOSOME_SIZE);
 		for (int i = 0; i < CHROMOSOME_SIZE; i++){
-			grammar.add(Allele.NULL);
+			grammar.add(Utterance.NULL_VALUE);
 		}
 		learningResource = LEARNING_RESOURCE;
 		fitness = 0;
@@ -47,7 +46,7 @@ public class OriginalAgent implements Agent {
 	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id){
 		
 		this.id = id;
-		chromosome = new ArrayList<Allele>(CHROMOSOME_SIZE);
+		chromosome = new ArrayList<Integer>(CHROMOSOME_SIZE);
 		learningResource = LEARNING_RESOURCE;
 		fitness = 0;
 		
@@ -63,15 +62,15 @@ public class OriginalAgent implements Agent {
 			i++;
 		}
 		
-		grammar = new ArrayList<Allele>(CHROMOSOME_SIZE);
+		grammar = new ArrayList<Integer>(CHROMOSOME_SIZE);
 		for (int j = 0; j < CHROMOSOME_SIZE; j++){
-			grammar.add(Allele.NULL);
+			grammar.add(Utterance.NULL_VALUE);
 		}
 		
 		//Mutation
 		for(int j = 0; j < CHROMOSOME_SIZE; j++){
 			if(randomGenerator.random() < MUTATION_RATE){
-				chromosome.set(j, randomGenerator.randomBoolean()?Allele.ZERO:Allele.ONE);
+				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
 		}
 	}
@@ -84,7 +83,7 @@ public class OriginalAgent implements Agent {
 	@Override
 	public Utterance getRandomUtterance() {
 		int index = randomGenerator.randomInt(chromosome.size());
-		Allele value = grammar.get(index);
+		Integer value = grammar.get(index);
 		return new Utterance(index, value);
 	}
 	
@@ -95,7 +94,7 @@ public class OriginalAgent implements Agent {
 	@Override
 	public void invent() {
 		
-		while(grammar.contains(Allele.NULL) && learningResource > 0){
+		while(grammar.contains(Utterance.NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
 			if(randomGenerator.random() < INVENTION_PROBABILITY){
@@ -104,8 +103,8 @@ public class OriginalAgent implements Agent {
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
 				for(int i = 0; i < grammar.size(); i++){
 					
-					Allele allele = grammar.get(i);
-					if(allele == Allele.NULL){
+					Integer allele = grammar.get(i);
+					if(allele == Utterance.NULL_VALUE){
 						nullIndexes.add(i);
 					}
 				}
@@ -113,7 +112,7 @@ public class OriginalAgent implements Agent {
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomBoolean()?Allele.ZERO:Allele.ONE);
+				grammar.set(index, randomGenerator.randomBoolean()?0:1);
 			}
 		}
 	}
@@ -139,7 +138,7 @@ public class OriginalAgent implements Agent {
 	public void learnUtterance(Utterance u) {
 		
 		//agents agree on value or NULL utterance
-		if(u.value == grammar.get(u.index) || u.value == Allele.NULL){
+		if(u.value == grammar.get(u.index) || u.value == Utterance.NULL_VALUE){
 			return;
 		}
 		
@@ -184,7 +183,7 @@ public class OriginalAgent implements Agent {
 	}
 
 	@Override
-	public ArrayList<Allele> getGrammar() {
+	public ArrayList<Integer> getGrammar() {
 		return grammar;
 	}
 
@@ -213,7 +212,7 @@ public class OriginalAgent implements Agent {
 		int count = 0;
 		
 		for(int i = 0; i < CHROMOSOME_SIZE; i++){
-			if(grammar.get(i).equals(Allele.NULL)){
+			if(grammar.get(i).equals(Utterance.NULL_VALUE)){
 				count++;
 			}
 		}
