@@ -17,7 +17,7 @@ public class ModelController {
 	
 	private static final int CRITICAL_PERIOD = 12; //Number of utterances available to learners
 	
-	//statistics
+ 	//statistics
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
 	private ArrayList<Double> learningIntensities = new ArrayList<Double>();
 	private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
