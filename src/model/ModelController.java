@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, TestAgent };
-	public AgentType currentAgentType = AgentType.OriginalAgent;
-	//public AgentType currentAgentType = AgentType.BiasAgent;
+	//public AgentType currentAgentType = AgentType.OriginalAgent;
+	public AgentType currentAgentType = AgentType.BiasAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
 	private static final int GENERATION_COUNT = 50000; 
