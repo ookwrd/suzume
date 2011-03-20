@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+import Agents.Agent;
+import Agents.OriginalAgent;
+
 /**
  * Population model corresponding to a cyclical distribution of agents as seen in:
  * Relaxation of selection, Niche Construction, and the Baldwin Eﬀect in Language 

@@ -1,6 +1,7 @@
-package model;
+package Agents;
 
 import java.util.ArrayList;
+
 
 public interface Agent {
 	

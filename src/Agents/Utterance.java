@@ -1,4 +1,4 @@
-package model;
+package Agents;
 
 public class Utterance {
 

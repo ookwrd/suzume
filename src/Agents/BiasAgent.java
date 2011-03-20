@@ -1,5 +1,8 @@
-package model;
+package Agents;
 import java.util.ArrayList;
+
+import model.RandomGenerator;
+
 
 public class BiasAgent extends AbstractAgent implements Agent{
 	
@@ -198,12 +201,5 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	@Override
-	public void communicate(Agent partner) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }
