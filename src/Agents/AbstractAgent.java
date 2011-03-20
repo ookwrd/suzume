@@ -1,6 +1,8 @@
-package model;
+package Agents;
 
 import java.util.ArrayList;
+
+
 
 public abstract class AbstractAgent implements Agent {
 
@@ -68,5 +70,16 @@ public abstract class AbstractAgent implements Agent {
 	@Override
 	public void teach(Agent learner) {
 		learner.learnUtterance(getRandomUtterance());
+	}
+	
+	@Override
+	public void communicate(Agent partner){
+		
+		Utterance utterance = partner.getRandomUtterance();
+
+		//If agent and neighbour agree update fitness.
+		if(!utterance.isNull() && (getGrammar().get(utterance.meaning) == utterance.signal)){
+			setFitness(getFitness()+1);
+		}
 	}
 }

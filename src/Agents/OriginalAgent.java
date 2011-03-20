@@ -1,5 +1,8 @@
-package model;
+package Agents;
 import java.util.ArrayList;
+
+import model.RandomGenerator;
+
 
 public class OriginalAgent extends AbstractAgent implements Agent {
 	
@@ -175,9 +178,4 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		return learningResource;
 	}
 
-	@Override
-	public void communicate(Agent partner) {
-		// TODO Auto-generated method stub
-		
-	}
 }

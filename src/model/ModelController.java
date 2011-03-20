@@ -2,12 +2,17 @@ package model;
 
 import java.util.ArrayList;
 
+import Agents.Agent;
+import Agents.BiasAgent;
+import Agents.OriginalAgent;
+import Agents.SynonymAgent;
+
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
-	//public AgentType currentAgentType = AgentType.OriginalAgent;
+	public AgentType currentAgentType = AgentType.OriginalAgent;
 	//public AgentType currentAgentType = AgentType.BiasAgent;
-	public AgentType currentAgentType = AgentType.SynonymAgent;
+	//public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
 	private static final int GENERATION_COUNT = 500; 
@@ -16,7 +21,7 @@ public class ModelController {
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 12; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
 	
  	//statistics
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
@@ -152,12 +157,14 @@ public class ModelController {
 			for(Agent neighbour : neighbouringAgents){
 				
 				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
-					Utterance utterance = neighbour.getRandomUtterance();
+					
+					agent.communicate(neighbour);
+					/*Utterance utterance = neighbour.getRandomUtterance();
 
 					//If agent and neighbour agree update fitness.
 					if(!utterance.isNull() && (agent.getGrammar().get(utterance.meaning) == utterance.signal)){
 						agent.setFitness(agent.getFitness()+1);
-					}
+					}*/
 				}
 			}
 			

@@ -1,6 +1,8 @@
-package model;
+package Agents;
 
 import java.util.ArrayList;
+
+
 
 public class SynonymAgent extends AbstractAgent {
 

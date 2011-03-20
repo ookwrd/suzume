@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import Agents.Agent;
+
 /**
  * Interface capturing the common elements of population structure. Makes the assumption of discrete generations.
  * 
