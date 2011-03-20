@@ -15,13 +15,13 @@ public class ModelController {
 	public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 500; 
+	private static final int GENERATION_COUNT = 10000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 7; //Number of utterances available to learners
 	
  	//statistics
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
@@ -285,11 +285,11 @@ public class ModelController {
 		
 		selector.runSimulation();
 		
+		//Get to a point where the current generation has calculated fitness. TODO swap out with previous generation.
 		selector.training();
 		selector.communication();
 		
-		for(Agent agent : selector.population.getCurrentGeneration()){
-			
+		for(Agent agent : selector.population.getCurrentGeneration()){	
 			agent.printAgent();
 			System.out.println();
 		}
