@@ -2,91 +2,67 @@ package Agents;
 
 import java.util.ArrayList;
 
-
-
 public class SynonymAgent extends AbstractAgent {
 
-	public static final int DEFAULT_MEMEORY_SIZE = 20;
-	
+	public static final int DEFAULT_MEMEORY_SIZE = 10;	
 	private static final double INVENTION_PROBABILITY = 0.01;
 	
 	private Utterance[] memory;
 	private int memoryPointer = 0;
-	private ArrayList<Utterance>[] meanings; 
+	private ArrayList<Utterance>[] wordsPerMeaning; 
 	
 	@SuppressWarnings("unchecked")
 	public SynonymAgent(int id, int memorySize){
 		super(id);
 		memory = new Utterance[memorySize];
-		meanings = new ArrayList[NUMBER_OF_MEANINGS];
+		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
+		for(int i = 0; i < wordsPerMeaning.length; i++){
+			wordsPerMeaning[i] = new ArrayList<Utterance>();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	public SynonymAgent(SynonymAgent parent1, SynonymAgent parent2, int id) {
 		super(id);
 		
-		int memorySize = parent1.memory.length + Math.random() > 0.5?1:-1;
+		//Currently asexual reproduction
+		int memorySize = parent1.memory.length + ((Math.random() > 0.5)?1:-1);
+		if(memorySize < 1){
+			memorySize = 1;
+		}
 		memory = new Utterance[memorySize];
-		meanings = new ArrayList[NUMBER_OF_MEANINGS];
+		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
+		for(int i = 0; i < wordsPerMeaning.length; i++){
+			wordsPerMeaning[i] = new ArrayList<Utterance>();
+		}
 	}
 
 	public void learnUtterance(Utterance word){
 		
-		if(word==null){
+		if(word.isNull()){
 			return;
 		}
+	
+		remember(word);
 		
-		ArrayList<Utterance> synonyms = meanings[word.meaning];
 		
-		if(synonyms == null){//If no words with same meaning and space left, add the new word
-			if(memoryPointer < memory.length){
-				synonyms = new ArrayList<Utterance>();
-				synonyms.add(word);
-				meanings[word.meaning] = synonyms;
-				memory[memoryPointer] = word;
-				memoryPointer++;
-			}
-		}else if(!synonyms.contains(word)){//If words with same meaning, but not that one and there is space left, add it.
-			
-			if(memoryPointer < memory.length){
-				synonyms.add(word);
-				memory[memoryPointer] = word;
-				memoryPointer++;
-			}
-		}
-		
-		//TODO move recently seen words to front.
+		//TODO move recently seen words to front as an option
 		
 	}
-	
-	private Utterance getUtteranceForMeaning(int meaning){
+
+	/**
+	 * Adds an utterance to both structures representing the memory.
+	 * 
+	 * @param toRemember
+	 */
+	private void remember(Utterance toRemember){
 		
-		if(meanings[meaning] == null){
-			
-			//In case of no word known, invent something maybe
-			if(memoryPointer < memory.length && Math.random() < INVENTION_PROBABILITY){
-				Utterance invention = new Utterance(meaning, forms++);
-				ArrayList<Utterance> words = new ArrayList<Utterance>();
-				words.add(invention);
-				meanings[meaning] = words;
-				memory[memoryPointer] = invention;
-				memoryPointer++;
-				return invention;
-			}
-			
-			return new Utterance(meaning, Utterance.SIGNAL_NULL_VALUE);//no new invention, return an empty utterance
-		}else{
-			ArrayList<Utterance> words = meanings[meaning];
-			
-			//Change this later, maybe make first one more likely to be used etc
-			int index = (int)(Math.random() * words.size());
-			
-			return words.get(index);
+		ArrayList<Utterance> synonyms = wordsPerMeaning[toRemember.meaning];
+		if(memoryPointer < memory.length && !synonyms.contains(toRemember)){//Have memory space and non-duplicate
+			synonyms.add(toRemember);
+			memory[memoryPointer] = toRemember;
+			memoryPointer++;
 		}
-	}
-	
-	public int getWordsForMeaning(int meaning){
-		return meanings[meaning]!=null?meanings[meaning].size():0;
 	}
 	
 	/**
@@ -95,27 +71,25 @@ public class SynonymAgent extends AbstractAgent {
 	public void printAgent(){
 		
 		System.out.println("Agent: " + getId() + "\nmemory:");
-		
-		for(int i = 0; i < memory.length; i++){
-			
+
+		for(int i = 0; i < memory.length; i++){			
 			if(memory[i] != null){System.out.println(i + " contains " + memory[i].signal);}
 			else{System.out.println(i + " is empty");}
 		}
 		
 		System.out.println("Meanings:");
 		
-		for(int i = 0; i < meanings.length; i++){
+		for(int i = 0; i < wordsPerMeaning.length; i++){
 			
-			ArrayList<Utterance> words = meanings[i];
+			ArrayList<Utterance> words = wordsPerMeaning[i];
 			
-			System.out.print("meaning " + i +" has " + (words==null?"0":words.size()) + " forms. ");
+			System.out.print("meaning " + i +" has " + words.size() + " forms. ");
 			
 			if(words!= null){
 				for(Utterance word : words){
 					System.out.print(word.signal + " ");
 				}
 			}
-			
 			System.out.println();
 			
 		}
@@ -129,14 +103,12 @@ public class SynonymAgent extends AbstractAgent {
 	 */
 	public void printForms(){
 		
-		for(ArrayList<Utterance> forms : meanings){
-			
+		for(ArrayList<Utterance> forms : wordsPerMeaning){
 			if(forms==null){
 				System.out.print("0\t");
 			}else{
 				System.out.print(forms.size()+"\t");
 			}
-			
 		}
 		
 		System.out.println();
@@ -153,10 +125,8 @@ public class SynonymAgent extends AbstractAgent {
 		//If agent and neighbour agree update fitness.
 		if(!utterance.isNull()){
 			
-			ArrayList<Utterance> synonyms = meanings[utterance.meaning];
-			if(synonyms == null){
-				return;
-			}
+			ArrayList<Utterance> synonyms = wordsPerMeaning[utterance.meaning];
+
 			for(Utterance knowledge : synonyms){
 				if(knowledge.signal == utterance.signal){
 					setFitness(getFitness()+1);
@@ -169,7 +139,6 @@ public class SynonymAgent extends AbstractAgent {
 	
 	private static enum MeaningDistribution {LINEAR,SQUARED,LOG};
 	private static MeaningDistribution selectionMethod = MeaningDistribution.LINEAR;
-	private static final int GRADIENT = 1;
 	@Override
 	public Utterance getRandomUtterance() {
 
@@ -187,7 +156,47 @@ public class SynonymAgent extends AbstractAgent {
 		}
 	}
 	
+	private Utterance getUtteranceForMeaning(int meaning){
+		
+		if(wordsPerMeaning[meaning].size() == 0){
+			
+			//In case of no word known, invent something maybe
+			if(memoryPointer < memory.length && Math.random() < INVENTION_PROBABILITY){
+				Utterance invention = new Utterance(meaning, forms++);
+				ArrayList<Utterance> words = new ArrayList<Utterance>();
+				words.add(invention);
+				wordsPerMeaning[meaning] = words;
+				memory[memoryPointer] = invention;
+				memoryPointer++;
+				return invention;
+			}
+			
+			return new Utterance(meaning, Utterance.SIGNAL_NULL_VALUE);//no new invention, return an empty utterance
+		}else{
+			ArrayList<Utterance> words = wordsPerMeaning[meaning];
+			
+			//TODO Change this later, maybe make first one more likely to be used etc
+			int index = (int)(Math.random() * words.size());
+			
+			return words.get(index);
+		}
+	}
 	
+	@Override
+	public double geneGrammarMatch() {
+		return memory.length; //TODO
+	}
+
+	@Override
+	public int learningIntensity() {
+		return 0; //TODO
+	}
+	
+	@Override
+	public int numberOfNulls(){
+		return 0; //TODO
+	}
+
 	public static void main(String[] args){
 		
 		SynonymAgent test = new SynonymAgent(1,10);
@@ -203,17 +212,5 @@ public class SynonymAgent extends AbstractAgent {
 		test.printAgent();
 
 	}
-
-	@Override
-	public double geneGrammarMatch() {
-		return 0;
-	}
-
-	@Override
-	public int learningIntensity() {
-		return 0;
-	}
-
-
 	
 }
