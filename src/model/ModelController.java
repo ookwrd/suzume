@@ -11,7 +11,7 @@ public class ModelController {
 	//public AgentType currentAgentType = AgentType.BiasAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 1000; 
+	private static final int GENERATION_COUNT = 2000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -251,17 +251,18 @@ public class ModelController {
 			}
 			totalFitness += agent.getFitness();
 			antiLearningIntensity += agent.learningIntensity();
+			//System.out.println(antiLearningIntensity);
 			numberNull += agent.numberOfNulls();
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 		
-		double learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
+		double learningIntensity = (POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity) / POPULATION_SIZE / 2 / COMMUNICATIONS_PER_NEIGHBOUR; // opposite value
 		
 		totalNumberGenotypes.add(numberGenotypes); // add the count of (different) genotypes for this generation
 		totalFitnesses.add(totalFitness/POPULATION_SIZE);
 		learningIntensities.add(learningIntensity);
 		geneGrammarMatches.add(genomeGrammarMatch);
-		numberNulls.add(numberNull);
+		numberNulls.add(numberNull/POPULATION_SIZE);
 		
 		//totalFitnesses.add(new Integer((int) (new Double(totalFitness)/POPULATION_SIZE)));
 		//learningIntensities.add(new Integer((int) (new Double(learningIntensity)/POPULATION_SIZE)));
