@@ -10,8 +10,8 @@ import Agents.SynonymAgent;
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
-	//public AgentType currentAgentType = AgentType.OriginalAgent;
-	public AgentType currentAgentType = AgentType.BiasAgent;
+	public AgentType currentAgentType = AgentType.OriginalAgent;
+	//public AgentType currentAgentType = AgentType.BiasAgent;
 	//public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
@@ -21,7 +21,7 @@ public class ModelController {
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 50; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
 	
  	//statistics
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
@@ -249,10 +249,10 @@ public class ModelController {
 		
 		double learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
 		
-		totalFitnesses.add(totalFitness);
-		learningIntensities.add(learningIntensity);
-		geneGrammarMatches.add(genomeGrammarMatch);
-		numberNulls.add(numberNull);
+		totalFitnesses.add(totalFitness/POPULATION_SIZE);
+		learningIntensities.add(learningIntensity/POPULATION_SIZE);
+		geneGrammarMatches.add(genomeGrammarMatch/POPULATION_SIZE);
+		numberNulls.add(numberNull/POPULATION_SIZE);
 		
 		//totalFitnesses.add(new Integer((int) (new Double(totalFitness)/POPULATION_SIZE)));
 		//learningIntensities.add(new Integer((int) (new Double(learningIntensity)/POPULATION_SIZE)));
