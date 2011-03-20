@@ -1,6 +1,7 @@
 //TODO where did this come from.
 
 package model;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -24,8 +25,13 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
 
-	public ModelStatistics() {
+	public ModelStatistics(String title) {
+		this.setTitle(title);
 		this.setLayout(new FlowLayout());
+		this.setPreferredSize(new Dimension(640,480));
+	}
+	
+	public void display(){
 		setVisible(true);
 	}
 

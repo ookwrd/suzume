@@ -15,13 +15,13 @@ public class ModelController {
 	//public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 100; 
+	private static final int GENERATION_COUNT = 1000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 7; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
 	
  	//statistics
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
@@ -267,13 +267,14 @@ public class ModelController {
 	private void plot() {
 		
 		
-		ModelStatistics statsWindow = new ModelStatistics();
+		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + RandomGenerator.randomSeed + "   AgentType: " + currentAgentType + "   GenerationCount: " + GENERATION_COUNT + "   PopulationSize: " + POPULATION_SIZE + "   CriticalPeriod: " + CRITICAL_PERIOD + "]");
 		
 		statsWindow.plot(learningIntensities, "Learning Intensities");
 		statsWindow.plot(numberNulls, "Number of Nulls");
 		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches");
 		statsWindow.plot(totalFitnesses, "Total Fitnesses");
 		
+		statsWindow.display();
 	}
 	
 	public static void main(String[] args){
