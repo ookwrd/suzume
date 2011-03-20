@@ -25,6 +25,12 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class ModelStatistics extends Panel {
 	
+	private static int id = 0;
+	private static int WIDTH = 500;
+	private static int LENGTH = 300;
+	private static int POSITION_Y = 0;
+	private static int POSITION_X = 0;
+	
 	private BufferedImage image;
 	public static String title;
 	XYSeries series;
@@ -52,12 +58,58 @@ public class ModelStatistics extends Panel {
 							)); 
 		}
 		createImage(series);
-		
+
 		JFrame frame = new JFrame(title);
+		switch (id++) {
+		case 0:
+			POSITION_Y = 0;
+			POSITION_X = 0;
+			break;
+		case 1:
+			POSITION_Y = 0;
+			POSITION_X = WIDTH;
+			break;
+			
+		case 2:
+			POSITION_Y = LENGTH;
+			POSITION_X = 0;
+			break;
+		
+		case 3:
+			POSITION_Y = LENGTH;
+			POSITION_X = WIDTH;
+			break;
+		
+		case 4:
+			POSITION_Y = LENGTH*2;
+			POSITION_X = 0;
+			break;
+		case 5:
+			POSITION_Y = LENGTH*2;
+			POSITION_X = WIDTH;
+			break;
+		case 6:
+			POSITION_Y = 0;
+			POSITION_X = WIDTH*2;
+			break;
+		case 7:
+			POSITION_Y = LENGTH;
+			POSITION_X = WIDTH*2;
+			break;
+		case 8:
+			POSITION_Y = LENGTH*2;
+			POSITION_X = WIDTH*2;
+			break;
+			
+		default:
+			POSITION_Y = 0;
+			POSITION_X = 0;
+			break;
+		}
+		frame.setLocation(POSITION_X, POSITION_Y);
 	    frame.getContentPane().add(this);
-	    frame.setSize(500, 500);
+	    frame.setSize(WIDTH, LENGTH);
 	    frame.setVisible(true);
-	    
 	}
 	
 	private static JFreeChart createChart(XYSeries series) {
@@ -77,7 +129,7 @@ public class ModelStatistics extends Panel {
 
 	private BufferedImage createImage(XYSeries series) {
 		JFreeChart chart = createChart(series);
-		image = chart.createBufferedImage(500, 300);
+		image = chart.createBufferedImage(WIDTH, LENGTH);
 
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
