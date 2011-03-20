@@ -10,12 +10,12 @@ import Agents.SynonymAgent;
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
-	public AgentType currentAgentType = AgentType.OriginalAgent;
+	//public AgentType currentAgentType = AgentType.OriginalAgent;
 	//public AgentType currentAgentType = AgentType.BiasAgent;
-	//public AgentType currentAgentType = AgentType.SynonymAgent;
+	public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 5000; 
+	private static final int GENERATION_COUNT = 500; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;

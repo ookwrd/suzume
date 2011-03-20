@@ -74,7 +74,7 @@ public class SynonymAgent extends AbstractAgent {
 				return invention;
 			}
 			
-			return null;//no new invention, return an empty utterance
+			return new Utterance(meaning, Utterance.SIGNAL_NULL_VALUE);//no new invention, return an empty utterance
 		}else{
 			ArrayList<Utterance> words = meanings[meaning];
 			
@@ -145,20 +145,34 @@ public class SynonymAgent extends AbstractAgent {
 	
 	private static int forms = 0; //Unique static word form identifier, TODO should be replaced with a static get form method
 	
-	/*public void teach(SynonymAgent listener, SynonymAgent speaker){
+	@Override
+	public void communicate(Agent partner) {
 		
-		int meaning = Simulation.getMeaning();
-		Utterance utterance = speaker.getUtteranceForMeaning(meaning);	
-		listener.learnUtterance(utterance);
+		Utterance utterance = partner.getRandomUtterance();
 		
-	}*/
+		//If agent and neighbour agree update fitness.
+		if(!utterance.isNull()){
+			
+			ArrayList<Utterance> synonyms = meanings[utterance.meaning];
+			if(synonyms == null){
+				return;
+			}
+			for(Utterance knowledge : synonyms){
+				if(knowledge.signal == utterance.signal){
+					setFitness(getFitness()+1);
+					return;
+				}
+			}
+		}
+		
+	}
 	
 	private static enum MeaningDistribution {LINEAR,SQUARED,LOG};
 	private static MeaningDistribution selectionMethod = MeaningDistribution.LINEAR;
 	private static final int GRADIENT = 1;
 	@Override
 	public Utterance getRandomUtterance() {
-		
+
 		double rand = Math.random();
 		
 		if(selectionMethod == MeaningDistribution.SQUARED){
@@ -200,10 +214,6 @@ public class SynonymAgent extends AbstractAgent {
 		return 0;
 	}
 
-	@Override
-	public void communicate(Agent partner) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 }
