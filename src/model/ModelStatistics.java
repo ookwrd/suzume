@@ -1,9 +1,7 @@
 //TODO where did this come from.
 
 package model;
-import java.awt.Graphics;
-import java.awt.PageAttributes.OrientationRequestedType;
-import java.awt.Panel;
+import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,27 +21,20 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-public class ModelStatistics extends Panel {
-	
-	private BufferedImage image;
-	public static String title;
-	XYSeries series;
-	
-	public static void plot(ArrayList<Double> data, String title) {
-		ModelStatistics mp = new ModelStatistics(title, data);
-	}
-	
-	public ModelStatistics(String title, ArrayList<Double> data) {
-		this.title = title;
-		plot(data);
+@SuppressWarnings("serial")
+public class ModelStatistics extends JFrame {
+
+	public ModelStatistics() {
+		this.setLayout(new FlowLayout());
+		setVisible(true);
 	}
 
-	public void plot(ArrayList<Double> data) {
-		
-		series = new XYSeries(title);
+	public void plot(ArrayList<Double> data, String title) {
+	
+		XYSeries newSeries = new XYSeries(title);
 		
 		for (int i = 0; i < data.size(); i++) {
-			series.add(new Double(
+			newSeries.add(new Double(
 					
 					i // x
 					), new Double(
@@ -51,16 +42,12 @@ public class ModelStatistics extends Panel {
 							data.get(i) // y 
 							)); 
 		}
-		createImage(series);
 		
-		JFrame frame = new JFrame(title);
-	    frame.getContentPane().add(this);
-	    frame.setSize(500, 500);
-	    frame.setVisible(true);
-	    
+		add(new JLabel(new ImageIcon(createImage(newSeries, title))));
+		validate();
 	}
 	
-	private static JFreeChart createChart(XYSeries series) {
+	private static JFreeChart createChart(XYSeries series, String title) {
 		XYDataset xyDataset = new XYSeriesCollection(series);
 
 		JFreeChart chart = ChartFactory.createXYLineChart(
@@ -75,9 +62,9 @@ public class ModelStatistics extends Panel {
 		return chart;
 	}
 
-	private BufferedImage createImage(XYSeries series) {
-		JFreeChart chart = createChart(series);
-		image = chart.createBufferedImage(500, 300);
+	private BufferedImage createImage(XYSeries series, String title) {
+		JFreeChart chart = createChart(series, title);
+		BufferedImage image = chart.createBufferedImage(500, 300);
 
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
@@ -107,13 +94,6 @@ public class ModelStatistics extends Panel {
 			System.out.println("Error:" + ie.getMessage());
 		}
 	}
-
-	public void paint(Graphics g) {
-		g.drawImage(image, 0, 0, null);
-	}
 	
-	public static void main() {
-		ModelController.main(null);
-	}
 
 }

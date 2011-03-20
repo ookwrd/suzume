@@ -10,12 +10,12 @@ import Agents.SynonymAgent;
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
-	//public AgentType currentAgentType = AgentType.OriginalAgent;
+	public AgentType currentAgentType = AgentType.OriginalAgent;
 	//public AgentType currentAgentType = AgentType.BiasAgent;
-	public AgentType currentAgentType = AgentType.SynonymAgent;
+	//public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 10000; 
+	private static final int GENERATION_COUNT = 100; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -266,10 +266,13 @@ public class ModelController {
 	 */
 	private void plot() {
 		
-		ModelStatistics.plot(learningIntensities, "Learning Intensities");
-		ModelStatistics.plot(numberNulls, "Number of Nulls");
-		ModelStatistics.plot(geneGrammarMatches, "Gene Grammar Matches");
-		ModelStatistics.plot(totalFitnesses, "Total Fitnesses");
+		
+		ModelStatistics statsWindow = new ModelStatistics();
+		
+		statsWindow.plot(learningIntensities, "Learning Intensities");
+		statsWindow.plot(numberNulls, "Number of Nulls");
+		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches");
+		statsWindow.plot(totalFitnesses, "Total Fitnesses");
 		
 	}
 	
