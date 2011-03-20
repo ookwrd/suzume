@@ -7,6 +7,8 @@ public class SynonymAgent extends AbstractAgent {
 	public static final int DEFAULT_MEMEORY_SIZE = 10;	
 	private static final double INVENTION_PROBABILITY = 0.01;
 	
+	private static final boolean ALLOW_BIOLOGICAL_MUTATION = false;
+	
 	private Utterance[] memory;
 	private int memoryPointer = 0;
 	private ArrayList<Utterance>[] wordsPerMeaning; 
@@ -26,10 +28,16 @@ public class SynonymAgent extends AbstractAgent {
 		super(id);
 		
 		//Currently asexual reproduction
-		int memorySize = parent1.memory.length + ((Math.random() > 0.5)?1:-1);
-		if(memorySize < 1){
-			memorySize = 1;
+		int memorySize;
+		if(ALLOW_BIOLOGICAL_MUTATION){
+			memorySize = parent1.memory.length + ((Math.random() > 0.5)?1:-1);
+			if(memorySize < 1){
+				memorySize = 1;
+			}
+		}else{
+			memorySize = parent1.memory.length;
 		}
+		
 		memory = new Utterance[memorySize];
 		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
 		for(int i = 0; i < wordsPerMeaning.length; i++){
