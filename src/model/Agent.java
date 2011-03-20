@@ -26,6 +26,8 @@ public interface Agent {
 	
 	public int getId();
 	public ArrayList<Integer> getGrammar();//TODO is this needed?
+	public ArrayList<Integer> getChromosome();
 	
+	//public boolean genotypeEquals(Agent agent);	
 	
 }
