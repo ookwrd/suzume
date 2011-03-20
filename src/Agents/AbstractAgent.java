@@ -80,7 +80,7 @@ public abstract class AbstractAgent implements Agent {
 		//If agent and neighbour agree update fitnes.
 		if(!utterance.isNull() && (getGrammar().get(utterance.meaning) == utterance.signal)){
 			setFitness(getFitness()+1);
-			partner.setFitness(partner.getFitness()+1);
+			//partner.setFitness(partner.getFitness()+1); TODO need to implement symetry
 		}
 	}
 }
