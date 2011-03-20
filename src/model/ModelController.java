@@ -276,10 +276,10 @@ public class ModelController {
 	private void plot() {
 		
 		ModelStatistics.plot(totalNumberGenotypes, "Total Number of Genotypes");
-		/*ModelStatistics.plot(learningIntensities, "Learning Intensities");
+		ModelStatistics.plot(learningIntensities, "Learning Intensities");
 		ModelStatistics.plot(numberNulls, "Number of Nulls");
 		ModelStatistics.plot(geneGrammarMatches, "Gene Grammar Matches");
-		ModelStatistics.plot(totalFitnesses, "Total Fitnesses");*/
+		ModelStatistics.plot(totalFitnesses, "Total Fitnesses");
 		
 	}
 	
@@ -310,18 +310,14 @@ public class ModelController {
 	 * @throws Exception 
 	 */
 	public static boolean agentGenotypeEquals(Agent a, Agent b) throws Exception {
-		//int count = 0;
-		
 		if (a.getChromosome().size() != b.getChromosome().size()) 
 			throw new Exception("Chromosome sizes do not match");
 		for(int i = 0; i < a.getChromosome().size(); i++){
 			if(a.getChromosome().get(i).equals(b.getChromosome().get(i))){
-				//count++;
 			}
 			else return false;
 		}
 		return true;
-		//return count==CHROMOSOME_SIZE;
 	}
 	
 
@@ -334,18 +330,14 @@ public class ModelController {
 	 * @throws Exception 
 	 */
 	public static boolean genotypeEquals(ArrayList<Integer> chromosome1, ArrayList<Integer> chromosome2) throws Exception {
-		//int count = 0;
-		
 		if (chromosome1.size() != chromosome2.size()) 
 			throw new Exception("Chromosome sizes do not match");
 		for(int i = 0; i < chromosome1.size(); i++){
 			if(chromosome1.get(i).equals(chromosome2.get(i))){
-				//count++;
 			}
 			else return false;
 		}
 		return true;
-		//return count==CHROMOSOME_SIZE;
 	}
 	
 	
