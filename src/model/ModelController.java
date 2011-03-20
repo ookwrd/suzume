@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ModelController {
 	
@@ -9,7 +11,7 @@ public class ModelController {
 	//public AgentType currentAgentType = AgentType.BiasAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 50000; 
+	private static final int GENERATION_COUNT = 1000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -18,6 +20,7 @@ public class ModelController {
 	private static final int CRITICAL_PERIOD = 12; //Number of utterances available to learners
 	
 	//statistics
+	private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
 	private ArrayList<Double> learningIntensities = new ArrayList<Double>();
 	private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
@@ -232,22 +235,30 @@ public class ModelController {
 	 */
 	private void gatherStatistics(){
 		
+		Set<ArrayList<Integer>> genotypes = new HashSet<ArrayList<Integer>>();
+		double numberGenotypes = 0;
 		double antiLearningIntensity = 0;
 		double totalFitness = 0;
 		double genomeGrammarMatch = 0;
 		double numberNull = 0;
 		
 		for(Agent agent : population.getCurrentGeneration()){
+			ArrayList<Integer> chromosome = agent.getChromosome();// if agent.getGenotype is not already in genotypes then +1
+			if (!setContainsGenotype(genotypes, chromosome)) 
+			{ 
+				numberGenotypes++;
+				genotypes.add(chromosome); // now add agent.getGenotype to genotypes
+			}
 			totalFitness += agent.getFitness();
 			antiLearningIntensity += agent.learningIntensity();
-			
 			numberNull += agent.numberOfNulls();
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 		
 		double learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
 		
-		totalFitnesses.add(totalFitness);
+		totalNumberGenotypes.add(numberGenotypes); // add the count of (different) genotypes for this generation
+		totalFitnesses.add(totalFitness/POPULATION_SIZE);
 		learningIntensities.add(learningIntensity);
 		geneGrammarMatches.add(genomeGrammarMatch);
 		numberNulls.add(numberNull);
@@ -264,12 +275,79 @@ public class ModelController {
 	 */
 	private void plot() {
 		
-		ModelStatistics.plot(learningIntensities, "Learning Intensities");
+		ModelStatistics.plot(totalNumberGenotypes, "Total Number of Genotypes");
+		/*ModelStatistics.plot(learningIntensities, "Learning Intensities");
 		ModelStatistics.plot(numberNulls, "Number of Nulls");
 		ModelStatistics.plot(geneGrammarMatches, "Gene Grammar Matches");
-		ModelStatistics.plot(totalFitnesses, "Total Fitnesses");
+		ModelStatistics.plot(totalFitnesses, "Total Fitnesses");*/
 		
 	}
+	
+	/**
+	 * Returns true if genotypes already contains genotype
+	 * and false otherwise 
+	 * 
+	 * @param genotypes a list of genotypes
+	 * @param genotype one specific genotype to test
+	 */
+	private boolean setContainsGenotype(Set<ArrayList<Integer>> genotypes, ArrayList<Integer> genotype) {
+		for (ArrayList<Integer> g: genotypes) {
+			try {
+				if(genotypeEquals(g, genotype)) return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if the chromosome of agent a matches exactly the chromosome of agent b
+	 * Returns false otherwise
+	 * 
+	 * @param a first agent
+	 * @param b second agent
+	 * @throws Exception 
+	 */
+	public static boolean agentGenotypeEquals(Agent a, Agent b) throws Exception {
+		//int count = 0;
+		
+		if (a.getChromosome().size() != b.getChromosome().size()) 
+			throw new Exception("Chromosome sizes do not match");
+		for(int i = 0; i < a.getChromosome().size(); i++){
+			if(a.getChromosome().get(i).equals(b.getChromosome().get(i))){
+				//count++;
+			}
+			else return false;
+		}
+		return true;
+		//return count==CHROMOSOME_SIZE;
+	}
+	
+
+	/**
+	 * Returns true if chromosome a matches exactly chromosome b
+	 * Returns false otherwise
+	 * 
+	 * @param chromosome1 first agent
+	 * @param chromosome2 second agent
+	 * @throws Exception 
+	 */
+	public static boolean genotypeEquals(ArrayList<Integer> chromosome1, ArrayList<Integer> chromosome2) throws Exception {
+		//int count = 0;
+		
+		if (chromosome1.size() != chromosome2.size()) 
+			throw new Exception("Chromosome sizes do not match");
+		for(int i = 0; i < chromosome1.size(); i++){
+			if(chromosome1.get(i).equals(chromosome2.get(i))){
+				//count++;
+			}
+			else return false;
+		}
+		return true;
+		//return count==CHROMOSOME_SIZE;
+	}
+	
 	
 	public static void main(String[] args){
 		
@@ -295,11 +373,11 @@ public class ModelController {
 		System.out.println();
 		System.out.println("Fitnesses\tlearningResc\tGeneGrammarMatch\tNulls");
 		for(int i = 0; i < selector.learningIntensities.size(); i++){
-			System.out.println(selector.totalFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i));
+			System.out.println(selector.totalFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i) + "\t" + selector.totalNumberGenotypes.get(i));
 		}
 		
 		//Plot
 		selector.plot();
 	}
-
+	
 }
