@@ -10,18 +10,18 @@ import Agents.SynonymAgent;
 public class ModelController {
 	
 	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
-	public AgentType currentAgentType = AgentType.OriginalAgent;
-	//public AgentType currentAgentType = AgentType.BiasAgent;
+	//public AgentType currentAgentType = AgentType.OriginalAgent;
+	public AgentType currentAgentType = AgentType.BiasAgent;
 	//public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 1000; 
+	private static final int GENERATION_COUNT = 10000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 50; //Number of utterances available to learners
 	
  	//statistics
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();

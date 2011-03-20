@@ -14,6 +14,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -25,10 +29,13 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
 
+	JPanel innerPane = new JPanel();
+	
 	public ModelStatistics(String title) {
+		innerPane.setLayout(new FlowLayout());
+		this.add(innerPane);
 		this.setTitle(title);
-		this.setLayout(new FlowLayout());
-		this.setPreferredSize(new Dimension(640,480));
+		this.setSize(new Dimension(1040,660));
 	}
 	
 	public void display(){
@@ -49,8 +56,8 @@ public class ModelStatistics extends JFrame {
 							)); 
 		}
 		
-		add(new JLabel(new ImageIcon(createImage(newSeries, title))));
-		validate();
+		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries, title))));
+		innerPane.validate();
 	}
 	
 	private static JFreeChart createChart(XYSeries series, String title) {

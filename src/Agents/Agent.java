@@ -29,7 +29,6 @@ public interface Agent {
 	public void printAgent();
 	
 	public int getId();
-	public ArrayList<Integer> getGrammar();//TODO is this needed?
 	
 	
 }

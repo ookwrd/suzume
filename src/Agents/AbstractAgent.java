@@ -29,7 +29,6 @@ public abstract class AbstractAgent implements Agent {
 		return id;
 	}
 
-	@Override
 	public ArrayList<Integer> getGrammar() {
 		return grammar;
 	}
