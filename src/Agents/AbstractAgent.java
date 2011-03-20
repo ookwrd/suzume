@@ -77,9 +77,10 @@ public abstract class AbstractAgent implements Agent {
 		
 		Utterance utterance = partner.getRandomUtterance();
 
-		//If agent and neighbour agree update fitness.
+		//If agent and neighbour agree update fitnes.
 		if(!utterance.isNull() && (getGrammar().get(utterance.meaning) == utterance.signal)){
 			setFitness(getFitness()+1);
+			partner.setFitness(partner.getFitness()+1);
 		}
 	}
 }

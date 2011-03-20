@@ -15,7 +15,7 @@ public class ModelController {
 	//public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 500; 
+	private static final int GENERATION_COUNT = 5000; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -145,26 +145,15 @@ public class ModelController {
 		
 		for(Agent agent : population.getCurrentGeneration()){
 		
-			//TODO this is redundant, as the affect of agent n on n+1 are symetrical. 
-			//TODO also doesn't match the paper as potential for different utterances used for calculating fitness of agent n and n+1 
-			
 			ArrayList<Agent> neighbouringAgents = population.getNeighbors(agent, 1);
 		
 			//Set the agents fitness to the default base level 
 			agent.setFitness(BASE_FITNESS);
 			
 			//Communicate with all neighbours
-			for(Agent neighbour : neighbouringAgents){
-				
+			for(Agent neighbour : neighbouringAgents){	
 				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
-					
 					agent.communicate(neighbour);
-					/*Utterance utterance = neighbour.getRandomUtterance();
-
-					//If agent and neighbour agree update fitness.
-					if(!utterance.isNull() && (agent.getGrammar().get(utterance.meaning) == utterance.signal)){
-						agent.setFitness(agent.getFitness()+1);
-					}*/
 				}
 			}
 			
