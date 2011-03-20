@@ -17,7 +17,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	public BiasAgent(int id) {
 		super(id);
 		chromosome = new ArrayList<double[]>();
-		for(int i = 0; i < CHROMOSOME_SIZE; i++){
+		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
 			
 			double[] biases = new double[DIMENSIONS];
 			
@@ -45,22 +45,22 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	 */
 	public BiasAgent(BiasAgent parent1, BiasAgent parent2, int id){
 		super(id);
-		chromosome = new ArrayList<double[]>(CHROMOSOME_SIZE);
+		chromosome = new ArrayList<double[]>(NUMBER_OF_MEANINGS);
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(CHROMOSOME_SIZE);
+		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < CHROMOSOME_SIZE){
+		while(i < NUMBER_OF_MEANINGS){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < CHROMOSOME_SIZE; j++){//TODO different mutation stratergies... fixed values. 80% or something
+		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){//TODO different mutation stratergies... fixed values. 80% or something
 			if(randomGenerator.random() < MUTATION_RATE){
 				
 				double[] gene = chromosome.get(j);
@@ -93,7 +93,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	@Override
 	public void invent() {
 		
-		if(grammar.contains(Utterance.NULL_VALUE)){//Single iteration... max 1 invention per turn.
+		if(grammar.contains(Utterance.SIGNAL_NULL_VALUE)){//Single iteration... max 1 invention per turn.
 			
 			if(randomGenerator.random() < INVENTION_PROBABILITY){
 				
@@ -102,7 +102,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 				for(int i = 0; i < grammar.size(); i++){
 					
 					Integer allele = grammar.get(i);
-					if(allele == Utterance.NULL_VALUE){
+					if(allele == Utterance.SIGNAL_NULL_VALUE){
 						nullIndexes.add(i);
 					}
 				}
@@ -126,21 +126,16 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	}
 	
 	@Override
-	public void teach(Agent learner) {
-		learner.learnUtterance(getRandomUtterance());
-	}
-	
-	@Override
 	public void learnUtterance(Utterance u) {
 		
 		//agents agree on value or NULL utterance
-		if(u.value == grammar.get(u.index) || u.value == Utterance.NULL_VALUE){
+		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
 		}
 		
 		double random = randomGenerator.random();
-		if(chromosome.get(u.index)[u.value] <= random){
-			grammar.set(u.index, u.value);
+		if(chromosome.get(u.meaning)[u.signal] <= random){
+			grammar.set(u.meaning, u.signal);
 		}
 		
 	}
@@ -149,13 +144,13 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		System.out.println("Agent " + getId() + ":");
 		for(int j = 0; j < DIMENSIONS; j++){
 			System.out.print("Dimension " + j + ":\t");
-			for (int i = 0; i < CHROMOSOME_SIZE; i++) {
+			for (int i = 0; i < NUMBER_OF_MEANINGS; i++) {
 				System.out.print(chromosome.get(i)[j] + "\t");
 			}
 			System.out.println();
 		}
 		System.out.print("Grammar:\t");
-		for(int i = 0; i < CHROMOSOME_SIZE; i++){
+		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
 			System.out.print(grammar.get(i) + "\t\t\t");
 		}
 		
@@ -179,14 +174,6 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		newAgent1.printAgent();
 		
 	}
-
-	@Override
-	public boolean canStillLearn() {
-		return true;
-	}
-
-
-
 	
 	/**
 	 * Sum of the probabilites of the grammar having the values that they do. 
@@ -196,8 +183,8 @@ public class BiasAgent extends AbstractAgent implements Agent{
 
 		double count = 0;
 		
-		for(int i = 0; i < CHROMOSOME_SIZE; i++){
-			if(grammar.get(i) != Utterance.NULL_VALUE){
+		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
+			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
 			}
 		}
@@ -210,6 +197,12 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	public int learningIntensity() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void communicate(Agent partner) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

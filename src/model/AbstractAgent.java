@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractAgent implements Agent {
 
-	protected static final int CHROMOSOME_SIZE = 12;
+	protected static final int NUMBER_OF_MEANINGS = 12;
 	
 	private int fitness;
 	private int id;
@@ -16,9 +16,9 @@ public abstract class AbstractAgent implements Agent {
 		this.id = id;
 		fitness = 0;
 		
-		grammar = new ArrayList<Integer>(CHROMOSOME_SIZE);
-		for (int j = 0; j < CHROMOSOME_SIZE; j++){
-			grammar.add(Utterance.NULL_VALUE);
+		grammar = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
+		for (int j = 0; j < NUMBER_OF_MEANINGS; j++){
+			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
 	}
 	
@@ -37,8 +37,8 @@ public abstract class AbstractAgent implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < CHROMOSOME_SIZE; i++){
-			if(grammar.get(i).equals(Utterance.NULL_VALUE)){
+		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
+			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}
 		}
@@ -56,4 +56,17 @@ public abstract class AbstractAgent implements Agent {
 		this.fitness = fitness;
 	}
 	
+	@Override
+	public boolean canStillLearn(){
+		return true;
+	}
+	
+	@Override
+	public void invent(){
+	}
+	
+	@Override
+	public void teach(Agent learner) {
+		learner.learnUtterance(getRandomUtterance());
+	}
 }

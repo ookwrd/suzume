@@ -2,18 +2,18 @@ package model;
 
 public class Utterance {
 
-	public static final int NULL_VALUE = -1;
+	public static final int SIGNAL_NULL_VALUE = -1;
 	
-	int index;
-	int value;
+	int meaning;
+	int signal;
 	
 	public Utterance(int meaningIndex, int signalValue) {
-		this.index = meaningIndex;
-		this.value = signalValue;
+		this.meaning = meaningIndex;
+		this.signal = signalValue;
 	}
 	
 	public boolean isNull(){
-		return value == NULL_VALUE;
+		return signal == SIGNAL_NULL_VALUE;
 	}
 
 }

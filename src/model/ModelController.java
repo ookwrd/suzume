@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class ModelController {
 	
-	private enum AgentType { OriginalAgent, BiasAgent, TestAgent };
+	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
 	//public AgentType currentAgentType = AgentType.OriginalAgent;
-	public AgentType currentAgentType = AgentType.BiasAgent;
+	//public AgentType currentAgentType = AgentType.BiasAgent;
+	public AgentType currentAgentType = AgentType.SynonymAgent;
 	//public AgentType currentAgentType = AgentType.TestAgent;
 	
-	private static final int GENERATION_COUNT = 50000; 
+	private static final int GENERATION_COUNT = 500; 
 	private static final int POPULATION_SIZE = 200; //Should be 200
 	
 	private static final int BASE_FITNESS = 1;
@@ -65,6 +66,8 @@ public class ModelController {
 			return new OriginalAgent(nextAgentID++);
 		}else if (currentAgentType == AgentType.BiasAgent){
 			return new BiasAgent(nextAgentID++);
+		}else if (currentAgentType == AgentType.SynonymAgent){
+			return new SynonymAgent(nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
 		}else{
 			System.err.println("Unsupported Agent type");
 			return null;
@@ -152,7 +155,7 @@ public class ModelController {
 					Utterance utterance = neighbour.getRandomUtterance();
 
 					//If agent and neighbour agree update fitness.
-					if(!utterance.isNull() && (agent.getGrammar().get(utterance.index) == utterance.value)){
+					if(!utterance.isNull() && (agent.getGrammar().get(utterance.meaning) == utterance.signal)){
 						agent.setFitness(agent.getFitness()+1);
 					}
 				}
@@ -175,10 +178,13 @@ public class ModelController {
 		while(newGenerationAgents.size() < POPULATION_SIZE){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
+			
 			if(currentAgentType == AgentType.OriginalAgent){
 				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
 			}else if (currentAgentType == AgentType.BiasAgent){
 				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++));
+			} else if (currentAgentType == AgentType.SynonymAgent){
+				newGenerationAgents.add(new SynonymAgent((SynonymAgent)parent1,(SynonymAgent)parent2,nextAgentID++));
 			}else{
 				System.err.println("Unsupported Agent type");
 				return null;

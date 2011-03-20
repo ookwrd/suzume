@@ -19,8 +19,8 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	public OriginalAgent(int id) {
 		super(id);
-		chromosome = new ArrayList<Integer>(CHROMOSOME_SIZE);
-		for (int i = 0; i < CHROMOSOME_SIZE; i++) { // all alleles are initially set to a random value initially
+		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
+		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
 		learningResource = LEARNING_RESOURCE;
@@ -35,23 +35,23 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	 */
 	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id){
 		super(id);
-		chromosome = new ArrayList<Integer>(CHROMOSOME_SIZE);
+		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		learningResource = LEARNING_RESOURCE;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(CHROMOSOME_SIZE);
+		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < CHROMOSOME_SIZE){
+		while(i < NUMBER_OF_MEANINGS){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < CHROMOSOME_SIZE; j++){
+		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){
 			if(randomGenerator.random() < MUTATION_RATE){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
@@ -77,7 +77,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	@Override
 	public void invent() {
 		
-		while(grammar.contains(Utterance.NULL_VALUE) && learningResource > 0){
+		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
 			if(randomGenerator.random() < INVENTION_PROBABILITY){
@@ -87,7 +87,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 				for(int i = 0; i < grammar.size(); i++){
 					
 					Integer allele = grammar.get(i);
-					if(allele == Utterance.NULL_VALUE){
+					if(allele == Utterance.SIGNAL_NULL_VALUE){
 						nullIndexes.add(i);
 					}
 				}
@@ -121,12 +121,12 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	public void learnUtterance(Utterance u) {
 		
 		//agents agree on value or NULL utterance
-		if(u.value == grammar.get(u.index) || u.value == Utterance.NULL_VALUE){
+		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
 		}
 		
-		if(u.value == chromosome.get(u.index)){//Matches this agents UG
-			grammar.set(u.index, u.value);
+		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
+			grammar.set(u.meaning, u.signal);
 			learningResource -= MATCHING_LEARNING_COST;
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
@@ -135,7 +135,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 				return;
 			}
 			
-			grammar.set(u.index, u.value);
+			grammar.set(u.meaning, u.signal);
 			learningResource -= NON_MATCHING_LEARNING_COST;
 		}
 		
@@ -160,7 +160,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < CHROMOSOME_SIZE; i++){
+		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
@@ -173,5 +173,11 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	public int learningIntensity() {
 		// TODO Some better more general way of measuring this...
 		return learningResource;
+	}
+
+	@Override
+	public void communicate(Agent partner) {
+		// TODO Auto-generated method stub
+		
 	}
 }
