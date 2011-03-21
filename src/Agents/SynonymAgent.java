@@ -220,5 +220,11 @@ public class SynonymAgent extends AbstractAgent {
 		test.printAgent();
 
 	}
+
+	@Override
+	public ArrayList getChromosome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
