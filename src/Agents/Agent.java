@@ -1,5 +1,7 @@
 package Agents;
 
+import java.util.ArrayList;
+
 public interface Agent {
 	
 
@@ -26,6 +28,7 @@ public interface Agent {
 	public void printAgent();
 	
 	public int getId();
+	public ArrayList getChromosome();//TODO get rid of this
 	
 	
 }

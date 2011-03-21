@@ -202,4 +202,9 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		return 0;
 	}
 
+	
+	@Override
+	public ArrayList getChromosome() {
+		return chromosome;
+	}
 }

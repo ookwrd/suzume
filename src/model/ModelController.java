@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import Agents.Agent;
 import Agents.BiasAgent;
@@ -24,6 +26,7 @@ public class ModelController {
 	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
 	
  	//statistics
+	private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
 	private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
 	private ArrayList<Double> learningIntensities = new ArrayList<Double>();
 	private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
@@ -234,12 +237,19 @@ public class ModelController {
 	 */
 	private void gatherStatistics(){
 		
+		ArrayList genotypes = new ArrayList();
 		double antiLearningIntensity = 0;
 		double totalFitness = 0;
 		double genomeGrammarMatch = 0;
 		double numberNull = 0;
 		
 		for(Agent agent : population.getCurrentGeneration()){
+			
+			ArrayList<Integer> chromosome = agent.getChromosome();
+			if (!genotypes.contains(chromosome)){
+				genotypes.add(chromosome);
+			}
+			
 			totalFitness += agent.getFitness();
 			antiLearningIntensity += agent.learningIntensity();
 			
@@ -247,35 +257,34 @@ public class ModelController {
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 		
-		double learningIntensity = POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity; // opposite value
-		
+		double learningIntensity = (POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity) / POPULATION_SIZE / 2 / COMMUNICATIONS_PER_NEIGHBOUR;
 		totalFitnesses.add(totalFitness/POPULATION_SIZE);
 		learningIntensities.add(learningIntensity/POPULATION_SIZE);
 		geneGrammarMatches.add(genomeGrammarMatch/POPULATION_SIZE);
 		numberNulls.add(numberNull/POPULATION_SIZE);
-		
-		//totalFitnesses.add(new Integer((int) (new Double(totalFitness)/POPULATION_SIZE)));
-		//learningIntensities.add(new Integer((int) (new Double(learningIntensity)/POPULATION_SIZE)));
-		//geneGrammarMatches.add(new Integer((int) (new Double(genomeGrammarMatch)/POPULATION_SIZE)));
-		//numberNulls.add(new Integer((int) (new Double(numberNull)/POPULATION_SIZE)));
+		totalNumberGenotypes.add((double)genotypes.size());
 		
 	}
+	
+	
 	
 	/**
 	 * Show all plots
 	 */
 	private void plot() {
 		
-		
 		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + RandomGenerator.randomSeed + "   AgentType: " + currentAgentType + "   GenerationCount: " + GENERATION_COUNT + "   PopulationSize: " + POPULATION_SIZE + "   CriticalPeriod: " + CRITICAL_PERIOD + "]");
 		
 		statsWindow.plot(learningIntensities, "Learning Intensities");
 		statsWindow.plot(numberNulls, "Number of Nulls");
+		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes");
 		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches");
 		statsWindow.plot(totalFitnesses, "Total Fitnesses");
+		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes");
 		
 		statsWindow.display();
 	}
+	
 	
 	public static void main(String[] args){
 		
@@ -306,6 +315,14 @@ public class ModelController {
 		
 		//Plot
 		selector.plot();
+		
+		for(Agent agent : selector.population.getCurrentGeneration()){
+			System.out.println(agent.getChromosome());
+		}
+		
+		Object double1 = new Double(12342.09);
+		
+		System.out.println(double1);
 	}
 
 }

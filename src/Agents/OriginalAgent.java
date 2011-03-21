@@ -177,5 +177,11 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		// TODO Some better more general way of measuring this...
 		return learningResource;
 	}
+	
+	
+	@Override
+	public ArrayList getChromosome() {
+		return chromosome;
+	}
 
 }
