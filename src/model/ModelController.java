@@ -26,10 +26,11 @@ public class ModelController {
 	
 	private int currentGeneration = 0;
 	
-	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
+	private RandomGenerator randomGenerator;
 	
-	public ModelController(ModelConfiguration configuration){
+	public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
 		this.config = configuration;
+		this.randomGenerator = randomGenerator;
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}
 	
@@ -61,11 +62,11 @@ public class ModelController {
 		 */
 		
 		if(config.agentType == AgentType.OriginalAgent){
-			return new OriginalAgent(nextAgentID++);
+			return new OriginalAgent(nextAgentID++, randomGenerator);
 		}else if (config.agentType == AgentType.AlteredAgent){
-			return new AlteredAgent(nextAgentID++);
+			return new AlteredAgent(nextAgentID++, randomGenerator);
 		}else if (config.agentType == AgentType.BiasAgent){
-			return new BiasAgent(nextAgentID++);
+			return new BiasAgent(nextAgentID++, randomGenerator);
 		}else if (config.agentType == AgentType.SynonymAgent){
 			return new SynonymAgent(nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
 		}else{
@@ -172,11 +173,11 @@ public class ModelController {
 			Agent parent2 = selected.get(i++);
 			
 			if(config.agentType == AgentType.OriginalAgent){
-				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
+				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++, randomGenerator));
 			}else if (config.agentType == AgentType.AlteredAgent){
-				newGenerationAgents.add(new AlteredAgent((AlteredAgent)parent1, (AlteredAgent)parent2, nextAgentID++));
+				newGenerationAgents.add(new AlteredAgent((AlteredAgent)parent1, (AlteredAgent)parent2, nextAgentID++, randomGenerator));
 			}else if (config.agentType == AgentType.BiasAgent){
-				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++));
+				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++, randomGenerator));
 			} else if (config.agentType == AgentType.SynonymAgent){
 				newGenerationAgents.add(new SynonymAgent((SynonymAgent)parent1,(SynonymAgent)parent2,nextAgentID++));
 			}else{
@@ -268,7 +269,7 @@ public class ModelController {
 	 */
 	private void plot() {
 		
-		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + RandomGenerator.randomSeed + "   " + config + "]");
+		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
 		
 		statsWindow.plot(learningIntensities, "Learning Intensities");
 		statsWindow.plot(numberNulls, "Number of Nulls");
@@ -292,7 +293,7 @@ public class ModelController {
 	public static void main(String[] args){
 		
 		//Test selection
-		ModelController selector = new ModelController(new ModelConfiguration());
+		ModelController selector = new ModelController(new ModelConfiguration(), RandomGenerator.getGenerator());
 
 		System.out.println("Using seed:" + selector.randomGenerator.getSeed());
 		

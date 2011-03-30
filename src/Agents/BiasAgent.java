@@ -15,10 +15,13 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	
 	public int dimensions;
 	
-	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
+	private RandomGenerator randomGenerator;
 	
-	public BiasAgent(int id) {
+	public BiasAgent(int id, RandomGenerator randomGenerator) {
 		super(id);
+		
+		this.randomGenerator = randomGenerator;
+		
 		chromosome = new ArrayList<double[]>();
 		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
 			
@@ -46,9 +49,11 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	 * @param Parent2
 	 * @param id
 	 */
-	public BiasAgent(BiasAgent parent1, BiasAgent parent2, int id){
+	public BiasAgent(BiasAgent parent1, BiasAgent parent2, int id, RandomGenerator randomGenerator){
 		super(id);
 		chromosome = new ArrayList<double[]>(NUMBER_OF_MEANINGS);
+		
+		this.randomGenerator = randomGenerator;
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
@@ -163,12 +168,12 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	
 	public static void main(String[] args){
 	
-		BiasAgent newAgent = new BiasAgent(11342134);
+		BiasAgent newAgent = new BiasAgent(11342134, RandomGenerator.getGenerator());
 		for(int i = 0; i < 1000; i++){
 			newAgent.invent();
 		}
 		
-		BiasAgent newAgent1 = new BiasAgent(1132);
+		BiasAgent newAgent1 = new BiasAgent(1132, RandomGenerator.getGenerator());
 		for(int i = 0; i < 50; i++){
 			newAgent1.learnUtterance(newAgent.getRandomUtterance());
 		}

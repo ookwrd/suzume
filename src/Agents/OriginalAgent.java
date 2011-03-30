@@ -18,10 +18,13 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	protected int learningResource;
 
 	
-	protected RandomGenerator randomGenerator = RandomGenerator.getGenerator();
+	protected RandomGenerator randomGenerator;
 	
-	public OriginalAgent(int id) {
+	public OriginalAgent(int id, RandomGenerator randomGenerator) {
 		super(id);
+		
+		this.randomGenerator = randomGenerator;
+		
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
@@ -36,10 +39,12 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	 * @param Parent2
 	 * @param id
 	 */
-	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id){
+	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator){
 		super(id);
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		learningResource = LEARNING_RESOURCE;
+		
+		this.randomGenerator = randomGenerator;
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);

@@ -9,12 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import model.ModelConfiguration;
 import model.ModelController;
+import model.RandomGenerator;
 
 @SuppressWarnings("serial")
 public class Launcher extends JPanel {
 
 	private JFrame window;
 	
+	private RandomConfigurationPanel randomOptions;
 	private ModelConfigurationPanel modelOptions;
 	
 	private JPanel menuBar;
@@ -27,9 +29,12 @@ public class Launcher extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
+		randomOptions = new RandomConfigurationPanel();
+		add(randomOptions);
+		
 		modelOptions = new ModelConfigurationPanel();
-
 		add(modelOptions);
+		
 		
 		menuBar = new JPanel();
 		menuBar.setLayout(new FlowLayout());
@@ -54,7 +59,7 @@ public class Launcher extends JPanel {
 		
 		ModelConfiguration configuration = modelOptions.getConfiguration();
 		
-		ModelController controller = new ModelController(configuration);
+		ModelController controller = new ModelController(configuration, RandomGenerator.getGenerator());
 		
 		controller.run();
 		

@@ -130,13 +130,13 @@ public class OriginalPopulationModel implements PopulationModel {
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 
 		for (int i = 1; i <= 200; i++) {
-			agents.add(new OriginalAgent(i));
+			agents.add(new OriginalAgent(i, RandomGenerator.getGenerator()));
 		}
 		
 		ArrayList<Agent> agents1 = new ArrayList<Agent>();
 
 		for (int i = 1; i <= 200; i++) {
-			agents1.add(new OriginalAgent(i));
+			agents1.add(new OriginalAgent(i, RandomGenerator.getGenerator()));
 		}
 
 		OriginalPopulationModel test = new OriginalPopulationModel(agents, agents1);

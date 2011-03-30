@@ -1,15 +1,15 @@
 package Agents;
 
-import java.util.ArrayList;
+import model.RandomGenerator;
 
 public class AlteredAgent extends OriginalAgent implements Agent {
 	
-	public AlteredAgent(OriginalAgent parent1, OriginalAgent parent2, int id) {
-		super(parent1, parent2, id);
+	public AlteredAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator) {
+		super(parent1, parent2, id, randomGenerator);
 	}
 	
-	public AlteredAgent(int id) {
-		super(id);
+	public AlteredAgent(int id, RandomGenerator randomGenerator) {
+		super(id, randomGenerator);
 	}
 
 	protected final static int LEFTOVER_RESOURCE_USE = 1;

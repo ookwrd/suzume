@@ -1,5 +1,6 @@
 package Launcher;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,6 +43,20 @@ public class AbstractConfigurationPanel extends JPanel {
 		jLabel.setLabelFor(field);
 		
 		return field;
+	}
+	
+	protected JCheckBox addCheckBox(String label, boolean initialValue){
+		
+		JLabel jLabel = new JLabel(label);
+		jLabel.setHorizontalAlignment(JLabel.TRAILING);
+		add(jLabel);
+		
+		JCheckBox checkBox = new JCheckBox();
+		checkBox.setSelected(initialValue);
+		add(checkBox);
+		jLabel.setLabelFor(checkBox);
+		
+		return checkBox;
 	}
 	
 	protected void makeGrid(){
