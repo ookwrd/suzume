@@ -23,7 +23,7 @@ public class ModelController {
 	private static final int BASE_FITNESS = 1;
 	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
 	
-	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
+	private static final int CRITICAL_PERIOD = 40; //Number of utterances available to learners
 	
  	//statistics
 	private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
