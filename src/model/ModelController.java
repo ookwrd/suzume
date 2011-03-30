@@ -293,7 +293,7 @@ public class ModelController {
 	public static void main(String[] args){
 		
 		//Test selection
-		ModelController selector = new ModelController(new ModelConfiguration(), RandomGenerator.getGenerator());
+		ModelController selector = new ModelController(new ModelConfiguration(), new RandomGenerator());
 
 		System.out.println("Using seed:" + selector.randomGenerator.getSeed());
 		

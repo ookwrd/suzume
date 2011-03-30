@@ -59,7 +59,9 @@ public class Launcher extends JPanel {
 		
 		ModelConfiguration configuration = modelOptions.getConfiguration();
 		
-		ModelController controller = new ModelController(configuration, RandomGenerator.getGenerator());
+		RandomGenerator random = randomOptions.getGenerator();
+	
+		ModelController controller = new ModelController(configuration, random);
 		
 		controller.run();
 		
