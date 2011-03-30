@@ -2,19 +2,30 @@ package model;
 
 import java.util.StringTokenizer;
 
+/**
+ * Class for storing Model Configuration parameters.
+ * 
+ * @author Luke Mccrohon
+ */
 public class ModelConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent }
-	public enum PopulationModelType {OriginalPopulationModel, TestModel}
+	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent}
+	public enum PopulationModelType { OriginalPopulationModel }
 	
 	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
 	
 	public static final int DEFAULT_GENERATION_COUNT = 10000;
-	public static final int DEFAULT_POPULATION_SIZE = 200; //Should be 200
+	public static final int DEFAULT_POPULATION_SIZE = 200;
+	
+	//The base fitness score assigned to all agents before communication round
 	public static final int DEFAULT_BASE_FITNESS = 1;
+	
+	//Number of communication events with each neighbour during fitness evaluation
 	public static final int DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR = 6;
-	public static final int DEFAULT_CRITICAL_PERIOD = 200; //Number of utterances available to learners
+	
+	//Maximum number of utterances presented to agents during learning.
+	public static final int DEFAULT_CRITICAL_PERIOD = 200; 
 	
 	protected AgentType agentType;
 	protected PopulationModelType populationModelType;
@@ -41,6 +52,27 @@ public class ModelConfiguration {
 		this.communicationsPerNeighbour = DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR;
 		
 		this.criticalPeriod= DEFAULT_CRITICAL_PERIOD;
+	}
+	
+	/**
+	 * Creates ModelConfiguration based on custom settings. 
+	 * 
+	 * @param agentType
+	 * @param populationModelType
+	 * @param generationCount
+	 * @param populationSize
+	 * @param baseFitness
+	 * @param communicationsPerNeighbour
+	 * @param criticalPeriod
+	 */
+	public ModelConfiguration(AgentType agentType, PopulationModelType populationModelType, int generationCount, int populationSize, int baseFitness, int communicationsPerNeighbour, int criticalPeriod){
+		this.agentType = agentType;
+		this.populationModelType = populationModelType;
+		this.generationCount = generationCount;
+		this.populationSize = populationSize;
+		this.baseFitness = baseFitness;
+		this.communicationsPerNeighbour = communicationsPerNeighbour;
+		this.criticalPeriod = criticalPeriod;
 	}
 	
 	/**
@@ -85,10 +117,18 @@ public class ModelConfiguration {
 		+ " " + criticalPeriod;
 	}
 	
+	
+	/**
+	 * Outputs a string suitable for display to end user.
+	 * 
+	 */
 	@Override
 	public String toString(){
 		
-		return "AgentType: " + agentType + "   GenerationCount: " + generationCount + "   PopulationSize: " + populationSize + "   CriticalPeriod: " + criticalPeriod;
+		return "AgentType: " + agentType + 
+		"   GenerationCount: " + generationCount + 
+		"   PopulationSize: " + populationSize + 
+		"   CriticalPeriod: " + criticalPeriod;
 	}
 }
 
