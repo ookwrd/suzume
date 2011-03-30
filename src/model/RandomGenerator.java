@@ -8,18 +8,14 @@ import java.util.Random;
  * @author Luke McCrohon
  */
 public class RandomGenerator {
-
-	public static long randomSeed = System.currentTimeMillis();//9111111222111775807L;
 	
-	public static RandomGenerator randomGenerator;
+	private RandomGenerator randomGenerator;
 	private Random random;
-	
-	private RandomGenerator(){
-		random = new Random();
-	}
+	private long randomSeed;
 	
 	private RandomGenerator(long seed){
 		random = new Random(seed);
+		randomSeed = seed;
 	}
 	
 	public double random(){
@@ -38,12 +34,16 @@ public class RandomGenerator {
 		return randomSeed;
 	}
 	
+	//TODO turn these into standard constructors.
+	
 	public static RandomGenerator getGenerator(){
 		
-		if(randomGenerator == null){
-			randomGenerator = new RandomGenerator(randomSeed);
-		}
+		return new RandomGenerator(System.currentTimeMillis());
 		
-		return randomGenerator;
+	}
+	
+	public static RandomGenerator getGenerator(long seed){
+		
+		return new RandomGenerator(seed);
 	}
 }
