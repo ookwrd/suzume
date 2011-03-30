@@ -9,8 +9,8 @@ import java.util.StringTokenizer;
  */
 public class ModelConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent}
-	public enum PopulationModelType { OriginalPopulationModel }
+	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, AlteredAgent }
+	public enum PopulationModelType {OriginalPopulationModel}
 	
 	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
