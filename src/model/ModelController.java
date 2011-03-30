@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.ModelConfiguration.AgentType;
 
 import Agents.Agent;
+import Agents.AlteredAgent;
 import Agents.BiasAgent;
 import Agents.OriginalAgent;
 import Agents.SynonymAgent;
@@ -61,6 +62,8 @@ public class ModelController {
 		
 		if(config.agentType == AgentType.OriginalAgent){
 			return new OriginalAgent(nextAgentID++);
+		}else if (config.agentType == AgentType.AlteredAgent){
+			return new AlteredAgent(nextAgentID++);
 		}else if (config.agentType == AgentType.BiasAgent){
 			return new BiasAgent(nextAgentID++);
 		}else if (config.agentType == AgentType.SynonymAgent){
@@ -149,6 +152,7 @@ public class ModelController {
 				}
 			}
 			
+			agent.adjustCosts();
 		}
 	}
 	
@@ -169,6 +173,8 @@ public class ModelController {
 			
 			if(config.agentType == AgentType.OriginalAgent){
 				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
+			}else if (config.agentType == AgentType.AlteredAgent){
+				newGenerationAgents.add(new AlteredAgent((AlteredAgent)parent1, (AlteredAgent)parent2, nextAgentID++));
 			}else if (config.agentType == AgentType.BiasAgent){
 				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++));
 			} else if (config.agentType == AgentType.SynonymAgent){
