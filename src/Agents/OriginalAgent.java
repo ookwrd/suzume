@@ -6,19 +6,19 @@ import model.RandomGenerator;
 
 public class OriginalAgent extends AbstractAgent implements Agent {
 	
-	private static final int LEARNING_RESOURCE = 24;
-	private static final int MATCHING_LEARNING_COST = 1;
-	private static final int NON_MATCHING_LEARNING_COST = 4;
+	protected static final int LEARNING_RESOURCE = 24;
+	protected static final int MATCHING_LEARNING_COST = 1;
+	protected static final int NON_MATCHING_LEARNING_COST = 4;
 	
-	private static final double MUTATION_RATE = 0.00025;
-	private static final double INVENTION_PROBABILITY = 0.01;
+	protected static final double MUTATION_RATE = 0.00025;
+	protected static final double INVENTION_PROBABILITY = 0.01;
 	
-	private ArrayList<Integer> chromosome;
+	protected ArrayList<Integer> chromosome;
 	
-	private int learningResource;
+	protected int learningResource;
 
 	
-	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
+	protected RandomGenerator randomGenerator = RandomGenerator.getGenerator();
 	
 	public OriginalAgent(int id) {
 		super(id);
