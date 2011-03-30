@@ -168,12 +168,12 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	
 	public static void main(String[] args){
 	
-		BiasAgent newAgent = new BiasAgent(11342134, RandomGenerator.getGenerator());
+		BiasAgent newAgent = new BiasAgent(11342134, new RandomGenerator());
 		for(int i = 0; i < 1000; i++){
 			newAgent.invent();
 		}
 		
-		BiasAgent newAgent1 = new BiasAgent(1132, RandomGenerator.getGenerator());
+		BiasAgent newAgent1 = new BiasAgent(1132, new RandomGenerator());
 		for(int i = 0; i < 50; i++){
 			newAgent1.learnUtterance(newAgent.getRandomUtterance());
 		}
