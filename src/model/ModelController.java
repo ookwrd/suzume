@@ -272,7 +272,6 @@ public class ModelController {
 		
 		statsWindow.plot(learningIntensities, "Learning Intensities");
 		statsWindow.plot(numberNulls, "Number of Nulls");
-		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes");
 		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches");
 		statsWindow.plot(totalFitnesses, "Total Fitnesses");
 		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes");

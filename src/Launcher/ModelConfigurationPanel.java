@@ -37,7 +37,7 @@ public class ModelConfigurationPanel extends AbstractConfigurationPanel{
 	}
 	
 	public ModelConfiguration getConfiguration(){
-		System.out.println(agentTypesBox.getSelectedItem());
+		
 		return new ModelConfiguration(
 				(AgentType)agentTypesBox.getSelectedItem(),
 				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
