@@ -174,6 +174,8 @@ public class ModelController {
 			
 			if(config.agentType == AgentType.OriginalAgent){
 				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
+			}else if (config.agentType == AgentType.AlteredAgent){
+				newGenerationAgents.add(new AlteredAgent((AlteredAgent)parent1, (AlteredAgent)parent2, nextAgentID++));
 			}else if (config.agentType == AgentType.BiasAgent){
 				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++));
 			} else if (config.agentType == AgentType.SynonymAgent){
@@ -283,7 +285,9 @@ public class ModelController {
 	public static void main(String[] args){
 		
 		//Test selection
-		ModelController selector = new ModelController(new ModelConfiguration());
+		ModelConfiguration config = new ModelConfiguration();
+		config.agentType = AgentType.AlteredAgent;
+		ModelController selector = new ModelController(config);
 
 		System.out.println("Using seed:" + selector.randomGenerator.getSeed());
 		
