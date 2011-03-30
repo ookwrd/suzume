@@ -15,7 +15,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	private ArrayList<Integer> chromosome;
 	
-	private int learningResource;
+	protected int learningResource;
 
 	
 	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
