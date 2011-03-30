@@ -1,8 +1,8 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+
+import model.ModelConfiguration.AgentType;
 
 import Agents.Agent;
 import Agents.BiasAgent;
@@ -11,19 +11,7 @@ import Agents.SynonymAgent;
 
 public class ModelController {
 	
-	private enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent };
-	public AgentType currentAgentType = AgentType.OriginalAgent;
-	//public AgentType currentAgentType = AgentType.BiasAgent;
-	//public AgentType currentAgentType = AgentType.SynonymAgent;
-	//public AgentType currentAgentType = AgentType.TestAgent;
-	
-	private static final int GENERATION_COUNT = 10000; 
-	private static final int POPULATION_SIZE = 200; //Should be 200
-	
-	private static final int BASE_FITNESS = 1;
-	private static final int COMMUNICATIONS_PER_NEIGHBOUR = 6;
-	
-	private static final int CRITICAL_PERIOD = 200; //Number of utterances available to learners
+	private ModelConfiguration config;
 	
  	//statistics
 	private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
@@ -39,7 +27,8 @@ public class ModelController {
 	
 	private RandomGenerator randomGenerator = RandomGenerator.getGenerator();
 	
-	public ModelController(){
+	public ModelController(ModelConfiguration configuration){
+		this.config = configuration;
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}
 	
@@ -51,7 +40,7 @@ public class ModelController {
 	private ArrayList<Agent> createIntialAgents(){
 		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
-		for (int i = 1; i <= POPULATION_SIZE; i++) {
+		for (int i = 1; i <= config.populationSize; i++) {
 			agents.add(createRandomAgent());
 		}
 		
@@ -70,11 +59,11 @@ public class ModelController {
 		 * constructor as well in the "selection " method.
 		 */
 		
-		if(currentAgentType == AgentType.OriginalAgent){
+		if(config.agentType == AgentType.OriginalAgent){
 			return new OriginalAgent(nextAgentID++);
-		}else if (currentAgentType == AgentType.BiasAgent){
+		}else if (config.agentType == AgentType.BiasAgent){
 			return new BiasAgent(nextAgentID++);
-		}else if (currentAgentType == AgentType.SynonymAgent){
+		}else if (config.agentType == AgentType.SynonymAgent){
 			return new SynonymAgent(nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
 		}else{
 			System.err.println("Unsupported Agent type");
@@ -87,7 +76,7 @@ public class ModelController {
 	 */
 	public void runSimulation(){
 		
-		for(currentGeneration = 0; currentGeneration < GENERATION_COUNT; currentGeneration++){
+		for(currentGeneration = 0; currentGeneration < config.generationCount; currentGeneration++){
 			iterateGeneration();
 			
 			//Print progress information
@@ -123,7 +112,7 @@ public class ModelController {
 			//get its ancestors (teachers)
 			ArrayList<Agent> teachers = population.getAncestors(learner, 2);
 			
-			for(int i = 0; i < CRITICAL_PERIOD; i++){
+			for(int i = 0; i < config.criticalPeriod; i++){
 				
 				//Get random teacher
 				Agent teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
@@ -151,11 +140,11 @@ public class ModelController {
 			ArrayList<Agent> neighbouringAgents = population.getNeighbors(agent, 1);
 		
 			//Set the agents fitness to the default base level 
-			agent.setFitness(BASE_FITNESS);
+			agent.setFitness(config.baseFitness);
 			
 			//Communicate with all neighbours
 			for(Agent neighbour : neighbouringAgents){	
-				for(int i = 0; i < COMMUNICATIONS_PER_NEIGHBOUR; i++){
+				for(int i = 0; i < config.communicationsPerNeighbour; i++){
 					agent.communicate(neighbour);
 				}
 			}
@@ -172,19 +161,19 @@ public class ModelController {
 	 */
 	private ArrayList<Agent> selection(){
 		
-		ArrayList<Agent> selected = select(POPULATION_SIZE*2, population.getCurrentGeneration());
+		ArrayList<Agent> selected = select(config.populationSize*2, population.getCurrentGeneration());
 		
 		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
 		int i = 0;
-		while(newGenerationAgents.size() < POPULATION_SIZE){
+		while(newGenerationAgents.size() < config.populationSize){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 			
-			if(currentAgentType == AgentType.OriginalAgent){
+			if(config.agentType == AgentType.OriginalAgent){
 				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++));
-			}else if (currentAgentType == AgentType.BiasAgent){
+			}else if (config.agentType == AgentType.BiasAgent){
 				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++));
-			} else if (currentAgentType == AgentType.SynonymAgent){
+			} else if (config.agentType == AgentType.SynonymAgent){
 				newGenerationAgents.add(new SynonymAgent((SynonymAgent)parent1,(SynonymAgent)parent2,nextAgentID++));
 			}else{
 				System.err.println("Unsupported Agent type");
@@ -259,11 +248,11 @@ public class ModelController {
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 		
-		double learningIntensity = (POPULATION_SIZE*2*COMMUNICATIONS_PER_NEIGHBOUR - antiLearningIntensity) / POPULATION_SIZE / 2 / COMMUNICATIONS_PER_NEIGHBOUR;
-		totalFitnesses.add(totalFitness/POPULATION_SIZE);
-		learningIntensities.add(learningIntensity/POPULATION_SIZE);
-		geneGrammarMatches.add(genomeGrammarMatch/POPULATION_SIZE);
-		numberNulls.add(numberNull/POPULATION_SIZE);
+		double learningIntensity = (config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
+		totalFitnesses.add(totalFitness/config.populationSize);
+		learningIntensities.add(learningIntensity/config.populationSize);
+		geneGrammarMatches.add(genomeGrammarMatch/config.populationSize);
+		numberNulls.add(numberNull/config.populationSize);
 		totalNumberGenotypes.add((double)genotypes.size());
 		
 	}
@@ -275,7 +264,7 @@ public class ModelController {
 	 */
 	private void plot() {
 		
-		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + RandomGenerator.randomSeed + "   AgentType: " + currentAgentType + "   GenerationCount: " + GENERATION_COUNT + "   PopulationSize: " + POPULATION_SIZE + "   CriticalPeriod: " + CRITICAL_PERIOD + "]");
+		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + RandomGenerator.randomSeed + "   " + config + "]");
 		
 		statsWindow.plot(learningIntensities, "Learning Intensities");
 		statsWindow.plot(numberNulls, "Number of Nulls");
@@ -291,7 +280,7 @@ public class ModelController {
 	public static void main(String[] args){
 		
 		//Test selection
-		ModelController selector = new ModelController();
+		ModelController selector = new ModelController(new ModelConfiguration());
 
 		System.out.println("Using seed:" + selector.randomGenerator.getSeed());
 		
