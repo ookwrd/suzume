@@ -2,8 +2,6 @@ package Launcher;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import javax.xml.ws.Service.Mode;
-
 import model.ModelConfiguration;
 import model.ModelConfiguration.AgentType;
 import model.ModelConfiguration.PopulationModelType;
