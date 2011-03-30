@@ -4,10 +4,10 @@ import java.util.StringTokenizer;
 
 public class ModelConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent }
+	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, TestAgent, AlteredAgent }
 	public enum PopulationModelType {OriginalPopulationModel, TestModel}
 	
-	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;
+	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.AlteredAgent;
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
 	
 	public static final int DEFAULT_GENERATION_COUNT = 10000;
