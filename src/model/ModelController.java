@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.ModelConfiguration.AgentType;
 
 import Agents.Agent;
+import Agents.AlteredAgent;
 import Agents.BiasAgent;
 import Agents.OriginalAgent;
 import Agents.SynonymAgent;
@@ -61,6 +62,8 @@ public class ModelController {
 		
 		if(config.agentType == AgentType.OriginalAgent){
 			return new OriginalAgent(nextAgentID++);
+		}else if (config.agentType == AgentType.AlteredAgent){
+			return new AlteredAgent(nextAgentID++);
 		}else if (config.agentType == AgentType.BiasAgent){
 			return new BiasAgent(nextAgentID++);
 		}else if (config.agentType == AgentType.SynonymAgent){
