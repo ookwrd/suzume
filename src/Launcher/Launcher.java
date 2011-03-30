@@ -1,23 +1,14 @@
 package Launcher;
 
-import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-
 import model.ModelConfiguration;
 import model.ModelController;
-import model.ModelConfiguration.AgentType;
-import model.ModelConfiguration.PopulationModelType;
 
 @SuppressWarnings("serial")
 public class Launcher extends JPanel {
@@ -72,8 +63,7 @@ public class Launcher extends JPanel {
 	
 	public static void main(String[] args){
 		
-		Launcher launcher = new Launcher();
-		
+		new Launcher();
 		
 	}
 }
