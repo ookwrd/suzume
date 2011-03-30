@@ -275,6 +275,15 @@ public class ModelController {
 	}
 	
 	
+	public void run(){
+		runSimulation();
+		
+		training();
+		communication();
+		
+		plot();
+	}
+	
 	public static void main(String[] args){
 		
 		//Test selection
