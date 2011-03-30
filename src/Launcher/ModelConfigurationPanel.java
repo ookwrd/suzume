@@ -2,8 +2,11 @@ package Launcher;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.xml.ws.Service.Mode;
 
 import model.ModelConfiguration;
+import model.ModelConfiguration.AgentType;
+import model.ModelConfiguration.PopulationModelType;
 
 @SuppressWarnings("serial")
 public class ModelConfigurationPanel extends AbstractConfigurationPanel{
@@ -34,7 +37,16 @@ public class ModelConfigurationPanel extends AbstractConfigurationPanel{
 	}
 	
 	public ModelConfiguration getConfiguration(){
-		return new ModelConfiguration(); //TODO
+		System.out.println(agentTypesBox.getSelectedItem());
+		return new ModelConfiguration(
+				(AgentType)agentTypesBox.getSelectedItem(),
+				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
+				Integer.parseInt(generationCountField.getText()),
+				Integer.parseInt(populationSizeField.getText()),
+				Integer.parseInt(baseFitnessField.getText()),
+				Integer.parseInt(communicationPerNeighbourField.getText()),
+				Integer.parseInt(criticalPeriodField.getText())
+				);
 	}
 	
 }

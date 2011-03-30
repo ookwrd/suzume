@@ -1,8 +1,5 @@
 package Launcher;
 
-import java.awt.FlowLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,19 +43,6 @@ public class AbstractConfigurationPanel extends JPanel {
 		
 		return field;
 	}
-	
-	/*private JPanel initializePanel(String label){
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());
-		
-		JLabel jLabel = new JLabel(label);
-		panel.add(jLabel);
-		
-		add(panel);
-		
-		return panel;
-	}*/
 	
 	protected void makeGrid(){
 		SpringUtilities.makeCompactGrid(this,
