@@ -82,5 +82,10 @@ public abstract class AbstractAgent implements Agent {
 			//partner.setFitness(partner.getFitness()+1); TODO need to implement symetry
 		}
 	}
+	
+	@Override
+	public void adjustCosts(){
+		//Do nothing.
+	}
 
 }

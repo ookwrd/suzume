@@ -18,6 +18,7 @@ public interface Agent {
 	public void setFitness(int fitness);
 	public int getFitness();
 	public void communicate(Agent partner); 
+	public void adjustCosts();
 	
 	//Statistics
 	public double geneGrammarMatch();
