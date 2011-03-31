@@ -27,9 +27,11 @@ public class ModelController {
 	private int currentGeneration = 0;
 	
 	private RandomGenerator randomGenerator;
+	public String experimentId;
 	
 	public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
 		this.config = configuration;
+		experimentId = configuration.toString().replaceAll(":", "").replaceAll(" ", "-");
 		this.randomGenerator = randomGenerator;
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}
@@ -271,11 +273,11 @@ public class ModelController {
 		
 		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
 		
-		statsWindow.plot(learningIntensities, "Learning Intensities");
-		statsWindow.plot(numberNulls, "Number of Nulls");
-		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches");
-		statsWindow.plot(totalFitnesses, "Total Fitnesses");
-		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes");
+		statsWindow.plot(learningIntensities, "Learning Intensities", experimentId);
+		statsWindow.plot(numberNulls, "Number of Nulls", experimentId);
+		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", experimentId);
+		statsWindow.plot(totalFitnesses, "Total Fitnesses", experimentId);
+		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", experimentId);
 		
 		statsWindow.display();
 	}

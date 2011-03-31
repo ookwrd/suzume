@@ -130,5 +130,6 @@ public class ModelConfiguration {
 		"   PopulationSize: " + populationSize + 
 		"   CriticalPeriod: " + criticalPeriod;
 	}
+	
 }
 
