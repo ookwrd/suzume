@@ -3,7 +3,6 @@ package Agents;
 import java.util.ArrayList;
 
 public interface Agent {
-	
 
 	//Language Learning
 	public void teach(Agent agent);
@@ -29,7 +28,6 @@ public interface Agent {
 	public void printAgent();
 	
 	public int getId();
-	public ArrayList getChromosome();//TODO get rid of this
-	
-	
+	public ArrayList getChromosome();//TODO get rid of this	
+
 }

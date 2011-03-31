@@ -1,10 +1,8 @@
 package model;
 
 import java.util.ArrayList;
-
-import model.ModelConfiguration.AgentType;
-
 import Agents.Agent;
+import Agents.AgentConfiguration.AgentType;
 import Agents.AlteredAgent;
 import Agents.BiasAgent;
 import Agents.OriginalAgent;

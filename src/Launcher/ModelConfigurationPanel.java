@@ -2,8 +2,10 @@ package Launcher;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
+import Agents.AgentConfiguration;
+import Agents.AgentConfiguration.AgentType;
 import model.ModelConfiguration;
-import model.ModelConfiguration.AgentType;
 import model.ModelConfiguration.PopulationModelType;
 
 @SuppressWarnings("serial")
@@ -23,7 +25,7 @@ public class ModelConfigurationPanel extends AbstractConfigurationPanel{
 	public ModelConfigurationPanel(){
 		super("Model Configuration");
 		
-		agentTypesBox = addComboBox("Agent type:", ModelConfiguration.AgentType.values());
+		agentTypesBox = addComboBox("Agent type:", AgentConfiguration.AgentType.values());
 		populationModelTypeBox = addComboBox("Population Model:", ModelConfiguration.PopulationModelType.values());
 		generationCountField = addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT);
 		populationSizeField = addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE); 

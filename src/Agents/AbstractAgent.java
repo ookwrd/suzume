@@ -2,10 +2,10 @@ package Agents;
 
 import java.util.ArrayList;
 
-
-
 public abstract class AbstractAgent implements Agent {
 
+	public static final double DEFAULT_MUTATION_RATE = 0.05; //TODO make this actually used.
+	
 	protected static final int NUMBER_OF_MEANINGS = 12;
 	
 	private int fitness;
