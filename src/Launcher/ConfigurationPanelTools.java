@@ -17,6 +17,11 @@ public class ConfigurationPanelTools {
 	private ConfigurationPanelTools() {
 	}
 	
+	
+	public static void configurePanel(JPanel target){
+		target.setLayout(new SpringLayout());
+	}
+	
 	public static void configurePanel(String title, JPanel target) {
 		target.setLayout(new SpringLayout());
 		target.setBorder(new TitledBorder(title));
