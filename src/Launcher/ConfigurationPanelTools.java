@@ -1,7 +1,5 @@
 package Launcher;
 
-import java.lang.annotation.Target;
-
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -10,24 +8,21 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
-@SuppressWarnings("serial")
-public class AbstractConfigurationPanel extends JPanel {
-	
-	//TODO this should be a static utitilities class
-	
-	public AbstractConfigurationPanel(String title) {
-		super();
-		setLayout(new SpringLayout());
-		setBorder(new TitledBorder(title));
+
+public class ConfigurationPanelTools {
+
+	/**
+	 * Disallow construction of this class.
+	 */
+	private ConfigurationPanelTools() {
 	}
 	
-	public AbstractConfigurationPanel(String title, JPanel target) {
-		super();
+	public static void configurePanel(String title, JPanel target) {
 		target.setLayout(new SpringLayout());
 		target.setBorder(new TitledBorder(title));
 	}
 	
-	protected JComboBox addComboBox(String label, Object[] values, JPanel target) {
+	public static JComboBox addComboBox(String label, Object[] values, JPanel target) {
 		
 		JLabel jLabel = new JLabel(label);
 		jLabel.setHorizontalAlignment(JLabel.TRAILING);
@@ -40,7 +35,7 @@ public class AbstractConfigurationPanel extends JPanel {
 		return comboBox;
 	}
 	
-	protected JTextField addField(String label, String initialValue, JPanel target){
+	public static JTextField addField(String label, String initialValue, JPanel target){
 		
 		JLabel jLabel = new JLabel(label);
 		jLabel.setHorizontalAlignment(JLabel.TRAILING);
@@ -53,7 +48,7 @@ public class AbstractConfigurationPanel extends JPanel {
 		return field;
 	}
 	
-	protected JCheckBox addCheckBox(String label, boolean initialValue, JPanel target){
+	public static JCheckBox addCheckBox(String label, boolean initialValue, JPanel target){
 		
 		JLabel jLabel = new JLabel(label);
 		jLabel.setHorizontalAlignment(JLabel.TRAILING);
@@ -67,7 +62,7 @@ public class AbstractConfigurationPanel extends JPanel {
 		return checkBox;
 	}
 	
-	protected void makeGrid(JPanel target){
+	public static void makeGrid(JPanel target){
 		SpringUtilities.makeCompactGrid(target,
                 target.getComponentCount()/2, 2, 	//rows, cols
                 6, 6,        			//initX, initY
