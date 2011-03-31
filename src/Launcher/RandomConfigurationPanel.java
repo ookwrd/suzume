@@ -4,20 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import model.RandomGenerator;
 
 @SuppressWarnings("serial")
-public class RandomConfigurationPanel extends AbstractConfigurationPanel {
+public class RandomConfigurationPanel extends JPanel {
 	
 	private JCheckBox useRandomSeedBox;
 	private JTextField randomSeedField;
 	
 	public RandomConfigurationPanel(){
-		super("Random Number Generator Configuration");
+		ConfigurationPanelTools.configurePanel("Random Number Generator Configuration", this);
 		
-		useRandomSeedBox = addCheckBox("Use current time as seed:", true, this);
+		useRandomSeedBox = ConfigurationPanelTools.addCheckBox("Use current time as seed:", true, this);
 		useRandomSeedBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -25,10 +26,10 @@ public class RandomConfigurationPanel extends AbstractConfigurationPanel {
 			}
 		});
 		
-		randomSeedField = addField("Seed:", ""+1, this);
+		randomSeedField = ConfigurationPanelTools.addField("Seed:", ""+1, this);
 		randomSeedField.setEnabled(false);
 		
-		makeGrid(this);
+		ConfigurationPanelTools.makeGrid(this);
 	}
 
 	public RandomGenerator getGenerator(){

@@ -1,6 +1,7 @@
 package Launcher;
 
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Agents.AgentConfiguration;
@@ -9,7 +10,7 @@ import model.ModelConfiguration;
 import model.ModelConfiguration.PopulationModelType;
 
 @SuppressWarnings("serial")
-public class ModelConfigurationPanel extends AbstractConfigurationPanel{
+public class ModelConfigurationPanel extends JPanel {
 
 	private AgentConfigurationPanel agentConfigurationPanel;
 	
@@ -25,19 +26,19 @@ public class ModelConfigurationPanel extends AbstractConfigurationPanel{
 	private JTextField criticalPeriodField;
 	
 	public ModelConfigurationPanel(){
-		super("Model Configuration");
+		ConfigurationPanelTools.configurePanel("Model Configuration", this);
 		
 	//	agentConfigurationPanel = new AgentConfigurationPanel();
 		
-		agentTypesBox = addComboBox("Agent type:", AgentConfiguration.AgentType.values(),this);
-		populationModelTypeBox = addComboBox("Population Model:", ModelConfiguration.PopulationModelType.values(), this);
-		generationCountField = addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, this);
-		populationSizeField = addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, this); 
-		baseFitnessField= addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, this);
-		communicationPerNeighbourField = addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, this);
-		criticalPeriodField = addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD, this);
+		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", AgentConfiguration.AgentType.values(),this);
+		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", ModelConfiguration.PopulationModelType.values(), this);
+		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, this);
+		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, this); 
+		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, this);
+		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, this);
+		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD, this);
 		
-		makeGrid(this);
+		ConfigurationPanelTools.makeGrid(this);
 	}
 	
 	public ModelConfiguration getConfiguration(){
