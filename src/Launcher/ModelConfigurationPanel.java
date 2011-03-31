@@ -39,7 +39,7 @@ public class ModelConfigurationPanel extends AbstractConfigurationPanel{
 	public ModelConfiguration getConfiguration(){
 		
 		return new ModelConfiguration(
-				(AgentType)agentTypesBox.getSelectedItem(),
+				new AgentConfiguration((AgentType)agentTypesBox.getSelectedItem()),
 				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
 				Integer.parseInt(generationCountField.getText()),
 				Integer.parseInt(populationSizeField.getText()),
