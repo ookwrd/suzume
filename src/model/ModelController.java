@@ -31,7 +31,7 @@ public class ModelController {
 	
 	public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
 		this.config = configuration;
-		experimentId = configuration.toString().replaceAll(":", "").replaceAll(" ", "-");
+		experimentId = configuration.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 		this.randomGenerator = randomGenerator;
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}

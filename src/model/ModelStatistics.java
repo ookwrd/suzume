@@ -31,7 +31,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
   
-	public int printSize = 400; 
+	public int printSize = 200; 
 	public int viewSize = 100;
 	public int[] imageRatio = {5,3};
 	
@@ -86,6 +86,7 @@ public class ModelStatistics extends JFrame {
 				true, // Show legend
 				false, // Tooltips 
 				false); // URL
+		
 		return chart;
 	}
 

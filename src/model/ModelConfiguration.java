@@ -131,5 +131,10 @@ public class ModelConfiguration {
 		"   CriticalPeriod: " + criticalPeriod;
 	}
 	
+	
+	public String printName(){
+		return "" + agentType + " " + "gen_" + generationCount + "pop_" + populationSize + "crit_" + criticalPeriod;
+	}
+	
 }
 
