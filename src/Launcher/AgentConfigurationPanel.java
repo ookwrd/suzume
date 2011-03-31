@@ -21,9 +21,11 @@ public class AgentConfigurationPanel extends JPanel {
 	
 	public AgentConfigurationPanel(){
 		
-		//setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", AgentConfiguration.AgentType.values(),this);
+		JPanel topPanel = new JPanel();
+		ConfigurationPanelTools.configurePanel(topPanel);
+		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", AgentConfiguration.AgentType.values(),topPanel);
 		agentTypesBox.addActionListener(new ActionListener() {
 			
 			@Override
@@ -31,6 +33,9 @@ public class AgentConfigurationPanel extends JPanel {
 				reconfigureSubPanel();
 			}
 		});
+		ConfigurationPanelTools.makeGrid(topPanel);
+		
+		add(topPanel);
 		
 		
 		reconfigureSubPanel();
