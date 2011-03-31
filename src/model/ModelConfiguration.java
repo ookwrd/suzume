@@ -15,7 +15,7 @@ public class ModelConfiguration {
 	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
 	
-	public static final int DEFAULT_GENERATION_COUNT = 10000;
+	public static final int DEFAULT_GENERATION_COUNT = 100;
 	public static final int DEFAULT_POPULATION_SIZE = 200;
 	
 	//The base fitness score assigned to all agents before communication round

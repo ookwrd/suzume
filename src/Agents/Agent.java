@@ -17,7 +17,7 @@ public interface Agent {
 	//Fitness Calculation
 	public void setFitness(int fitness);
 	public int getFitness();
-	public void communicate(Agent partner); 
+	public void communicate(Agent partner);
 	public void adjustCosts();
 	
 	//Statistics

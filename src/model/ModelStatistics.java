@@ -1,6 +1,7 @@
 //TODO where did this come from.
 
 package model;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
@@ -30,10 +31,14 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class ModelStatistics extends JFrame {
 
 	JPanel innerPane = new JPanel();
+	JScrollPane scroller = new JScrollPane(innerPane);  
 	
 	public ModelStatistics(String title) {
-		innerPane.setLayout(new FlowLayout());
-		this.add(innerPane);
+		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		innerPane.setSize(new Dimension(1000,600));
+		scroller.setVerticalScrollBar(new JScrollBar());
+		
+		this.add(scroller, BorderLayout.CENTER);
 		this.setTitle(title);
 		this.setSize(new Dimension(1040,660));
 	}
@@ -93,6 +98,7 @@ public class ModelStatistics extends JFrame {
 
 		return image;
 	}
+	 
 
 	private void displayChart(BufferedImage image) {
 
