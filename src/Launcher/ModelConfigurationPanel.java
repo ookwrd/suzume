@@ -11,7 +11,7 @@ import model.ModelConfiguration.PopulationModelType;
 @SuppressWarnings("serial")
 public class ModelConfigurationPanel extends JPanel {
 
-	private AgentConfigurationPanel agentConfigurationPanel;
+	private AgentTypeConfigurationPanel agentConfigurationPanel;
 	
 	private JPanel innerPanel;
 	
@@ -30,7 +30,7 @@ public class ModelConfigurationPanel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(new TitledBorder("Model Configuration:"));
 		
-		agentConfigurationPanel = new AgentConfigurationPanel();
+		agentConfigurationPanel = new AgentTypeConfigurationPanel();
 		add(agentConfigurationPanel);
 		
 		innerPanel = new JPanel();
