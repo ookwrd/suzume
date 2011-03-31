@@ -25,11 +25,9 @@ public class ModelController implements Runnable {
 	private int currentGeneration = 0;
 	
 	private RandomGenerator randomGenerator;
-	public String experimentId;
 	
 	public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
 		this.config = configuration;
-		experimentId = configuration.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 		this.randomGenerator = randomGenerator;
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}
@@ -270,12 +268,12 @@ public class ModelController implements Runnable {
 	private void plot() {
 		
 		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
-		
-		statsWindow.plot(learningIntensities, "Learning Intensities", experimentId);
-		statsWindow.plot(numberNulls, "Number of Nulls", experimentId);
-		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", experimentId);
-		statsWindow.plot(totalFitnesses, "Total Fitnesses", experimentId);
-		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", experimentId);
+		String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		statsWindow.plot(learningIntensities, "Learning Intensities", printName);
+		statsWindow.plot(numberNulls, "Number of Nulls", printName);
+		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
+		statsWindow.plot(totalFitnesses, "Total Fitnesses", printName);
+		statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", printName);
 		
 		statsWindow.display();
 	}
