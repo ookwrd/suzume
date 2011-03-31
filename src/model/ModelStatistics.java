@@ -31,7 +31,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
   
-	private static final boolean SAVE_IMAGE_TO_FILE = true;
+	private static boolean SAVE_IMAGE_TO_FILE = true;
 	private String experimentId = "default";
 	private String chartName = "A chart";  
 	JPanel innerPane = new JPanel();
@@ -39,12 +39,11 @@ public class ModelStatistics extends JFrame {
 	
 	public ModelStatistics(String title) {
 		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		innerPane.setSize(new Dimension(1000,600));
 		scroller.setVerticalScrollBar(new JScrollBar());
 		
 		this.add(scroller, BorderLayout.CENTER);
 		this.setTitle(title);
-		this.setSize(new Dimension(1040,660));
+		this.setSize(new Dimension(1000,500));
 	}
 	
 	public void display(){
@@ -93,7 +92,7 @@ public class ModelStatistics extends JFrame {
 	 * 
 	 * @param series
 	 * @param title 
-	 * @param print if true, the corresponded file is created
+	 * @param print : if true, the corresponded file is created
 	 * @return
 	 */
 	private BufferedImage createImage(XYSeries series, String title, boolean print) {
@@ -104,7 +103,10 @@ public class ModelStatistics extends JFrame {
 		lblChart.setIcon(new ImageIcon(image));
 
 		// Creating the corresponding file
-		if (print) createFile(chart, image);
+		if (print) {
+			BufferedImage imagePrint = chart.createBufferedImage(2000, 1200);
+			createFile(chart, imagePrint);
+		}
 		
 		return image;
 	}
@@ -112,7 +114,7 @@ public class ModelStatistics extends JFrame {
 	private void createFile(JFreeChart chart, BufferedImage image) {
 		
 		try {
-			ChartUtilities.saveChartAsJPEG(new File(chartName.replaceAll(" ", "_")+"-"+experimentId+".jpg"), chart, 500, 300);
+			ChartUtilities.saveChartAsJPEG(new File(chartName.replaceAll(" ", "_")+"-"+experimentId+".jpg"), chart, 2000, 1200);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
