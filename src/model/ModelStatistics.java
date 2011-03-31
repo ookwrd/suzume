@@ -31,9 +31,14 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
   
+	public int printSize = 400; 
+	public int viewSize = 100;
+	public int[] imageRatio = {5,3};
+	
 	private static boolean SAVE_IMAGE_TO_FILE = true;
 	private String experimentId = "default";
 	private String chartName = "A chart";  
+	
 	JPanel innerPane = new JPanel();
 	JScrollPane scroller = new JScrollPane(innerPane);
 	
@@ -97,14 +102,14 @@ public class ModelStatistics extends JFrame {
 	 */
 	private BufferedImage createImage(XYSeries series, String title, boolean print) {
 		JFreeChart chart = createChart(series);
-		BufferedImage image = chart.createBufferedImage(500, 300);
+		BufferedImage image = chart.createBufferedImage(imageRatio[0]*viewSize, imageRatio[1]*viewSize);
 
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
 
 		// Creating the corresponding file
 		if (print) {
-			BufferedImage imagePrint = chart.createBufferedImage(2000, 1200);
+			BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]*printSize, imageRatio[1]*printSize);
 			createFile(chart, imagePrint);
 		}
 		
@@ -114,7 +119,7 @@ public class ModelStatistics extends JFrame {
 	private void createFile(JFreeChart chart, BufferedImage image) {
 		
 		try {
-			ChartUtilities.saveChartAsJPEG(new File(chartName.replaceAll(" ", "_")+"-"+experimentId+".jpg"), chart, 2000, 1200);
+			ChartUtilities.saveChartAsJPEG(new File(chartName.replaceAll(" ", "_")+"-"+experimentId+".jpg"), chart, imageRatio[0]*printSize, imageRatio[1]*printSize);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
