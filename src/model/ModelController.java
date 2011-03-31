@@ -268,7 +268,8 @@ public class ModelController implements Runnable {
 	private void plot() {
 		
 		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
-		String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String printName = "Seed" + randomGenerator.getSeed() + " " + 
+			config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 		statsWindow.plot(learningIntensities, "Learning Intensities", printName);
 		statsWindow.plot(numberNulls, "Number of Nulls", printName);
 		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
