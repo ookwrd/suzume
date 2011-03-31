@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYDataset;
@@ -29,9 +30,12 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
-
+  
+	private static final boolean SAVE_IMAGE_TO_FILE = true;
+	private String experimentId = "default";
+	private String chartName = "A chart";  
 	JPanel innerPane = new JPanel();
-	JScrollPane scroller = new JScrollPane(innerPane);  
+	JScrollPane scroller = new JScrollPane(innerPane);
 	
 	public ModelStatistics(String title) {
 		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -47,9 +51,10 @@ public class ModelStatistics extends JFrame {
 		setVisible(true);
 	}
 
-	public void plot(ArrayList<Double> data, String title) {
-	
-		XYSeries newSeries = new XYSeries(title);
+	public void plot(ArrayList<Double> data, String chartName, String experimentId) {
+		this.experimentId = experimentId;
+		this.chartName = chartName;
+		XYSeries newSeries = new XYSeries(chartName);
 		
 		for (int i = 0; i < data.size(); i++) {
 			newSeries.add(new Double(
@@ -61,17 +66,17 @@ public class ModelStatistics extends JFrame {
 							)); 
 		}
 		
-		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries, title))));
+		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 	}
 	
-	private static JFreeChart createChart(XYSeries series, String title) {
+	private JFreeChart createChart(XYSeries series) {
 		XYDataset xyDataset = new XYSeriesCollection(series);
 
 		JFreeChart chart = ChartFactory.createXYLineChart(
-				title, // Title
+				chartName, // Title
 				"Generation", // X-Axis label
-				title, // Y-Axis label
+				chartName, // Y-Axis label
 				xyDataset, // Dataset
 				PlotOrientation.VERTICAL, // Plot orientation 
 				true, // Show legend
@@ -80,25 +85,105 @@ public class ModelStatistics extends JFrame {
 		return chart;
 	}
 
-	private BufferedImage createImage(XYSeries series, String title) {
-		JFreeChart chart = createChart(series, title);
+	private BufferedImage createImage(XYSeries series) {
+		return createImage(series, chartName, SAVE_IMAGE_TO_FILE);
+	}
+	
+	/**
+	 * 
+	 * @param series
+	 * @param title 
+	 * @param print if true, the corresponded file is created
+	 * @return
+	 */
+	private BufferedImage createImage(XYSeries series, String title, boolean print) {
+		JFreeChart chart = createChart(series);
 		BufferedImage image = chart.createBufferedImage(500, 300);
 
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
 
 		// Creating the corresponding file
+		if (print) createFile(chart, image);
 		
-		// JFreeChart also includes a class named ChartUtilities that provides
-		// several methods for saving charts to files or writing them out to
-		// streams in JPEG or PNG format. For example, the following piece of
-		// code can export a chart to a JPEG:
-		// ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500,
-		// 300);
-
 		return image;
 	}
-	 
+	
+	private void createFile(JFreeChart chart, BufferedImage image) {
+		
+		try {
+			ChartUtilities.saveChartAsJPEG(new File(chartName.replaceAll(" ", "_")+"-"+experimentId+".jpg"), chart, 500, 300);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	private void displayChart(BufferedImage image) {
 
