@@ -15,7 +15,7 @@ import Agents.AgentConfiguration.AgentType;
 public class AgentConfigurationPanel extends JPanel {
 
 	private JComboBox agentTypesBox;
-	private JTextField mutationRateField;
+	private JTextField mutationRateField;//TODO remove this
 	
 	private JPanel subPanel;
 	

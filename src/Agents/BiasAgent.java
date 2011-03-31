@@ -17,8 +17,8 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	
 	private RandomGenerator randomGenerator;
 	
-	public BiasAgent(int id, RandomGenerator randomGenerator) {
-		super(id);
+	public BiasAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
+		super(config, id);
 		
 		this.randomGenerator = randomGenerator;
 		
@@ -50,7 +50,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	 * @param id
 	 */
 	public BiasAgent(BiasAgent parent1, BiasAgent parent2, int id, RandomGenerator randomGenerator){
-		super(id);
+		super(parent1.getConfiguration(), id);
 		chromosome = new ArrayList<double[]>(NUMBER_OF_MEANINGS);
 		
 		this.randomGenerator = randomGenerator;
@@ -163,24 +163,6 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		}
 		
 		System.out.println();
-	}
-
-	
-	public static void main(String[] args){
-	
-		BiasAgent newAgent = new BiasAgent(11342134, new RandomGenerator());
-		for(int i = 0; i < 1000; i++){
-			newAgent.invent();
-		}
-		
-		BiasAgent newAgent1 = new BiasAgent(1132, new RandomGenerator());
-		for(int i = 0; i < 50; i++){
-			newAgent1.learnUtterance(newAgent.getRandomUtterance());
-		}
-		
-		newAgent.printAgent();
-		newAgent1.printAgent();
-		
 	}
 	
 	/**

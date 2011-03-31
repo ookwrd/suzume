@@ -14,8 +14,8 @@ public class SynonymAgent extends AbstractAgent {
 	private ArrayList<Utterance>[] wordsPerMeaning; 
 	
 	@SuppressWarnings("unchecked")
-	public SynonymAgent(int id, int memorySize){
-		super(id);
+	public SynonymAgent(AgentConfiguration config, int id, int memorySize){
+		super(config, id);
 		memory = new Utterance[memorySize];
 		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
 		for(int i = 0; i < wordsPerMeaning.length; i++){
@@ -25,7 +25,7 @@ public class SynonymAgent extends AbstractAgent {
 	
 	@SuppressWarnings("unchecked")
 	public SynonymAgent(SynonymAgent parent1, SynonymAgent parent2, int id) {
-		super(id);
+		super(parent1.getConfiguration(), id);
 		
 		//Currently asexual reproduction
 		int memorySize;
@@ -203,22 +203,6 @@ public class SynonymAgent extends AbstractAgent {
 	@Override
 	public int numberOfNulls(){
 		return 0; //TODO
-	}
-
-	public static void main(String[] args){
-		
-		SynonymAgent test = new SynonymAgent(1,10);
-		
-		Utterance wordOne = new Utterance(5, 1);
-		Utterance wordTwo = new Utterance(5, 2);
-		Utterance wordThree = new Utterance(4, 3);
-		
-		test.learnUtterance(wordOne);
-		test.learnUtterance(wordTwo);
-		test.learnUtterance(wordThree);
-		
-		test.printAgent();
-
 	}
 
 	@Override

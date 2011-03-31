@@ -20,8 +20,8 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	protected RandomGenerator randomGenerator;
 	
-	public OriginalAgent(int id, RandomGenerator randomGenerator) {
-		super(id);
+	public OriginalAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
+		super(config, id);
 		
 		this.randomGenerator = randomGenerator;
 		
@@ -40,7 +40,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	 * @param id
 	 */
 	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator){
-		super(id);
+		super(parent1.getConfiguration(),id);
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		learningResource = LEARNING_RESOURCE;
 		
