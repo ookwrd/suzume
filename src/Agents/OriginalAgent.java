@@ -33,6 +33,11 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		
 	}
 	
+	@Override
+	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
+		return defaultParameters;
+	}
+	
 	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);//TODO push randomGenerator down
 		
