@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import Agents.Agent;
+import Agents.AgentConfiguration;
 import Agents.AgentConfiguration.AgentType;
 import Agents.AlteredAgent;
 import Agents.BiasAgent;
@@ -60,13 +61,13 @@ public class ModelController implements Runnable {
 		 */
 		
 		if(config.agentConfig.type == AgentType.OriginalAgent){
-			return new OriginalAgent(nextAgentID++, randomGenerator);
+			return new OriginalAgent(config.agentConfig, nextAgentID++, randomGenerator);
 		}else if (config.agentConfig.type == AgentType.AlteredAgent){
-			return new AlteredAgent(nextAgentID++, randomGenerator);
+			return new AlteredAgent(config.agentConfig, nextAgentID++, randomGenerator);
 		}else if (config.agentConfig.type == AgentType.BiasAgent){
-			return new BiasAgent(nextAgentID++, randomGenerator);
+			return new BiasAgent(config.agentConfig, nextAgentID++, randomGenerator);
 		}else if (config.agentConfig.type == AgentType.SynonymAgent){
-			return new SynonymAgent(nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
+			return new SynonymAgent(config.agentConfig, nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
 		}else{
 			System.err.println("Unsupported Agent type");
 			return null;

@@ -10,12 +10,13 @@ public abstract class AbstractAgent implements Agent {
 	
 	private int fitness;
 	private int id;
+	private AgentConfiguration config;
 	
 	protected ArrayList<Integer> grammar;
 	
-	
-	public AbstractAgent(int id){
+	public AbstractAgent(AgentConfiguration config, int id){
 		this.id = id;
+		this.config = config;
 		fitness = 0;
 		
 		grammar = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
@@ -27,6 +28,11 @@ public abstract class AbstractAgent implements Agent {
 	@Override
 	public int getId() {
 		return id;
+	}
+	
+	@Override
+	public AgentConfiguration getConfiguration(){
+		return config;
 	}
 
 	public ArrayList<Integer> getGrammar() {

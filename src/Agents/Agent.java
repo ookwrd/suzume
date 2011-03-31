@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public interface Agent {
 
+	//General Properties
+	public AgentConfiguration getConfiguration();
+	
 	//Language Learning
 	public void teach(Agent agent);
 	public void learnUtterance(Utterance utterance);

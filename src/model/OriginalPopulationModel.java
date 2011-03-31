@@ -125,28 +125,4 @@ public class OriginalPopulationModel implements PopulationModel {
 		return currentGeneration;
 	}
 
-	public static void main(String[] args) {
-
-		ArrayList<Agent> agents = new ArrayList<Agent>();
-
-		for (int i = 1; i <= 200; i++) {
-			agents.add(new OriginalAgent(i, new RandomGenerator()));
-		}
-		
-		ArrayList<Agent> agents1 = new ArrayList<Agent>();
-
-		for (int i = 1; i <= 200; i++) {
-			agents1.add(new OriginalAgent(i, new RandomGenerator()));
-		}
-
-		OriginalPopulationModel test = new OriginalPopulationModel(agents, agents1);
-		test.switchGenerations(agents);
-
-		ArrayList<Agent> neighbours = test.getAncestors(agents.get(99), 3);
-
-		for (Agent agent : neighbours) {
-			System.out.println("Agent " + agent.getId());
-		}
-	}
-
 }

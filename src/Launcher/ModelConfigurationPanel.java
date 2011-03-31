@@ -5,9 +5,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-
-import Agents.AgentConfiguration;
-import Agents.AgentConfiguration.AgentType;
 import model.ModelConfiguration;
 import model.ModelConfiguration.PopulationModelType;
 
