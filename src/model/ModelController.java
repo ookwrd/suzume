@@ -10,7 +10,7 @@ import Agents.BiasAgent;
 import Agents.OriginalAgent;
 import Agents.SynonymAgent;
 
-public class ModelController {
+public class ModelController implements Runnable {
 	
 	private ModelConfiguration config;
 	
@@ -280,7 +280,7 @@ public class ModelController {
 		statsWindow.display();
 	}
 	
-	
+	@Override
 	public void run(){
 		runSimulation();
 		
