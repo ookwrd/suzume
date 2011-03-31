@@ -17,7 +17,7 @@ public class RandomConfigurationPanel extends AbstractConfigurationPanel {
 	public RandomConfigurationPanel(){
 		super("Random Number Generator Configuration");
 		
-		useRandomSeedBox = addCheckBox("Use current time as seed:", true);
+		useRandomSeedBox = addCheckBox("Use current time as seed:", true, this);
 		useRandomSeedBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -25,10 +25,10 @@ public class RandomConfigurationPanel extends AbstractConfigurationPanel {
 			}
 		});
 		
-		randomSeedField = addField("Seed:", ""+1);
+		randomSeedField = addField("Seed:", ""+1, this);
 		randomSeedField.setEnabled(false);
 		
-		makeGrid();
+		makeGrid(this);
 	}
 
 	public RandomGenerator getGenerator(){
