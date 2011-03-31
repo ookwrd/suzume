@@ -66,6 +66,11 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		}
 	}
 	
+	@Override
+	public String getName(){
+		return "Original Agent";
+	}
+	
 	/**
 	 * Returns a random utterance from this agents grammar.
 	 * 

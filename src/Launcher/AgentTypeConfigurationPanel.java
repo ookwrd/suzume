@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import Agents.AgentConfiguration;
 import Agents.AgentConfiguration.AgentType;
+import Agents.AgentConfigurationPanel;
+import Agents.AgentFactory;
 
 
 @SuppressWarnings("serial")
@@ -17,7 +19,7 @@ public class AgentTypeConfigurationPanel extends JPanel {
 	private JComboBox agentTypesBox;
 	private JTextField mutationRateField;//TODO remove this
 	
-	private JPanel subPanel;
+	private AgentConfigurationPanel subPanel;
 	
 	public AgentTypeConfigurationPanel(){
 		
@@ -48,14 +50,17 @@ public class AgentTypeConfigurationPanel extends JPanel {
 			remove(subPanel);
 		}
 		
-		subPanel = new JPanel();
+		subPanel = AgentFactory.getConfigurationPanel((AgentType)agentTypesBox.getSelectedItem());
+			
+	/*		new JPanel();
 		
 		ConfigurationPanelTools.configurePanel(""+agentTypesBox.getSelectedItem(), subPanel);
 		
 		mutationRateField = ConfigurationPanelTools.addField("Mutation Rate", "0.05", subPanel);
 		
 		ConfigurationPanelTools.makeGrid(subPanel);
-		
+		*/
+			
 		add(subPanel);
 		
 		validate();
@@ -64,7 +69,7 @@ public class AgentTypeConfigurationPanel extends JPanel {
 	}
 	
 	public AgentConfiguration getConfiguration(){
-		return new AgentConfiguration((AgentType)agentTypesBox.getSelectedItem(), Double.parseDouble(mutationRateField.getText()));
+		return subPanel.getConfiguration();
 	}
 	
 }

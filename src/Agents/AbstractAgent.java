@@ -31,6 +31,16 @@ public abstract class AbstractAgent implements Agent {
 	}
 	
 	@Override
+	public String getName(){
+		return config.type.toString();
+	}
+	
+	@Override
+	public String getDescription(){
+		return "Undescribed";
+	}
+	
+	@Override
 	public AgentConfiguration getConfiguration(){
 		return config;
 	}

@@ -6,6 +6,8 @@ public interface Agent {
 
 	//General Properties
 	public AgentConfiguration getConfiguration();
+	public String getName();
+	public String getDescription();
 	
 	//Language Learning
 	public void teach(Agent agent);
