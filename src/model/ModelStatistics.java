@@ -83,7 +83,7 @@ public class ModelStatistics extends JFrame {
 				chartName, // Y-Axis label
 				xyDataset, // Dataset
 				PlotOrientation.VERTICAL, // Plot orientation 
-				true, // Show legend
+				false, // Show legend
 				false, // Tooltips 
 				false); // URL
 		
