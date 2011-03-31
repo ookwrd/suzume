@@ -1,12 +1,15 @@
 package Agents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.RandomGenerator;
 
 public abstract class AbstractAgent implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
+	
+	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
 	
 	private int fitness;
 	private int id;
@@ -25,6 +28,11 @@ public abstract class AbstractAgent implements Agent {
 		for (int j = 0; j < NUMBER_OF_MEANINGS; j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
+	}
+	
+	@Override
+	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
+		return defaultParameters;
 	}
 	
 	@Override

@@ -8,7 +8,7 @@ import model.RandomGenerator;
 public interface Agent {
 	
 	//Initialization
-	//public HashMap<String, ConfigurationParameter> getDefaultParameters();
+	public HashMap<String, ConfigurationParameter> getDefaultParameters();
 	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator);
 	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator);
 	

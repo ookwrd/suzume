@@ -58,8 +58,6 @@ public class AgentFactory {
 	
 	public static AgentConfigurationPanel getConfigurationPanel(AgentType type){
 	
-		
-		
 		switch (type) {
 
 		default:
@@ -68,7 +66,7 @@ public class AgentFactory {
 		
 	}
 	
-	public String toString(){
+	/*public String toString(){
 		System.out.println("Sucess!");
 		return "Success";
 	}
@@ -110,5 +108,5 @@ public class AgentFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 }
