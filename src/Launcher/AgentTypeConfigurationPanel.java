@@ -12,14 +12,14 @@ import Agents.AgentConfiguration.AgentType;
 
 
 @SuppressWarnings("serial")
-public class AgentConfigurationPanel extends JPanel {
+public class AgentTypeConfigurationPanel extends JPanel {
 
 	private JComboBox agentTypesBox;
 	private JTextField mutationRateField;//TODO remove this
 	
 	private JPanel subPanel;
 	
-	public AgentConfigurationPanel(){
+	public AgentTypeConfigurationPanel(){
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
