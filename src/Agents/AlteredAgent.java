@@ -19,7 +19,6 @@ public class AlteredAgent extends OriginalAgent implements Agent {
 	public void adjustCosts() {
 		if (learningResource>0) {
 			setFitness(getFitness()+learningResource*LEFTOVER_RESOURCE_USE);
-			learningResource=0;
 		}
 	}
 

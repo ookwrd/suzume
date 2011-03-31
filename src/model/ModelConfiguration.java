@@ -2,14 +2,16 @@ package model;
 
 import java.util.StringTokenizer;
 
+import Agents.AgentConfiguration.AgentType;
+
+
 /**
  * Class for storing Model Configuration parameters.
  * 
- * @author Luke Mccrohon
+ * @author Luke McCrohon
  */
 public class ModelConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, AlteredAgent }
 	public enum PopulationModelType {OriginalPopulationModel}
 	
 	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;
