@@ -2,9 +2,9 @@ package Agents;
 
 import java.util.ArrayList;
 
-public abstract class AbstractAgent implements Agent {
+import model.RandomGenerator;
 
-	public static final double DEFAULT_MUTATION_RATE = 0.05; //TODO make this actually used.
+public abstract class AbstractAgent implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
 	
@@ -14,7 +14,9 @@ public abstract class AbstractAgent implements Agent {
 	
 	protected ArrayList<Integer> grammar;
 	
-	public AbstractAgent(AgentConfiguration config, int id){
+	public AbstractAgent(){}
+	
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
 		this.id = id;
 		this.config = config;
 		fitness = 0;

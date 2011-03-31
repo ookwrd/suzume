@@ -4,12 +4,14 @@ import model.RandomGenerator;
 
 public class AlteredAgent extends OriginalAgent implements Agent {
 	
-	public AlteredAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator) {
-		super(parent1, parent2, id, randomGenerator);
+	public AlteredAgent(){}
+	
+	public void initializeAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator) {
+		super.initializeAgent(parent1, parent2, id, randomGenerator);
 	}
 	
-	public AlteredAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
-		super(config, id, randomGenerator);
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
+		super.initializeAgent(config, id, randomGenerator);
 	}
 
 	protected final static int LEFTOVER_RESOURCE_USE = 1;

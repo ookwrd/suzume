@@ -1,5 +1,6 @@
 package Agents;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.RandomGenerator;
 
@@ -17,11 +18,23 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	protected int learningResource;
 
+	@SuppressWarnings("serial")
+	public static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
+		put("Learning Resource", new ConfigurationParameter(24));
+		put("Learning Resource on Match", new ConfigurationParameter(1));
+		put("Learning Resource on MisMatch", new ConfigurationParameter(4));
+		put("Mutation Rate", new ConfigurationParameter(0.00025));
+		put("Invention Probability", new ConfigurationParameter(0.01));
+	}};
 	
 	protected RandomGenerator randomGenerator;
 	
-	public OriginalAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
-		super(config, id);
+	public OriginalAgent(){
+		
+	}
+	
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
+		super.initializeAgent(config, id, randomGenerator);//TODO push randomGenerator down
 		
 		this.randomGenerator = randomGenerator;
 		
@@ -32,15 +45,11 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		learningResource = LEARNING_RESOURCE;
 	}
 	
-	/**
-	 * Sexual reproduction of a new agent.
-	 * 
-	 * @param parent1
-	 * @param Parent2
-	 * @param id
-	 */
-	public OriginalAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator){
-		super(parent1.getConfiguration(),id);
+	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
+		OriginalAgent parent1 = (OriginalAgent)parentA;
+		OriginalAgent parent2 = (OriginalAgent)parentB;
+		
+		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		learningResource = LEARNING_RESOURCE;
 		
