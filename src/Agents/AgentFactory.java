@@ -58,4 +58,14 @@ public class AgentFactory {
 			return null;
 		}
 	}
+	
+	public static AgentConfigurationPanel getConfigurationPanel(AgentType type){
+
+		switch (type) {
+
+		default:
+			return new AgentConfigurationPanel(type);
+		}
+		
+	}
 }
