@@ -36,7 +36,8 @@ public class ModelStatistics extends JFrame {
 	public int viewSize = 100;
 	public int[] imageRatio = { 5, 3 };
 
-	private static boolean SAVE_IMAGE_TO_FILE = true;
+	private final static boolean SAVE_WHILE_PROCESSING = false;
+	
 	private String experimentId = "default";
 	private String chartName = "A chart";
 
@@ -74,6 +75,8 @@ public class ModelStatistics extends JFrame {
 
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
+		
+		saveChart(data);
 	}
 
 	private JFreeChart createChart(XYSeries series) {
@@ -92,19 +95,18 @@ public class ModelStatistics extends JFrame {
 	}
 
 	private BufferedImage createImage(XYSeries series) {
-		return createImage(series, chartName, SAVE_IMAGE_TO_FILE);
+		return createImage(series, chartName, SAVE_WHILE_PROCESSING);
 	}
 
 	/**
 	 * 
 	 * @param series
 	 * @param title
-	 * @param print
-	 *            : if true, the corresponded file is created
+	 * @param printToFile : if true, the corresponding file is created
 	 * @return
 	 */
 	private BufferedImage createImage(XYSeries series, String title,
-			boolean print) {
+			boolean printToFile) {
 		JFreeChart chart = createChart(series);
 		BufferedImage image = chart.createBufferedImage(imageRatio[0]
 				* viewSize, imageRatio[1] * viewSize);
@@ -113,7 +115,7 @@ public class ModelStatistics extends JFrame {
 		lblChart.setIcon(new ImageIcon(image));
 
 		// Creating the corresponding file
-		if (print) {
+		if (printToFile) {
 			BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]
 					* printSize, imageRatio[1] * printSize);
 			createFile(chart, imagePrint);
@@ -123,36 +125,68 @@ public class ModelStatistics extends JFrame {
 	}
 
 	private void createFile(JFreeChart chart, BufferedImage image) {
-
-		mkdir("charts");
+		
+		cd("/");
+		mkdir("/suzume-charts");
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File("charts/" + chartName.replaceAll(" ", "_") + "-"
+					new File("/suzume-charts/" + chartName.replaceAll(" ", "_") + "-"
 							+ experimentId + ".jpg"), chart, imageRatio[0]
 							* printSize, imageRatio[1] * printSize);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private void cd(String string) {
+		System.setProperty("user.dir", string);
+		System.out.println(System.getProperty("user.dir"));
+	}
 
+	/**
+	 * This only prints charts to file without showing a window
+	 */
+	private void saveChart(ArrayList<Double> data) {
+		
+		XYSeries series = new XYSeries(chartName);
+		
+		for (int i = 0; i < data.size(); i++) {
+			series.add(new Double(
+
+			i // x
+					), new Double(
+
+					data.get(i) // y
+					));
+		}
+				
+		JFreeChart chart = createChart(series);
+		BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]* printSize, imageRatio[1] * printSize);
+		createFile(chart, imagePrint);
+		
+	}
+
+	/**
+	 * Create a directory
+	 * 
+	 * @param dir
+	 */
 	private void mkdir(String dir) {
-
+		
 		try {
-			// Create one directory
 			boolean success = (new File(dir)).mkdir();
 			if (success) {
 				System.out.println("Folder " + dir + " created");
 			}
 
-		} catch (Exception e) {// Catch exception if any
+		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
 
 	}
 
 	private void displayChart(BufferedImage image) {
-
 		try {
 			System.out.println("Enter image name\n");
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
