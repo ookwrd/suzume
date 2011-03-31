@@ -14,6 +14,8 @@ public class AlteredAgent extends OriginalAgent implements Agent {
 
 	protected final static int LEFTOVER_RESOURCE_USE = 1;
 	
+	
+
 	public void adjustCosts() {
 		if (learningResource>0) {
 			setFitness(getFitness()+learningResource*LEFTOVER_RESOURCE_USE);

@@ -1,16 +1,14 @@
 package model;
 
 import java.util.ArrayList;
-
-import model.ModelConfiguration.AgentType;
-
 import Agents.Agent;
+import Agents.AgentConfiguration.AgentType;
 import Agents.AlteredAgent;
 import Agents.BiasAgent;
 import Agents.OriginalAgent;
 import Agents.SynonymAgent;
 
-public class ModelController {
+public class ModelController implements Runnable {
 	
 	private ModelConfiguration config;
 	
@@ -63,13 +61,13 @@ public class ModelController {
 		 * constructor as well in the "selection " method.
 		 */
 		
-		if(config.agentType == AgentType.OriginalAgent){
+		if(config.agentConfig.type == AgentType.OriginalAgent){
 			return new OriginalAgent(nextAgentID++, randomGenerator);
-		}else if (config.agentType == AgentType.AlteredAgent){
+		}else if (config.agentConfig.type == AgentType.AlteredAgent){
 			return new AlteredAgent(nextAgentID++, randomGenerator);
-		}else if (config.agentType == AgentType.BiasAgent){
+		}else if (config.agentConfig.type == AgentType.BiasAgent){
 			return new BiasAgent(nextAgentID++, randomGenerator);
-		}else if (config.agentType == AgentType.SynonymAgent){
+		}else if (config.agentConfig.type == AgentType.SynonymAgent){
 			return new SynonymAgent(nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
 		}else{
 			System.err.println("Unsupported Agent type");
@@ -174,13 +172,13 @@ public class ModelController {
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 			
-			if(config.agentType == AgentType.OriginalAgent){
+			if(config.agentConfig.type == AgentType.OriginalAgent){
 				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++, randomGenerator));
-			}else if (config.agentType == AgentType.AlteredAgent){
+			}else if (config.agentConfig.type == AgentType.AlteredAgent){
 				newGenerationAgents.add(new AlteredAgent((AlteredAgent)parent1, (AlteredAgent)parent2, nextAgentID++, randomGenerator));
-			}else if (config.agentType == AgentType.BiasAgent){
+			}else if (config.agentConfig.type == AgentType.BiasAgent){
 				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++, randomGenerator));
-			} else if (config.agentType == AgentType.SynonymAgent){
+			} else if (config.agentConfig.type == AgentType.SynonymAgent){
 				newGenerationAgents.add(new SynonymAgent((SynonymAgent)parent1,(SynonymAgent)parent2,nextAgentID++));
 			}else{
 				System.err.println("Unsupported Agent type");
@@ -282,7 +280,7 @@ public class ModelController {
 		statsWindow.display();
 	}
 	
-	
+	@Override
 	public void run(){
 		runSimulation();
 		

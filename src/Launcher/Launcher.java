@@ -63,7 +63,9 @@ public class Launcher extends JPanel {
 	
 		ModelController controller = new ModelController(configuration, random);
 		
-		controller.run();
+		Thread thread = new Thread(controller);
+		
+		thread.start();
 		
 	}
 	

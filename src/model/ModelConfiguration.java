@@ -2,17 +2,16 @@ package model;
 
 import java.util.StringTokenizer;
 
+import Agents.AgentConfiguration;
+
 /**
  * Class for storing Model Configuration parameters.
  * 
- * @author Luke Mccrohon
+ * @author Luke McCrohon
  */
 public class ModelConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, AlteredAgent }
 	public enum PopulationModelType {OriginalPopulationModel}
-	
-	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
 	
 	public static final int DEFAULT_GENERATION_COUNT = 1000;
@@ -27,7 +26,8 @@ public class ModelConfiguration {
 	//Maximum number of utterances presented to agents during learning.
 	public static final int DEFAULT_CRITICAL_PERIOD = 200; 
 	
-	protected AgentType agentType;
+	protected AgentConfiguration agentConfig;
+	
 	protected PopulationModelType populationModelType;
 	
 	protected int generationCount;
@@ -42,7 +42,7 @@ public class ModelConfiguration {
 	 * Create a configuration based on the default values.
 	 */
 	public ModelConfiguration(){
-		this.agentType = DEFAULT_AGENT_TYPE;
+		this.agentConfig = new AgentConfiguration();
 		this.populationModelType = DEFAULT_POPULATION_MODEL;
 		
 		this.generationCount = DEFAULT_GENERATION_COUNT;
@@ -65,8 +65,8 @@ public class ModelConfiguration {
 	 * @param communicationsPerNeighbour
 	 * @param criticalPeriod
 	 */
-	public ModelConfiguration(AgentType agentType, PopulationModelType populationModelType, int generationCount, int populationSize, int baseFitness, int communicationsPerNeighbour, int criticalPeriod){
-		this.agentType = agentType;
+	public ModelConfiguration(AgentConfiguration agentConfig, PopulationModelType populationModelType, int generationCount, int populationSize, int baseFitness, int communicationsPerNeighbour, int criticalPeriod){
+		this.agentConfig = agentConfig;
 		this.populationModelType = populationModelType;
 		this.generationCount = generationCount;
 		this.populationSize = populationSize;
@@ -83,13 +83,7 @@ public class ModelConfiguration {
 	public ModelConfiguration(String inputString){
 		StringTokenizer tokenizer = new StringTokenizer(inputString);
 		
-		if(tokenizer.countTokens()!= 7){
-			//Invalid string
-			System.err.println("Invalid Input string to ModelConfiguration Constructor");
-			return;
-		}
-		
-		this.agentType = AgentType.valueOf(tokenizer.nextToken());
+		this.agentConfig = new AgentConfiguration(tokenizer);
 		this.populationModelType = PopulationModelType.valueOf(tokenizer.nextToken());
 		
 		this.generationCount = Integer.parseInt(tokenizer.nextToken());
@@ -108,7 +102,7 @@ public class ModelConfiguration {
 	 * @return
 	 */
 	public String saveString(){
-		return "" + agentType 
+		return "" + agentConfig.saveString() //TODO Make this work.
 		+ " " + populationModelType 
 		+ " " + generationCount 
 		+ " " + populationSize 
@@ -125,7 +119,7 @@ public class ModelConfiguration {
 	@Override
 	public String toString(){
 		
-		return "AgentType: " + agentType + 
+		return agentConfig.toString() + 
 		"   GenerationCount: " + generationCount + 
 		"   PopulationSize: " + populationSize + 
 		"   CriticalPeriod: " + criticalPeriod;
@@ -133,7 +127,7 @@ public class ModelConfiguration {
 	
 	
 	public String printName(){
-		return "" + agentType + " " + "gen_" + generationCount + "pop_" + populationSize + "crit_" + criticalPeriod;
+		return "" + agentConfig.type + " " + "gen_" + generationCount + "pop_" + populationSize + "crit_" + criticalPeriod;
 	}
 	
 }

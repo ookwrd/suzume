@@ -1,14 +1,19 @@
 package Launcher;
 
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import Agents.AgentConfiguration;
+import Agents.AgentConfiguration.AgentType;
 import model.ModelConfiguration;
-import model.ModelConfiguration.AgentType;
 import model.ModelConfiguration.PopulationModelType;
 
 @SuppressWarnings("serial")
-public class ModelConfigurationPanel extends AbstractConfigurationPanel{
+public class ModelConfigurationPanel extends JPanel {
 
+	//private AgentConfigurationPanel agentConfigurationPanel;
+	
 	private JComboBox agentTypesBox;
 	private JComboBox populationModelTypeBox;
 	
@@ -21,23 +26,25 @@ public class ModelConfigurationPanel extends AbstractConfigurationPanel{
 	private JTextField criticalPeriodField;
 	
 	public ModelConfigurationPanel(){
-		super("Model Configuration");
+		ConfigurationPanelTools.configurePanel("Model Configuration", this);
 		
-		agentTypesBox = addComboBox("Agent type:", ModelConfiguration.AgentType.values());
-		populationModelTypeBox = addComboBox("Population Model:", ModelConfiguration.PopulationModelType.values());
-		generationCountField = addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT);
-		populationSizeField = addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE); 
-		baseFitnessField= addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS);
-		communicationPerNeighbourField = addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR);
-		criticalPeriodField = addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD);
+	//	agentConfigurationPanel = new AgentConfigurationPanel();
 		
-		makeGrid();
+		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", AgentConfiguration.AgentType.values(),this);
+		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", ModelConfiguration.PopulationModelType.values(), this);
+		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, this);
+		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, this); 
+		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, this);
+		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, this);
+		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD, this);
+		
+		ConfigurationPanelTools.makeGrid(this);
 	}
 	
 	public ModelConfiguration getConfiguration(){
 		
 		return new ModelConfiguration(
-				(AgentType)agentTypesBox.getSelectedItem(),
+				new AgentConfiguration((AgentType)agentTypesBox.getSelectedItem(), 0.05),//TODO
 				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
 				Integer.parseInt(generationCountField.getText()),
 				Integer.parseInt(populationSizeField.getText()),

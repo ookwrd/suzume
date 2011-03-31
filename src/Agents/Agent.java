@@ -3,7 +3,6 @@ package Agents;
 import java.util.ArrayList;
 
 public interface Agent {
-	
 
 	//Language Learning
 	public void teach(Agent agent);
