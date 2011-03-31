@@ -14,7 +14,7 @@ public class ModelConfiguration {
 	public enum PopulationModelType {OriginalPopulationModel}
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
 	
-	public static final int DEFAULT_GENERATION_COUNT = 10000;
+	public static final int DEFAULT_GENERATION_COUNT = 1000;
 	public static final int DEFAULT_POPULATION_SIZE = 200;
 	
 	//The base fitness score assigned to all agents before communication round
@@ -124,5 +124,11 @@ public class ModelConfiguration {
 		"   PopulationSize: " + populationSize + 
 		"   CriticalPeriod: " + criticalPeriod;
 	}
+	
+	
+	public String printName(){
+		return "" + agentConfig.type + " " + "gen_" + generationCount + "pop_" + populationSize + "crit_" + criticalPeriod;
+	}
+	
 }
 

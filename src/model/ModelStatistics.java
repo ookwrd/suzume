@@ -1,6 +1,7 @@
 //TODO where did this come from.
 
 package model;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
@@ -20,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYDataset;
@@ -28,23 +30,35 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
-
+  
+	public int printSize = 200; 
+	public int viewSize = 100;
+	public int[] imageRatio = {5,3};
+	
+	private static boolean SAVE_IMAGE_TO_FILE = true;
+	private String experimentId = "default";
+	private String chartName = "A chart";  
+	
 	JPanel innerPane = new JPanel();
+	JScrollPane scroller = new JScrollPane(innerPane);
 	
 	public ModelStatistics(String title) {
-		innerPane.setLayout(new FlowLayout());
-		this.add(innerPane);
+		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		scroller.setVerticalScrollBar(new JScrollBar());
+		
+		this.add(scroller, BorderLayout.CENTER);
 		this.setTitle(title);
-		this.setSize(new Dimension(1040,660));
+		this.setSize(new Dimension(1000,500));
 	}
 	
 	public void display(){
 		setVisible(true);
 	}
 
-	public void plot(ArrayList<Double> data, String title) {
-	
-		XYSeries newSeries = new XYSeries(title);
+	public void plot(ArrayList<Double> data, String chartName, String experimentId) {
+		this.experimentId = experimentId;
+		this.chartName = chartName;
+		XYSeries newSeries = new XYSeries(chartName);
 		
 		for (int i = 0; i < data.size(); i++) {
 			newSeries.add(new Double(
@@ -56,43 +70,128 @@ public class ModelStatistics extends JFrame {
 							)); 
 		}
 		
-		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries, title))));
+		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 	}
 	
-	private static JFreeChart createChart(XYSeries series, String title) {
+	private JFreeChart createChart(XYSeries series) {
 		XYDataset xyDataset = new XYSeriesCollection(series);
 
 		JFreeChart chart = ChartFactory.createXYLineChart(
-				title, // Title
+				chartName, // Title
 				"Generation", // X-Axis label
-				title, // Y-Axis label
+				chartName, // Y-Axis label
 				xyDataset, // Dataset
 				PlotOrientation.VERTICAL, // Plot orientation 
-				true, // Show legend
+				false, // Show legend
 				false, // Tooltips 
 				false); // URL
+		
 		return chart;
 	}
 
-	private BufferedImage createImage(XYSeries series, String title) {
-		JFreeChart chart = createChart(series, title);
-		BufferedImage image = chart.createBufferedImage(500, 300);
+	private BufferedImage createImage(XYSeries series) {
+		return createImage(series, chartName, SAVE_IMAGE_TO_FILE);
+	}
+	
+	/**
+	 * 
+	 * @param series
+	 * @param title 
+	 * @param print : if true, the corresponded file is created
+	 * @return
+	 */
+	private BufferedImage createImage(XYSeries series, String title, boolean print) {
+		JFreeChart chart = createChart(series);
+		BufferedImage image = chart.createBufferedImage(imageRatio[0]*viewSize, imageRatio[1]*viewSize);
 
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
 
 		// Creating the corresponding file
+		if (print) {
+			BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]*printSize, imageRatio[1]*printSize);
+			createFile(chart, imagePrint);
+		}
 		
-		// JFreeChart also includes a class named ChartUtilities that provides
-		// several methods for saving charts to files or writing them out to
-		// streams in JPEG or PNG format. For example, the following piece of
-		// code can export a chart to a JPEG:
-		// ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500,
-		// 300);
-
 		return image;
 	}
+	
+	private void createFile(JFreeChart chart, BufferedImage image) {
+		
+		try {
+			ChartUtilities.saveChartAsJPEG(new File(chartName.replaceAll(" ", "_")+"-"+experimentId+".jpg"), chart, imageRatio[0]*printSize, imageRatio[1]*printSize);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	private void displayChart(BufferedImage image) {
 

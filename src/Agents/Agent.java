@@ -16,7 +16,7 @@ public interface Agent {
 	//Fitness Calculation
 	public void setFitness(int fitness);
 	public int getFitness();
-	public void communicate(Agent partner); 
+	public void communicate(Agent partner);
 	public void adjustCosts();
 	
 	//Statistics
@@ -28,6 +28,7 @@ public interface Agent {
 	public void printAgent();
 	
 	public int getId();
-	public ArrayList getChromosome();//TODO get rid of this	
-
+	public ArrayList getChromosome();//TODO get rid of this
+	
+	
 }

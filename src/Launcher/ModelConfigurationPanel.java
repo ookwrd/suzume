@@ -12,7 +12,7 @@ import model.ModelConfiguration.PopulationModelType;
 @SuppressWarnings("serial")
 public class ModelConfigurationPanel extends JPanel {
 
-	private AgentConfigurationPanel agentConfigurationPanel;
+	//private AgentConfigurationPanel agentConfigurationPanel;
 	
 	private JComboBox agentTypesBox;
 	private JComboBox populationModelTypeBox;
