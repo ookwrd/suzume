@@ -124,6 +124,12 @@ public class ModelStatistics extends JFrame {
 		return image;
 	}
 
+	/**
+	 * Create a jpg file for the image of the chart
+	 * 
+	 * @param chart
+	 * @param image
+	 */
 	private void createFile(JFreeChart chart, BufferedImage image) {
 		
 		cd("/");
@@ -139,8 +145,12 @@ public class ModelStatistics extends JFrame {
 		}
 	}
 	
-	private void cd(String string) {
-		System.setProperty("user.dir", string);
+	/**
+	 * Create a directory
+	 * @param name
+	 */
+	private void cd(String name) {
+		System.setProperty("user.dir", name);
 		System.out.println(System.getProperty("user.dir"));
 	}
 
