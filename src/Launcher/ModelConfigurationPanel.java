@@ -1,6 +1,7 @@
 package Launcher;
 
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,7 +25,7 @@ public class ModelConfigurationPanel extends JPanel {
 	private JTextField communicationPerNeighbourField;
 	
 	private JTextField criticalPeriodField;
-	
+
 	public ModelConfigurationPanel(){
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

@@ -2,7 +2,11 @@ package model;
 
 import java.util.ArrayList;
 import Agents.Agent;
-import Agents.AgentFactory;
+import Agents.AgentConfiguration.AgentType;
+import Agents.AlteredAgent;
+import Agents.BiasAgent;
+import Agents.OriginalAgent;
+import Agents.SynonymAgent;
 
 public class ModelController implements Runnable {
 	
@@ -15,6 +19,7 @@ public class ModelController implements Runnable {
 	private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
 	private ArrayList<Double> numberNulls = new ArrayList<Double>();
 	
+	private int nextAgentID = 0; // keeps count of all the next agents from this world
 	private PopulationModel population;
 	
 	private int currentGeneration = 0;
@@ -36,10 +41,36 @@ public class ModelController implements Runnable {
 		
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 		for (int i = 1; i <= config.populationSize; i++) {
-			agents.add(AgentFactory.constructAgent(config.agentConfig, randomGenerator));
+			agents.add(createRandomAgent());
 		}
 		
 		return agents;
+	}
+	
+	/**
+	 * Creates an agent with a new ID and a random genome.
+	 * 
+	 * @return
+	 */
+	private Agent createRandomAgent(){
+		
+		/*
+		 * When adding new agent types make sure to add a sexual reproduction 
+		 * constructor as well in the "selection " method.
+		 */
+		
+		if(config.agentConfig.type == AgentType.OriginalAgent){
+			return new OriginalAgent(nextAgentID++, randomGenerator);
+		}else if (config.agentConfig.type == AgentType.AlteredAgent){
+			return new AlteredAgent(nextAgentID++, randomGenerator);
+		}else if (config.agentConfig.type == AgentType.BiasAgent){
+			return new BiasAgent(nextAgentID++, randomGenerator);
+		}else if (config.agentConfig.type == AgentType.SynonymAgent){
+			return new SynonymAgent(nextAgentID, SynonymAgent.DEFAULT_MEMEORY_SIZE);
+		}else{
+			System.err.println("Unsupported Agent type");
+			return null;
+		}
 	}
 	
 	/**
@@ -138,8 +169,19 @@ public class ModelController implements Runnable {
 		while(newGenerationAgents.size() < config.populationSize){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
-
-			newGenerationAgents.add(AgentFactory.constructAgent(parent1, parent2, randomGenerator));
+			
+			if(config.agentConfig.type == AgentType.OriginalAgent){
+				newGenerationAgents.add(new OriginalAgent((OriginalAgent)parent1, (OriginalAgent)parent2, nextAgentID++, randomGenerator));
+			}else if (config.agentConfig.type == AgentType.AlteredAgent){
+				newGenerationAgents.add(new AlteredAgent((AlteredAgent)parent1, (AlteredAgent)parent2, nextAgentID++, randomGenerator));
+			}else if (config.agentConfig.type == AgentType.BiasAgent){
+				newGenerationAgents.add(new BiasAgent((BiasAgent)parent1, (BiasAgent)parent2, nextAgentID++, randomGenerator));
+			} else if (config.agentConfig.type == AgentType.SynonymAgent){
+				newGenerationAgents.add(new SynonymAgent((SynonymAgent)parent1,(SynonymAgent)parent2,nextAgentID++));
+			}else{
+				System.err.println("Unsupported Agent type");
+				return null;
+			}
 		}
 		
 		return newGenerationAgents;
@@ -226,7 +268,8 @@ public class ModelController implements Runnable {
 	private void plot() {
 		
 		ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
-		String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String printName = "Seed" + randomGenerator.getSeed() + " " + 
+			config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 		statsWindow.plot(learningIntensities, "Learning Intensities", printName);
 		statsWindow.plot(numberNulls, "Number of Nulls", printName);
 		statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
