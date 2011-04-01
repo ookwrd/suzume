@@ -115,5 +115,10 @@ public abstract class AbstractAgent implements Agent {
 	public void adjustCosts(){
 		//Do nothing.
 	}
+	
+	@Override
+	public ArrayList getPhenotype(){
+		return grammar;
+	}
 
 }
