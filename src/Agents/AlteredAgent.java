@@ -6,6 +6,7 @@ import model.RandomGenerator;
 
 public class AlteredAgent extends OriginalAgent implements Agent {
 	
+	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
 		put("Leftover Resource Multiplier", new ConfigurationParameter(1.0));
 	}}; 
@@ -14,11 +15,13 @@ public class AlteredAgent extends OriginalAgent implements Agent {
 	
 	public AlteredAgent(){}
 	
-	public void initializeAgent(OriginalAgent parent1, OriginalAgent parent2, int id, RandomGenerator randomGenerator) {
-		super.initializeAgent(parent1, parent2, id, randomGenerator);
+	@Override
+	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
+		super.initializeAgent(parentA, parentB, id, randomGenerator);
 		resourceMultiplier = ((ConfigurationParameter)config.parameters.get("Leftover Resource Multiplier")).getDouble();
 	}
 	
+	@Override
 	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		resourceMultiplier = ((ConfigurationParameter)config.parameters.get("Leftover Resource Multiplier")).getDouble();
@@ -36,8 +39,6 @@ public class AlteredAgent extends OriginalAgent implements Agent {
 	}
 
 	public void adjustCosts() {
-		
-		System.out.println(resourceMultiplier);
 		if (learningResource>0) {
 			setFitness(getFitness()+(int)(learningResource*resourceMultiplier+10));
 		}
