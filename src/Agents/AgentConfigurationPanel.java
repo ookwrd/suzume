@@ -31,14 +31,6 @@ public class AgentConfigurationPanel extends JPanel {
 		
 		setBorder(new TitledBorder(type.toString() + " configuration"));
 		
-		innerPanel = new JPanel();
-		
-		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-		
-		innerPanel.add(new JLabel("No configuration required.")); 
-		
-		add(innerPanel);
-		
 		this.type = type;
 		
 		//Get default parameter map for this agent type
@@ -86,6 +78,12 @@ public class AgentConfigurationPanel extends JPanel {
 		
 		add(autoPanel);
 		
+		if(parameters.size()==0){
+			innerPanel = new JPanel();
+			innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+			innerPanel.add(new JLabel("No configuration required.")); 
+			add(innerPanel);
+		}
 	}
 	
 	public AgentConfiguration getConfiguration(){
