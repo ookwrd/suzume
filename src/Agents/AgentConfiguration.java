@@ -19,12 +19,9 @@ public class AgentConfiguration {
 		//TODO maybe I need to get rid of this method?
 	}
 	
-	public AgentConfiguration(AgentType agentType){
+	public AgentConfiguration(AgentType agentType, HashMap<String, ConfigurationParameter> parameters){
 		this.type = agentType;
-	}
-	
-	public Object getParameter(String key){
-		return parameters.get(key);
+		this.parameters = parameters;
 	}
 
 	public AgentConfiguration(StringTokenizer tokenizer) {
