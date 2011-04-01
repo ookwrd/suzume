@@ -10,6 +10,7 @@ public class ModelController implements Runnable {
         
         //statistics
         private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
+        private ArrayList<Double> totalNumberPhenotypes = new ArrayList<Double>();
         private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
         private ArrayList<Double> learningIntensities = new ArrayList<Double>();
         private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
@@ -190,6 +191,7 @@ public class ModelController implements Runnable {
         private void gatherStatistics(){
                 
                 ArrayList genotypes = new ArrayList();
+                ArrayList phenotypes = new ArrayList();
                 double antiLearningIntensity = 0;
                 double totalFitness = 0;
                 double genomeGrammarMatch = 0;
@@ -197,10 +199,18 @@ public class ModelController implements Runnable {
                 
                 for(Agent agent : population.getCurrentGeneration()){
                         
-                        ArrayList<Integer> chromosome = agent.getChromosome();
+                        ArrayList<Integer> chromosome = agent.getGenotype();
                         if (!genotypes.contains(chromosome)){
-                                genotypes.add(chromosome);
+                        	genotypes.add(chromosome);
                         }
+                        
+                        ArrayList<Integer> phenotype = agent.getPhenotype();
+                        if(!phenotypes.contains(phenotype)){
+                        	phenotypes.add(phenotype);
+                        }
+                        
+                        
+                        
                         
                         totalFitness += agent.getFitness();
                         antiLearningIntensity += agent.learningIntensity();
@@ -215,6 +225,7 @@ public class ModelController implements Runnable {
                 geneGrammarMatches.add(genomeGrammarMatch/config.populationSize);
                 numberNulls.add(numberNull/config.populationSize);
                 totalNumberGenotypes.add((double)genotypes.size());
+                totalNumberPhenotypes.add((double)phenotypes.size());
                 
         }
         
@@ -232,6 +243,7 @@ public class ModelController implements Runnable {
                 statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
                 statsWindow.plot(totalFitnesses, "Total Fitnesses", printName);
                 statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", printName);
+                statsWindow.plot(totalNumberPhenotypes, "Total Number of Phenotypes", printName);
                 
                 statsWindow.display();
         }
@@ -277,7 +289,7 @@ public class ModelController implements Runnable {
                 selector.plot();
                 
                 for(Agent agent : selector.population.getCurrentGeneration()){
-                        System.out.println(agent.getChromosome());
+                        System.out.println(agent.getGenotype());
                 }
                 
                 Object double1 = new Double(12342.09);

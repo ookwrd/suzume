@@ -36,8 +36,10 @@ public class AlteredAgent extends OriginalAgent implements Agent {
 	}
 
 	public void adjustCosts() {
+		
+		System.out.println(resourceMultiplier);
 		if (learningResource>0) {
-			setFitness(getFitness()+(int)(learningResource*resourceMultiplier));
+			setFitness(getFitness()+(int)(learningResource*resourceMultiplier+10));
 		}
 	}
 

@@ -14,6 +14,7 @@ public interface Agent {
 	
 	//General Properties
 	public AgentConfiguration getConfiguration();
+	public int getId();
 	public String getName();
 	public String getDescription();
 	
@@ -36,12 +37,12 @@ public interface Agent {
 	public double geneGrammarMatch();
 	public int numberOfNulls();
 	public int learningIntensity(); //TODO how do i make this more general??
+	public ArrayList getGenotype();//TODO get rid of this
+	public ArrayList getPhenotype();//TODO get rid of this as well
+	//Need to refactor how statistics are handled to be more general.
 	
 	//Display
 	public void printAgent();
-	
-	public int getId();
-	public ArrayList getChromosome();//TODO get rid of this
 	
 	
 }

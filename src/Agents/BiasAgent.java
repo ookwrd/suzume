@@ -195,7 +195,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 
 	
 	@Override
-	public ArrayList getChromosome() {
+	public ArrayList getGenotype() {
 		return chromosome;
 	}
 }
