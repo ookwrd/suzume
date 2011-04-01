@@ -11,7 +11,7 @@ public class AgentConfiguration {
 	
 	public AgentType type;
 	
-	private HashMap<String, /*ConfigurationParameter*/Object> parameters = new HashMap<String, Object>();
+	public HashMap<String, ConfigurationParameter> parameters = new HashMap<String, ConfigurationParameter>();
 	
 	public AgentConfiguration(){
 		this.type = DEFAULT_AGENT_TYPE;

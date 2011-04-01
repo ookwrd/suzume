@@ -7,16 +7,14 @@ import model.RandomGenerator;
 
 public class OriginalAgent extends AbstractAgent implements Agent {
 	
-	protected static final int LEARNING_RESOURCE = 24;
-	protected static final int MATCHING_LEARNING_COST = 1;
-	protected static final int NON_MATCHING_LEARNING_COST = 4;
-	
-	protected static final double MUTATION_RATE = 0.00025;
-	protected static final double INVENTION_PROBABILITY = 0.01;
-	
 	protected ArrayList<Integer> chromosome;
 	
 	protected int learningResource;
+	protected int matchingLearingCost;
+	protected int nonMatchingLearningCost;
+	
+	protected double mutationRate;
+	protected double inventionProbability;
 
 	@SuppressWarnings("serial")
 	public static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
@@ -27,11 +25,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		put("Invention Probability", new ConfigurationParameter(0.01));
 	}};
 	
-	protected RandomGenerator randomGenerator;
-	
-	public OriginalAgent(){
-		
-	}
+	public OriginalAgent(){}
 	
 	@Override
 	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
@@ -39,26 +33,36 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	}
 	
 	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
-		super.initializeAgent(config, id, randomGenerator);//TODO push randomGenerator down
-		
-		this.randomGenerator = randomGenerator;
+		super.initializeAgent(config, id, randomGenerator);
 		
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
-		learningResource = LEARNING_RESOURCE;
+		
+		initializeParameters(config);
+	}
+	
+	private void initializeParameters(AgentConfiguration config){
+
+		learningResource = config.parameters.get("Learning Resource").getInteger();
+		matchingLearingCost = config.parameters.get("Learning Resource on Match").getInteger();
+		nonMatchingLearningCost = config.parameters.get("Learning Resource on MisMatch").getInteger();
+		
+		mutationRate = config.parameters.get("Mutation Rate").getDouble();
+		inventionProbability = config.parameters.get("Invention Probability").getDouble();
+		
 	}
 	
 	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
+		
 		OriginalAgent parent1 = (OriginalAgent)parentA;
 		OriginalAgent parent2 = (OriginalAgent)parentB;
 		
 		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
-		learningResource = LEARNING_RESOURCE;
-		
-		this.randomGenerator = randomGenerator;
+
+		initializeParameters(config);
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
@@ -74,7 +78,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		
 		//Mutation
 		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){
-			if(randomGenerator.random() < MUTATION_RATE){
+			if(randomGenerator.random() < mutationRate){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
 		}
@@ -107,7 +111,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
-			if(randomGenerator.random() < INVENTION_PROBABILITY){
+			if(randomGenerator.random() < inventionProbability){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -154,16 +158,16 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
 			grammar.set(u.meaning, u.signal);
-			learningResource -= MATCHING_LEARNING_COST;
+			learningResource -= matchingLearingCost;
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
-			if(learningResource < NON_MATCHING_LEARNING_COST){
+			if(learningResource < nonMatchingLearningCost){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= NON_MATCHING_LEARNING_COST;
+			learningResource -= nonMatchingLearningCost;
 		}
 		
 	}
