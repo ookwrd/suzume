@@ -1,8 +1,5 @@
 package Agents;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import model.RandomGenerator;
 import Agents.AgentConfiguration.AgentType;
 
@@ -22,7 +19,7 @@ public class AgentFactory {
 		case BiasAgent:
 			return new BiasAgent();
 			
-		case SynonymAgent:
+	//	case SynonymAgent:
 	//		return new SynonymAgent();
 
 		default:

@@ -1,12 +1,15 @@
 package Launcher;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import Agents.AgentConfiguration;
 import Agents.AgentConfiguration.AgentType;
 import Agents.AgentConfigurationPanel;
@@ -17,7 +20,6 @@ import Agents.AgentFactory;
 public class AgentTypeConfigurationPanel extends JPanel {
 
 	private JComboBox agentTypesBox;
-	private JTextField mutationRateField;//TODO remove this
 	
 	private AgentConfigurationPanel subPanel;
 	
@@ -52,18 +54,15 @@ public class AgentTypeConfigurationPanel extends JPanel {
 		
 		subPanel = AgentFactory.getConfigurationPanel((AgentType)agentTypesBox.getSelectedItem());
 			
-	/*		new JPanel();
-		
-		ConfigurationPanelTools.configurePanel(""+agentTypesBox.getSelectedItem(), subPanel);
-		
-		mutationRateField = ConfigurationPanelTools.addField("Mutation Rate", "0.05", subPanel);
-		
-		ConfigurationPanelTools.makeGrid(subPanel);
-		*/
-			
 		add(subPanel);
 		
-		validate();
+		revalidate();
+		
+		//I really hate swing, revalidate won't update window size, so do it manually.
+		JFrame frame = (JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, this);
+		if(frame != null) {
+			frame.pack();
+		}
 		
 		return subPanel;
 	}

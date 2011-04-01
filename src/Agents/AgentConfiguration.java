@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 public class AgentConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent, SynonymAgent, AlteredAgent }
+	public enum AgentType { OriginalAgent, BiasAgent/*, SynonymAgent*/, AlteredAgent }
 
 	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;//See *** below if you change this.
 	

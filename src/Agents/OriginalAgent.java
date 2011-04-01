@@ -17,7 +17,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	protected double inventionProbability;
 
 	@SuppressWarnings("serial")
-	public static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
+	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
 		put("Learning Resource", new ConfigurationParameter(24));
 		put("Learning Resource on Match", new ConfigurationParameter(1));
 		put("Learning Resource on MisMatch", new ConfigurationParameter(4));
