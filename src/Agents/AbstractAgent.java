@@ -1,28 +1,40 @@
 package Agents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import model.RandomGenerator;
 
 public abstract class AbstractAgent implements Agent {
-
-	public static final double DEFAULT_MUTATION_RATE = 0.05; //TODO make this actually used.
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
+	
+	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
 	
 	private int fitness;
 	private int id;
 	protected AgentConfiguration config;
+	protected RandomGenerator randomGenerator;
 	
 	protected ArrayList<Integer> grammar;
 	
-	public AbstractAgent(AgentConfiguration config, int id){
+	public AbstractAgent(){}
+	
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
 		this.id = id;
 		this.config = config;
+		this.randomGenerator = randomGenerator;
 		fitness = 0;
 		
 		grammar = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		for (int j = 0; j < NUMBER_OF_MEANINGS; j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
+	}
+	
+	@Override
+	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
+		return defaultParameters;
 	}
 	
 	@Override
@@ -102,6 +114,11 @@ public abstract class AbstractAgent implements Agent {
 	@Override
 	public void adjustCosts(){
 		//Do nothing.
+	}
+	
+	@Override
+	public ArrayList getPhenotype(){
+		return grammar;
 	}
 
 }

@@ -34,8 +34,7 @@ public class Launcher extends JPanel {
 		
 		modelOptions = new ModelConfigurationPanel();
 		add(modelOptions);
-		
-		
+			
 		menuBar = new JPanel();
 		menuBar.setLayout(new FlowLayout());
 		

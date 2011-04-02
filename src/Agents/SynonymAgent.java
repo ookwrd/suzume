@@ -206,7 +206,7 @@ public class SynonymAgent extends AbstractAgent {
 	}
 
 	@Override
-	public ArrayList getChromosome() {
+	public ArrayList getGenotype() {
 		// TODO Auto-generated method stub
 		return null;
 	}

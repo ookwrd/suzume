@@ -17,15 +17,17 @@ public class ModelController implements Runnable {
 		private ModelConfiguration config;
         
         //statistics
-        private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
-        private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
-        private ArrayList<Double> learningIntensities = new ArrayList<Double>();
-        private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
-        private ArrayList<Double> numberNulls = new ArrayList<Double>();
+        private ArrayList<Double>[] totalNumberGenotypes;
+        private ArrayList<Double>[] totalNumberPhenotypes;
+        private ArrayList<Double>[] totalFitnesses;
+        private ArrayList<Double>[] learningIntensities;
+        private ArrayList<Double>[] geneGrammarMatches;
+        private ArrayList<Double>[] numberNulls;
         
         private PopulationModel population;
         
         private int currentGeneration = 0;
+        private int currentRun = 0;
         
         private RandomGenerator randomGenerator;
 
@@ -34,7 +36,33 @@ public class ModelController implements Runnable {
         public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
                 this.config = configuration;
                 this.randomGenerator = randomGenerator;
-                population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
+                
+                resetModel();
+                
+                totalNumberGenotypes = initializeStatisticsArraylist();
+                totalNumberPhenotypes = initializeStatisticsArraylist();
+                totalFitnesses = initializeStatisticsArraylist();
+                learningIntensities = initializeStatisticsArraylist();
+                geneGrammarMatches = initializeStatisticsArraylist();
+                numberNulls = initializeStatisticsArraylist();    
+                
+                
+        }
+        
+        public void resetModel(){
+
+            population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
+        }
+        
+        @SuppressWarnings("unchecked")
+		private ArrayList<Double>[] initializeStatisticsArraylist(){
+        	
+        	ArrayList<Double>[] arrayLists = new ArrayList[config.numberRuns];
+        	for(int i = 0;i < config.numberRuns; i++){
+        		arrayLists[i] = new ArrayList<Double>();
+        	}
+        	
+        	return arrayLists;
         }
         
         /**
@@ -62,8 +90,13 @@ public class ModelController implements Runnable {
                         
                         //Print progress information
                         if(currentGeneration % 1000 == 0){
-                                System.out.println("Generation " + currentGeneration);
+                                System.out.println("Run " + currentRun + " Generation " + currentGeneration);
                         }
+                }
+                
+                if(++currentRun < config.numberRuns){
+                	resetModel();
+                	runSimulation();
                 }
         }
         
@@ -200,6 +233,7 @@ public class ModelController implements Runnable {
         private void gatherStatistics(){
                 
                 ArrayList genotypes = new ArrayList();
+                ArrayList phenotypes = new ArrayList();
                 double antiLearningIntensity = 0;
                 double totalFitness = 0;
                 double genomeGrammarMatch = 0;
@@ -207,10 +241,18 @@ public class ModelController implements Runnable {
                 
                 for(Agent agent : population.getCurrentGeneration()){
                         
-                        ArrayList<Integer> chromosome = agent.getChromosome();
+                        ArrayList<Integer> chromosome = agent.getGenotype();
                         if (!genotypes.contains(chromosome)){
-                                genotypes.add(chromosome);
+                        	genotypes.add(chromosome);
                         }
+                        
+                        ArrayList<Integer> phenotype = agent.getPhenotype();
+                        if(!phenotypes.contains(phenotype)){
+                        	phenotypes.add(phenotype);
+                        }
+                        
+                        
+                        
                         
                         totalFitness += agent.getFitness();
                         antiLearningIntensity += agent.learningIntensity();
@@ -220,11 +262,13 @@ public class ModelController implements Runnable {
                 }
                 
                 double learningIntensity = (config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
-                totalFitnesses.add(totalFitness/config.populationSize);
-                learningIntensities.add(learningIntensity/config.populationSize);
-                geneGrammarMatches.add(genomeGrammarMatch/config.populationSize);
-                numberNulls.add(numberNull/config.populationSize);
-                totalNumberGenotypes.add((double)genotypes.size());
+             
+                totalFitnesses[currentRun].add(totalFitness/config.populationSize);
+                learningIntensities[currentRun].add(learningIntensity/config.populationSize);
+                geneGrammarMatches[currentRun].add(genomeGrammarMatch/config.populationSize);
+                numberNulls[currentRun].add(numberNull/config.populationSize);
+                totalNumberGenotypes[currentRun].add((double)genotypes.size());
+                totalNumberPhenotypes[currentRun].add((double)phenotypes.size());
                 
         }
         
@@ -237,11 +281,12 @@ public class ModelController implements Runnable {
                 
                 ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
                 String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-                statsWindow.plot(learningIntensities, "Learning Intensities","Learning Intensities", "generation", printName);
-                statsWindow.plot(numberNulls, "Number of Nulls","Number of Nulls", "generation", printName);
-                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Gene Grammar Matches", "generation", printName);
-                statsWindow.plot(totalFitnesses, "Fitnesses", "Fitnesses", "generation", printName);
-                statsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Number of Genotypes", "generation", printName);
+                statsWindow.plot(learningIntensities, "Learning Intensities","Learning Intensities");
+                statsWindow.plot(numberNulls, "Number of Nulls","Number of Nulls");
+                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Gene Grammar Matches");
+                statsWindow.plot(totalFitnesses, "Fitnesses", "Fitnesses");
+                statsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Number of Genotypes");
+                statsWindow.plot(totalNumberPhenotypes, "Total Number of Phenotypes", printName);
                 
                 statsWindow.display();
         }
@@ -262,7 +307,7 @@ public class ModelController implements Runnable {
          * @param array
          */
         private Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
-        	globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
+        	//globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
         	
         	Hashtable<Double, Integer> numOccurrences = 
         		new Hashtable<Double, Integer>(); // k:value->v:count
@@ -286,7 +331,7 @@ public class ModelController implements Runnable {
         private void plotDensities() {
         	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
         	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-        	
+        	/*
         	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", printName);
         	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurences", "Learning Intensities", printName);
         	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurences", "Number of Nulls", printName);
@@ -294,6 +339,7 @@ public class ModelController implements Runnable {
         	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences", "Number of Genotypes", printName);
         	
         	densityWindow.display();
+        	*/
         }
         
         public static void multipleRun(int num) {
@@ -332,15 +378,15 @@ public class ModelController implements Runnable {
                 
                 System.out.println();
                 System.out.println("Fitnesses\tlearningResc\tGeneGrammarMatch\tNulls");
-                for(int i = 0; i < selector.learningIntensities.size(); i++){
-                        System.out.println(selector.totalFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i));
+                for(int i = 0; i < selector.learningIntensities[0].size(); i++){
+                        System.out.println(selector.totalFitnesses[0].get(i) + "\t" + selector.learningIntensities[0].get(i) + "\t" + selector.geneGrammarMatches[0].get(i) + "\t" + selector.numberNulls[0].get(i));
                 }
                 
                 //Plot
                 selector.plot();
                 
                 for(Agent agent : selector.population.getCurrentGeneration()){
-                        System.out.println(agent.getChromosome());
+                        System.out.println(agent.getGenotype());
                 }
                 
                 Object double1 = new Double(12342.09);

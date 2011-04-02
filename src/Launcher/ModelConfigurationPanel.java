@@ -26,6 +26,8 @@ public class ModelConfigurationPanel extends JPanel {
 	
 	private JTextField criticalPeriodField;
 
+	private JTextField numberRunsField;
+	
 	public ModelConfigurationPanel(){
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -45,6 +47,7 @@ public class ModelConfigurationPanel extends JPanel {
 		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
 		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, innerPanel);
 		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD, innerPanel);
+		numberRunsField = ConfigurationPanelTools.addField("Rumber of Runs", ""+ModelConfiguration.DEFAULT_NUMBER_RUNS,innerPanel);
 		
 		ConfigurationPanelTools.makeGrid(innerPanel);
 	}
@@ -58,8 +61,8 @@ public class ModelConfigurationPanel extends JPanel {
 				Integer.parseInt(populationSizeField.getText()),
 				Integer.parseInt(baseFitnessField.getText()),
 				Integer.parseInt(communicationPerNeighbourField.getText()),
-				Integer.parseInt(criticalPeriodField.getText())
-				);
+				Integer.parseInt(criticalPeriodField.getText()),
+				Integer.parseInt(numberRunsField.getText()));
 	}
 	
 }
