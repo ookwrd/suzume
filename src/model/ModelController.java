@@ -12,7 +12,9 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
         
-        private ModelConfiguration config;
+        private static final double DENSITY_GRANULARITY = 0.1;
+
+		private ModelConfiguration config;
         
         //statistics
         private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
@@ -252,47 +254,46 @@ public class ModelController implements Runnable {
                 communication();
                 
                 plot();
-                plotDensity();
+                plotDensities();
         }
         
-        private void calculateDensity(ArrayList<Double> array) {
+        /**
+         * Calculate density for an array
+         * @param array
+         */
+        private Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
         	//globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
         	
         	Hashtable<Double, Integer> numOccurrences = 
         		new Hashtable<Double, Integer>(); // key=count
-        	double pace = 10.0;
+        	double pace = DENSITY_GRANULARITY;
         	for (int i = 0; i < array.size(); i++) {
         		// cluster value
         		double clusterVal = pace*(double) Math.round(array.get(i)/pace);
         		
         		// count
 				if(numOccurrences.containsKey(clusterVal))
-					numOccurrences.put(clusterVal, numOccurrences.get(clusterVal));
+					numOccurrences.put(clusterVal, numOccurrences.get(clusterVal)+1);
 				else
 					numOccurrences.put(clusterVal, 1);
 			}
-        	
-        }
-        
-        private void plotDensity() {
-        	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
-        	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-        	
-        	calculateDensity(geneGrammarMatches);
-        	densityWindow.plot(geneGrammarMatches, "Density", printName);
-        	densityWindow.display();
-        }
-        
-        private static int find(ArrayList<Double> array, double numToFind) {
-        	int numOccurrences = 0;
-        	for (int i = 0; i < array.size(); i++) { 
-        		if (array.get(i) == numToFind)
-        			numOccurrences++;
-    		}
         	return numOccurrences;
         }
         
-        //public void run()
+        /**
+         * 
+         */
+        private void plotDensities() {
+        	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
+        	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+        	
+        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", printName);
+        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", printName);
+        	
+        	densityWindow.display();
+        	
+        	
+        }
         
         public static void main2(String[] args){
                 
