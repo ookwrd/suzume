@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -37,7 +40,7 @@ public class ModelStatistics extends JFrame {
 	public int[] imageRatio = { 5, 3 };
 
 	private final static boolean SAVE_WHILE_PROCESSING = false;
-	
+
 	private String experimentId = "default";
 	private String chartName = "A chart";
 
@@ -75,8 +78,28 @@ public class ModelStatistics extends JFrame {
 
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
-		
+
 		saveChart(data);
+	}
+
+	public void plot(Hashtable<Double, Integer> table, String chartName,
+			String experimentId) {
+		this.experimentId = experimentId;
+		this.chartName = chartName;
+		XYSeries newSeries = new XYSeries(chartName);
+		
+		Enumeration e = table.keys();
+		while (e.hasMoreElements()) {
+			Double key = (Double) e.nextElement();
+			newSeries.add(new Double(key// x
+					), new Double(table.get(key) // y
+					));
+		}
+
+		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
+		innerPane.validate();
+
+		//saveChart(table);
 	}
 
 	private JFreeChart createChart(XYSeries series) {
@@ -102,7 +125,8 @@ public class ModelStatistics extends JFrame {
 	 * 
 	 * @param series
 	 * @param title
-	 * @param printToFile : if true, the corresponding file is created
+	 * @param printToFile
+	 *            : if true, the corresponding file is created
 	 * @return
 	 */
 	private BufferedImage createImage(XYSeries series, String title,
@@ -131,22 +155,23 @@ public class ModelStatistics extends JFrame {
 	 * @param image
 	 */
 	private void createFile(JFreeChart chart, BufferedImage image) {
-		
+
 		cd("/");
 		mkdir("/suzume-charts");
 		try {
 
-			ChartUtilities.saveChartAsJPEG(
-					new File("/suzume-charts/" + chartName.replaceAll(" ", "_") + "-"
-							+ experimentId + ".jpg"), chart, imageRatio[0]
-							* printSize, imageRatio[1] * printSize);
+			ChartUtilities.saveChartAsJPEG(new File("/suzume-charts/"
+					+ chartName.replaceAll(" ", "_") + "-" + experimentId
+					+ ".jpg"), chart, imageRatio[0] * printSize, imageRatio[1]
+					* printSize);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Create a directory
+	 * 
 	 * @param name
 	 */
 	private void cd(String name) {
@@ -158,9 +183,9 @@ public class ModelStatistics extends JFrame {
 	 * This only prints charts to file without showing a window
 	 */
 	private void saveChart(ArrayList<Double> data) {
-		
+
 		XYSeries series = new XYSeries(chartName);
-		
+
 		for (int i = 0; i < data.size(); i++) {
 			series.add(new Double(
 
@@ -170,11 +195,12 @@ public class ModelStatistics extends JFrame {
 					data.get(i) // y
 					));
 		}
-				
+
 		JFreeChart chart = createChart(series);
-		BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]* printSize, imageRatio[1] * printSize);
+		BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]
+				* printSize, imageRatio[1] * printSize);
 		createFile(chart, imagePrint);
-		
+
 	}
 
 	/**
@@ -183,7 +209,7 @@ public class ModelStatistics extends JFrame {
 	 * @param dir
 	 */
 	private void mkdir(String dir) {
-		
+
 		try {
 			boolean success = (new File(dir)).mkdir();
 			if (success) {
