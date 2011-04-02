@@ -331,7 +331,7 @@ public class ModelController implements Runnable {
         private void plotDensities() {
         	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
         	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-        	/*
+        	
         	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", printName);
         	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurences", "Learning Intensities", printName);
         	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurences", "Number of Nulls", printName);
@@ -339,7 +339,6 @@ public class ModelController implements Runnable {
         	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences", "Number of Genotypes", printName);
         	
         	densityWindow.display();
-        	*/
         }
         
         public static void multipleRun(int num) {
