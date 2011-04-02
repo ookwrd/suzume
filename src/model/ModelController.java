@@ -28,7 +28,6 @@ public class ModelController implements Runnable {
 	
 	public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
 		this.config = configuration;
-		experimentId = configuration.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 		this.randomGenerator = randomGenerator;
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 	}
