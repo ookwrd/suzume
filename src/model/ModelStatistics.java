@@ -82,7 +82,7 @@ public class ModelStatistics extends JFrame {
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 
-		saveChart(data);
+		saveChart(data); // TODO supposed to be called by a button
 	}
 
 	public void plot(Hashtable<Double, Integer> table, String title, String yLabel, String xLabel,

@@ -12,7 +12,7 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
         
-        private static final double DENSITY_GRANULARITY = 0.1;
+        private static final double DEFAULT_DENSITY_GRANULARITY = 0.1;
 
 		private ModelConfiguration config;
         
@@ -262,11 +262,11 @@ public class ModelController implements Runnable {
          * @param array
          */
         private Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
-        	//globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
+        	globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
         	
         	Hashtable<Double, Integer> numOccurrences = 
-        		new Hashtable<Double, Integer>(); // key=count
-        	double pace = DENSITY_GRANULARITY;
+        		new Hashtable<Double, Integer>(); // k:value->v:count
+        	double pace = DEFAULT_DENSITY_GRANULARITY;
         	for (int i = 0; i < array.size(); i++) {
         		// cluster value
         		double clusterVal = pace*(double) Math.round(array.get(i)/pace);
@@ -294,8 +294,19 @@ public class ModelController implements Runnable {
         	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences", "Number of Genotypes", printName);
         	
         	densityWindow.display();
-        	
-        	
+        }
+        
+        public static void multipleRun(int num) {
+        	/*
+        	for (int i = 0; i < num; i++) {
+	        	runSimulation();
+	            training();
+	            communication();
+	            plot();
+	            calculateDensity(geneGrammarMatches);
+	        }
+            densityWindow.plot(calculateDensity(globalGeneGrammarMatches), "Global Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", "*Multiple*");
+            */
         }
         
         public static void main2(String[] args){
