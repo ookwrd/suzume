@@ -19,12 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -57,44 +58,65 @@ public class ModelStatistics extends JFrame {
 		setVisible(true);
 	}
 
-	public void plot(ArrayList<Double> data, String chartName,
+	public void plot(ArrayList<Double>[] dataSets, String chartName,
 			String experimentId) {
 		this.experimentId = experimentId;
 		this.chartName = chartName;
-		XYSeries newSeries = new XYSeries(chartName);
+		XYSeries[] newSeries = new XYSeries[dataSets.length];
+		
+		for(int j =0; j < dataSets.length; j++){
+		
+			newSeries[j] = new XYSeries(chartName+j);
 
-		for (int i = 0; i < data.size(); i++) {
-			newSeries.add(new Double(
-
-			i // x
-					), new Double(
-
-					data.get(i) // y
-					));
+			ArrayList<Double> data = dataSets[j];
+			
+			for (int i = 0; i < data.size(); i++) {
+				newSeries[j].add(new Double(
+	
+				i // x
+						), new Double(
+	
+						data.get(i) // y
+						));
+			}
+		
 		}
 
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 		
-		saveChart(data);
+		saveChart(dataSets[0]);//TODO
 	}
 
-	private JFreeChart createChart(XYSeries series) {
-		XYDataset xyDataset = new XYSeriesCollection(series);
+	private JFreeChart createChart(XYSeries[] series) {
 
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		
+		for(int i = 0; i < series.length; i++){
+			dataset.addSeries(series[i]);
+		}
+
+		
 		JFreeChart chart = ChartFactory.createXYLineChart(chartName, // Title
 				"Generation", // X-Axis label
 				chartName, // Y-Axis label
-				xyDataset, // Dataset
+				dataset, // Dataset
 				PlotOrientation.VERTICAL, // Plot orientation
 				false, // Show legend
 				false, // Tooltips
 				false); // URL
 
+	//	XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+       // renderer.setSeriesLinesVisible(0, true);
+       // renderer.setSeriesLinesVisible(1, true);
+       // chart.getXYPlot().setRenderer(renderer);
+		
+		
 		return chart;
 	}
 
-	private BufferedImage createImage(XYSeries series) {
+	
+	private BufferedImage createImage(XYSeries[] series) {
 		return createImage(series, chartName, SAVE_WHILE_PROCESSING);
 	}
 
@@ -105,7 +127,7 @@ public class ModelStatistics extends JFrame {
 	 * @param printToFile : if true, the corresponding file is created
 	 * @return
 	 */
-	private BufferedImage createImage(XYSeries series, String title,
+	private BufferedImage createImage(XYSeries[] series, String title,
 			boolean printToFile) {
 		JFreeChart chart = createChart(series);
 		BufferedImage image = chart.createBufferedImage(imageRatio[0]
@@ -159,10 +181,11 @@ public class ModelStatistics extends JFrame {
 	 */
 	private void saveChart(ArrayList<Double> data) {
 		
-		XYSeries series = new XYSeries(chartName);
+		XYSeries[] series = new XYSeries[1];
+		series[0] = new XYSeries(chartName);
 		
 		for (int i = 0; i < data.size(); i++) {
-			series.add(new Double(
+			series[0].add(new Double(
 
 			i // x
 					), new Double(
