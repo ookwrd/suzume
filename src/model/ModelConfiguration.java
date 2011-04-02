@@ -26,6 +26,8 @@ public class ModelConfiguration {
 	//Maximum number of utterances presented to agents during learning.
 	public static final int DEFAULT_CRITICAL_PERIOD = 200; 
 	
+	public static final int DEFAULT_NUMBER_RUNS = 1;
+	
 	protected AgentConfiguration agentConfig;
 	
 	protected PopulationModelType populationModelType;
@@ -36,7 +38,9 @@ public class ModelConfiguration {
 	protected int baseFitness;
 	protected int communicationsPerNeighbour;
 	
-	protected int criticalPeriod;
+	protected int criticalPeriod; //TODO move into agent.
+	
+	protected int numberRuns;
 	
 	/**
 	 * Create a configuration based on the default values.
@@ -52,6 +56,8 @@ public class ModelConfiguration {
 		this.communicationsPerNeighbour = DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR;
 		
 		this.criticalPeriod= DEFAULT_CRITICAL_PERIOD;
+		
+		this.numberRuns = DEFAULT_NUMBER_RUNS;
 	}
 	
 	/**
@@ -65,7 +71,7 @@ public class ModelConfiguration {
 	 * @param communicationsPerNeighbour
 	 * @param criticalPeriod
 	 */
-	public ModelConfiguration(AgentConfiguration agentConfig, PopulationModelType populationModelType, int generationCount, int populationSize, int baseFitness, int communicationsPerNeighbour, int criticalPeriod){
+	public ModelConfiguration(AgentConfiguration agentConfig, PopulationModelType populationModelType, int generationCount, int populationSize, int baseFitness, int communicationsPerNeighbour, int criticalPeriod, int numberRuns){
 		this.agentConfig = agentConfig;
 		this.populationModelType = populationModelType;
 		this.generationCount = generationCount;
@@ -73,6 +79,7 @@ public class ModelConfiguration {
 		this.baseFitness = baseFitness;
 		this.communicationsPerNeighbour = communicationsPerNeighbour;
 		this.criticalPeriod = criticalPeriod;
+		this.numberRuns = numberRuns;
 	}
 	
 	/**
@@ -94,6 +101,7 @@ public class ModelConfiguration {
 		
 		this.criticalPeriod = Integer.parseInt(tokenizer.nextToken());
 		
+		this.numberRuns = Integer.parseInt(tokenizer.nextToken());
 	}
 	
 	/**
@@ -108,7 +116,8 @@ public class ModelConfiguration {
 		+ " " + populationSize 
 		+ " " + baseFitness
 		+ " " + communicationsPerNeighbour
-		+ " " + criticalPeriod;
+		+ " " + criticalPeriod
+		+ " " + numberRuns;
 	}
 	
 	
