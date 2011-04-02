@@ -68,7 +68,6 @@ public class Launcher extends JPanel {
 		
 	}
 	
-	
 	public static void main(String[] args){
 		
 		new Launcher();

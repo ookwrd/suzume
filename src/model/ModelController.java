@@ -1,12 +1,20 @@
 package model;
 
+import java.awt.print.Printable;
 import java.util.ArrayList;
+import java.util.Hashtable;
+
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
 import Agents.Agent;
 import Agents.AgentFactory;
+import Launcher.Launcher;
 
 public class ModelController implements Runnable {
         
-        private ModelConfiguration config;
+        private static final double DEFAULT_DENSITY_GRANULARITY = 0.1;
+
+		private ModelConfiguration config;
         
         //statistics
         private ArrayList<Double>[] totalNumberGenotypes;
@@ -22,6 +30,8 @@ public class ModelController implements Runnable {
         private int currentRun = 0;
         
         private RandomGenerator randomGenerator;
+
+		private ArrayList<Double> globalGeneGrammarMatches;
         
         public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
                 this.config = configuration;
@@ -271,11 +281,11 @@ public class ModelController implements Runnable {
                 
                 ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
                 String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-                statsWindow.plot(learningIntensities, "Learning Intensities", printName);
-                statsWindow.plot(numberNulls, "Number of Nulls", printName);
-                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
-                statsWindow.plot(totalFitnesses, "Total Fitnesses", printName);
-                statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", printName);
+                statsWindow.plot(learningIntensities, "Learning Intensities","Learning Intensities");
+                statsWindow.plot(numberNulls, "Number of Nulls","Number of Nulls");
+                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Gene Grammar Matches");
+                statsWindow.plot(totalFitnesses, "Fitnesses", "Fitnesses");
+                statsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Number of Genotypes");
                 statsWindow.plot(totalNumberPhenotypes, "Total Number of Phenotypes", printName);
                 
                 statsWindow.display();
@@ -289,9 +299,63 @@ public class ModelController implements Runnable {
                 communication();
                 
                 plot();
+                plotDensities();
         }
         
-        public static void main(String[] args){
+        /**
+         * Calculate density for an array
+         * @param array
+         */
+        private Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
+        	//globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
+        	
+        	Hashtable<Double, Integer> numOccurrences = 
+        		new Hashtable<Double, Integer>(); // k:value->v:count
+        	double pace = DEFAULT_DENSITY_GRANULARITY;
+        	for (int i = 0; i < array.size(); i++) {
+        		// cluster value
+        		double clusterVal = pace*(double) Math.round(array.get(i)/pace);
+        		
+        		// count
+				if(numOccurrences.containsKey(clusterVal))
+					numOccurrences.put(clusterVal, numOccurrences.get(clusterVal)+1);
+				else
+					numOccurrences.put(clusterVal, 1);
+			}
+        	return numOccurrences;
+        }
+        
+        /**
+         * 
+         */
+        private void plotDensities() {
+        	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
+        	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+        	/*
+        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", printName);
+        	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurences", "Learning Intensities", printName);
+        	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurences", "Number of Nulls", printName);
+        	densityWindow.plot(calculateDensity(totalFitnesses), "Density (Fitnesses)", "Occurences", "Fitnesses", printName);
+        	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences", "Number of Genotypes", printName);
+        	
+        	densityWindow.display();
+        	*/
+        }
+        
+        public static void multipleRun(int num) {
+        	/*
+        	for (int i = 0; i < num; i++) {
+	        	runSimulation();
+	            training();
+	            communication();
+	            plot();
+	            calculateDensity(geneGrammarMatches);
+	        }
+            densityWindow.plot(calculateDensity(globalGeneGrammarMatches), "Global Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", "*Multiple*");
+            */
+        }
+        
+        public static void main2(String[] args){
                 
                 //Test selection
                 ModelController selector = new ModelController(new ModelConfiguration(), new RandomGenerator());
@@ -329,5 +393,9 @@ public class ModelController implements Runnable {
                 
                 System.out.println(double1);
         }
+        
+        public static void main(String[] args) {
+			new Launcher();
+		}
 
 }
