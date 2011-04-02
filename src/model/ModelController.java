@@ -26,7 +26,8 @@ public class ModelController implements Runnable {
         public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
                 this.config = configuration;
                 this.randomGenerator = randomGenerator;
-                population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
+                
+                resetModel();
                 
                 totalNumberGenotypes = initializeStatisticsArraylist();
                 totalNumberPhenotypes = initializeStatisticsArraylist();
@@ -35,6 +36,12 @@ public class ModelController implements Runnable {
                 geneGrammarMatches = initializeStatisticsArraylist();
                 numberNulls = initializeStatisticsArraylist();    
                 
+                
+        }
+        
+        public void resetModel(){
+
+            population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
         }
         
         @SuppressWarnings("unchecked")
@@ -78,6 +85,7 @@ public class ModelController implements Runnable {
                 }
                 
                 if(++currentRun < config.numberRuns){
+                	resetModel();
                 	runSimulation();
                 }
         }
