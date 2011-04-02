@@ -237,11 +237,11 @@ public class ModelController implements Runnable {
                 
                 ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
                 String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-                statsWindow.plot(learningIntensities, "Learning Intensities", printName);
-                statsWindow.plot(numberNulls, "Number of Nulls", printName);
-                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
-                statsWindow.plot(totalFitnesses, "Total Fitnesses", printName);
-                statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", printName);
+                statsWindow.plot(learningIntensities, "Learning Intensities","Learning Intensities", "generation", printName);
+                statsWindow.plot(numberNulls, "Number of Nulls","Number of Nulls", "generation", printName);
+                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Gene Grammar Matches", "generation", printName);
+                statsWindow.plot(totalFitnesses, "Fitnesses", "Fitnesses", "generation", printName);
+                statsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Number of Genotypes", "generation", printName);
                 
                 statsWindow.display();
         }
@@ -287,8 +287,11 @@ public class ModelController implements Runnable {
         	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
         	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
         	
-        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", printName);
-        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", printName);
+        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", printName);
+        	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurences", "Learning Intensities", printName);
+        	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurences", "Number of Nulls", printName);
+        	densityWindow.plot(calculateDensity(totalFitnesses), "Density (Fitnesses)", "Occurences", "Fitnesses", printName);
+        	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences", "Number of Genotypes", printName);
         	
         	densityWindow.display();
         	

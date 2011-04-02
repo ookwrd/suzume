@@ -42,10 +42,13 @@ public class ModelStatistics extends JFrame {
 	private final static boolean SAVE_WHILE_PROCESSING = false;
 
 	private String experimentId = "default";
-	private String chartName = "A chart";
-
+	private String title  = "A chart";
+	private String yLabel;
+	private String xLabel;
+	
 	JPanel innerPane = new JPanel();
 	JScrollPane scroller = new JScrollPane(innerPane);
+	
 
 	public ModelStatistics(String title) {
 		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -59,12 +62,12 @@ public class ModelStatistics extends JFrame {
 	public void display() {
 		setVisible(true);
 	}
-
-	public void plot(ArrayList<Double> data, String chartName,
+	
+	public void plot(ArrayList<Double> data, String title, String yLabel, String xLabel, 
 			String experimentId) {
 		this.experimentId = experimentId;
-		this.chartName = chartName;
-		XYSeries newSeries = new XYSeries(chartName);
+		this.yLabel = yLabel;
+		XYSeries newSeries = new XYSeries(yLabel);
 
 		for (int i = 0; i < data.size(); i++) {
 			newSeries.add(new Double(
@@ -82,11 +85,12 @@ public class ModelStatistics extends JFrame {
 		saveChart(data);
 	}
 
-	public void plot(Hashtable<Double, Integer> table, String chartName,
+	public void plot(Hashtable<Double, Integer> table, String title, String yLabel, String xLabel,
 			String experimentId) {
 		this.experimentId = experimentId;
-		this.chartName = chartName;
-		XYSeries newSeries = new XYSeries(chartName);
+		this.yLabel = yLabel;
+		this.xLabel = xLabel;
+		XYSeries newSeries = new XYSeries(yLabel);
 		
 		Enumeration e = table.keys();
 		while (e.hasMoreElements()) {
@@ -105,9 +109,9 @@ public class ModelStatistics extends JFrame {
 	private JFreeChart createChart(XYSeries series) {
 		XYDataset xyDataset = new XYSeriesCollection(series);
 
-		JFreeChart chart = ChartFactory.createXYLineChart(chartName, // Title
-				"Generation", // X-Axis label
-				chartName, // Y-Axis label
+		JFreeChart chart = ChartFactory.createXYLineChart(yLabel, // Title
+				xLabel, // X-Axis label
+				yLabel, // Y-Axis label
 				xyDataset, // Dataset
 				PlotOrientation.VERTICAL, // Plot orientation
 				false, // Show legend
@@ -118,7 +122,7 @@ public class ModelStatistics extends JFrame {
 	}
 
 	private BufferedImage createImage(XYSeries series) {
-		return createImage(series, chartName, SAVE_WHILE_PROCESSING);
+		return createImage(series, yLabel, SAVE_WHILE_PROCESSING);
 	}
 
 	/**
@@ -161,7 +165,7 @@ public class ModelStatistics extends JFrame {
 		try {
 
 			ChartUtilities.saveChartAsJPEG(new File("/suzume-charts/"
-					+ chartName.replaceAll(" ", "_") + "-" + experimentId
+					+ yLabel.replaceAll(" ", "_") + "-" + experimentId
 					+ ".jpg"), chart, imageRatio[0] * printSize, imageRatio[1]
 					* printSize);
 		} catch (IOException e) {
@@ -184,7 +188,7 @@ public class ModelStatistics extends JFrame {
 	 */
 	private void saveChart(ArrayList<Double> data) {
 
-		XYSeries series = new XYSeries(chartName);
+		XYSeries series = new XYSeries(yLabel);
 
 		for (int i = 0; i < data.size(); i++) {
 			series.add(new Double(
