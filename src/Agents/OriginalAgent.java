@@ -10,7 +10,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	protected ArrayList<Integer> chromosome;
 	
 	protected int learningResource;
-	protected int matchingLearingCost;
+	protected int matchingLearningCost;
 	protected int nonMatchingLearningCost;
 	
 	protected double mutationRate;
@@ -46,7 +46,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	private void initializeParameters(AgentConfiguration config){
 
 		learningResource = config.parameters.get("Learning Resource").getInteger();
-		matchingLearingCost = config.parameters.get("Learning Resource on Match").getInteger();
+		matchingLearningCost = config.parameters.get("Learning Resource on Match").getInteger();
 		nonMatchingLearningCost = config.parameters.get("Learning Resource on MisMatch").getInteger();
 		
 		mutationRate = config.parameters.get("Mutation Rate").getDouble();
@@ -157,8 +157,13 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
+			if(learningResource < matchingLearningCost){
+				learningResource = 0;
+				return;
+			}
+			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= matchingLearingCost;
+			learningResource -= matchingLearningCost;
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
 			if(learningResource < nonMatchingLearningCost){
@@ -208,7 +213,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	
 	@Override
-	public ArrayList getGenotype() {
+	public ArrayList<Integer> getGenotype() {
 		return chromosome;
 	}
 
