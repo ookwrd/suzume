@@ -22,7 +22,6 @@ public abstract class AbstractAgent implements Agent {
 	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
 		this.id = id;
 		this.config = config;
-		this.randomGenerator = randomGenerator;
 		fitness = 0;
 		
 		grammar = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
