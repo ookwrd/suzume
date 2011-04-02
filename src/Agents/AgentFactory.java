@@ -19,6 +19,9 @@ public class AgentFactory {
 		case BiasAgent:
 			return new BiasAgent();
 			
+		case FixedProbabilityAgent:
+			return new FixedProbabilityAgent();
+			
 	//	case SynonymAgent:
 	//		return new SynonymAgent();
 

@@ -216,12 +216,18 @@ public class BiasAgent extends AbstractAgent implements Agent{
 
 		double count = 0;
 		
+		double antiCount = 0;
+		
 		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
 			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
+				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];
 			}
 		}
 		
+		//System.out.println("count "+ count);
+
+		//System.out.println("anticount "+ antiCount);
 		return count;
 		
 	}
