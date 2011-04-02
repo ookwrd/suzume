@@ -1,8 +1,14 @@
 package model;
 
+import java.awt.print.Printable;
 import java.util.ArrayList;
+import java.util.Hashtable;
+
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
 import Agents.Agent;
 import Agents.AgentFactory;
+import Launcher.Launcher;
 
 public class ModelController implements Runnable {
         
@@ -20,6 +26,8 @@ public class ModelController implements Runnable {
         private int currentGeneration = 0;
         
         private RandomGenerator randomGenerator;
+
+		private ArrayList<Double> globalGeneGrammarMatches;
         
         public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
                 this.config = configuration;
@@ -244,9 +252,49 @@ public class ModelController implements Runnable {
                 communication();
                 
                 plot();
+                plotDensity();
         }
         
-        public static void main(String[] args){
+        private void calculateDensity(ArrayList<Double> array) {
+        	//globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
+        	
+        	Hashtable<Double, Integer> numOccurrences = 
+        		new Hashtable<Double, Integer>(); // key=count
+        	double pace = 10.0;
+        	for (int i = 0; i < array.size(); i++) {
+        		// cluster value
+        		double clusterVal = pace*(double) Math.round(array.get(i)/pace);
+        		
+        		// count
+				if(numOccurrences.containsKey(clusterVal))
+					numOccurrences.put(clusterVal, numOccurrences.get(clusterVal));
+				else
+					numOccurrences.put(clusterVal, 1);
+			}
+        	
+        }
+        
+        private void plotDensity() {
+        	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
+        	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+        	
+        	calculateDensity(geneGrammarMatches);
+        	densityWindow.plot(geneGrammarMatches, "Density", printName);
+        	densityWindow.display();
+        }
+        
+        private static int find(ArrayList<Double> array, double numToFind) {
+        	int numOccurrences = 0;
+        	for (int i = 0; i < array.size(); i++) { 
+        		if (array.get(i) == numToFind)
+        			numOccurrences++;
+    		}
+        	return numOccurrences;
+        }
+        
+        //public void run()
+        
+        public static void main2(String[] args){
                 
                 //Test selection
                 ModelController selector = new ModelController(new ModelConfiguration(), new RandomGenerator());
@@ -284,5 +332,9 @@ public class ModelController implements Runnable {
                 
                 System.out.println(double1);
         }
+        
+        public static void main(String[] args) {
+			new Launcher();
+		}
 
 }

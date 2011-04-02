@@ -69,6 +69,20 @@ public class Launcher extends JPanel {
 		
 	}
 	
+	private void createMultipleSimulation(){
+	
+		ModelConfiguration configuration = modelOptions.getConfiguration();
+		
+		RandomGenerator random = randomOptions.getGenerator();
+	
+		ModelController controller = new ModelController(configuration, random);
+		
+		Thread thread = new Thread(controller);
+		
+		thread.start();
+		
+	}
+	
 	
 	public static void main(String[] args){
 		

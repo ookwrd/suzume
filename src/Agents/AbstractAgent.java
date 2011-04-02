@@ -10,7 +10,7 @@ public abstract class AbstractAgent implements Agent {
 	
 	private int fitness;
 	private int id;
-	private AgentConfiguration config;
+	protected AgentConfiguration config;
 	
 	protected ArrayList<Integer> grammar;
 	
