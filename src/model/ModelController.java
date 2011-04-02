@@ -9,16 +9,17 @@ public class ModelController implements Runnable {
         private ModelConfiguration config;
         
         //statistics
-        private ArrayList<Double> totalNumberGenotypes = new ArrayList<Double>();
-        private ArrayList<Double> totalNumberPhenotypes = new ArrayList<Double>();
-        private ArrayList<Double> totalFitnesses = new ArrayList<Double>();
-        private ArrayList<Double> learningIntensities = new ArrayList<Double>();
-        private ArrayList<Double> geneGrammarMatches = new ArrayList<Double>();
-        private ArrayList<Double> numberNulls = new ArrayList<Double>();
+        private ArrayList<Double>[] totalNumberGenotypes;
+        private ArrayList<Double>[] totalNumberPhenotypes;
+        private ArrayList<Double>[] totalFitnesses;
+        private ArrayList<Double>[] learningIntensities;
+        private ArrayList<Double>[] geneGrammarMatches;
+        private ArrayList<Double>[] numberNulls;
         
         private PopulationModel population;
         
         private int currentGeneration = 0;
+        private int currentRun = 0;
         
         private RandomGenerator randomGenerator;
         
@@ -26,6 +27,25 @@ public class ModelController implements Runnable {
                 this.config = configuration;
                 this.randomGenerator = randomGenerator;
                 population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
+                
+                totalNumberGenotypes = initializeStatisticsArraylist();
+                totalNumberPhenotypes = initializeStatisticsArraylist();
+                totalFitnesses = initializeStatisticsArraylist();
+                learningIntensities = initializeStatisticsArraylist();
+                geneGrammarMatches = initializeStatisticsArraylist();
+                numberNulls = initializeStatisticsArraylist();    
+                
+        }
+        
+        @SuppressWarnings("unchecked")
+		private ArrayList<Double>[] initializeStatisticsArraylist(){
+        	
+        	ArrayList<Double>[] arrayLists = new ArrayList[config.numberRuns];
+        	for(int i = 0;i < config.numberRuns; i++){
+        		arrayLists[i] = new ArrayList<Double>();
+        	}
+        	
+        	return arrayLists;
         }
         
         /**
@@ -53,8 +73,12 @@ public class ModelController implements Runnable {
                         
                         //Print progress information
                         if(currentGeneration % 1000 == 0){
-                                System.out.println("Generation " + currentGeneration);
+                                System.out.println("Run " + currentRun + " Generation " + currentGeneration);
                         }
+                }
+                
+                if(++currentRun < config.numberRuns){
+                	runSimulation();
                 }
         }
         
@@ -220,12 +244,13 @@ public class ModelController implements Runnable {
                 }
                 
                 double learningIntensity = (config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
-                totalFitnesses.add(totalFitness/config.populationSize);
-                learningIntensities.add(learningIntensity/config.populationSize);
-                geneGrammarMatches.add(genomeGrammarMatch/config.populationSize);
-                numberNulls.add(numberNull/config.populationSize);
-                totalNumberGenotypes.add((double)genotypes.size());
-                totalNumberPhenotypes.add((double)phenotypes.size());
+             
+                totalFitnesses[currentRun].add(totalFitness/config.populationSize);
+                learningIntensities[currentRun].add(learningIntensity/config.populationSize);
+                geneGrammarMatches[currentRun].add(genomeGrammarMatch/config.populationSize);
+                numberNulls[currentRun].add(numberNull/config.populationSize);
+                totalNumberGenotypes[currentRun].add((double)genotypes.size());
+                totalNumberPhenotypes[currentRun].add((double)phenotypes.size());
                 
         }
         
@@ -238,12 +263,12 @@ public class ModelController implements Runnable {
                 
                 ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
                 String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-                statsWindow.plot(learningIntensities, "Learning Intensities", printName);
-                statsWindow.plot(numberNulls, "Number of Nulls", printName);
-                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", printName);
-                statsWindow.plot(totalFitnesses, "Total Fitnesses", printName);
-                statsWindow.plot(totalNumberGenotypes, "Total Number of Genotypes", printName);
-                statsWindow.plot(totalNumberPhenotypes, "Total Number of Phenotypes", printName);
+                statsWindow.plot(learningIntensities[0], "Learning Intensities", printName);
+                statsWindow.plot(numberNulls[0], "Number of Nulls", printName);
+                statsWindow.plot(geneGrammarMatches[0], "Gene Grammar Matches", printName);
+                statsWindow.plot(totalFitnesses[0], "Total Fitnesses", printName);
+                statsWindow.plot(totalNumberGenotypes[0], "Total Number of Genotypes", printName);
+                statsWindow.plot(totalNumberPhenotypes[0], "Total Number of Phenotypes", printName);
                 
                 statsWindow.display();
         }
@@ -281,8 +306,8 @@ public class ModelController implements Runnable {
                 
                 System.out.println();
                 System.out.println("Fitnesses\tlearningResc\tGeneGrammarMatch\tNulls");
-                for(int i = 0; i < selector.learningIntensities.size(); i++){
-                        System.out.println(selector.totalFitnesses.get(i) + "\t" + selector.learningIntensities.get(i) + "\t" + selector.geneGrammarMatches.get(i) + "\t" + selector.numberNulls.get(i));
+                for(int i = 0; i < selector.learningIntensities[0].size(); i++){
+                        System.out.println(selector.totalFitnesses[0].get(i) + "\t" + selector.learningIntensities[0].get(i) + "\t" + selector.geneGrammarMatches[0].get(i) + "\t" + selector.numberNulls[0].get(i));
                 }
                 
                 //Plot
