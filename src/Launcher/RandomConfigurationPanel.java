@@ -37,7 +37,7 @@ public class RandomConfigurationPanel extends JPanel {
 		if(useRandomSeedBox.isSelected()){
 			return new RandomGenerator();
 		}else{
-			return new RandomGenerator(Long.parseLong(randomSeedField.getText()));
+			return new RandomGenerator(Long.parseLong(randomSeedField.getText().trim()));
 		}
 		
 	}

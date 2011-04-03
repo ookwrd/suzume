@@ -16,6 +16,7 @@ public class ModelController implements Runnable {
         private static final double DEFAULT_DENSITY_GRANULARITY = 0.1;
 
 		private ModelConfiguration config;
+		private VisualizationConfiguration visualConfig;
         
         //statistics
         private ArrayList<Double>[] totalNumberGenotypes;
@@ -30,14 +31,15 @@ public class ModelController implements Runnable {
         private int currentGeneration = 0;
         private int currentRun = 0;
         
-        private int printGeneration = 1000;
+        private int printGeneration = 500;
         
         private RandomGenerator randomGenerator;
 
 		private ArrayList<Double> globalGeneGrammarMatches;
         
-        public ModelController(ModelConfiguration configuration, RandomGenerator randomGenerator){
+        public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
                 this.config = configuration;
+                this.visualConfig = visualizationConfiguration;
                 this.randomGenerator = randomGenerator;
                 
                 resetModel();
@@ -96,13 +98,9 @@ public class ModelController implements Runnable {
                         	System.out.println("Run " + currentRun + " Generation " + currentGeneration);
                         }
                         
-                        if(currentGeneration == printGeneration){
-                        	System.out.println("Printing Print Generation");
-                        	
-                            for(Agent agent : population.getAncestorGeneration()){  
-                                agent.printAgent();
-                                System.out.println();
-                            }
+                        //Print slice genereation
+                        if(visualConfig.printSliceGeneration && currentGeneration == visualConfig.sliceGeneration){
+                            printGeneration();
                         }
                 }
                 
@@ -110,6 +108,17 @@ public class ModelController implements Runnable {
                 	resetModel();
                 	runSimulation();
                 }
+        }
+        
+        private void printGeneration(){
+        	
+        	System.out.println("Printing Previous Generation");
+        	
+            for(Agent agent : population.getAncestorGeneration()){  
+                agent.printAgent();
+                System.out.println();
+            }
+            
         }
         
         /**
@@ -377,45 +386,6 @@ public class ModelController implements Runnable {
         	densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
         	
         	densityWindow.display();
-        }
-        
-        public static void main2(String[] args){
-                
-                //Test selection
-                ModelController selector = new ModelController(new ModelConfiguration(), new RandomGenerator());
-
-                System.out.println("Using seed:" + selector.randomGenerator.getSeed());
-                
-                //TODO print other simulation parameters
-                System.out.println();
-                
-                selector.runSimulation();
-                
-                //Get to a point where the current generation has calculated fitness. TODO swap out with previous generation.
-                selector.training();
-                selector.communication();
-                
-                for(Agent agent : selector.population.getCurrentGeneration()){  
-                        agent.printAgent();
-                        System.out.println();
-                }
-                
-                System.out.println();
-                System.out.println("Fitnesses\tlearningResc\tGeneGrammarMatch\tNulls");
-                for(int i = 0; i < selector.learningIntensities[0].size(); i++){
-                        System.out.println(selector.totalFitnesses[0].get(i) + "\t" + selector.learningIntensities[0].get(i) + "\t" + selector.geneGrammarMatches[0].get(i) + "\t" + selector.numberNulls[0].get(i));
-                }
-                
-                //Plot
-                selector.plotStatistics();
-                
-                for(Agent agent : selector.population.getCurrentGeneration()){
-                        System.out.println(agent.getGenotype());
-                }
-                
-                Object double1 = new Double(12342.09);
-                
-                System.out.println(double1);
         }
         
         public static void main(String[] args) {
