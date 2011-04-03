@@ -2,6 +2,7 @@ package model;
 
 import java.awt.print.Printable;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.text.StyledEditorKit.ForegroundAction;
@@ -306,15 +307,15 @@ public class ModelController implements Runnable {
          * Calculate density for an array
          * @param array
          */
-        private Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
+        private ArrayList<Double>[] calculateDensity(ArrayList<Double>[] array) {
         	//globalGeneGrammarMatches.addAll(geneGrammarMatches); // total for several runs
         	
         	Hashtable<Double, Integer> numOccurrences = 
         		new Hashtable<Double, Integer>(); // k:value->v:count
         	double pace = DEFAULT_DENSITY_GRANULARITY;
-        	for (int i = 0; i < array.size(); i++) {
+        	for (int i = 0; i < array[0].size(); i++) {
         		// cluster value
-        		double clusterVal = pace*(double) Math.round(array.get(i)/pace);
+        		double clusterVal = pace*(double) Math.round(array[0].get(i)/pace);
         		
         		// count
 				if(numOccurrences.containsKey(clusterVal))
@@ -322,7 +323,19 @@ public class ModelController implements Runnable {
 				else
 					numOccurrences.put(clusterVal, 1);
 			}
-        	return numOccurrences;
+        	
+        	ArrayList<Double>[] dataSets = new ArrayList[2];
+        	dataSets[0] = new ArrayList<Double>();
+        	Enumeration<Double> e = numOccurrences.keys();
+        	int i = 0;
+        	while(e.hasMoreElements()) {
+        		Double val = e.nextElement();
+        		dataSets[0].add(i, (double) val);
+        		dataSets[1].add(i, (double) numOccurrences.get(val));
+        		i++;
+        	}
+        	
+        	return dataSets;
         }
         
         /**
@@ -332,11 +345,11 @@ public class ModelController implements Runnable {
         	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
         	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
         	
-        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurences", "Gene Grammar Matches", printName);
-        	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurences", "Learning Intensities", printName);
-        	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurences", "Number of Nulls", printName);
-        	densityWindow.plot(calculateDensity(totalFitnesses), "Density (Fitnesses)", "Occurences", "Fitnesses", printName);
-        	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences", "Number of Genotypes", printName);
+        	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurences");
+        	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurences");
+        	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurences");
+        	densityWindow.plot(calculateDensity(totalFitnesses), "Density (Fitnesses)", "Occurences");
+        	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes", "Occurences");
         	
         	densityWindow.display();
         }
