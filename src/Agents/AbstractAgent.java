@@ -1,5 +1,8 @@
 package Agents;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -121,4 +124,14 @@ public abstract class AbstractAgent implements Agent {
 		return grammar;
 	}
 
+	@Override
+	public Dimension getDimension(){
+		return new Dimension(1,1);
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		g.setColor(Color.green);
+		g.drawRect(0, 0, 1, 1);
+	}
 }

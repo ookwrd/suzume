@@ -1,5 +1,7 @@
 package Agents;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -44,5 +46,8 @@ public interface Agent {
 	//Display
 	public void printAgent();
 	
+	//Visualization
+	public Dimension getDimension();
+	public void draw(Graphics g);
 	
 }

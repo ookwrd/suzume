@@ -1,7 +1,13 @@
 package model;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Hashtable;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -134,6 +140,21 @@ public class ModelController implements Runnable {
 			agent.printAgent();
 			System.out.println();
 		}
+		
+		JFrame frame = new JFrame(){
+			public void paint(Graphics g){
+				super.paint(g);
+				
+				g.translate(100, 100);
+				
+				population.draw(g);
+				
+			}
+		};
+		frame.setSize(new Dimension(600,600));
+		
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 	/**
