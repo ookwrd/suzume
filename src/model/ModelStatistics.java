@@ -36,7 +36,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
 
-	public int printSize = 200;
+	public int printSize = 100;//200
 	public int viewSize = 100;
 	public int[] imageRatio = { 5, 3 };
 
@@ -47,15 +47,19 @@ public class ModelStatistics extends JFrame {
 	private String experimentId = "default";
 	private String yLabel = "";
 	private String xLabel = "";
-	private String title = "A chart";
+	private String title = "A curChart";
+	
+	private int chartType = LINE_CHART;
 
 	JPanel innerPane = new JPanel();
 	JScrollPane scroller = new JScrollPane(innerPane);
+	//private XYSeries[] currentSeries;
+	private BufferedImage currentImage;
+	private JFreeChart curChart;
 
 	public ModelStatistics(String title) {
 		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		scroller.setVerticalScrollBar(new JScrollBar());
-
 		this.add(scroller, BorderLayout.CENTER);
 		this.setTitle(title);
 		this.setSize(new Dimension(1000, 500));
@@ -71,6 +75,7 @@ public class ModelStatistics extends JFrame {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
+		this.chartType = LINE_CHART;
 		XYSeries[] newSeries = new XYSeries[dataSets.length];
 
 		for (int j = 0; j < dataSets.length; j++) {
@@ -94,7 +99,7 @@ public class ModelStatistics extends JFrame {
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 
-		saveChart(dataSets[0]);// TODO
+		saveChart();// TODO
 	}
 
 	public void plot(Hashtable<Double, Integer> table, String title,
@@ -103,6 +108,7 @@ public class ModelStatistics extends JFrame {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
+		this.chartType = BAR_CHART;
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
 
@@ -117,7 +123,7 @@ public class ModelStatistics extends JFrame {
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 
-		// saveChart(table);
+		saveChart();
 	}
 
 	private JFreeChart createChart(XYSeries[] series, int type) {
@@ -172,7 +178,7 @@ public class ModelStatistics extends JFrame {
 
 	/**
 	 * 
-	 * @param series
+	 * @param currentSeries
 	 * @param title
 	 * @param printToFile
 	 *            : if true, the corresponding file is created
@@ -180,28 +186,27 @@ public class ModelStatistics extends JFrame {
 	 */
 	private BufferedImage createImage(XYSeries[] series, String title,
 			boolean printToFile) {
-		JFreeChart chart = createChart(series, LINE_CHART);
-		BufferedImage image = chart.createBufferedImage(imageRatio[0]
+		curChart = createChart(series, LINE_CHART);
+		currentImage = curChart.createBufferedImage(imageRatio[0]
 				* viewSize, imageRatio[1] * viewSize);
-
 		JLabel lblChart = new JLabel();
-		lblChart.setIcon(new ImageIcon(image));
+		lblChart.setIcon(new ImageIcon(currentImage));
 
 		// Creating the corresponding file
 		if (printToFile) {
-			BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]
+			BufferedImage imagePrint = curChart.createBufferedImage(imageRatio[0]
 					* printSize, imageRatio[1] * printSize);
-			createFile(chart, imagePrint);
+			createFile(curChart, imagePrint);
 		}
 
-		return image;
+		return currentImage;
 	}
 
 	/**
-	 * Create a jpg file for the image of the chart
+	 * Create a jpg file for the currentImage of the curChart
 	 * 
-	 * @param chart
-	 * @param image
+	 * @param curChart
+	 * @param currentImage
 	 */
 	private void createFile(JFreeChart chart, BufferedImage image) {
 
@@ -210,8 +215,7 @@ public class ModelStatistics extends JFrame {
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File("/suzume-charts/" + yLabel.replaceAll(" ", "_")
-							+ "-" + experimentId + ".jpg"), chart,
+					new File("/suzume-charts/" + title.replaceAll(" ", "_") + "-" + experimentId + ".jpg"), chart,
 					imageRatio[0] * printSize, imageRatio[1] * printSize);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -229,30 +233,16 @@ public class ModelStatistics extends JFrame {
 	}
 
 	/**
-	 * This only prints charts to file without showing a window
+	 * This only prints the current curChart to file without showing it in a window
 	 */
-	private void saveChart(ArrayList<Double> data) {
-
-		XYSeries[] series = new XYSeries[1];
-		series[0] = new XYSeries(yLabel);
-
-		for (int i = 0; i < data.size(); i++) {
-			series[0].add(new Double(
-
-			i // x
-					), new Double(
-
-					data.get(i) // y
-					));
-		}
-
-		JFreeChart chart = createChart(series, LINE_CHART);
-		BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]
-				* printSize, imageRatio[1] * printSize);
-		createFile(chart, imagePrint);
+	private void saveChart() {
+		//JFreeChart curChart = createChart(currentSeries, LINE_CHART);
+		//BufferedImage imagePrint = curChart.createBufferedImage(imageRatio[0]
+		//		* printSize, imageRatio[1] * printSize);
+		createFile(curChart, currentImage);
 
 	}
-
+	
 	/**
 	 * Create a directory
 	 * 
@@ -274,7 +264,7 @@ public class ModelStatistics extends JFrame {
 
 	private void displayChart(BufferedImage image) {
 		try {
-			System.out.println("Enter image name\n");
+			System.out.println("Enter currentImage name\n");
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
 					System.in));
 			String imageName = bf.readLine();
