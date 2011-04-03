@@ -100,11 +100,11 @@ public class AgentConfigurationPanel extends JPanel {
 			switch (parameter.type) {
 			
 			case Integer:
-				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText())) );
+				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText().trim())) );
 				break;
 			
 			case Double:
-				retParameters.put(key, new ConfigurationParameter(Double.parseDouble(((JTextField)comp).getText())) );
+				retParameters.put(key, new ConfigurationParameter(Double.parseDouble(((JTextField)comp).getText().trim())) );
 				break;
 			
 			case String:
