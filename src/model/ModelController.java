@@ -351,12 +351,14 @@ public class ModelController implements Runnable {
         	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
         	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
         	
+        	densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
         	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+        	densityWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
         	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurrences", "Learning Intensity", printName);
-        	densityWindow.plot(calculateDensity(numberNulls), "Density (Number of Nulls)", "Occurrences", "Number of Nulls", printName);
-        	densityWindow.plot(calculateDensity(totalFitnesses), "Density (Fitnesses)", "Occurrences", "Fitnesses", printName);
-        	densityWindow.plot(calculateDensity(totalNumberGenotypes), "Density (Number of Genotypes)", "Occurrences", "Number of Genotypes", printName);
-        	densityWindow.plot(calculateDensity(totalNumberPhenotypes), "Density (Number of Phenotypes)", "Occurrences", "Number of Phenotypes", printName);
+        	densityWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
+        	densityWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
+        	densityWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
+        	densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
         	
         	densityWindow.display();
         }
