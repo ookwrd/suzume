@@ -30,6 +30,8 @@ public class ModelController implements Runnable {
         private int currentGeneration = 0;
         private int currentRun = 0;
         
+        private int printGeneration = 1000;
+        
         private RandomGenerator randomGenerator;
 
 		private ArrayList<Double> globalGeneGrammarMatches;
@@ -91,7 +93,16 @@ public class ModelController implements Runnable {
                         
                         //Print progress information
                         if(currentGeneration % 1000 == 0){
-                                System.out.println("Run " + currentRun + " Generation " + currentGeneration);
+                        	System.out.println("Run " + currentRun + " Generation " + currentGeneration);
+                        }
+                        
+                        if(currentGeneration == printGeneration){
+                        	System.out.println("Printing Print Generation");
+                        	
+                            for(Agent agent : population.getAncestorGeneration()){  
+                                agent.printAgent();
+                                System.out.println();
+                            }
                         }
                 }
                 
