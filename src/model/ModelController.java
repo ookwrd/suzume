@@ -322,12 +322,16 @@ public class ModelController implements Runnable {
         	Double min = 1000000000.0;
         	Double max = -1000000000.0;
         	for (int i = 0; i < array.length; i++) { 
-        		Double minCandidate = Collections.min(array[i]);
-        		if ((Double) minCandidate < (Double) min) min = minCandidate;
-        		Double maxCandidate = Collections.max(array[i]);
-        		if ((Double) maxCandidate > (Double) max) max = maxCandidate;
+        		//Double minCandidate = Collections.min(array[i]);
+        		//if ((Double) minCandidate < (Double) min) min = minCandidate;
+        		for (int j = 0; j < array[i].size(); j++) {
+        			if ((Double) array[i].get(j) > (Double) max) 
+        				max = array[i].get(j);
+        		}
         	}
+        	System.out.println(max);
         	
+        	min=0.0;//quick fix TODO
         	pace = DEFAULT_DENSITY_GRANULARITY*(max-min);
         	//System.out.println("max-min: "+(max-min)+">< pace: "+pace);
         	
