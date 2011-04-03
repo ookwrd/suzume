@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import Agents.Agent;
@@ -70,5 +72,10 @@ public interface PopulationModel {
 	 * @return
 	 */
 	public ArrayList<Agent> getAncestorGeneration();
+	
+	
+	public Dimension getDimension();
+	
+	public void draw(Graphics g);
 
 }

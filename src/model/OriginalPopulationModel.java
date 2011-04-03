@@ -1,6 +1,11 @@
 package model;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
+
+import org.jfree.ui.Size2D;
 
 import Agents.Agent;
 import Agents.OriginalAgent;
@@ -13,7 +18,7 @@ import Agents.OriginalAgent;
  * @author Luke McCrohon
  *
  */
-public class OriginalPopulationModel implements PopulationModel {
+public class OriginalPopulationModel extends AbstractPopulationModel implements PopulationModel {
 
 	private ArrayList<Agent> previousGeneration = new ArrayList<Agent>();
 	private ArrayList<Agent> currentGeneration = new ArrayList<Agent>();
@@ -123,6 +128,63 @@ public class OriginalPopulationModel implements PopulationModel {
 	@Override
 	public ArrayList<Agent> getCurrentGeneration() {
 		return currentGeneration;
+	}
+	
+	@Override
+	public Dimension getDimension(){
+		
+		if(currentGeneration.size() == 0){
+			System.out.print("Trying to get Dimension of empty population model");
+			return null;
+		}
+		
+		int size = currentGeneration.size();
+		Dimension agentDimension = currentGeneration.get(0).getDimension();
+		
+		int agentsPerEdge = (size/4)+(size%4!=0?1:0) + 1;
+		
+		return new Dimension(agentsPerEdge*agentDimension.width, agentsPerEdge*agentDimension.height);
+		
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		
+		int size = currentGeneration.size();
+		Dimension thisDimension = getDimension();
+		Dimension agentDimension = currentGeneration.get(0).getDimension();
+
+		int agentsPerSection = (size/4)+(size%4!=0?1:0);
+		
+		g.setColor(Color.pink);
+		g.fillRect(0, 0, thisDimension.width, thisDimension.height);
+		
+		//Top edge
+		int i;
+		for(i = 0; i < agentsPerSection; i++){
+			currentGeneration.get(i).draw(g);
+			g.translate(agentDimension.width, 0);
+		}
+		
+		//right edge
+		for(; i < 2*agentsPerSection; i++){
+			currentGeneration.get(i).draw(g);
+			g.translate(0, agentDimension.height);
+		}
+		
+		//Bottom edge
+		for(; i < 3*agentsPerSection; i++){
+			currentGeneration.get(i).draw(g);
+			g.translate(-agentDimension.width, 0);
+		}
+		
+		//Left edge
+		for(; i < size; i++){
+			//TODO reset the translate point.
+			currentGeneration.get(i).draw(g);
+			g.translate(0, -agentDimension.height);
+		}
+		
 	}
 
 }
