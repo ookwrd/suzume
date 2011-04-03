@@ -36,7 +36,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JFrame {
 
-	public int printSize = 100;
+	public int printSize = 100;//200
 	public int viewSize = 100;
 	public int[] imageRatio = { 5, 3 };
 
