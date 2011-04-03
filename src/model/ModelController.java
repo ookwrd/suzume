@@ -2,6 +2,7 @@ package model;
 
 import java.awt.print.Printable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -13,7 +14,7 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
         
-        private static final double DEFAULT_DENSITY_GRANULARITY = 0.1;
+        private static final double DEFAULT_DENSITY_GRANULARITY = 0.001;//should be set lower than 0.01
 
 		private ModelConfiguration config;
         
@@ -315,7 +316,20 @@ public class ModelController implements Runnable {
         	
         	Hashtable<Double, Integer> numOccurrences = 
         		new Hashtable<Double, Integer>(); // k:value->v:count
-        	double pace = DEFAULT_DENSITY_GRANULARITY;
+        	double pace;
+        	
+        	// find max-min
+        	Double min = 1000000000.0;
+        	Double max = -1000000000.0;
+        	for (int i = 0; i < array.length; i++) { 
+        		Double minCandidate = Collections.min(array[i]);
+        		if ((Double) minCandidate < (Double) min) min = minCandidate;
+        		Double maxCandidate = Collections.max(array[i]);
+        		if ((Double) maxCandidate > (Double) max) max = maxCandidate;
+        	}
+        	
+        	pace = DEFAULT_DENSITY_GRANULARITY*(max-min);
+        	//System.out.println("max-min: "+(max-min)+">< pace: "+pace);
         	
         	for (int i = 0; i < array.length; i++) { // for every run
 	        	for (int j = 0; j < array[0].size(); j++) {
