@@ -43,15 +43,15 @@ public class ModelStatistics extends JFrame {
 	private final static boolean SAVE_WHILE_PROCESSING = false;
 	private static final int LINE_CHART = 1;
 	private static final int BAR_CHART = 2;
-	
+
 	private String experimentId = "default";
 	private String yLabel = "";
 	private String xLabel = "";
 	private String title = "A chart";
-	
+
 	JPanel innerPane = new JPanel();
 	JScrollPane scroller = new JScrollPane(innerPane);
-	
+
 	public ModelStatistics(String title) {
 		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		scroller.setVerticalScrollBar(new JScrollBar());
@@ -65,47 +65,47 @@ public class ModelStatistics extends JFrame {
 		setVisible(true);
 	}
 
-	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel, String xLabel, 
-			String experimentId) {
+	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
+			String xLabel, String experimentId) {
 		this.experimentId = experimentId;
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
 		XYSeries[] newSeries = new XYSeries[dataSets.length];
-		
-		for(int j =0; j < dataSets.length; j++) {
-		
-			newSeries[j] = new XYSeries(yLabel+j);
+
+		for (int j = 0; j < dataSets.length; j++) {
+
+			newSeries[j] = new XYSeries(yLabel + j);
 
 			ArrayList<Double> data = dataSets[j];
-			
+
 			for (int i = 0; i < data.size(); i++) {
 				newSeries[j].add(new Double(
-	
+
 				i // x
 						), new Double(
-	
+
 						data.get(i) // y
 						));
 			}
-		
+
 		}
-		
+
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
-		
-		saveChart(dataSets[0]);//TODO
+
+		saveChart(dataSets[0]);// TODO
 	}
-	
-	public void plot(Hashtable<Double, Integer> table, String title, String yLabel, String xLabel,
-			String experimentId) {
+
+	public void plot(Hashtable<Double, Integer> table, String title,
+			String yLabel, String xLabel, String experimentId) {
 		this.experimentId = experimentId;
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
-		
+
 		Enumeration<Double> e = table.keys();
 		while (e.hasMoreElements()) {
 			Double key = (Double) e.nextElement();
@@ -117,18 +117,17 @@ public class ModelStatistics extends JFrame {
 		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
 		innerPane.validate();
 
-		//saveChart(table);
+		// saveChart(table);
 	}
 
 	private JFreeChart createChart(XYSeries[] series, int type) {
 
 		XYSeriesCollection dataset = new XYSeriesCollection();
-		
-		for(int i = 0; i < series.length; i++){
+
+		for (int i = 0; i < series.length; i++) {
 			dataset.addSeries(series[i]);
 		}
 
-		
 		JFreeChart chart;
 		switch (type) {
 		case LINE_CHART:
@@ -140,19 +139,19 @@ public class ModelStatistics extends JFrame {
 					false, // Show legend
 					false, // Tooltips
 					false); // URL;
-		break;
-		
+			break;
+
 		case BAR_CHART:
-		chart = ChartFactory.createBarChart(title, // Title
-				xLabel, // X-Axis label
-				yLabel, // Y-Axis label
-				(CategoryDataset) dataset, // Dataset
-				PlotOrientation.VERTICAL, // Plot orientation
-				false, // Show legend
-				false, // Tooltips
-				false); // URL
-		break;
-		
+			chart = ChartFactory.createBarChart(title, // Title
+					xLabel, // X-Axis label
+					yLabel, // Y-Axis label
+					(CategoryDataset) dataset, // Dataset
+					PlotOrientation.VERTICAL, // Plot orientation
+					false, // Show legend
+					false, // Tooltips
+					false); // URL
+			break;
+
 		default:
 			chart = ChartFactory.createXYLineChart(title, // Title
 					xLabel, // X-Axis label
@@ -163,11 +162,10 @@ public class ModelStatistics extends JFrame {
 					false, // Tooltips
 					false); // URL;
 		}
-		
+
 		return chart;
 	}
 
-	
 	private BufferedImage createImage(XYSeries[] series) {
 		return createImage(series, yLabel, SAVE_WHILE_PROCESSING);
 	}
@@ -176,7 +174,8 @@ public class ModelStatistics extends JFrame {
 	 * 
 	 * @param series
 	 * @param title
-	 * @param printToFile : if true, the corresponding file is created
+	 * @param printToFile
+	 *            : if true, the corresponding file is created
 	 * @return
 	 */
 	private BufferedImage createImage(XYSeries[] series, String title,
@@ -205,22 +204,23 @@ public class ModelStatistics extends JFrame {
 	 * @param image
 	 */
 	private void createFile(JFreeChart chart, BufferedImage image) {
-		
+
 		cd("/");
 		mkdir("/suzume-charts");
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File("/suzume-charts/" + yLabel.replaceAll(" ", "_") + "-"
-							+ experimentId + ".jpg"), chart, imageRatio[0]
-							* printSize, imageRatio[1] * printSize);
+					new File("/suzume-charts/" + yLabel.replaceAll(" ", "_")
+							+ "-" + experimentId + ".jpg"), chart,
+					imageRatio[0] * printSize, imageRatio[1] * printSize);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Create a directory
+	 * 
 	 * @param name
 	 */
 	private void cd(String name) {
@@ -232,10 +232,10 @@ public class ModelStatistics extends JFrame {
 	 * This only prints charts to file without showing a window
 	 */
 	private void saveChart(ArrayList<Double> data) {
-		
+
 		XYSeries[] series = new XYSeries[1];
 		series[0] = new XYSeries(yLabel);
-		
+
 		for (int i = 0; i < data.size(); i++) {
 			series[0].add(new Double(
 
@@ -245,11 +245,12 @@ public class ModelStatistics extends JFrame {
 					data.get(i) // y
 					));
 		}
-				
+
 		JFreeChart chart = createChart(series, LINE_CHART);
-		BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]* printSize, imageRatio[1] * printSize);
+		BufferedImage imagePrint = chart.createBufferedImage(imageRatio[0]
+				* printSize, imageRatio[1] * printSize);
 		createFile(chart, imagePrint);
-		
+
 	}
 
 	/**
@@ -258,7 +259,7 @@ public class ModelStatistics extends JFrame {
 	 * @param dir
 	 */
 	private void mkdir(String dir) {
-		
+
 		try {
 			boolean success = (new File(dir)).mkdir();
 			if (success) {
