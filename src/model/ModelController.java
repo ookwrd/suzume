@@ -91,17 +91,18 @@ public class ModelController implements Runnable {
         public void runSimulation(){
                 
                 for(currentGeneration = 0; currentGeneration < config.generationCount; currentGeneration++){
-                        iterateGeneration();
                         
-                        //Print progress information
-                        if(currentGeneration % 1000 == 0){
-                        	System.out.println("Run " + currentRun + " Generation " + currentGeneration);
-                        }
+                	iterateGeneration();
                         
-                        //Print slice genereation
-                        if(visualConfig.printSliceGeneration && currentGeneration == visualConfig.sliceGeneration){
-                            printGeneration();
-                        }
+                    //Print progress information
+                    if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
+                    	System.out.println("Run " + currentRun + " Generation " + currentGeneration);
+                    }
+                        
+                    //Print slice generation
+                    if(visualConfig.printSliceGeneration && currentGeneration == visualConfig.sliceGeneration){
+                    	printGeneration();
+                    }
                 }
                 
                 if(++currentRun < config.numberRuns){
