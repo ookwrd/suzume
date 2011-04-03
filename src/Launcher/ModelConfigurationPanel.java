@@ -57,12 +57,12 @@ public class ModelConfigurationPanel extends JPanel {
 		return new ModelConfiguration(
 				agentConfigurationPanel.getConfiguration(),
 				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
-				Integer.parseInt(generationCountField.getText()),
-				Integer.parseInt(populationSizeField.getText()),
-				Integer.parseInt(baseFitnessField.getText()),
-				Integer.parseInt(communicationPerNeighbourField.getText()),
-				Integer.parseInt(criticalPeriodField.getText()),
-				Integer.parseInt(numberRunsField.getText()));
+				Integer.parseInt(generationCountField.getText().trim()),
+				Integer.parseInt(populationSizeField.getText().trim()),
+				Integer.parseInt(baseFitnessField.getText().trim()),
+				Integer.parseInt(communicationPerNeighbourField.getText().trim()),
+				Integer.parseInt(criticalPeriodField.getText().trim()),
+				Integer.parseInt(numberRunsField.getText().trim()));
 	}
 	
 }

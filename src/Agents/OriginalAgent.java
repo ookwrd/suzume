@@ -180,7 +180,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	@Override
 	public void printAgent(){
 		
-		System.out.println("Agent " + getId() + " has fitness of " + getFitness() + " has learning resource of " + learningResource + " fitness of  " + getFitness());
+		System.out.println("Agent " + getId() + " has fitness of " + getFitness() + " has learning resource of " + learningResource + " fitness of  " + getFitness() +" match " + geneGrammarMatch());
 		System.out.println("P" + grammar);
 		System.out.println("G" + chromosome);
 		
