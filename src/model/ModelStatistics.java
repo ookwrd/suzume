@@ -48,6 +48,8 @@ public class ModelStatistics extends JFrame {
 	private String yLabel = "";
 	private String xLabel = "";
 	private String title = "A chart";
+	
+	private int chartType = LINE_CHART;
 
 	JPanel innerPane = new JPanel();
 	JScrollPane scroller = new JScrollPane(innerPane);
@@ -55,7 +57,6 @@ public class ModelStatistics extends JFrame {
 	public ModelStatistics(String title) {
 		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		scroller.setVerticalScrollBar(new JScrollBar());
-
 		this.add(scroller, BorderLayout.CENTER);
 		this.setTitle(title);
 		this.setSize(new Dimension(1000, 500));
@@ -71,6 +72,7 @@ public class ModelStatistics extends JFrame {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
+		this.chartType = LINE_CHART;
 		XYSeries[] newSeries = new XYSeries[dataSets.length];
 
 		for (int j = 0; j < dataSets.length; j++) {
@@ -103,6 +105,7 @@ public class ModelStatistics extends JFrame {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
+		this.chartType = BAR_CHART;
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
 
