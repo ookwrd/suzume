@@ -274,24 +274,6 @@ public class ModelController implements Runnable {
         }
         
         
-        
-        /**
-         * Show all plots
-         */
-        private void plot() {
-                
-                ModelStatistics statsWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
-                String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-                statsWindow.plot(learningIntensities, "Learning Intensities","Learning Intensities", "Generation", printName);
-                statsWindow.plot(numberNulls, "Number of Nulls","Number of Nulls", "Generation", printName);
-                statsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Gene Grammar Matches", "Generation", printName);
-                statsWindow.plot(totalFitnesses, "Fitnesses", "Fitnesses", "Generation", printName);
-                statsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Number of Genotypes", "Generation", printName);
-                statsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes", "Generation", printName);
-                
-                statsWindow.display();
-        }
-        
         @Override
         public void run(){
                 runSimulation();
@@ -299,9 +281,30 @@ public class ModelController implements Runnable {
                 training();
                 communication();
                 
-                plot();
-                plotDensities();
+                plotStatistics();
         }
+        
+        private ArrayList<Double>[] trimArrayLists(ArrayList<Double>[] arrays, int start, int finish){
+        	
+        	@SuppressWarnings("unchecked")
+			ArrayList<Double>[] outputArrays = new ArrayList[arrays.length];
+        
+        	for(int i = 0; i < arrays.length && i < finish; i++){
+        		
+        		outputArrays[i] = new ArrayList<Double>();
+        		
+        		for(int j = start; j < arrays[i].size(); j++){
+        			
+        			outputArrays[i].add(arrays[i].get(j));
+        			
+        		}
+        		
+        	}
+        	
+        	return outputArrays;
+        	
+        }
+        
         
         /**
          * Calculate density for an array
@@ -347,12 +350,14 @@ public class ModelController implements Runnable {
         /**
          * 
          */
-        private void plotDensities() {
+        private void plotStatistics() {
         	ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
         	String printName = config.printName().replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
         	
         	densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
         	densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+        	densityWindow.plot(calculateDensity(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size())), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+        	
         	densityWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
         	densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurrences", "Learning Intensity", printName);
         	densityWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
@@ -391,7 +396,7 @@ public class ModelController implements Runnable {
                 }
                 
                 //Plot
-                selector.plot();
+                selector.plotStatistics();
                 
                 for(Agent agent : selector.population.getCurrentGeneration()){
                         System.out.println(agent.getGenotype());
