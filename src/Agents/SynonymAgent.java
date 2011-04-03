@@ -2,6 +2,8 @@ package Agents;
 
 import java.util.ArrayList;
 
+import model.RandomGenerator;
+
 public class SynonymAgent extends AbstractAgent {
 
 	public static final int DEFAULT_MEMEORY_SIZE = 10;	
@@ -15,7 +17,7 @@ public class SynonymAgent extends AbstractAgent {
 	
 	@SuppressWarnings("unchecked")
 	public SynonymAgent(AgentConfiguration config, int id, int memorySize){
-		super(config, id);
+		//super(config, id);
 		memory = new Utterance[memorySize];
 		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
 		for(int i = 0; i < wordsPerMeaning.length; i++){
@@ -25,7 +27,7 @@ public class SynonymAgent extends AbstractAgent {
 	
 	@SuppressWarnings("unchecked")
 	public SynonymAgent(SynonymAgent parent1, SynonymAgent parent2, int id) {
-		super(parent1.getConfiguration(), id);
+		//super(parent1.getConfiguration(), id);
 		
 		//Currently asexual reproduction
 		int memorySize;
@@ -209,6 +211,13 @@ public class SynonymAgent extends AbstractAgent {
 	public ArrayList getGenotype() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void initializeAgent(Agent parentA, Agent parentB, int id,
+			RandomGenerator randomGenerator) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
