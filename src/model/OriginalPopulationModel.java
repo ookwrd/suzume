@@ -156,7 +156,7 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 
 		int agentsPerSection = (size/4)+(size%4!=0?1:0);
 		
-		g.setColor(Color.pink);
+		g.setColor(Color.white);
 		g.fillRect(0, 0, thisDimension.width, thisDimension.height);
 		
 		//Top edge

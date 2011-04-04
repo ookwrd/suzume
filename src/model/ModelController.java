@@ -1,13 +1,11 @@
 package model;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -32,6 +30,9 @@ public class ModelController implements Runnable {
 
 	//Model
 	private PopulationModel population;
+	
+	//Visualization
+	private StepwiseVisualizer visualizer;
 
 	//Progress counters
 	private int currentGeneration = 0;
@@ -41,10 +42,14 @@ public class ModelController implements Runnable {
 		this.config = configuration;
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
-
+		
 		resetModel();
 
 		resetStatistics();
+
+		if(visualConfig.enableContinuousVisualization){
+			this.visualizer = new StepwiseVisualizer(getTitleString(),population, visualizationConfiguration);
+		}
 	}
 
 	private void resetModel(){
@@ -116,6 +121,11 @@ public class ModelController implements Runnable {
 			if(visualConfig.printSliceGeneration && currentGeneration == visualConfig.sliceGeneration){
 				printGeneration();
 			}
+			
+			//Update stepwise visualization
+			if(visualConfig.enableContinuousVisualization && currentGeneration % visualConfig.visualizationInterval == 0){
+				visualizer.updateImage();
+			}
 
 			currentGeneration++;
 		}
@@ -140,21 +150,6 @@ public class ModelController implements Runnable {
 			agent.printAgent();
 			System.out.println();
 		}
-		
-		JFrame frame = new JFrame(){
-			public void paint(Graphics g){
-				super.paint(g);
-				
-				g.translate(100, 100);
-				
-				population.draw(g);
-				
-			}
-		};
-		frame.setSize(new Dimension(600,600));
-		
-		frame.pack();
-		frame.setVisible(true);
 	}
 
 	/**
@@ -331,7 +326,7 @@ public class ModelController implements Runnable {
 	 */
 	private void plotStatistics() {
 		
-		ModelStatistics densityWindow = new ModelStatistics("[Seed: " + randomGenerator.getSeed() + "   " + config + "]");
+		ModelStatistics densityWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-seed"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
@@ -345,6 +340,10 @@ public class ModelController implements Runnable {
 		densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
 
 		densityWindow.display();
+	}
+	
+	private String getTitleString(){
+		return "[Seed: " + randomGenerator.getSeed() + "   " + config + "]";
 	}
 
 	/**

@@ -18,6 +18,8 @@ public class VisualizationConfiguration {
 	public int printGenerationsEachX;
 	
 	public boolean enableContinuousVisualization;
+	public int visualizationInterval = 1; //TODO
+	public int visualizationPause = 500; //TODO
 	
 	public VisualizationConfiguration(){
 		this.printSliceGeneration = DEFAULT_PRINT_SLICE_GENERATION;
