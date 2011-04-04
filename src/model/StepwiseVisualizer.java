@@ -54,6 +54,15 @@ public class StepwiseVisualizer extends JPanel {
 		
 		model.draw(image.getGraphics());
 		label.repaint();
+		
+		if(config.visualizationPause > 0){
+			try {
+				Thread.sleep(config.visualizationPause);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 }

@@ -19,6 +19,8 @@ public class VisualizationConfigurationPanel extends JPanel {
 	private JTextField printGenerationsEachXField;
 	
 	private JCheckBox enableStepwiseVisualizationBox;
+	private JTextField stepwiseVisualizationIntervalField;
+	private JTextField stepwiseVisualizationPauseField;
 	
 	public VisualizationConfigurationPanel(){
 		super();
@@ -48,6 +50,17 @@ public class VisualizationConfigurationPanel extends JPanel {
 		
 		
 		enableStepwiseVisualizationBox = ConfigurationPanelTools.addCheckBox("Enable continuous visualiaztion?", VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION, this);
+		stepwiseVisualizationIntervalField = ConfigurationPanelTools.addField("Visualization interval", ""+VisualizationConfiguration.DEFAULT_VISUALIZATION_INTERVAL, this);
+		stepwiseVisualizationPauseField = ConfigurationPanelTools.addField("Pause after visualization", ""+VisualizationConfiguration.DEFAULT_VISUALIZATION_PAUSE, this);
+		enableStepwiseVisualizationBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				stepwiseVisualizationIntervalField.setEnabled(enableStepwiseVisualizationBox.isSelected());
+				stepwiseVisualizationPauseField.setEnabled(enableStepwiseVisualizationBox.isSelected());
+			}
+		});
+		stepwiseVisualizationIntervalField.setEnabled(VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION);
+		stepwiseVisualizationPauseField.setEnabled(VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION);
 		
 		ConfigurationPanelTools.makeGrid(this);
 		
@@ -60,7 +73,9 @@ public class VisualizationConfigurationPanel extends JPanel {
 				Integer.parseInt(printSliceGenerationField.getText().trim()),
 				printGenerationsBox.isSelected(),
 				Integer.parseInt(printGenerationsEachXField.getText().trim()),
-				enableStepwiseVisualizationBox.isSelected()
+				enableStepwiseVisualizationBox.isSelected(),
+				Integer.parseInt(stepwiseVisualizationIntervalField.getText().trim()),
+				Integer.parseInt(stepwiseVisualizationPauseField.getText().trim())
 				);
 		
 	}
