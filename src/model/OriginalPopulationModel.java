@@ -162,26 +162,26 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 		//Top edge
 		int i;
 		for(i = 0; i < agentsPerSection; i++){
-			currentGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(g);
 			g.translate(agentDimension.width, 0);
 		}
 		
 		//right edge
 		for(; i < 2*agentsPerSection; i++){
-			currentGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(g);
 			g.translate(0, agentDimension.height);
 		}
 		
 		//Bottom edge
 		for(; i < 3*agentsPerSection; i++){
-			currentGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(g);
 			g.translate(-agentDimension.width, 0);
 		}
 		
 		//Left edge
 		for(; i < size; i++){
 			//TODO reset the translate point.
-			currentGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(g);
 			g.translate(0, -agentDimension.height);
 		}
 		
