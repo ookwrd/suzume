@@ -77,7 +77,7 @@ public class StepwiseVisualizer extends JPanel {
 		pauseField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(pauseField.getText());
+				config.visualizationPause = Integer.parseInt(pauseField.getText().trim());
 			}
 		});
 		
@@ -87,6 +87,12 @@ public class StepwiseVisualizer extends JPanel {
 
 		JLabel intervalLabel = new JLabel("Display every ");
 		intervalField = new JTextField(""+config.visualizationInterval, 6);
+		intervalField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				config.visualizationInterval = Integer.parseInt(intervalField.getText().trim());	
+			}
+		});
 		JLabel intervalUnit = new JLabel(" generations");
 		
 		buttonPanel.add(intervalLabel);
@@ -108,6 +114,10 @@ public class StepwiseVisualizer extends JPanel {
 	}
 	
 	public void update(int generation){
+		
+		if( generation % config.visualizationInterval != 0){
+			return;
+		}
 		
 		updateCounter(generation);
 		

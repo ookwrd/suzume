@@ -123,7 +123,7 @@ public class ModelController implements Runnable {
 			}
 			
 			//Update stepwise visualization
-			if(visualConfig.enableContinuousVisualization && currentGeneration % visualConfig.visualizationInterval == 0){
+			if(visualConfig.enableContinuousVisualization){
 				visualizer.update(currentGeneration);
 			}
 
