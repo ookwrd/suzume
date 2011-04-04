@@ -1,5 +1,8 @@
 package Agents;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,6 +11,8 @@ import model.RandomGenerator;
 public abstract class AbstractAgent implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
+	
+	protected static final Dimension DIMENSION = new Dimension(10,10);
 	
 	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
 	
@@ -121,4 +126,14 @@ public abstract class AbstractAgent implements Agent {
 		return grammar;
 	}
 
+	@Override
+	public Dimension getDimension(){
+		return DIMENSION;
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		g.setColor(Color.green);
+		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
+	}
 }

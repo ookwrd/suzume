@@ -5,6 +5,7 @@ package model;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -29,15 +30,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 @SuppressWarnings("serial")
-public class ModelStatistics extends JFrame {
+public class ModelStatistics extends JPanel {
 
 	public int saveSize = 200;
 	public int smallSize = 100;
@@ -53,27 +51,32 @@ public class ModelStatistics extends JFrame {
 	
 	private int chartType;
 
-	JPanel innerPane = new JPanel();
-	JScrollPane scroller = new JScrollPane(innerPane);
-	private JButton saveButton;
-	
-	// for the current graph
+    private JFrame frame;
+    JScrollPane scrollPane;
+    private JButton saveButton;
+    
+ // for the current graph
 	private String title = "The current chart";
 	private BufferedImage currentImage;
 	private JFreeChart curChart;
 	private String curFilename;
-	
+
 	private ArrayList<BufferedImage> images;
 	private ArrayList<JFreeChart> charts;
 	private ArrayList<String> filenames;
 	
-
 	public ModelStatistics(String title) {
-		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		scroller.setVerticalScrollBar(new JScrollBar());
-		this.add(scroller, BorderLayout.CENTER);
-		this.setTitle(title);
-		this.setSize(new Dimension(1000, 500));
+		frame = new JFrame();
+		frame.setTitle(title);
+		frame.setSize(new Dimension(1000, 500));
+		
+		setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		scrollPane = new JScrollPane(this);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
+		
+		frame.add(scrollPane);
 		
 		this.images = new ArrayList<BufferedImage>();
 		this.charts = new ArrayList<JFreeChart>();
@@ -89,7 +92,7 @@ public class ModelStatistics extends JFrame {
 	}
 
 	public void display() {
-		setVisible(true);
+		frame.setVisible(true);
 	}
 
 	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
@@ -119,8 +122,8 @@ public class ModelStatistics extends JFrame {
 
 		}
 
-		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
-		innerPane.validate();
+		add(new JLabel(new ImageIcon(createImage(newSeries))));
+		validate();
 
 		saveCurChart();
 	}
@@ -144,9 +147,9 @@ public class ModelStatistics extends JFrame {
 					));
 		}
 
-		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
-		innerPane.validate();
-
+		add(new JLabel(new ImageIcon(createImage(newSeries))));
+		validate();
+		frame.validate();
 		saveCurChart();
 	}
 
@@ -212,21 +215,14 @@ public class ModelStatistics extends JFrame {
 			boolean printToFile) {
 		curChart = createChart(series, LINE_CHART);
 		currentImage = curChart.createBufferedImage(imageRatio[0]
-				* smallSize, imageRatio[1] * smallSize);
+		    * smallSize, imageRatio[1] * smallSize);
 		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
 		
 		charts.add(curChart);
 		images.add(currentImage);
 		filenames.add(curFilename);
-		
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(currentImage));
-
-		// Creating the corresponding file (view size)
-		//if (printToFile) {
-		//	BufferedImage imagePrint = currentImage; //curChart.createBufferedImage(imageRatio[0]* smallSize, imageRatio[1] * smallSize);
-		//	createFile(curChart, imagePrint, curFilename, saveSize);
-		//}
 
 		return currentImage;
 	}
@@ -242,6 +238,7 @@ public class ModelStatistics extends JFrame {
 		cd("/");
 		mkdir("/suzume-charts");
 		try {
+
 			ChartUtilities.saveChartAsJPEG(
 					new File("/suzume-charts/" + filename), chart,
 					imageRatio[0] * printSize, imageRatio[1] * printSize);
@@ -264,9 +261,7 @@ public class ModelStatistics extends JFrame {
 	 * This only prints the current curChart to file without showing it in a window
 	 */
 	private void saveCurChart() {
-		//JFreeChart curChart = createChart(currentSeries, LINE_CHART);
-		//BufferedImage imagePrint = curChart.createBufferedImage(imageRatio[0]
-		//		* saveSize, imageRatio[1] * saveSize);
+		
 		createFile(curChart, currentImage, curFilename, smallSize);
 
 	}
