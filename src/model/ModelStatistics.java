@@ -5,6 +5,7 @@ package model;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.ScrollPane;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,15 +27,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 @SuppressWarnings("serial")
-public class ModelStatistics extends JFrame {
+public class ModelStatistics extends JPanel {
 
 	public int printSize = 100;//200
 	public int viewSize = 100;
@@ -51,22 +49,28 @@ public class ModelStatistics extends JFrame {
 	
 	private int chartType = LINE_CHART;
 
-	JPanel innerPane = new JPanel();
-	JScrollPane scroller = new JScrollPane(innerPane);
-	//private XYSeries[] currentSeries;
+    private JFrame frame;
+    JScrollPane scrollPane;
+    
 	private BufferedImage currentImage;
 	private JFreeChart curChart;
 
 	public ModelStatistics(String title) {
-		innerPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		scroller.setVerticalScrollBar(new JScrollBar());
-		this.add(scroller, BorderLayout.CENTER);
-		this.setTitle(title);
-		this.setSize(new Dimension(1000, 500));
+		frame = new JFrame();
+		frame.setTitle(title);
+		frame.setSize(new Dimension(1000, 500));
+		
+		setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		scrollPane = new JScrollPane(this);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
+		
+		frame.add(scrollPane);
 	}
 
 	public void display() {
-		setVisible(true);
+		frame.setVisible(true);
 	}
 
 	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
@@ -96,8 +100,8 @@ public class ModelStatistics extends JFrame {
 
 		}
 
-		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
-		innerPane.validate();
+		add(new JLabel(new ImageIcon(createImage(newSeries))));
+		validate();
 
 		saveChart();// TODO
 	}
@@ -120,9 +124,9 @@ public class ModelStatistics extends JFrame {
 					));
 		}
 
-		innerPane.add(new JLabel(new ImageIcon(createImage(newSeries))));
-		innerPane.validate();
-
+		add(new JLabel(new ImageIcon(createImage(newSeries))));
+		validate();
+		frame.validate();
 		saveChart();
 	}
 
