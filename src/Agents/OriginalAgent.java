@@ -1,4 +1,6 @@
 package Agents;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -215,6 +217,22 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	@Override
 	public ArrayList<Integer> getGenotype() {
 		return chromosome;
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		
+		Color c;
+		
+		c = new Color(
+				Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
+				Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
+				Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
+				);
+		
+		g.setColor(c);
+		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
+		
 	}
 
 }

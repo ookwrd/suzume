@@ -12,6 +12,8 @@ public abstract class AbstractAgent implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
 	
+	protected static final Dimension DIMENSION = new Dimension(10,10);
+	
 	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
 	
 	private int fitness;
@@ -126,12 +128,12 @@ public abstract class AbstractAgent implements Agent {
 
 	@Override
 	public Dimension getDimension(){
-		return new Dimension(1,1);
+		return DIMENSION;
 	}
 	
 	@Override
 	public void draw(Graphics g){
 		g.setColor(Color.green);
-		g.drawRect(0, 0, 1, 1);
+		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
 	}
 }
