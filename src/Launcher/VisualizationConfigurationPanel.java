@@ -19,6 +19,7 @@ public class VisualizationConfigurationPanel extends JPanel {
 	private JTextField printGenerationsEachXField;
 	
 	private JCheckBox enableStepwiseVisualizationBox;
+	private JCheckBox interactiveModeBox;
 	private JTextField stepwiseVisualizationIntervalField;
 	private JTextField stepwiseVisualizationPauseField;
 	
@@ -50,15 +51,19 @@ public class VisualizationConfigurationPanel extends JPanel {
 		
 		
 		enableStepwiseVisualizationBox = ConfigurationPanelTools.addCheckBox("Enable continuous visualiaztion?", VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION, this);
+		interactiveModeBox = ConfigurationPanelTools.addCheckBox("Iteractive mode", VisualizationConfiguration.DEFAULT_INTERACTIVE_MODE, this);
 		stepwiseVisualizationIntervalField = ConfigurationPanelTools.addField("Visualization interval", ""+VisualizationConfiguration.DEFAULT_VISUALIZATION_INTERVAL, this);
 		stepwiseVisualizationPauseField = ConfigurationPanelTools.addField("Pause after visualization", ""+VisualizationConfiguration.DEFAULT_VISUALIZATION_PAUSE, this);
 		enableStepwiseVisualizationBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				stepwiseVisualizationIntervalField.setEnabled(enableStepwiseVisualizationBox.isSelected());
-				stepwiseVisualizationPauseField.setEnabled(enableStepwiseVisualizationBox.isSelected());
+				boolean enabled = enableStepwiseVisualizationBox.isSelected();
+				interactiveModeBox.setEnabled(enabled);
+				stepwiseVisualizationIntervalField.setEnabled(enabled);
+				stepwiseVisualizationPauseField.setEnabled(enabled);
 			}
 		});
+		interactiveModeBox.setEnabled(VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION);
 		stepwiseVisualizationIntervalField.setEnabled(VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION);
 		stepwiseVisualizationPauseField.setEnabled(VisualizationConfiguration.DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION);
 		
@@ -74,6 +79,7 @@ public class VisualizationConfigurationPanel extends JPanel {
 				printGenerationsBox.isSelected(),
 				Integer.parseInt(printGenerationsEachXField.getText().trim()),
 				enableStepwiseVisualizationBox.isSelected(),
+				interactiveModeBox.isSelected(),
 				Integer.parseInt(stepwiseVisualizationIntervalField.getText().trim()),
 				Integer.parseInt(stepwiseVisualizationPauseField.getText().trim())
 				);
