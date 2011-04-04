@@ -113,6 +113,15 @@ public class StepwiseVisualizer extends JPanel {
 		frame.add(counterPanel, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Update the model that we are producing visualizations of.
+	 * 
+	 * @param model
+	 */
+	public void updateModel(PopulationModel model){
+		this.model = model;
+	}
+	
 	public void update(int generation){
 		
 		if( generation % config.visualizationInterval != 0){
