@@ -7,6 +7,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import model.ModelConfiguration;
 import model.ModelController;
 import model.RandomGenerator;
@@ -54,7 +56,11 @@ public class Launcher extends JPanel {
 		
 		add(menuBar);
 		
-		window.add(this);
+		JScrollPane scrollPane = new JScrollPane(this);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);//Faster scrolling.
+		
+		window.add(scrollPane);
 		window.pack();
 		window.setVisible(true);
 	}
