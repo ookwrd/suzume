@@ -9,7 +9,10 @@ public class VisualizationConfiguration {
 	
 	public static final boolean DEFAULT_PRINT_GENERATIONS = true;
 	public static final int DEFAULT_PRINT_GENERATIONS_EACH_X = 1000;
+	
 	public static final boolean DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION = false;
+	public static final int DEFAULT_VISUALIZATION_INTERVAL = 1;
+	public static final int DEFAULT_VISUALIZATION_PAUSE = 500;
 	
 	public boolean printSliceGeneration;
 	public int sliceGeneration;
@@ -18,8 +21,8 @@ public class VisualizationConfiguration {
 	public int printGenerationsEachX;
 	
 	public boolean enableContinuousVisualization;
-	public int visualizationInterval = 1; //TODO
-	public int visualizationPause = 500; //TODO
+	public int visualizationInterval;
+	public int visualizationPause;
 	
 	public VisualizationConfiguration(){
 		this.printSliceGeneration = DEFAULT_PRINT_SLICE_GENERATION;
@@ -27,14 +30,26 @@ public class VisualizationConfiguration {
 		this.printGenerations = DEFAULT_PRINT_GENERATIONS;
 		this.printGenerationsEachX = DEFAULT_PRINT_GENERATIONS_EACH_X;
 		this.enableContinuousVisualization = DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION;
+		this.visualizationInterval = DEFAULT_VISUALIZATION_INTERVAL;
+		this.visualizationPause = DEFAULT_VISUALIZATION_PAUSE;
 	}
 	
-	public VisualizationConfiguration(boolean printSliceGeneration, int sliceGeneration, boolean printGenerations, int printGenerationsEachX, boolean enableContinuousVisualization){
+	public VisualizationConfiguration (
+			boolean printSliceGeneration, 
+			int sliceGeneration, 
+			boolean printGenerations, 
+			int printGenerationsEachX, 
+			boolean enableContinuousVisualization, 
+			int visualizationInterval, 
+			int visualizationPause)
+	{
 		this.printSliceGeneration = printSliceGeneration;
 		this.sliceGeneration = sliceGeneration;
 		this.printGenerations = printGenerations;
 		this.printGenerationsEachX = printGenerationsEachX;
 		this.enableContinuousVisualization = enableContinuousVisualization;
+		this.visualizationInterval = visualizationInterval;
+		this.visualizationPause = visualizationPause;
 	}
 	
 	public VisualizationConfiguration(StringTokenizer tokenizer){
