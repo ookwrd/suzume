@@ -1,11 +1,9 @@
-//TODO where did this come from.
 
 package model;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -23,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import org.jfree.chart.ChartFactory;
@@ -49,7 +46,7 @@ public class ModelStatistics extends JPanel {
 	private String yLabel = "";
 	private String xLabel = "";
 	
-	private int chartType;
+	private int chartType;//TODO olaf can this be removed?
 
     private JFrame frame;
     JScrollPane scrollPane;
@@ -82,13 +79,18 @@ public class ModelStatistics extends JPanel {
 		this.charts = new ArrayList<JFreeChart>();
 		this.filenames = new ArrayList<String>();
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
+		
 		saveButton = new JButton("Save all graphs");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				saveAllCharts();
 			}
 		});
-		this.add(saveButton, BorderLayout.SOUTH);
+		buttonPanel.add(saveButton);
+		
+		frame.add(buttonPanel, BorderLayout.SOUTH);
 	}
 
 	public void display() {
@@ -294,7 +296,7 @@ public class ModelStatistics extends JPanel {
 
 	}
 
-	private void displayChart(BufferedImage image) {
+	private void displayChart(BufferedImage image) {//TODO olaf can this be removed?
 		try {
 			System.out.println("Enter currentImage name\n");
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
