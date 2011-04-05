@@ -54,10 +54,6 @@ public class ModelController implements Runnable {
 
 	private void resetModel(){
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
-		if(visualizer!=null){
-			visualizer.updateModel(population);
-		}
-		
 	}
 
 	private void resetStatistics(){
