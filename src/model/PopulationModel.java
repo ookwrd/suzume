@@ -77,5 +77,7 @@ public interface PopulationModel {
 	public Dimension getDimension();
 	
 	public void draw(Graphics g);
+	
+	public void print();
 
 }
