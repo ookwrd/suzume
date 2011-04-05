@@ -3,9 +3,6 @@ package model;
 import java.util.StringTokenizer;
 
 public class VisualizationConfiguration {
-
-	public static final boolean DEFAULT_PRINT_SLICE_GENERATION = false;
-	public static final int DEFAULT_SLICE_GENERATION = 500;
 	
 	public static final boolean DEFAULT_PRINT_GENERATIONS = true;
 	public static final int DEFAULT_PRINT_GENERATIONS_EACH_X = 1000;
@@ -14,9 +11,6 @@ public class VisualizationConfiguration {
 	public static final boolean DEFAULT_INTERACTIVE_MODE = true;
 	public static final int DEFAULT_VISUALIZATION_INTERVAL = 1;
 	public static final int DEFAULT_VISUALIZATION_PAUSE = 500;
-	
-	public boolean printSliceGeneration;
-	public int sliceGeneration;
 	
 	public boolean printGenerations;
 	public int printGenerationsEachX;
@@ -27,8 +21,6 @@ public class VisualizationConfiguration {
 	public int visualizationPause;
 	
 	public VisualizationConfiguration(){
-		this.printSliceGeneration = DEFAULT_PRINT_SLICE_GENERATION;
-		this.sliceGeneration = DEFAULT_SLICE_GENERATION;
 		this.printGenerations = DEFAULT_PRINT_GENERATIONS;
 		this.printGenerationsEachX = DEFAULT_PRINT_GENERATIONS_EACH_X;
 		this.enableContinuousVisualization = DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION;
@@ -38,8 +30,6 @@ public class VisualizationConfiguration {
 	}
 	
 	public VisualizationConfiguration (
-			boolean printSliceGeneration, 
-			int sliceGeneration, 
 			boolean printGenerations, 
 			int printGenerationsEachX, 
 			boolean enableContinuousVisualization, 
@@ -47,8 +37,6 @@ public class VisualizationConfiguration {
 			int visualizationInterval, 
 			int visualizationPause)
 	{
-		this.printSliceGeneration = printSliceGeneration;
-		this.sliceGeneration = sliceGeneration;
 		this.printGenerations = printGenerations;
 		this.printGenerationsEachX = printGenerationsEachX;
 		this.enableContinuousVisualization = enableContinuousVisualization;

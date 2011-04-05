@@ -120,11 +120,6 @@ public class ModelController implements Runnable {
 			if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
 				System.out.println("Run " + currentRun + " Generation " + currentGeneration);
 			}
-
-			//Print slice generation
-			if(visualConfig.printSliceGeneration && currentGeneration == visualConfig.sliceGeneration){
-			//TODO	printGeneration();
-			}
 			
 			//Update stepwise visualization
 			if(visualConfig.enableContinuousVisualization){
