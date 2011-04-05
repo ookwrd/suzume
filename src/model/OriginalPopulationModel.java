@@ -186,5 +186,17 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 		}
 		
 	}
+	
+	/**
+	 * Print a generations worth of agents. 
+	 */
+	@Override
+	public void print(){
+		System.out.println("Printing Previous Generation");	
+		for(Agent agent : getAncestorGeneration()){  
+			agent.printAgent();
+			System.out.println();
+		}
+	}
 
 }

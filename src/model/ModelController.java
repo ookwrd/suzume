@@ -123,7 +123,7 @@ public class ModelController implements Runnable {
 
 			//Print slice generation
 			if(visualConfig.printSliceGeneration && currentGeneration == visualConfig.sliceGeneration){
-				printGeneration();
+			//TODO	printGeneration();
 			}
 			
 			//Update stepwise visualization
@@ -143,18 +143,6 @@ public class ModelController implements Runnable {
 		}
 	}
 
-	/**
-	 * Print a generations worth of agents. 
-	 * 
-	 *  //TODO re-factor into the model interface.
-	 */
-	private void printGeneration(){
-		System.out.println("Printing Previous Generation");	
-		for(Agent agent : population.getAncestorGeneration()){  
-			agent.printAgent();
-			System.out.println();
-		}
-	}
 
 	/**
 	 * Runs a single round of the simulation. 

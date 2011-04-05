@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -109,6 +110,15 @@ public class StepwiseVisualizer extends JPanel {
 		
 		generationCounter = new JLabel(COUNTER_PREFIX + "0");
 		counterPanel.add(generationCounter);
+		
+		JButton printCurrentGenerationButton = new JButton("Print current generation");
+		printCurrentGenerationButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				model.print();
+			}
+		});
+		counterPanel.add(printCurrentGenerationButton);
 		
 		frame.add(counterPanel, BorderLayout.SOUTH);
 	}
