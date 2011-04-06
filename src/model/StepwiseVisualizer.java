@@ -191,7 +191,7 @@ public class StepwiseVisualizer extends JPanel {
 		updateCounter(run, generation);
 		
 		updateImage();
-		
+				
 		if(config.visualizationPause > 0){
 			try {
 				Thread.sleep(config.visualizationPause);
