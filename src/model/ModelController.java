@@ -7,6 +7,8 @@ import java.util.Hashtable;
 
 import javax.swing.JFrame;
 
+import tools.ClusteringTool;
+
 import Agents.Agent;
 import Agents.AgentFactory;
 import Launcher.Launcher;
@@ -332,7 +334,8 @@ public class ModelController implements Runnable {
 		
 		ModelStatistics densityWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-seed"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-
+		
+		//plot
 		densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(calculateDensity(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size())), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
@@ -342,8 +345,12 @@ public class ModelController implements Runnable {
 		densityWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
 		densityWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
 		densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
-
+		
 		densityWindow.display();
+		
+		//cluster
+		cluster(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()));
+		
 	}
 	
 	private String getTitleString(){
@@ -374,19 +381,34 @@ public class ModelController implements Runnable {
 
 		return outputArrays;
 	}
-
+	
+	/**
+	 * Cluster points from an array
+	 * 
+	 * @param an array of values to cluster, each entry represents one
+	 *            occurrence of the value
+	 * @return a hashtable representing the mapping between each point (double
+	 *         key) and its cluster (integer value)
+	 */
+	public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
+		Hashtable<Double, Integer> clusters = null; //null
+		for(int i=1; i<6; i++) {
+			ClusteringTool.kmeans(array, i);
+		}
+		return clusters;
+	}
 
 	/**
 	 * Calculate density for an array
 	 * @param array
+	 * @return hashtable with key: value and value: number of occurrences 
 	 */
 	public static Hashtable<Double, Integer> calculateDensity(ArrayList<Double>[] array) {
-		//globalGeneGrammarMatches.addAll(geneGrammarMatches[currentRun]); // total for several runs
-
+		
 		Hashtable<Double, Integer> numOccurrences = 
 			new Hashtable<Double, Integer>(); // k:value->v:count
 		double pace;
-
+		
 		// find max-min
 		Double min = 1000000000.0;
 		Double max = -1000000000.0;
