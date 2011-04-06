@@ -18,7 +18,8 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class StepwiseVisualizer extends JPanel {
 	
-	private static final String COUNTER_PREFIX = "Generation : ";
+	private static final String RUN_COUNTER_PREFIX = "Run : ";
+	private static final String GENERATION_COUNTER_PREFIX = "Generation : ";
 	
 	private VisualizationConfiguration config;
 	
@@ -30,9 +31,9 @@ public class StepwiseVisualizer extends JPanel {
 	private JTextField intervalField;
 	
 	private JLabel generationCounter;
+	private JLabel runCounter;
 	
-	private PopulationModel model;
-	
+	private PopulationModel model;	
 	
 	public StepwiseVisualizer(String title, PopulationModel model, VisualizationConfiguration config){
 		
@@ -57,9 +58,9 @@ public class StepwiseVisualizer extends JPanel {
 		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		
-		configureInteractiveMode();
+		configureTopBar();
 		
-		configureGenerationCounter();
+		configureBottomBar();
 		
 		frame.add(scrollPane, BorderLayout.CENTER);
 		frame.pack();
@@ -67,7 +68,7 @@ public class StepwiseVisualizer extends JPanel {
 		
 	}
 	
-	private void configureInteractiveMode(){
+	private void configureTopBar(){
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -102,13 +103,10 @@ public class StepwiseVisualizer extends JPanel {
 		frame.add(buttonPanel, BorderLayout.NORTH);
 	}
 	
-	private void configureGenerationCounter(){
+	private void configureBottomBar(){
 		
 		JPanel counterPanel = new JPanel();
 		counterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		
-		generationCounter = new JLabel(COUNTER_PREFIX + "0");
-		counterPanel.add(generationCounter);
 		
 		JButton printCurrentGenerationButton = new JButton("Print current generation");
 		printCurrentGenerationButton.addActionListener(new ActionListener() {
@@ -118,6 +116,12 @@ public class StepwiseVisualizer extends JPanel {
 			}
 		});
 		counterPanel.add(printCurrentGenerationButton);
+
+		runCounter = new JLabel(RUN_COUNTER_PREFIX + "0");
+		counterPanel.add(runCounter);
+		
+		generationCounter = new JLabel(GENERATION_COUNTER_PREFIX + "0");
+		counterPanel.add(generationCounter);
 		
 		frame.add(counterPanel, BorderLayout.SOUTH);
 	}
@@ -131,19 +135,20 @@ public class StepwiseVisualizer extends JPanel {
 		this.model = model;
 	}
 	
-	public void update(int generation){
+	public void update(int run,int generation){
 		
 		if( generation % config.visualizationInterval != 0){
 			return;
 		}
 		
-		updateCounter(generation);
+		updateCounter(run, generation);
 		
 		updateImage();
 	}
 	
-	private void updateCounter(int generation){
-		generationCounter.setText(COUNTER_PREFIX+ generation);
+	private void updateCounter(int run, int generation){
+		runCounter.setText(RUN_COUNTER_PREFIX + run);
+		generationCounter.setText(GENERATION_COUNTER_PREFIX + generation);
 	}
 	
 	private void updateImage(){
