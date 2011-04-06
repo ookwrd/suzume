@@ -392,8 +392,9 @@ public class ModelController implements Runnable {
 	 */
 	public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
 		Hashtable<Double, Integer> clusters = null; //null
-		for(int i=1; i<6; i++) {
-			ClusteringTool.kmeans(array, i);
+		for(int i=2; i<=15; i++) {
+			double sigma = ClusteringTool.sigmaKmeans(array, i);
+			System.out.println("total deviation = ["+Math.round(sigma*100000000)/1000000+"%]");
 		}
 		return clusters;
 	}
