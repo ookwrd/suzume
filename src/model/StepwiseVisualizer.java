@@ -191,6 +191,14 @@ public class StepwiseVisualizer extends JPanel {
 		updateCounter(run, generation);
 		
 		updateImage();
+		
+		if(config.visualizationPause > 0){
+			try {
+				Thread.sleep(config.visualizationPause);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void updateCounter(int run, int generation){
@@ -202,14 +210,6 @@ public class StepwiseVisualizer extends JPanel {
 		
 		model.draw(image.getGraphics());
 		imageLabel.repaint();
-		
-		if(config.visualizationPause > 0){
-			try {
-				Thread.sleep(config.visualizationPause);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 		
 	}
 
