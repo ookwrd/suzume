@@ -57,9 +57,8 @@ public class StepwiseVisualizer extends JPanel {
 		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		
-		if(config.interactiveMode){
-			configureInteractiveMode();
-		}
+		configureInteractiveMode();
+		
 		configureGenerationCounter();
 		
 		frame.add(scrollPane, BorderLayout.CENTER);
