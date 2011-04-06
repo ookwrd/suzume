@@ -22,18 +22,26 @@ public class StepwiseVisualizer extends JPanel {
 	private static final String GENERATION_COUNTER_PREFIX = "Generation : ";
 	
 	private VisualizationConfiguration config;
+	private PopulationModel model;	
 	
 	private JFrame frame;
+	
+	//Main Visualization
 	private BufferedImage image;
 	private JLabel imageLabel;
 	
+	//Top bar
 	private JTextField pauseField;
 	private JTextField intervalField;
+	private JButton pausePlayButton;
+	private JButton stepButton;
 	
+	//Bottom bar
 	private JLabel generationCounter;
 	private JLabel runCounter;
 	
-	private PopulationModel model;	
+	private boolean pauseStatus;
+	private int steps;
 	
 	public StepwiseVisualizer(String title, PopulationModel model, VisualizationConfiguration config){
 		
@@ -73,6 +81,7 @@ public class StepwiseVisualizer extends JPanel {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
+		//Pause Field
 		JLabel pauseLabel = new JLabel("Pause duration:");
 		pauseField = new JTextField(""+config.visualizationPause, 6);
 		pauseField.addActionListener(new ActionListener() {
@@ -81,11 +90,10 @@ public class StepwiseVisualizer extends JPanel {
 				config.visualizationPause = Integer.parseInt(pauseField.getText().trim());
 			}
 		});
-		
 		buttonPanel.add(pauseLabel);
 		buttonPanel.add(pauseField);
 		
-
+		//Interval Field
 		JLabel intervalLabel = new JLabel("Display every ");
 		intervalField = new JTextField(""+config.visualizationInterval, 6);
 		intervalField.addActionListener(new ActionListener() {
@@ -95,10 +103,32 @@ public class StepwiseVisualizer extends JPanel {
 			}
 		});
 		JLabel intervalUnit = new JLabel(" generations");
-		
 		buttonPanel.add(intervalLabel);
 		buttonPanel.add(intervalField);
 		buttonPanel.add(intervalUnit);
+		
+		//Pause/Play button
+		pausePlayButton = new JButton("Pause");
+		pausePlayButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pausePlayButton.setText(pauseStatus?"Pause":"Play");
+				pauseStatus = !pauseStatus;
+				steps = 0;
+				
+			}
+		});
+		buttonPanel.add(pausePlayButton);
+		
+		//Step
+		stepButton = new JButton(">>");
+		stepButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				steps += 1;
+			}
+		});
+		buttonPanel.add(stepButton);
 		
 		frame.add(buttonPanel, BorderLayout.NORTH);
 	}
@@ -136,6 +166,23 @@ public class StepwiseVisualizer extends JPanel {
 	}
 	
 	public void update(int run,int generation){
+		
+		while(true){
+			
+			if(steps > 0){
+				steps--;
+				break;
+			} else if ( !pauseStatus){
+				break;
+			}
+			
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
 		
 		if( generation % config.visualizationInterval != 0){
 			return;
