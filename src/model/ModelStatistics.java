@@ -36,7 +36,7 @@ public class ModelStatistics extends JPanel {
 
 	public int saveSize = 200;
 	public int smallSize = 100;
-	public int[] imageRatio = { 5, 3 };
+	public int[] imageRatio = {5, 3};
 
 	private final static boolean SAVE_WHILE_PROCESSING = false;
 	private static final int LINE_CHART = 1;

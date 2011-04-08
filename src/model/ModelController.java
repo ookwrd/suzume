@@ -16,6 +16,7 @@ import Launcher.Launcher;
 public class ModelController implements Runnable {
 
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.001;//should be set lower than 0.01 //TODO refactor
+	private static final double MAX_DEVIATION_DECREASE = 1;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -339,6 +340,9 @@ public class ModelController implements Runnable {
 		densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(calculateDensity(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size())), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		//densityWindow.plot(ClusteringTool.smooth(calculateDensity(
+		//		trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size())), 10), 
+		//		"Smoothened 200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
 		densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurrences", "Learning Intensity", printName);
 		densityWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
@@ -383,6 +387,25 @@ public class ModelController implements Runnable {
 	}
 	
 	/**
+	 * Cluster points from an array and computes the standard deviation (sigma)
+	 * 
+	 * @param an array of values to cluster, each entry represents one
+	 *            occurrence of the value
+	 * @param i number of clusters
+	 * @return std deviation
+	 */
+	public static double clusterSigma(ArrayList<Double>[] array, int i) {
+		//Hashtable<Double, Integer> clusters = null; //null
+		//for(int i=2; i<=10; i++) {
+		
+		double sigma = ClusteringTool.sigmaKmeans(array, i);
+		System.out.println("total deviation = ["+Math.round(sigma*1000000.0)/10000.0+"%]");
+		
+		//}
+		return sigma;
+	}
+	
+	/**
 	 * Cluster points from an array
 	 * 
 	 * @param an array of values to cluster, each entry represents one
@@ -391,11 +414,14 @@ public class ModelController implements Runnable {
 	 *         key) and its cluster (integer value)
 	 */
 	public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
-		Hashtable<Double, Integer> clusters = null; //null
-		for(int i=2; i<=15; i++) {
-			double sigma = ClusteringTool.sigmaKmeans(array, i);
-			System.out.println("total deviation = ["+Math.round(sigma*100000000)/1000000+"%]");
+			
+		Hashtable<Double, Integer> clusters = ClusteringTool.kmeansLimDevDecrease(array, MAX_DEVIATION_DECREASE);
+		/*
+		for(int i=2; i<=10; i++) {
+			ClusteringTool.sigmaKmeans(array, i);
+			System.out.println("total deviation = ["+Math.round(sigma*1000000.0)/10000.0+"%]");
 		}
+		*/
 		return clusters;
 	}
 
