@@ -108,13 +108,13 @@ public class ModelController implements Runnable {
 		communication();
 
 		plotStatistics();
-		computeStateTransitionDiagram();
+		computeStateTransitions();
 	}
 
-	private void computeStateTransitionDiagram() {
+	private void computeStateTransitions() {
 		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
 		Hashtable<Double, Integer> clustering = cluster(a);
-		extractStateTransitionDiagram(a, clustering);
+		extractStateTransitions(a, clustering, false);
 	}
 
 	/**
@@ -480,7 +480,7 @@ public class ModelController implements Runnable {
      * @param clustering
      * @return
      */
-    public static ArrayList<Integer> extractStateTransitionDiagram(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
+    public static ArrayList<Integer> extractStateTransitionsNoRepeat(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
 		/*
 		 * //other method int previousState = 0; for (int i = 0; i < a.length;
@@ -510,7 +510,7 @@ public class ModelController implements Runnable {
 			}
 			
 
-		} //TODO : virer les states qui n'ont pas lieu, quand on passe à l'itération suivante !
+		} //TODO : virer les states qui n'ont pas lieu, quand on passe au run suivant
 		
     	System.out.print("\nState transitions: ");
     	for (int i = 0; i < stateSequence.size(); i++) {
@@ -521,7 +521,56 @@ public class ModelController implements Runnable {
     	System.out.println("#max successive stable transitions = "+maxStableCount);
 		return stateSequence;
     }
-	
+    
+    /**
+     * 
+     * @param clustering
+     * @return
+     */
+    public static ArrayList<Integer> extractStateTransitions(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering, boolean noRepeat) {
+    	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
+		/*
+		 * //other method int previousState = 0; for (int i = 0; i < a.length;
+		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
+		 * a[i].get(i); int tmp = clustering.get(elt);
+		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
+		 * stateSequence.add(tmp); previousState = tmp; } } }
+		 */
+		Enumeration<Double> e = clustering.keys();
+		int previousState = 0;
+		int count = 0;
+		int repetitionCount = 0;
+		int maxRepetitionCount = 0;
+		while (e.hasMoreElements()) {
+			double elt = e.nextElement();
+			int tmp = clustering.get(elt);
+			System.out.print(elt + ":" + tmp + " ");
+			count++;
+			previousState = tmp;
+			if (!noRepeat) stateSequence.add(tmp); // if repeating states : add anyways
+			if (previousState != tmp) {
+				if(noRepeat) stateSequence.add(tmp); // if not repeating states : add only if different from previous state
+				repetitionCount = 0;
+			}
+			else { 
+				repetitionCount++;
+				if (maxRepetitionCount<repetitionCount) maxRepetitionCount=repetitionCount;
+			}
+			
+
+		} //TODO : virer les states qui n'ont pas lieu, quand on passe au run suivant
+		
+    	System.out.print("\nState transitions: ");
+    	for (int i = 0; i < stateSequence.size(); i++) {
+			System.out.print(stateSequence.get(i)+"->");
+		}
+    	System.out.print("\n#data = "+count+" ");
+    	System.out.println("#successive states = "+stateSequence.size());
+    	System.out.println("#max successive stable transitions = "+maxRepetitionCount);
+		return stateSequence;
+    }
+
+    
 	public static void main(String[] args) {
 		new Launcher();
 	}
