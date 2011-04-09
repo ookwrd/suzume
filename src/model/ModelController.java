@@ -3,9 +3,12 @@ package model;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.JFrame;
+
+import tools.ClusteringTool;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -14,6 +17,8 @@ import Launcher.Launcher;
 public class ModelController implements Runnable {
 
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.001;//should be set lower than 0.01 //TODO refactor
+
+	private static final double MAX_DEVIATION_DECREASE = 1;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -103,6 +108,13 @@ public class ModelController implements Runnable {
 		communication();
 
 		plotStatistics();
+		computeStateTransitionDiagram();
+	}
+
+	private void computeStateTransitionDiagram() {
+		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
+		Hashtable<Double, Integer> clustering = cluster(a);
+		extractStateTransitionDiagram(a, clustering);
 	}
 
 	/**
@@ -337,7 +349,7 @@ public class ModelController implements Runnable {
 		densityWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
 		densityWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
 		densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
-
+		
 		densityWindow.display();
 	}
 	
@@ -369,7 +381,7 @@ public class ModelController implements Runnable {
 
 		return outputArrays;
 	}
-
+	
 
 	/**
 	 * Calculate density for an array
@@ -428,6 +440,87 @@ public class ModelController implements Runnable {
         	}*/
 		return numOccurrences;
 	}
+	
+
+    /**
+     * Cluster points from an array and computes the standard deviation (sigma)
+     * 
+     * @param an array of values to cluster, each entry represents one
+     *            occurrence of the value
+     * @param i number of clusters
+     * @return std deviation
+     */
+    public static double clusterSigma(ArrayList<Double>[] array, int i) {
+            //Hashtable<Double, Integer> clusters = null; //null
+            //for(int i=2; i<=10; i++) {
+            
+            double sigma = ClusteringTool.sigmaKmeans(array, i);
+            System.out.println("total deviation = ["+Math.round(sigma*1000000.0)/10000.0+"%]");
+            
+            //}
+            return sigma;
+    }
+    
+    /**
+     * Cluster points from an array
+     * 
+     * @param an array of values to cluster, each entry represents one
+     *            occurrence of the value
+     * @return a hashtable representing the mapping between each point (double
+     *         key) and its cluster index (integer value)
+     */
+    public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
+                    
+            Hashtable<Double, Integer> clusters = ClusteringTool.kmeansLimDevDecrease(array, MAX_DEVIATION_DECREASE);
+            return clusters;
+    }
+    
+    /**
+     * 
+     * @param clustering
+     * @return
+     */
+    public static ArrayList<Integer> extractStateTransitionDiagram(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
+    	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
+		/*
+		 * //other method int previousState = 0; for (int i = 0; i < a.length;
+		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
+		 * a[i].get(i); int tmp = clustering.get(elt);
+		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
+		 * stateSequence.add(tmp); previousState = tmp; } } }
+		 */
+		Enumeration<Double> e = clustering.keys();
+		int previousState = 0;
+		int count = 0;
+		int stableCount = 0;
+		int maxStableCount = 0;
+		while (e.hasMoreElements()) {
+			double elt = e.nextElement();
+			int tmp = clustering.get(elt);
+			System.out.print(elt + ":" + tmp + " ");
+			count++;
+			if (previousState != tmp) {
+				stateSequence.add(tmp);
+				previousState = tmp;
+				stableCount = 0;
+			}
+			else { 
+				stableCount++;
+				if (maxStableCount<stableCount) maxStableCount=stableCount;
+			}
+			
+
+		} //TODO : virer les states qui n'ont pas lieu, quand on passe à l'itération suivante !
+		
+    	System.out.print("\nState transitions: ");
+    	for (int i = 0; i < stateSequence.size(); i++) {
+			System.out.print(stateSequence.get(i)+"->");
+		}
+    	System.out.print("\n#data = "+count+" ");
+    	System.out.println("#successive states = "+stateSequence.size());
+    	System.out.println("#max successive stable transitions = "+maxStableCount);
+		return stateSequence;
+    }
 	
 	public static void main(String[] args) {
 		new Launcher();

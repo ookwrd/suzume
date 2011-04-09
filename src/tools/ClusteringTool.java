@@ -41,7 +41,7 @@ public class ClusteringTool {
 
 		Hashtable<Double, Integer> clusters = new Hashtable<Double, Integer>();
 		Vector<DataPoint> dataPoints = new Vector<DataPoint>();
-
+		
 		for (ArrayList<Double> array : arraylists) {
 			for (Double value : array) {
 				dataPoints.add(new DataPoint(0, value, "" + value));
@@ -168,6 +168,16 @@ public class ClusteringTool {
 			}
 		}
 
+	}
+	
+	/**
+	 * Makes the function pair by mirroring with respect to the x-axis, at the end of the data
+	 * 
+	 * @param function
+	 * @return mirrored function
+	 */
+	public static void symmetry(Hashtable<Double, Integer> function) {
+		//TODO
 	}
 
 	public static void main(String args[]) {
