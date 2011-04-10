@@ -224,7 +224,7 @@ public class ClusteringTool {
 				System.out.println("minimum geometric decrease factor found: "+prevDeviation/curDeviation+" > "+prevDecreaseFactor);
 				return prevClusters; 
 			}
-					
+			
 			prevDecreaseFactor = prevDeviation/curDeviation;
 			prevClusters = clusters;
 			
@@ -234,6 +234,7 @@ public class ClusteringTool {
 			}
 			else System.out.println(prevDeviation/curDeviation+" > "+threshold);
 			
+			// quick fix in case there would be many clusters
 			if (i>=100) i+=100-1;
 			else if (i>=20) i+=20-1;
 			else if (i>=10) i+=10-1;
