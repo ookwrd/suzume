@@ -2,13 +2,16 @@ package model;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.JFrame;
+import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import tools.ClusteringTool;
+import tools.StateTransitionVisualizer;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -108,13 +111,87 @@ public class ModelController implements Runnable {
 		communication();
 
 		plotStatistics();
-		computeStateTransitions();
+		findMarkov();
 	}
-
-	private void computeStateTransitions() {
+	
+	/**
+	 * Compute the Markov probabilistic model for the data
+	 */
+	private void findMarkov() {
 		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
 		Hashtable<Double, Integer> clustering = cluster(a);
-		extractStateTransitions(a, clustering, false);
+		Integer[] stateSequence = (Integer[]) stateTransitions(a, clustering, false);
+		
+		//render diagram
+		stateTransitionsNormalized(stateSequence);
+		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence));
+	}
+	
+	/**
+	 * Compute the state transition probability matrix 
+	 * 
+	 * @param stateSequence
+	 * @return
+	 */
+	private double[][] stateTransitions(Integer[] stateSequence) {
+		double[][] transitions = new double[stateSequence.length][stateSequence.length];
+		int from, to = 0;
+		if(stateSequence.length>1)
+			from=stateSequence[0];
+		else return transitions;
+		int fromMax = 0;
+		int toMax = 0;
+		for (int i = 1; i < stateSequence.length; i++) {
+			from = to;
+			to = stateSequence[i];
+			transitions[from][to] +=1;
+			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
+			if (to > toMax) toMax = to;
+		}
+		fromMax++; 
+		toMax++;
+		
+		//return a smaller matrix
+		double[][] result = new double[fromMax][toMax];
+		
+		System.out.println("transitions: ");
+		for (int i = 0; i < fromMax; i++) {
+			for (int j = 0; j < toMax; j++) {
+				result[i][j] = transitions[i][j];
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
+			}
+			System.out.println();
+		}
+		return result;
+	}
+	
+	/**
+	 * Normalize the probability matrix so that every column sums up to 1
+	 * 
+	 * @param matrix
+	 * @return
+	 */
+	private double[][] stateTransitionsNormalized(Integer[] stateSequence) {
+		double[][] matrix = stateTransitions(stateSequence);
+		double[][] result = new double[matrix.length][matrix[0].length]; 
+		for (int i = 0; i < matrix.length; i++) {
+			int colSum = 0;
+			for (int j = 0; j < matrix[i].length; j++) {
+				colSum += matrix[i][j];
+			}
+			for (int j = 0; j < matrix[i].length; j++) {
+				result[i][j] = matrix[i][j]/colSum;
+			}
+		}
+		DecimalFormat df = new DecimalFormat("########.00"); 
+		System.out.println("normalized transitions: ");
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[0].length; j++) {
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
+			}
+			System.out.println();
+		}
+		return result;
 	}
 
 	/**
@@ -475,7 +552,8 @@ public class ModelController implements Runnable {
             return clusters;
     }
     
-    /**
+    /** 
+     * Extract non-state-repeating transitions (deprecated
      * 
      * @param clustering
      * @return
@@ -523,12 +601,15 @@ public class ModelController implements Runnable {
     }
     
     /**
+     * Extract state transitions
      * 
-     * @param clustering
+     * @param data array of the original data
+     * @param clustering result of the classification (values-to-classes table)
+     * @param noRepeat if true, don't take any repeated state into account
      * @return
      */
-    public static ArrayList<Integer> extractStateTransitions(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering, boolean noRepeat) {
-    	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
+    public static Integer[] stateTransitions(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
+    	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
 		/*
 		 * //other method int previousState = 0; for (int i = 0; i < a.length;
 		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
@@ -536,6 +617,17 @@ public class ModelController implements Runnable {
 		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
 		 * stateSequence.add(tmp); previousState = tmp; } } }
 		 */
+    	
+    	// counting clusters
+    	/*Enumeration<Integer> v = clustering.values;
+    	int clusterNum = 0;
+    	while(v.hasMoreElements()) {
+			int next = v.nextElement();
+			if(clusterNum<next) clusterNum=next; //TODO correct, this was a quickfix
+		}
+    	clusterNum--;
+    	System.out.println("MATRIX_SIZE: "+clusterNum);*/
+    	
 		Enumeration<Double> e = clustering.keys();
 		int previousState = 0;
 		int count = 0;
@@ -560,14 +652,20 @@ public class ModelController implements Runnable {
 
 		} //TODO : virer les states qui n'ont pas lieu, quand on passe au run suivant
 		
-    	System.out.print("\nState transitions: ");
+    	System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
     	for (int i = 0; i < stateSequence.size(); i++) {
 			System.out.print(stateSequence.get(i)+"->");
 		}
     	System.out.print("\n#data = "+count+" ");
     	System.out.println("#successive states = "+stateSequence.size());
     	System.out.println("#max successive stable transitions = "+maxRepetitionCount);
-		return stateSequence;
+    	
+    	int clusterNum = stateSequence.size();
+    	Integer[] states = new Integer[clusterNum];
+    	for (int i = 0; i < count; i++) {
+			states[i] = stateSequence.get(i);
+		}
+		return states;
     }
 
     
