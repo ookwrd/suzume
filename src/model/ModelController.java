@@ -2,10 +2,10 @@ package model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
-
-import prefuse.util.force.Force;
 
 import tools.ClusteringTool;
 
@@ -15,13 +15,23 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
 
-	public static class Pair<A,B>{
+	public static class Pair<A extends Comparable<A>,B> implements Comparable<Pair<A, B>> {
 		public A first;
 		public B second;
 		
 		public Pair(A first, B second) {
 			this.first = first;
 			this.second = second;
+		}
+		
+		@Override
+		public String toString(){
+			return ""+first + " " +second;
+		}
+		
+		@Override
+		public int compareTo(Pair<A, B> pair){
+			return first.compareTo(pair.first);
 		}
 	}
 	
@@ -420,6 +430,10 @@ public class ModelController implements Runnable {
 		densityWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
 		densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
 		
+		ArrayList<Pair<Double, Integer>> values = calculateDensity(aggregateArrayLists(learningIntensities));
+		Collections.sort(values);
+		print(values);
+		
 		densityWindow.display();
 	}
 	
@@ -470,9 +484,7 @@ public class ModelController implements Runnable {
 	 */
 	public static ArrayList<Pair<Double, Integer>> calculateDensity(ArrayList<Double> array) {
 
-		double pace;
-
-		// find max-min
+		// find range
 		Double min = Double.MAX_VALUE;
 		Double max = Double.MIN_VALUE;
 			for (int j = 0; j < array.size(); j++) {
@@ -484,10 +496,8 @@ public class ModelController implements Runnable {
 				min = value;
 			}
 		}
-		
 		double range = max - min;
-
-		pace = DEFAULT_DENSITY_GRANULARITY*range;
+		double step = DEFAULT_DENSITY_GRANULARITY*range;
 
 		Hashtable<Double, Integer> numOccurrences = 
 			new Hashtable<Double, Integer>(); // k:value->v:count
@@ -495,20 +505,18 @@ public class ModelController implements Runnable {
 		//Make sure all possible counters in the range initialized to zero.
 		double intializedSoFar = max;
 		while(true){
-			double value = intializedSoFar/pace;
-			
+			double value = intializedSoFar/step;
 			numOccurrences.put(value, 0);
-			
-			intializedSoFar -= pace;
-			
+			intializedSoFar -= step;
 			if(intializedSoFar < min){
 				break;
 			}
 		}
 		
+		//Count occurrences within each step
 		for (Double value : array) {
 			// cluster value
-			double clusterVal = value/pace;
+			double clusterVal = value/step;
 
 			// count
 			if(numOccurrences.containsKey(clusterVal)) {
@@ -517,7 +525,7 @@ public class ModelController implements Runnable {
 				numOccurrences.put(clusterVal, 1);
 			}
 		}
-	
+		
 		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
 		for(Double key : numOccurrences.keySet()){
 			retVal.add(new Pair<Double, Integer>(key, numOccurrences.get(key)));
@@ -526,6 +534,36 @@ public class ModelController implements Runnable {
 		return retVal;
 	}
 	
+	public static ArrayList<Pair<Double, Integer>> sort(ArrayList<Pair<Double, Integer>> input){
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<Pair<Double, Integer>> retVal = (ArrayList<Pair<Double, Integer>>) input.clone();
+		
+		Comparator<Pair<Double, Integer>> comparator = new Comparator<ModelController.Pair<Double,Integer>>() {
+
+			@Override
+			public int compare(Pair<Double, Integer> o1,
+					Pair<Double, Integer> o2) {
+				return Double.compare(o1.first,o2.first);
+			}
+		};
+		
+		Collections.sort(retVal, comparator);
+		
+		return retVal;
+	}
+	
+	public static void print(ArrayList<Pair<Double, Integer>> series){
+		
+		System.out.println("printing");
+		
+		for(Pair<Double, Integer> pair : series){
+			
+			System.out.println(pair);
+			
+		}
+		
+	}
 
     /**
      * Cluster points from an array and computes the standard deviation (sigma)
