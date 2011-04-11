@@ -304,6 +304,7 @@ public class ModelController implements Runnable {
 			}
 
 			agent.adjustCosts();
+			//agent.setFitness(10);//just a test
 		}
 	}
 
@@ -594,9 +595,9 @@ public class ModelController implements Runnable {
     	for (int i = 0; i < stateSequence.size(); i++) {
 			System.out.print(stateSequence.get(i)+"->");
 		}
-    	System.out.print("\n#data = "+count+" ");
-    	System.out.println("#successive states = "+stateSequence.size());
-    	System.out.println("#max successive stable transitions = "+maxStableCount);
+    	//System.out.print("\n#data = "+count+" ");
+    	//System.out.println("#successive states = "+stateSequence.size());
+    	//System.out.println("#max successive stable transitions = "+maxStableCount);
 		return stateSequence;
     }
     
