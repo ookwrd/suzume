@@ -248,7 +248,7 @@ public class ClusteringTool {
 	 * @param arraylists density
 	 * @return number of peaks maxima
 	 */
-	public static int findPeaks(ArrayList<Double>[] array) {
+	public static int findPeaks(ArrayList<Double> array) {
 		
 		//Hashtable<Double, Double> centredMeans = new Hashtable<Double, Double>();
 		Hashtable<Double, Integer> density = ModelController.calculateDensity(array);

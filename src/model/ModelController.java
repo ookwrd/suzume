@@ -19,7 +19,7 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
 
-	private static final double DEFAULT_DENSITY_GRANULARITY = 0.001;//should be set lower than 0.01 //TODO refactor
+	private static final double DEFAULT_DENSITY_GRANULARITY = 0.005;//should be set lower than 0.01 //TODO refactor
 
 	private static final double MAX_DEVIATION_DECREASE = 1;
 
@@ -418,10 +418,10 @@ public class ModelController implements Runnable {
 		String printName = (config.printName()+"-seed"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
-		densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		densityWindow.plot(calculateDensity(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size())), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		densityWindow.plot(calculateDensity(aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		densityWindow.plot(calculateDensity(aggregateArrayLists(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
-		densityWindow.plot(calculateDensity(learningIntensities), "Density (Learning Intensity)", "Occurrences", "Learning Intensity", printName);
+		densityWindow.plot(calculateDensity(aggregateArrayLists(learningIntensities)), "Density (Learning Intensity)", "Occurrences", "Learning Intensity", printName);
 		densityWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
 		densityWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
 		densityWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
@@ -443,13 +443,13 @@ public class ModelController implements Runnable {
 	 * @param finish
 	 * @return
 	 */
-	public static ArrayList<Double>[] trimArrayLists(ArrayList<Double>[] arrays, int start, int finish){
+	public static <E> ArrayList<E>[] trimArrayLists(ArrayList<E>[] arrays, int start, int finish){
 
 		@SuppressWarnings("unchecked")
-		ArrayList<Double>[] outputArrays = new ArrayList[arrays.length];
+		ArrayList<E>[] outputArrays = new ArrayList[arrays.length];
 
 		for(int i = 0; i < arrays.length && i < finish; i++){
-			outputArrays[i] = new ArrayList<Double>();
+			outputArrays[i] = new ArrayList<E>();
 
 			for(int j = start; j < arrays[i].size(); j++){
 				outputArrays[i].add(arrays[i].get(j));
@@ -459,62 +459,57 @@ public class ModelController implements Runnable {
 		return outputArrays;
 	}
 	
+	public static <E> ArrayList<E> aggregateArrayLists(ArrayList<E>[] arrayLists){
+		
+		ArrayList<E> retVal = new ArrayList<E>();
+		
+		for(ArrayList<E> arrayList : arrayLists){
+			retVal.addAll(arrayList);
+		}
+		
+		return retVal;
+	}
+	
 
 	/**
 	 * Calculate density for an array
 	 * @param array
 	 */
-	public static Hashtable<Double, Integer> calculateDensity(ArrayList<Double>[] array) {
-		//globalGeneGrammarMatches.addAll(geneGrammarMatches[currentRun]); // total for several runs
+	public static Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
 
 		Hashtable<Double, Integer> numOccurrences = 
 			new Hashtable<Double, Integer>(); // k:value->v:count
 		double pace;
 
 		// find max-min
-		Double min = 1000000000.0;
-		Double max = -1000000000.0;
-		for (int i = 0; i < array.length; i++) { 
-			//Double minCandidate = Collections.min(array[i]);
-			//if ((Double) minCandidate < (Double) min) min = minCandidate;
-			for (int j = 0; j < array[i].size(); j++) {
-				if ((Double) array[i].get(j) > (Double) max) 
-					max = array[i].get(j);
+		Double min = Double.MAX_VALUE;
+		Double max = Double.MIN_VALUE;
+			for (int j = 0; j < array.size(); j++) {
+			Double value = array.get(j);
+			if (value > max) {
+				max = value;
+			}
+			if(value < min){
+				min = value;
 			}
 		}
-		System.out.println(max);
+		
+		double range = max - min;
 
-		min=0.0;//quick fix TODO
-		pace = DEFAULT_DENSITY_GRANULARITY*(max-min);
-		//System.out.println("max-min: "+(max-min)+">< pace: "+pace);
+		pace = DEFAULT_DENSITY_GRANULARITY*(range);
 
-		for (int i = 0; i < array.length; i++) { // for every run
-			for (int j = 0; j < array[0].size(); j++) {
-				// cluster value
-				double clusterVal = pace*(double) Math.round(array[i].get(j)/pace);
+		for (int j = 0; j < array.size(); j++) {
+			// cluster value
+			double clusterVal = pace*(double) Math.round(array.get(j)/pace);
 
-				// count
-				if(numOccurrences.containsKey(clusterVal))
-					numOccurrences.put(clusterVal, numOccurrences.get(clusterVal)+1);
-				else
-					numOccurrences.put(clusterVal, 1);
+			// count
+			if(numOccurrences.containsKey(clusterVal))
+				numOccurrences.put(clusterVal, numOccurrences.get(clusterVal)+1);
+			else
+				numOccurrences.put(clusterVal, 1);
 			}
-		}
+		
 
-		/*
-        	ArrayList<Double>[] dataSets = new ArrayList[numOccurrences.size()];
-        	for(int j = 0; j<dataSets.length; j++) {
-        		dataSets[0] = new ArrayList<Double>();
-	        	Enumeration<Double> e = numOccurrences.keys();
-	        	int i = 0;
-	        	while(e.hasMoreElements()) {
-	        		Double val = e.nextElement();
-	        		//dataSets[0].add(i, (double) val);
-	        		dataSets[j].add(i, (double) numOccurrences.get(val));
-	        		i++;
-	        	}
-
-        	}*/
 		return numOccurrences;
 	}
 	
