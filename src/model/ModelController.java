@@ -23,7 +23,7 @@ public class ModelController implements Runnable {
 
 	private static final double MAX_DEVIATION_DECREASE = 1;
 
-	private static final int TRANSITION_STEP = 1000;
+	private static final int DEFAULT_STATE_TRANSITION_STEP = 1;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -122,20 +122,50 @@ public class ModelController implements Runnable {
 	private void findMarkov() {
 		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
 		Hashtable<Double, Integer> clustering = cluster(a);
-		Integer[] stateSequence = (Integer[]) stateTransitions(a, clustering, false, TRANSITION_STEP);
+		Integer[] stateSequence = (Integer[]) stateSequence(a, clustering, false);
 		
 		//render diagram
-		stateTransitionsNormalized(stateSequence);
-		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence));
+		stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
+		
+		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
 	}
 	
+	/**
+	 * Normalize the probability matrix so that every column sums up to 1
+	 * 
+	 * @param matrix
+	 * @return
+	 */
+	private double[][] stateTransitionsNormalized(Integer[] stateSequence, int step) {
+		double[][] matrix = stateTransitions(stateSequence, step);
+		double[][] result = new double[matrix.length][matrix[0].length]; 
+		for (int i = 0; i < matrix.length; i++) {
+			int colSum = 0;
+			for (int j = 0; j < matrix[i].length; j++) {
+				colSum += matrix[i][j];
+			}
+			for (int j = 0; j < matrix[i].length; j++) {
+				result[i][j] = matrix[i][j]/colSum;
+			}
+		}
+		DecimalFormat df = new DecimalFormat("########.00"); 
+		System.out.println("Normalized transitions (single step: "+step+")");
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[0].length; j++) {
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
+			}
+			System.out.println();
+		}
+		return result;
+	}
+
 	/**
 	 * Compute the state transition probability matrix 
 	 * 
 	 * @param stateSequence
 	 * @return
 	 */
-	private double[][] stateTransitions(Integer[] stateSequence) {
+	private double[][] stateTransitions(Integer[] stateSequence, int step) {
 		double[][] transitions = new double[stateSequence.length][stateSequence.length];
 		int from, to = 0;
 		if(stateSequence.length>1)
@@ -143,7 +173,8 @@ public class ModelController implements Runnable {
 		else return transitions;
 		int fromMax = 0;
 		int toMax = 0;
-		for (int i = 1; i < stateSequence.length; i++) {
+		if (step<1) step = 1;
+		for (int i = 1; i < stateSequence.length; i+=step) {
 			from = to;
 			to = stateSequence[i];
 			transitions[from][to] +=1;
@@ -156,46 +187,17 @@ public class ModelController implements Runnable {
 		//return a smaller matrix
 		double[][] result = new double[fromMax][toMax];
 		
-		System.out.println("transitions: ");
+		//System.out.println("\nTransitions: ");
 		for (int i = 0; i < fromMax; i++) {
 			for (int j = 0; j < toMax; j++) {
 				result[i][j] = transitions[i][j];
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
+				//System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		return result;
 	}
 	
-	/**
-	 * Normalize the probability matrix so that every column sums up to 1
-	 * 
-	 * @param matrix
-	 * @return
-	 */
-	private double[][] stateTransitionsNormalized(Integer[] stateSequence) {
-		double[][] matrix = stateTransitions(stateSequence);
-		double[][] result = new double[matrix.length][matrix[0].length]; 
-		for (int i = 0; i < matrix.length; i++) {
-			int colSum = 0;
-			for (int j = 0; j < matrix[i].length; j++) {
-				colSum += matrix[i][j];
-			}
-			for (int j = 0; j < matrix[i].length; j++) {
-				result[i][j] = matrix[i][j]/colSum;
-			}
-		}
-		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("normalized transitions: ");
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
-			}
-			System.out.println();
-		}
-		return result;
-	}
-
 	/**
 	 * Main method to run the simulation.
 	 */
@@ -418,7 +420,7 @@ public class ModelController implements Runnable {
 	private void plotStatistics() {
 		
 		ModelStatistics densityWindow = new ModelStatistics(getTitleString());
-		String printName = (config.printName()+"-seed"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
 		densityWindow.plot(calculateDensity(geneGrammarMatches), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
@@ -609,40 +611,35 @@ public class ModelController implements Runnable {
      * @param data array of the original data
      * @param clustering result of the classification (values-to-classes table)
      * @param noRepeat if true, don't take any repeated state into account
-     * @return
+     * @return state sequence
      */
-    public static Integer[] stateTransitions(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat, int pace) {
+    public static Integer[] stateSequence(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
 		
     	//Enumeration<Double> e = clustering.keys();
 		int previousState = 0;
-		if (pace < 1) pace = 1;
-		System.out.println("transition step = "+pace);
 		
-		for (int i=0; i<data.length; i+=pace) {
-			for (int j=0; j<data[0].size(); j++) { 
+		for (int i = 0; i < data.length; i += 1) {
+			for (int j = 0; j < data[0].size(); j++) {
 				double elt = data[i].get(j);
 				int tmp = clustering.get(elt);
 				System.out.print(elt + ":" + tmp + " ");
 				previousState = tmp;
-				
-				if (j!=0) { // don't add transitions between successive runs
-					
-					if (!noRepeat)
-						stateSequence.add(tmp); // if repeating states : add
-												// anyways
 
-					if (previousState != tmp) {
-						if (noRepeat)
-							stateSequence.add(tmp); // if not repeating states :
-													// add
-													// only if different from
-													// previous state
-					}
+				if (!noRepeat)
+					stateSequence.add(tmp); // if repeating states : add
+											// anyways
+
+				if (previousState != tmp) {
+					if (noRepeat)
+						stateSequence.add(tmp); // if not repeating states :
+												// add
+												// only if different from
+												// previous state
 				}
 			}
 		}
-		
+
     	System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
     	for (int i = 0; i < stateSequence.size(); i++) {
 			System.out.print(stateSequence.get(i)+"->");
