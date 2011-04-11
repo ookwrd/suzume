@@ -47,17 +47,16 @@ public class ModelStatistics extends JPanel {
 	public int saveSize = 200;
 	public int smallSize = 100;
 	public int[] imageRatio = {5, 3};
-
+	
 	private final static boolean SAVE_WHILE_PROCESSING = false;
-	private static final int LINE_CHART = 1;
-	private static final int BAR_CHART = 2;
-	private static final int SCATTER_PLOT = 3;
+	
+	private static enum chartType {LINE_CHART, BAR_CHART, SCATTER_PLOT};
 
 	private String experiment = "default";
 	private String yLabel = "";
 	private String xLabel = "";
 	
-	private int chartType;//TODO olaf can this be removed?
+	private chartType type;//TODO olaf can this be removed?
 
     private JFrame frame;
     JScrollPane scrollPane;
@@ -74,6 +73,10 @@ public class ModelStatistics extends JPanel {
 	private ArrayList<String> filenames;
 	
 	public ModelStatistics(String title) {
+		
+		//Gets rid of all the fancy graph settings.
+		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+		
 		frame = new JFrame();
 		frame.setTitle(title);
 		frame.setSize(new Dimension(1000, 500));
@@ -114,7 +117,7 @@ public class ModelStatistics extends JPanel {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
-		this.chartType = LINE_CHART;
+		this.type = chartType.LINE_CHART;
 		XYSeries[] newSeries = new XYSeries[dataSets.length];
 
 		for (int j = 0; j < dataSets.length; j++) {
@@ -147,7 +150,7 @@ public class ModelStatistics extends JPanel {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
-		this.chartType = BAR_CHART;
+		this.type = chartType.BAR_CHART;
 		
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
@@ -162,7 +165,7 @@ public class ModelStatistics extends JPanel {
 		saveCurChart();
 	}
 
-	private JFreeChart createChart(XYSeries[] series, int type) {
+	private JFreeChart createChart(XYSeries[] series, chartType type) {
 
 		XYSeriesCollection dataset = new XYSeriesCollection();
 
@@ -174,7 +177,6 @@ public class ModelStatistics extends JPanel {
 		switch (type) {
 
 		case BAR_CHART:
-			ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 			chart = ChartFactory.createHistogram(title, // Title
 					xLabel, // X-Axis label
 					yLabel, // Y-Axis label
@@ -220,7 +222,7 @@ public class ModelStatistics extends JPanel {
 	}
 
 	private BufferedImage createImage(XYSeries[] series) {
-		return createImage(series, SAVE_WHILE_PROCESSING);
+		return createImage(series, SAVE_WHILE_PROCESSING, type);
 	}
 
 	/**
@@ -232,8 +234,8 @@ public class ModelStatistics extends JPanel {
 	 * @return
 	 */
 	private BufferedImage createImage(XYSeries[] series,
-			boolean printToFile) {
-		curChart = createChart(series, BAR_CHART);
+			boolean printToFile, chartType type) {
+		curChart = createChart(series, type);
 		currentImage = curChart.createBufferedImage(imageRatio[0]
 		    * smallSize, imageRatio[1] * smallSize);
 		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
