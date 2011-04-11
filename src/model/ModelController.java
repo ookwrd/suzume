@@ -1,17 +1,13 @@
 package model;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.swing.JFrame;
-import javax.swing.text.StyledEditorKit.ForegroundAction;
+import prefuse.util.force.Force;
 
 import tools.ClusteringTool;
-import tools.StateTransitionVisualizer;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -19,6 +15,16 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
 
+	public static class Pair<A,B>{
+		public A first;
+		public B second;
+		
+		public Pair(A first, B second) {
+			this.first = first;
+			this.second = second;
+		}
+	}
+	
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.005;//should be set lower than 0.01 //TODO refactor
 
 	private static final double MAX_DEVIATION_DECREASE = 1;
@@ -224,19 +230,6 @@ public class ModelController implements Runnable {
 		if (currentRun < config.numberRuns) {
 			resetModel();
 			runSimulation();
-		}
-	}
-
-	/**
-	 * Print a generations worth of agents. 
-	 * 
-	 *  //TODO re-factor into the model interface.
-	 */
-	private void printGeneration(){
-		System.out.println("Printing Previous Generation");	
-		for(Agent agent : population.getAncestorGeneration()){  
-			agent.printAgent();
-			System.out.println();
 		}
 	}
 
@@ -475,10 +468,8 @@ public class ModelController implements Runnable {
 	 * Calculate density for an array
 	 * @param array
 	 */
-	public static Hashtable<Double, Integer> calculateDensity(ArrayList<Double> array) {
+	public static ArrayList<Pair<Double, Integer>> calculateDensity(ArrayList<Double> array) {
 
-		Hashtable<Double, Integer> numOccurrences = 
-			new Hashtable<Double, Integer>(); // k:value->v:count
 		double pace;
 
 		// find max-min
@@ -496,21 +487,43 @@ public class ModelController implements Runnable {
 		
 		double range = max - min;
 
-		pace = DEFAULT_DENSITY_GRANULARITY*(range);
+		pace = DEFAULT_DENSITY_GRANULARITY*range;
 
-		for (int j = 0; j < array.size(); j++) {
+		Hashtable<Double, Integer> numOccurrences = 
+			new Hashtable<Double, Integer>(); // k:value->v:count
+
+		//Make sure all possible counters in the range initialized to zero.
+		double intializedSoFar = max;
+		while(true){
+			double value = intializedSoFar/pace;
+			
+			numOccurrences.put(value, 0);
+			
+			intializedSoFar -= pace;
+			
+			if(intializedSoFar < min){
+				break;
+			}
+		}
+		
+		for (Double value : array) {
 			// cluster value
-			double clusterVal = pace*(double) Math.round(array.get(j)/pace);
+			double clusterVal = value/pace;
 
 			// count
-			if(numOccurrences.containsKey(clusterVal))
+			if(numOccurrences.containsKey(clusterVal)) {
 				numOccurrences.put(clusterVal, numOccurrences.get(clusterVal)+1);
-			else
+			} else {
 				numOccurrences.put(clusterVal, 1);
 			}
-		
-
-		return numOccurrences;
+		}
+	
+		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
+		for(Double key : numOccurrences.keySet()){
+			retVal.add(new Pair<Double, Integer>(key, numOccurrences.get(key)));
+		}
+	
+		return retVal;
 	}
 	
 

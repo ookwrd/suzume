@@ -248,7 +248,7 @@ public class ClusteringTool {
 	 * @param arraylists density
 	 * @return number of peaks maxima
 	 */
-	public static int findPeaks(ArrayList<Double> array) {
+	/*public static int findPeaks(ArrayList<Double> array) {
 		
 		//Hashtable<Double, Double> centredMeans = new Hashtable<Double, Double>();
 		Hashtable<Double, Integer> density = ModelController.calculateDensity(array);
@@ -284,7 +284,7 @@ public class ClusteringTool {
 		}
 		System.out.println("Found "+count+" peaks, with threshold "+threshold);
 		return count;
-	}
+	}*/
 	
 	/**
 	 * Smoothen a function by averaging with a sliding window moving through the coordinate vector 
