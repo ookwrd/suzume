@@ -1,6 +1,7 @@
 
 package model;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,10 +24,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import model.ModelController.Pair;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.FastScatterPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -41,6 +51,7 @@ public class ModelStatistics extends JPanel {
 	private final static boolean SAVE_WHILE_PROCESSING = false;
 	private static final int LINE_CHART = 1;
 	private static final int BAR_CHART = 2;
+	private static final int SCATTER_PLOT = 3;
 
 	private String experiment = "default";
 	private String yLabel = "";
@@ -130,7 +141,7 @@ public class ModelStatistics extends JPanel {
 		saveCurChart();
 	}
 
-	public void plot(Hashtable<Double, Integer> table, String title,
+	public void plot(ArrayList<Pair<Double, Integer>> table, String title,
 			String yLabel, String xLabel, String experiment) {
 		this.experiment = experiment;
 		this.title = title;
@@ -141,12 +152,8 @@ public class ModelStatistics extends JPanel {
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
 
-		Enumeration<Double> e = table.keys();
-		while (e.hasMoreElements()) {
-			Double key = (Double) e.nextElement();
-			newSeries[0].add(new Double(key // x
-					), new Double(table.get(key) // y
-					));
+		for(Pair<Double, Integer> pair : table){
+			newSeries[0].add(pair.first, pair.second);
 		}
 
 		add(new JLabel(new ImageIcon(createImage(newSeries))));
@@ -165,28 +172,39 @@ public class ModelStatistics extends JPanel {
 
 		JFreeChart chart;
 		switch (type) {
-		case LINE_CHART:
-			chart = ChartFactory.createXYLineChart(title, // Title
+
+		case BAR_CHART:
+			ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+			chart = ChartFactory.createHistogram(title, // Title
 					xLabel, // X-Axis label
 					yLabel, // Y-Axis label
 					dataset, // Dataset
 					PlotOrientation.VERTICAL, // Plot orientation
 					false, // Show legend
 					false, // Tooltips
-					false); // URL;
-			break;
-
-		case BAR_CHART:
-			chart = ChartFactory.createBarChart(title, // Title
-					xLabel, // X-Axis label
-					yLabel, // Y-Axis label
-					(CategoryDataset) dataset, // Dataset
-					PlotOrientation.VERTICAL, // Plot orientation
-					false, // Show legend
-					false, // Tooltips
 					false); // URL
+			XYPlot catPlot = chart.getXYPlot();
+			((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
+			break;
+			
+		case SCATTER_PLOT:
+			
+			chart = ChartFactory.createScatterPlot(title, 
+					xLabel, 
+					yLabel, 
+					dataset, 
+					PlotOrientation.VERTICAL, 
+					false, 
+					false, 
+					false);
+			XYPlot plot = (XYPlot)chart.getPlot();
+			XYDotRenderer renderer = new XYDotRenderer();
+			renderer.setDotWidth(2);
+			renderer.setDotHeight(2);
+			plot.setRenderer(renderer);
 			break;
 
+		case LINE_CHART:
 		default:
 			chart = ChartFactory.createXYLineChart(title, // Title
 					xLabel, // X-Axis label
@@ -215,7 +233,7 @@ public class ModelStatistics extends JPanel {
 	 */
 	private BufferedImage createImage(XYSeries[] series,
 			boolean printToFile) {
-		curChart = createChart(series, LINE_CHART);
+		curChart = createChart(series, BAR_CHART);
 		currentImage = curChart.createBufferedImage(imageRatio[0]
 		    * smallSize, imageRatio[1] * smallSize);
 		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
