@@ -554,7 +554,7 @@ public class ModelController implements Runnable {
     }
     
     /** 
-     * Extract non-state-repeating transitions (deprecated
+     * Extract non-state-repeating transitions (deprecated)
      * 
      * @param clustering
      * @return
@@ -611,59 +611,44 @@ public class ModelController implements Runnable {
      */
     public static Integer[] stateTransitions(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
-		/*
-		 * //other method int previousState = 0; for (int i = 0; i < a.length;
-		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
-		 * a[i].get(i); int tmp = clustering.get(elt);
-		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
-		 * stateSequence.add(tmp); previousState = tmp; } } }
-		 */
-    	
-    	// counting clusters
-    	/*Enumeration<Integer> v = clustering.values;
-    	int clusterNum = 0;
-    	while(v.hasMoreElements()) {
-			int next = v.nextElement();
-			if(clusterNum<next) clusterNum=next; //TODO correct, this was a quickfix
-		}
-    	clusterNum--;
-    	System.out.println("MATRIX_SIZE: "+clusterNum);*/
-    	
-		Enumeration<Double> e = clustering.keys();
+		
+    	//Enumeration<Double> e = clustering.keys();
 		int previousState = 0;
-		int count = 0;
-		int repetitionCount = 0;
-		int maxRepetitionCount = 0;
-		while (e.hasMoreElements()) {
-			double elt = e.nextElement();
-			int tmp = clustering.get(elt);
-			System.out.print(elt + ":" + tmp + " ");
-			count++;
-			previousState = tmp;
-			if (!noRepeat) stateSequence.add(tmp); // if repeating states : add anyways
-			if (previousState != tmp) {
-				if(noRepeat) stateSequence.add(tmp); // if not repeating states : add only if different from previous state
-				repetitionCount = 0;
-			}
-			else { 
-				repetitionCount++;
-				if (maxRepetitionCount<repetitionCount) maxRepetitionCount=repetitionCount;
-			}
-			
+		
+		for (int i=0; i<data.length; i++) {
+			for (int j=0; j<data[0].size(); j++) { 
+				double elt = data[i].get(j);
+				int tmp = clustering.get(elt);
+				System.out.print(elt + ":" + tmp + " ");
+				previousState = tmp;
+				
+				if (j!=0) { // don't add transitions between successive runs
+					
+					if (!noRepeat)
+						stateSequence.add(tmp); // if repeating states : add
+												// anyways
 
-		} //TODO : virer les states qui n'ont pas lieu, quand on passe au run suivant
+					if (previousState != tmp) {
+						if (noRepeat)
+							stateSequence.add(tmp); // if not repeating states :
+													// add
+													// only if different from
+													// previous state
+					}
+				}
+			}
+		}
 		
     	System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
     	for (int i = 0; i < stateSequence.size(); i++) {
 			System.out.print(stateSequence.get(i)+"->");
 		}
-    	System.out.print("\n#data = "+count+" ");
-    	System.out.println("#successive states = "+stateSequence.size());
-    	System.out.println("#max successive stable transitions = "+maxRepetitionCount);
+    	//System.out.print("\n#data = "+count+" ");
+    	//System.out.println("#successive states = "+stateSequence.size());
     	
     	int clusterNum = stateSequence.size();
     	Integer[] states = new Integer[clusterNum];
-    	for (int i = 0; i < count; i++) {
+    	for (int i = 0; i < clusterNum; i++) {
 			states[i] = stateSequence.get(i);
 		}
 		return states;
