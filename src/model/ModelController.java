@@ -23,6 +23,8 @@ public class ModelController implements Runnable {
 
 	private static final double MAX_DEVIATION_DECREASE = 1;
 
+	private static final int TRANSITION_STEP = 1000;
+
 	//Configuration Settings
 	private ModelConfiguration config;
 	private VisualizationConfiguration visualConfig;
@@ -120,7 +122,7 @@ public class ModelController implements Runnable {
 	private void findMarkov() {
 		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
 		Hashtable<Double, Integer> clustering = cluster(a);
-		Integer[] stateSequence = (Integer[]) stateTransitions(a, clustering, false);
+		Integer[] stateSequence = (Integer[]) stateTransitions(a, clustering, false, TRANSITION_STEP);
 		
 		//render diagram
 		stateTransitionsNormalized(stateSequence);
@@ -593,7 +595,7 @@ public class ModelController implements Runnable {
 		
     	System.out.print("\nState transitions: ");
     	for (int i = 0; i < stateSequence.size(); i++) {
-			System.out.print(stateSequence.get(i)+"->");
+			System.out.print((int) stateSequence.get(i)+"->");
 		}
     	//System.out.print("\n#data = "+count+" ");
     	//System.out.println("#successive states = "+stateSequence.size());
@@ -609,13 +611,15 @@ public class ModelController implements Runnable {
      * @param noRepeat if true, don't take any repeated state into account
      * @return
      */
-    public static Integer[] stateTransitions(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
+    public static Integer[] stateTransitions(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat, int pace) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
 		
     	//Enumeration<Double> e = clustering.keys();
 		int previousState = 0;
+		if (pace < 1) pace = 1;
+		System.out.println("transition step = "+pace);
 		
-		for (int i=0; i<data.length; i++) {
+		for (int i=0; i<data.length; i+=pace) {
 			for (int j=0; j<data[0].size(); j++) { 
 				double elt = data[i].get(j);
 				int tmp = clustering.get(elt);
