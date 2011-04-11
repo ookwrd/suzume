@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="jfreechart-1.0.13/lib/junit.jar"/>
 	<classpathentry kind="lib" path="jfreechart-1.0.13/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="jgrapht-jdk1.6.jar"/>
-	<classpathentry kind="lib" path="grappa1_2.jar"/>
 	<classpathentry kind="lib" path="prefuse.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
