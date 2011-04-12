@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.jfree.ui.Size2D;
+
 import tools.ClusteringTool;
 
 import Agents.Agent;
@@ -35,7 +37,7 @@ public class ModelController implements Runnable {
 		}
 	}
 	
-	private static final double DEFAULT_DENSITY_GRANULARITY = 0.005;//should be set lower than 0.01 //TODO refactor
+	private static final double DEFAULT_DENSITY_GRANULARITY = 0.01;//should be set lower than 0.01 //TODO refactor
 
 	private static final double MAX_DEVIATION_DECREASE = 1;
 
@@ -417,24 +419,19 @@ public class ModelController implements Runnable {
 	 */
 	private void plotStatistics() {
 		
-		ModelStatistics densityWindow = new ModelStatistics(getTitleString());
+		ModelStatistics statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-seed"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		densityWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
-		densityWindow.plot(calculateDensity(aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		densityWindow.plot(calculateDensity(aggregateArrayLists(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		densityWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
-		densityWindow.plot(calculateDensity(aggregateArrayLists(learningIntensities)), "Density (Learning Intensity)", "Occurrences", "Learning Intensity", printName);
-		densityWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
-		densityWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
-		densityWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
-		densityWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
+		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
+		statisticsWindow.plot(calculateDensity(aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		statisticsWindow.plot(calculateDensity(aggregateArrayLists(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
+		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
+		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
+		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
+		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);		
 		
-		ArrayList<Pair<Double, Integer>> values = calculateDensity(aggregateArrayLists(learningIntensities));
-		Collections.sort(values);
-		print(values);
-		
-		densityWindow.display();
+		statisticsWindow.display();
 	}
 	
 	private String getTitleString(){
@@ -496,12 +493,34 @@ public class ModelController implements Runnable {
 				min = value;
 			}
 		}
+			
 		double range = max - min;
-		double step = DEFAULT_DENSITY_GRANULARITY*range;
+		double step = range/1000;
+		ArrayList<Integer> numOccurrences = new ArrayList<Integer>();
 
-		Hashtable<Double, Integer> numOccurrences = 
-			new Hashtable<Double, Integer>(); // k:value->v:count
-
+		for(int i = 0; i < 1001; i++){
+			numOccurrences.add(0);
+		}
+		
+		for(Double value : array){
+			int index = (int)((value-min)/step);
+			numOccurrences.set(index, numOccurrences.get(index)+1);
+		}
+		
+		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
+		
+		for(int i = 0; i < numOccurrences.size(); i++){
+			double reconstruct = min + i * step;
+			retVal.add(new Pair<Double, Integer>(reconstruct, numOccurrences.get(i)));
+		}
+		
+		System.out.println("XXXXXXX");
+		System.out.println(retVal);
+		
+		return retVal;
+		
+	/*	Hashtable<Double, Integer> numOccurrences = new Hashtable<Double, Integer>();
+		
 		//Make sure all possible counters in the range initialized to zero.
 		double intializedSoFar = max;
 		while(true){
@@ -530,34 +549,59 @@ public class ModelController implements Runnable {
 		for(Double key : numOccurrences.keySet()){
 			retVal.add(new Pair<Double, Integer>(key, numOccurrences.get(key)));
 		}
-	
-		return retVal;
+		
+		return retVal;*/
 	}
 	
-	public static ArrayList<Pair<Double, Integer>> sort(ArrayList<Pair<Double, Integer>> input){
+	public static ArrayList<Pair<Double, Integer>> smooth(ArrayList<Pair<Double, Integer>> series, int maxWindow){
 		
-		@SuppressWarnings("unchecked")
-		ArrayList<Pair<Double, Integer>> retVal = (ArrayList<Pair<Double, Integer>>) input.clone();
+		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
+		Collections.sort(series);
 		
-		Comparator<Pair<Double, Integer>> comparator = new Comparator<ModelController.Pair<Double,Integer>>() {
+		for(int i = maxWindow; i < series.size()-maxWindow; i++){
 
-			@Override
-			public int compare(Pair<Double, Integer> o1,
-					Pair<Double, Integer> o2) {
-				return Double.compare(o1.first,o2.first);
+			double count = 0;
+
+			for(int window = 1; window <= maxWindow; window++){
+				for(int j = 0; j < window; j++){
+					count += series.get(i-j).second * (window - j);
+					count += series.get(i+j).second * (window - j);
+				}
+				
+				count += series.get(i).second;
 			}
-		};
-		
-		Collections.sort(retVal, comparator);
+			retVal.add(new Pair<Double, Integer>(series.get(i).first, (int)(count/*/(window*2+1)*/)));
+		}
 		
 		return retVal;
+		
 	}
 	
-	public static void print(ArrayList<Pair<Double, Integer>> series){
+	public static ArrayList<Double> findLocalMinima(ArrayList<Pair<Double, Integer>> series){
+		
+		ArrayList<Double> retVal = new ArrayList<Double>();
+		Collections.sort(series);
+		for(int i = 1; i < series.size()-1; i++){
+			
+			Pair<Double, Integer> pair =series.get(i);
+			if(pair.second < series.get(i-1).second && pair.second < series.get(i+1).second){
+				retVal.add(pair.first);
+			}	
+			
+		}
+		
+		System.out.println("RetVal");
+		System.out.print(retVal);
+		
+		return null;
+		
+	}
+	
+	public static <E extends Comparable<E>, J> void print(ArrayList<Pair<E, J>> series){
 		
 		System.out.println("printing");
 		
-		for(Pair<Double, Integer> pair : series){
+		for(Pair<E, J> pair : series){
 			
 			System.out.println(pair);
 			
