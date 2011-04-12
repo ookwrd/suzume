@@ -549,9 +549,6 @@ public class ModelController implements Runnable {
 			retVal.add(new Pair<Double, Integer>(reconstruct, numOccurrences.get(i)));
 		}
 		
-		System.out.println("XXXXXXX");
-		System.out.println(retVal);
-		
 		return retVal;
 		
 	/*	Hashtable<Double, Integer> numOccurrences = new Hashtable<Double, Integer>();
