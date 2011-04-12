@@ -128,9 +128,7 @@ public class ModelController implements Runnable {
 		// render diagram
 		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
 		stateTransitionsNormalized(data, clustering, 1);
-		System.out.println("tried 1");
 		stateTransitionsNormalized(data, clustering, 2);
-		System.out.println("tried 2");
 		stateTransitionsNormalized(data, clustering, 3);
 		stateTransitionsNormalized(data, clustering, 4);
 		stateTransitionsNormalized(data, clustering, 5);
@@ -167,7 +165,7 @@ public class ModelController implements Runnable {
 			}
 		}
 		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("\nNormalized transitions (single step: "+step+")");
+		System.out.println("\nTransition probabilities (single step: "+step+")");
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[0].length; j++) {
 				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
@@ -184,7 +182,6 @@ public class ModelController implements Runnable {
 	 * @return
 	 */
 	private double[][] stateTransitions(Short[] stateSequence, int step) {
-		System.out.println("state transitions");
 		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
 		int from, to = 0;
 		if(stateSequence.length>1)
@@ -193,11 +190,14 @@ public class ModelController implements Runnable {
 		int fromMax = 0;
 		int toMax = 0;
 		if (step<1) step = 1;
-		int start = 0;
+		int start = 1;
+		System.out.print("\nState transitions: "+from);
 		for (int i = start; i < stateSequence.length; i+=step) {
 			from = to;
 			to = stateSequence[i];
-			transitions[from][to] +=1;
+			System.out.print(", "+to);
+			transitions[from][to] +=1; // TODO if jumped from one run to another : don't update
+			
 			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
 			if (to > toMax) toMax = to;
 		}
@@ -207,13 +207,13 @@ public class ModelController implements Runnable {
 		//return a smaller matrix
 		double[][] result = new double[fromMax][toMax];
 		
-		System.out.println("\nTransitions: ");
+		System.out.println("\nTransition count (single step: "+step+")");
 		for (int i = 0; i < fromMax; i++) {
 			for (int j = 0; j < toMax; j++) {
 				result[i][j] = transitions[i][j];
 				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
 			}
-			//System.out.println();
+			System.out.println();
 		}
 		return result;
 	}
@@ -654,12 +654,12 @@ public class ModelController implements Runnable {
 			}
 		}
 
-    	System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
+    	/*System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
     	for (int i = 0; i < stateSequence.size(); i++) {
 			System.out.print(stateSequence.get(i)+"->"); //showing every single transition
-		}
+		}*/
     	//System.out.print("\n#data = "+count+" ");
-    	//System.out.println("#successive states = "+stateSequence.size());
+    	System.out.println("Number of states: "+stateSequence.size());
     	
     	int clusterNum = stateSequence.size();
     	Short[] states = new Short[clusterNum];
@@ -671,8 +671,8 @@ public class ModelController implements Runnable {
 
     
 	public static void main(String[] args) {
-		long heapSize = Runtime.getRuntime().totalMemory();
-		System.out.println("Java heap size = "+ heapSize);
+		//long heapSize = Runtime.getRuntime().totalMemory();
+		//System.out.println("Java heap size = "+ heapSize);
 	    new Launcher();
 	}
 
