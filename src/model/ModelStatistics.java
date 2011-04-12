@@ -150,7 +150,7 @@ public class ModelStatistics extends JPanel {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
-		this.type = chartType.BAR_CHART;
+		this.type = chartType.SCATTER_PLOT;
 		
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
