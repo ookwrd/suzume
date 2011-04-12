@@ -7,14 +7,14 @@ import tools.Clustering;
 
 public class SimpleClustering implements Clustering {
 
-	private final double[] DEFAULT_THRESHOLDS = { 12, 11.75, 10.5, 10.25, 9.5,
-			8.5, 7.5 }; // must be in decreasing order
+	//private final double[] DEFAULT_THRESHOLDS = { 12, 11.75, 10.5, 10.25, 9.5,
+	//		8.5, 7.5 }; // must be in decreasing order
 	private final double[] DEFAULT_CENTERS = { 12, 11, 10.5, 10, 9, 8 };
 	private final double DEFAULT_SIGMA = 0.2;
 
 	@Override
 	public Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
-		return cluster(array, DEFAULT_THRESHOLDS);
+		return cluster(array, DEFAULT_CENTERS);
 	}
 
 	/**
@@ -26,9 +26,9 @@ public class SimpleClustering implements Clustering {
 	 *         corresponding classes
 	 */
 	public Hashtable<Double, Integer> cluster(ArrayList<Double>[] array,
-			double[] thresholds) {
-		if (thresholds == null)
-			thresholds = DEFAULT_THRESHOLDS;
+			double[] centers) {
+		if (centers == null)
+			centers = DEFAULT_CENTERS;
 		Hashtable<Double, Integer> results = new Hashtable<Double, Integer>();
 		for (ArrayList<Double> arrayList : array) {
 			/*
