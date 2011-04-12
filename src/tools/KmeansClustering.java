@@ -1,5 +1,6 @@
 package tools;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -20,11 +21,15 @@ import model.ModelController;
  * @author Olaf
  */
 
-public class ClusteringTool {
+public class KmeansClustering implements Clustering {
 
-	private static final int KMEANS_NUM_ITERATIONS = 1000;
+	private static final int KMEANS_NUM_ITERATIONS = 100;
 
-	private static final int KMEANS_MAX_OUTER_ITERATIONS = 10000;
+	public static final int MAX_NUM_CLUSTERS = 100;
+
+	public static final int MIN_NUM_CLUSTERS = 4;
+	
+	public static final int DEFAULT_THRESHOLD = 1;
 	
 	private static double deviation = 0;
 
@@ -37,8 +42,9 @@ public class ClusteringTool {
 	 *            number of clusters
 	 * @return the global standard deviation
 	 */
+	/*
 	public static double sigmaKmeans(ArrayList<Double>[] arraylists, int numClusters) {
-
+	
 		Hashtable<Double, Integer> clusters = new Hashtable<Double, Integer>();
 		Vector<DataPoint> dataPoints = new Vector<DataPoint>();
 		
@@ -90,8 +96,67 @@ public class ClusteringTool {
 		totalDeviation = Math.sqrt(totalDeviation/numClusters);
 		return totalDeviation;
 	}
-
+	*/
 	
+	/**
+	 * Performs a clustering with k-means
+	 * 
+	 * @param array
+	 */
+	public Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
+		return kmeansLimDevDecrease(array, DEFAULT_THRESHOLD);
+	}
+	
+	/**
+	 * Performs a k-means stopping whenever the threshold decrease is below a certain threshold
+	 * 
+	 * @param array
+	 * @param threshold
+	 * @return
+	 */
+	public Hashtable<Double, Integer> kmeansLimDevDecrease(ArrayList<Double>[] array, double threshold) {
+		Hashtable<Double, Integer> results = new Hashtable<Double, Integer>();
+		Hashtable<Double, Integer>  prevClusters = new Hashtable<Double, Integer>();
+		double prevDecreaseFactor = 0;
+		int numClusters = 0;
+		double curDeviation = 100000000;
+		double prevDeviation;
+		Hashtable<Double, Integer> clusters;
+		int minNumClusters = MIN_NUM_CLUSTERS;
+		for(int i=minNumClusters; i<=MAX_NUM_CLUSTERS; i++) {
+			Toolkit.getDefaultToolkit().beep();
+			
+			clusters = kmeansFixedClusters(array, i);
+			
+			prevDeviation = curDeviation;
+			curDeviation = deviation;
+			System.out.println("sigma("+i+" clusters): "+deviation);
+			
+			if (i>minNumClusters && prevDeviation/curDeviation > prevDecreaseFactor) { // if the decrease factor is at its min
+				System.out.println("minimum geometric decrease factor found: "+prevDeviation/curDeviation+" > "+prevDecreaseFactor);
+				return prevClusters; 
+			}
+			
+			prevDecreaseFactor = prevDeviation/curDeviation;
+			prevClusters = clusters;
+			
+			if (prevDeviation/curDeviation < threshold) {
+				System.out.println(prevDeviation/curDeviation+" < "+threshold);
+				return clusters;
+			}
+			else System.out.println(prevDeviation/curDeviation+" > "+threshold);
+			
+			// quick fix in case there would be many clusters
+			/*
+			if (i>=100) i+=100-1;
+			else if (i>=20) i+=20-1;
+			else if (i>=10) i+=10-1;
+			*/
+		}
+		System.out.println("Found "+numClusters+" clusters");
+		return results;
+	}
+
 	/**
 	 * Computes a k-means clustering on a one-dimensional set of points
 	 * 
@@ -147,8 +212,8 @@ public class ClusteringTool {
 		deviation = totalDeviation;
 		return clusters;
 	}
-
-	// deprecated
+	
+	/*
 	public static void kmeans(Vector<DataPoint> dataPoints, int numClusters) {
 
 		JCA jca = new JCA(numClusters, KMEANS_NUM_ITERATIONS, dataPoints);
@@ -168,7 +233,7 @@ public class ClusteringTool {
 			}
 		}
 
-	}
+	}*/
 	
 	/**
 	 * Makes the function pair by mirroring with respect to the x-axis, at the end of the data
@@ -176,71 +241,14 @@ public class ClusteringTool {
 	 * @param function
 	 * @return mirrored function
 	 */
+	/*
 	public static void symmetry(Hashtable<Double, Integer> function) {
 		//TODO
 	}
+	*/
 
 	public static void main(String args[]) {
 		Launcher.main(null);
-	}
-	
-	public static void main2(String args[]) {
-		Vector<DataPoint> dataPoints = new Vector<DataPoint>();
-		dataPoints.add(new DataPoint(0, 1, ""));
-		dataPoints.add(new DataPoint(0, 1.1, ""));
-		dataPoints.add(new DataPoint(0, 1.5, ""));
-		dataPoints.add(new DataPoint(0, 3.5, ""));
-		dataPoints.add(new DataPoint(0, 4, ""));
-		dataPoints.add(new DataPoint(0, 7, ""));
-		// dataPoints.add(new DataPoint(0, 6, "qdfzer"));
-		for (int i = 0; i < 6; i++) {
-			kmeans(dataPoints, 3);
-			System.out.println("**************************************");
-		}
-
-	}
-
-	/**
-	 * Performs a k-means stopping whenever the threshold decrease is below a certain threshold
-	 * 
-	 * @param array
-	 * @param threshold
-	 * @return
-	 */
-	public static Hashtable<Double, Integer> kmeansLimDevDecrease(ArrayList<Double>[] array, double threshold) {
-		Hashtable<Double, Integer> results = new Hashtable<Double, Integer>();
-		Hashtable<Double, Integer>  prevClusters = new Hashtable<Double, Integer>();
-		double prevDecreaseFactor = 0;
-		int numClusters = 0;
-		double curDeviation = 100000000;
-		double prevDeviation;
-		for(int i=2; i<=KMEANS_MAX_OUTER_ITERATIONS; i++) {
-			Hashtable<Double, Integer> clusters = kmeansFixedClusters(array, i);
-			prevDeviation = curDeviation;
-			curDeviation = deviation;
-			System.out.println("sigma("+i+" clusters): "+deviation);
-			
-			if (i>2 && prevDeviation/curDeviation > prevDecreaseFactor) { // if the decrease factor is at its min
-				System.out.println("minimum geometric decrease factor found: "+prevDeviation/curDeviation+" > "+prevDecreaseFactor);
-				return prevClusters; 
-			}
-			
-			prevDecreaseFactor = prevDeviation/curDeviation;
-			prevClusters = clusters;
-			
-			if (prevDeviation/curDeviation < threshold) {
-				System.out.println(prevDeviation/curDeviation+" < "+threshold);
-				return clusters;
-			}
-			else System.out.println(prevDeviation/curDeviation+" > "+threshold);
-			
-			// quick fix in case there would be many clusters
-			if (i>=100) i+=100-1;
-			else if (i>=20) i+=20-1;
-			else if (i>=10) i+=10-1;
-		}
-		System.out.println("Found "+numClusters+" clusters");
-		return results;
 	}
 	
 	/**
@@ -248,7 +256,8 @@ public class ClusteringTool {
 	 * @param arraylists density
 	 * @return number of peaks maxima
 	 */
-	/*public static int findPeaks(ArrayList<Double> array) {
+	/*
+	public static int findPeaks(ArrayList<Double>[] array) {
 		
 		//Hashtable<Double, Double> centredMeans = new Hashtable<Double, Double>();
 		Hashtable<Double, Integer> density = ModelController.calculateDensity(array);
@@ -284,7 +293,8 @@ public class ClusteringTool {
 		}
 		System.out.println("Found "+count+" peaks, with threshold "+threshold);
 		return count;
-	}*/
+	}
+	*/
 	
 	/**
 	 * Smoothen a function by averaging with a sliding window moving through the coordinate vector 
@@ -293,6 +303,7 @@ public class ClusteringTool {
 	 * @param slidingWindowSize size of the window
 	 * @return the smoothened list
 	 */
+	/*
 	public static Hashtable<Double,Integer> smooth(Hashtable<Double,Integer> function, int slidingWindowSize){
 		ArrayList<Double> window = new ArrayList<Double>(slidingWindowSize);
 		Hashtable<Double,Integer> result = new Hashtable<Double,Integer>();
@@ -317,4 +328,5 @@ public class ClusteringTool {
 		}
 		return result;
 	}
+	*/
 }
