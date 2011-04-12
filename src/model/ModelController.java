@@ -196,7 +196,8 @@ public class ModelController implements Runnable {
 			from = to;
 			to = stateSequence[i];
 			System.out.print(", "+to);
-			transitions[from][to] +=1; // TODO if jumped from one run to another : don't update
+			if ((i-step)/config.generationCount == (i)/config.generationCount) // if jumped far enough to reach another run : don't update
+				transitions[from][to] +=1; 
 			
 			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
 			if (to > toMax) toMax = to;
