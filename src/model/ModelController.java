@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -10,7 +11,8 @@ import java.util.Hashtable;
 import javax.swing.JFrame;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
-import tools.ClusteringTool;
+import tools.Clustering;
+import tools.KmeansClustering;
 import tools.StateTransitionVisualizer;
 
 import Agents.Agent;
@@ -21,9 +23,9 @@ public class ModelController implements Runnable {
 
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.001;//should be set lower than 0.01 //TODO refactor
 
-	private static final double MAX_DEVIATION_DECREASE = 1;
-
 	private static final int DEFAULT_STATE_TRANSITION_STEP = 1;
+
+	private static final int MAX_NUM_STATES = KmeansClustering.MAX_NUM_CLUSTERS;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -120,23 +122,39 @@ public class ModelController implements Runnable {
 	 * Compute the Markov probabilistic model for the data
 	 */
 	private void findMarkov() {
-		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
-		Hashtable<Double, Integer> clustering = cluster(a);
-		Integer[] stateSequence = (Integer[]) stateSequence(a, clustering, false);
-		
-		//render diagram
-		stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
+		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
+		Hashtable<Double, Integer> clustering = cluster(data);
+		System.out.println("clustering size : "+clustering.size());
+		// render diagram
+		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
+		stateTransitionsNormalized(data, clustering, 1);
+		System.out.println("tried 1");
+		stateTransitionsNormalized(data, clustering, 2);
+		System.out.println("tried 2");
+		stateTransitionsNormalized(data, clustering, 3);
+		stateTransitionsNormalized(data, clustering, 4);
+		stateTransitionsNormalized(data, clustering, 5);
+		stateTransitionsNormalized(data, clustering, 10);
+		stateTransitionsNormalized(data, clustering, 20);
+		stateTransitionsNormalized(data, clustering, 30);
+		stateTransitionsNormalized(data, clustering, 40);
+		stateTransitionsNormalized(data, clustering, 50);
+		stateTransitionsNormalized(data, clustering, 100);
+		stateTransitionsNormalized(data, clustering, 200);
 		
 		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
 	}
 	
 	/**
 	 * Normalize the probability matrix so that every column sums up to 1
+	 * @param i 
+	 * @param clustering 
 	 * 
 	 * @param matrix
 	 * @return
 	 */
-	private double[][] stateTransitionsNormalized(Integer[] stateSequence, int step) {
+	private double[][] stateTransitionsNormalized(ArrayList<Double>[] ar, Hashtable<Double, Integer> clustering, int step) {
+		Short[] stateSequence = stateSequence(ar, clustering, false);
 		double[][] matrix = stateTransitions(stateSequence, step);
 		double[][] result = new double[matrix.length][matrix[0].length]; 
 		for (int i = 0; i < matrix.length; i++) {
@@ -149,7 +167,7 @@ public class ModelController implements Runnable {
 			}
 		}
 		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("Normalized transitions (single step: "+step+")");
+		System.out.println("\nNormalized transitions (single step: "+step+")");
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[0].length; j++) {
 				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
@@ -165,8 +183,9 @@ public class ModelController implements Runnable {
 	 * @param stateSequence
 	 * @return
 	 */
-	private double[][] stateTransitions(Integer[] stateSequence, int step) {
-		double[][] transitions = new double[stateSequence.length][stateSequence.length];
+	private double[][] stateTransitions(Short[] stateSequence, int step) {
+		System.out.println("state transitions");
+		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
 		int from, to = 0;
 		if(stateSequence.length>1)
 			from=stateSequence[0];
@@ -174,24 +193,25 @@ public class ModelController implements Runnable {
 		int fromMax = 0;
 		int toMax = 0;
 		if (step<1) step = 1;
-		for (int i = 1; i < stateSequence.length; i+=step) {
+		int start = 0;
+		for (int i = start; i < stateSequence.length; i+=step) {
 			from = to;
 			to = stateSequence[i];
 			transitions[from][to] +=1;
 			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
 			if (to > toMax) toMax = to;
 		}
-		fromMax++; 
-		toMax++;
+		fromMax++; // matrix length
+		toMax++; // matrix width
 		
 		//return a smaller matrix
 		double[][] result = new double[fromMax][toMax];
 		
-		//System.out.println("\nTransitions: ");
+		System.out.println("\nTransitions: ");
 		for (int i = 0; i < fromMax; i++) {
 			for (int j = 0; j < toMax; j++) {
 				result[i][j] = transitions[i][j];
-				//System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
 			}
 			//System.out.println();
 		}
@@ -532,16 +552,16 @@ public class ModelController implements Runnable {
      * @param i number of clusters
      * @return std deviation
      */
-    public static double clusterSigma(ArrayList<Double>[] array, int i) {
+    /*public static double clusterSigma(ArrayList<Double>[] array, int i) {
             //Hashtable<Double, Integer> clusters = null; //null
             //for(int i=2; i<=10; i++) {
             
-            double sigma = ClusteringTool.sigmaKmeans(array, i);
+            double sigma = KmeansClustering.sigmaKmeans(array, i);
             System.out.println("total deviation = ["+Math.round(sigma*1000000.0)/10000.0+"%]");
             
             //}
             return sigma;
-    }
+    }*/
     
     /**
      * Cluster points from an array
@@ -552,8 +572,8 @@ public class ModelController implements Runnable {
      *         key) and its cluster index (integer value)
      */
     public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
-                    
-            Hashtable<Double, Integer> clusters = ClusteringTool.kmeansLimDevDecrease(array, MAX_DEVIATION_DECREASE);
+            Clustering clustering = new SimpleClustering(); // using a very simple version of clustering TODO to be improved later
+            Hashtable<Double, Integer> clusters = clustering.cluster(array);
             return clusters;
     }
     
@@ -563,15 +583,9 @@ public class ModelController implements Runnable {
      * @param clustering
      * @return
      */
-    public static ArrayList<Integer> extractStateTransitionsNoRepeat(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
+    /*public static ArrayList<Integer> extractStateTransitionsNoRepeat(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
-		/*
-		 * //other method int previousState = 0; for (int i = 0; i < a.length;
-		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
-		 * a[i].get(i); int tmp = clustering.get(elt);
-		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
-		 * stateSequence.add(tmp); previousState = tmp; } } }
-		 */
+		
 		Enumeration<Double> e = clustering.keys();
 		int previousState = 0;
 		int count = 0;
@@ -580,7 +594,7 @@ public class ModelController implements Runnable {
 		while (e.hasMoreElements()) {
 			double elt = e.nextElement();
 			int tmp = clustering.get(elt);
-			System.out.print(elt + ":" + tmp + " ");
+			//System.out.print(elt + ":" + tmp + " ");
 			count++;
 			if (previousState != tmp) {
 				stateSequence.add(tmp);
@@ -603,7 +617,7 @@ public class ModelController implements Runnable {
     	//System.out.println("#successive states = "+stateSequence.size());
     	//System.out.println("#max successive stable transitions = "+maxStableCount);
 		return stateSequence;
-    }
+    }*/
     
     /**
      * Extract state transitions
@@ -613,18 +627,18 @@ public class ModelController implements Runnable {
      * @param noRepeat if true, don't take any repeated state into account
      * @return state sequence
      */
-    public static Integer[] stateSequence(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
+    public static Short[] stateSequence(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
 		
     	//Enumeration<Double> e = clustering.keys();
-		int previousState = 0;
+		short previousState = 0;
 		
-		for (int i = 0; i < data.length; i += 1) {
-			for (int j = 0; j < data[0].size(); j++) {
+		for (int i = 0; i < data.length; i += 1) { // for every run
+			for (int j = 0; j < data[0].size(); j++) { // for every generation
 				double elt = data[i].get(j);
 				int tmp = clustering.get(elt);
-				System.out.print(elt + ":" + tmp + " ");
-				previousState = tmp;
+				//System.out.print(elt + ":" + tmp + " ");
+				previousState = (short) tmp;
 
 				if (!noRepeat)
 					stateSequence.add(tmp); // if repeating states : add
@@ -642,22 +656,24 @@ public class ModelController implements Runnable {
 
     	System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
     	for (int i = 0; i < stateSequence.size(); i++) {
-			System.out.print(stateSequence.get(i)+"->");
+			System.out.print(stateSequence.get(i)+"->"); //showing every single transition
 		}
     	//System.out.print("\n#data = "+count+" ");
     	//System.out.println("#successive states = "+stateSequence.size());
     	
     	int clusterNum = stateSequence.size();
-    	Integer[] states = new Integer[clusterNum];
+    	Short[] states = new Short[clusterNum];
     	for (int i = 0; i < clusterNum; i++) {
-			states[i] = stateSequence.get(i);
+			states[i] = stateSequence.get(i).shortValue();
 		}
 		return states;
     }
 
     
 	public static void main(String[] args) {
-		new Launcher();
+		long heapSize = Runtime.getRuntime().totalMemory();
+		System.out.println("Java heap size = "+ heapSize);
+	    new Launcher();
 	}
 
 }		
