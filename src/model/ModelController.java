@@ -1,5 +1,8 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,9 +10,12 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.jfree.ui.Size2D;
+import javax.swing.JFrame;
+import javax.swing.text.StyledEditorKit.ForegroundAction;
 
-import tools.ClusteringTool;
+import tools.Clustering;
+import tools.KmeansClustering;
+import tools.StateTransitionVisualizer;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -39,7 +45,9 @@ public class ModelController implements Runnable {
 	
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.01;//should be set lower than 0.01 //TODO refactor
 
-	private static final double MAX_DEVIATION_DECREASE = 1;
+	private static final int DEFAULT_STATE_TRANSITION_STEP = 1;
+
+	private static final int MAX_NUM_STATES = KmeansClustering.MAX_NUM_CLUSTERS;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -136,43 +144,99 @@ public class ModelController implements Runnable {
 	 * Compute the Markov probabilistic model for the data
 	 */
 	private void findMarkov() {
-		ArrayList<Double>[] a = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
-		Hashtable<Double, Integer> clustering = cluster(a);
-		Integer[] stateSequence = (Integer[]) stateTransitions(a, clustering, false);
+		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
+		Hashtable<Double, Integer> clustering = cluster(data);
+		System.out.println("clustering size : "+clustering.size());
+		// render diagram
+		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
+		stateTransitionsNormalized(data, clustering, 1);
+		stateTransitionsNormalized(data, clustering, 2);
+		stateTransitionsNormalized(data, clustering, 3);
+		stateTransitionsNormalized(data, clustering, 4);
+		stateTransitionsNormalized(data, clustering, 5);
+		stateTransitionsNormalized(data, clustering, 10);
+		stateTransitionsNormalized(data, clustering, 20);
+		stateTransitionsNormalized(data, clustering, 30);
+		stateTransitionsNormalized(data, clustering, 40);
+		stateTransitionsNormalized(data, clustering, 50);
+		stateTransitionsNormalized(data, clustering, 100);
+		stateTransitionsNormalized(data, clustering, 200);
 		
-		//render diagram
-		stateTransitionsNormalized(stateSequence);
-		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence));
+		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
 	}
 	
+	/**
+	 * Normalize the probability matrix so that every column sums up to 1
+	 * @param i 
+	 * @param clustering 
+	 * 
+	 * @param matrix
+	 * @return
+	 */
+	private double[][] stateTransitionsNormalized(ArrayList<Double>[] ar, Hashtable<Double, Integer> clustering, int step) {
+		Short[] stateSequence = stateSequence(ar, clustering, false);
+		double[][] matrix = stateTransitions(stateSequence, step);
+		double[][] result = new double[matrix.length][matrix[0].length]; 
+		for (int i = 0; i < matrix.length; i++) {
+			int colSum = 0;
+			for (int j = 0; j < matrix[i].length; j++) {
+				colSum += matrix[i][j];
+			}
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (colSum == 0) colSum = 1;
+				result[i][j] = matrix[i][j]/colSum;
+			}
+		}
+		DecimalFormat df = new DecimalFormat("########.00"); 
+		System.out.println("\nTransition probabilities (single step: "+step+")");
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[0].length; j++) {
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
+			}
+			System.out.println();
+		}
+		return result;
+	}
+
 	/**
 	 * Compute the state transition probability matrix 
 	 * 
 	 * @param stateSequence
 	 * @return
 	 */
-	private double[][] stateTransitions(Integer[] stateSequence) {
-		double[][] transitions = new double[stateSequence.length][stateSequence.length];
+	private double[][] stateTransitions(Short[] stateSequence, int step) {
+		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
+		/*for (int i=0; i<MAX_NUM_STATES; i++) {
+			for (int j=0; j<MAX_NUM_STATES; j++) {
+				transitions[i][j] = 0.0;
+			}
+		}*/
 		int from, to = 0;
 		if(stateSequence.length>1)
 			from=stateSequence[0];
 		else return transitions;
 		int fromMax = 0;
 		int toMax = 0;
-		for (int i = 1; i < stateSequence.length; i++) {
+		if (step<1) step = 1;
+		int start = 1;
+		System.out.print("\nState transitions: "+from);
+		for (int i = start; i < stateSequence.length; i+=step) {
 			from = to;
 			to = stateSequence[i];
-			transitions[from][to] +=1;
+			System.out.print(", "+to);
+			if ((i-step)/config.generationCount == (i)/config.generationCount) // if jumped far enough to reach another run : don't update
+				transitions[from][to] +=1; 
+			
 			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
 			if (to > toMax) toMax = to;
 		}
-		fromMax++; 
-		toMax++;
+		fromMax++; // matrix length
+		toMax++; // matrix width
 		
 		//return a smaller matrix
 		double[][] result = new double[fromMax][toMax];
 		
-		System.out.println("transitions: ");
+		System.out.println("\nTransition count (single step: "+step+")");
 		for (int i = 0; i < fromMax; i++) {
 			for (int j = 0; j < toMax; j++) {
 				result[i][j] = transitions[i][j];
@@ -183,35 +247,6 @@ public class ModelController implements Runnable {
 		return result;
 	}
 	
-	/**
-	 * Normalize the probability matrix so that every column sums up to 1
-	 * 
-	 * @param matrix
-	 * @return
-	 */
-	private double[][] stateTransitionsNormalized(Integer[] stateSequence) {
-		double[][] matrix = stateTransitions(stateSequence);
-		double[][] result = new double[matrix.length][matrix[0].length]; 
-		for (int i = 0; i < matrix.length; i++) {
-			int colSum = 0;
-			for (int j = 0; j < matrix[i].length; j++) {
-				colSum += matrix[i][j];
-			}
-			for (int j = 0; j < matrix[i].length; j++) {
-				result[i][j] = matrix[i][j]/colSum;
-			}
-		}
-		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("normalized transitions: ");
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
-			}
-			System.out.println();
-		}
-		return result;
-	}
-
 	/**
 	 * Main method to run the simulation.
 	 */
@@ -420,7 +455,7 @@ public class ModelController implements Runnable {
 	private void plotStatistics() {
 		
 		ModelStatistics statisticsWindow = new ModelStatistics(getTitleString());
-		String printName = (config.printName()+"-seed"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
 		statisticsWindow.plot(calculateDensity(aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
@@ -617,16 +652,16 @@ public class ModelController implements Runnable {
      * @param i number of clusters
      * @return std deviation
      */
-    public static double clusterSigma(ArrayList<Double>[] array, int i) {
+    /*public static double clusterSigma(ArrayList<Double>[] array, int i) {
             //Hashtable<Double, Integer> clusters = null; //null
             //for(int i=2; i<=10; i++) {
             
-            double sigma = ClusteringTool.sigmaKmeans(array, i);
+            double sigma = KmeansClustering.sigmaKmeans(array, i);
             System.out.println("total deviation = ["+Math.round(sigma*1000000.0)/10000.0+"%]");
             
             //}
             return sigma;
-    }
+    }*/
     
     /**
      * Cluster points from an array
@@ -637,26 +672,20 @@ public class ModelController implements Runnable {
      *         key) and its cluster index (integer value)
      */
     public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
-                    
-            Hashtable<Double, Integer> clusters = ClusteringTool.kmeansLimDevDecrease(array, MAX_DEVIATION_DECREASE);
+            Clustering clustering = new SimpleClustering(); // using a very simple version of clustering TODO to be improved later
+            Hashtable<Double, Integer> clusters = clustering.cluster(array);
             return clusters;
     }
     
     /** 
-     * Extract non-state-repeating transitions (deprecated
+     * Extract non-state-repeating transitions (deprecated)
      * 
      * @param clustering
      * @return
      */
-    public static ArrayList<Integer> extractStateTransitionsNoRepeat(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
+    /*public static ArrayList<Integer> extractStateTransitionsNoRepeat(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
-		/*
-		 * //other method int previousState = 0; for (int i = 0; i < a.length;
-		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
-		 * a[i].get(i); int tmp = clustering.get(elt);
-		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
-		 * stateSequence.add(tmp); previousState = tmp; } } }
-		 */
+		
 		Enumeration<Double> e = clustering.keys();
 		int previousState = 0;
 		int count = 0;
@@ -665,7 +694,7 @@ public class ModelController implements Runnable {
 		while (e.hasMoreElements()) {
 			double elt = e.nextElement();
 			int tmp = clustering.get(elt);
-			System.out.print(elt + ":" + tmp + " ");
+			//System.out.print(elt + ":" + tmp + " ");
 			count++;
 			if (previousState != tmp) {
 				stateSequence.add(tmp);
@@ -682,13 +711,13 @@ public class ModelController implements Runnable {
 		
     	System.out.print("\nState transitions: ");
     	for (int i = 0; i < stateSequence.size(); i++) {
-			System.out.print(stateSequence.get(i)+"->");
+			System.out.print((int) stateSequence.get(i)+"->");
 		}
-    	System.out.print("\n#data = "+count+" ");
-    	System.out.println("#successive states = "+stateSequence.size());
-    	System.out.println("#max successive stable transitions = "+maxStableCount);
+    	//System.out.print("\n#data = "+count+" ");
+    	//System.out.println("#successive states = "+stateSequence.size());
+    	//System.out.println("#max successive stable transitions = "+maxStableCount);
 		return stateSequence;
-    }
+    }*/
     
     /**
      * Extract state transitions
@@ -696,71 +725,55 @@ public class ModelController implements Runnable {
      * @param data array of the original data
      * @param clustering result of the classification (values-to-classes table)
      * @param noRepeat if true, don't take any repeated state into account
-     * @return
+     * @return state sequence
      */
-    public static Integer[] stateTransitions(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
+    public static Short[] stateSequence(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
-		/*
-		 * //other method int previousState = 0; for (int i = 0; i < a.length;
-		 * i++) { for (int j = 0; j < a[i].size(); j++) { double elt =
-		 * a[i].get(i); int tmp = clustering.get(elt);
-		 * System.out.print(elt+":"+tmp+" "); if (previousState != tmp) {
-		 * stateSequence.add(tmp); previousState = tmp; } } }
-		 */
-    	
-    	// counting clusters
-    	/*Enumeration<Integer> v = clustering.values;
-    	int clusterNum = 0;
-    	while(v.hasMoreElements()) {
-			int next = v.nextElement();
-			if(clusterNum<next) clusterNum=next; //TODO correct, this was a quickfix
-		}
-    	clusterNum--;
-    	System.out.println("MATRIX_SIZE: "+clusterNum);*/
-    	
-		Enumeration<Double> e = clustering.keys();
-		int previousState = 0;
-		int count = 0;
-		int repetitionCount = 0;
-		int maxRepetitionCount = 0;
-		while (e.hasMoreElements()) {
-			double elt = e.nextElement();
-			int tmp = clustering.get(elt);
-			System.out.print(elt + ":" + tmp + " ");
-			count++;
-			previousState = tmp;
-			if (!noRepeat) stateSequence.add(tmp); // if repeating states : add anyways
-			if (previousState != tmp) {
-				if(noRepeat) stateSequence.add(tmp); // if not repeating states : add only if different from previous state
-				repetitionCount = 0;
-			}
-			else { 
-				repetitionCount++;
-				if (maxRepetitionCount<repetitionCount) maxRepetitionCount=repetitionCount;
-			}
-			
-
-		} //TODO : virer les states qui n'ont pas lieu, quand on passe au run suivant
 		
-    	System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
-    	for (int i = 0; i < stateSequence.size(); i++) {
-			System.out.print(stateSequence.get(i)+"->");
+    	//Enumeration<Double> e = clustering.keys();
+		short previousState = 0;
+		
+		for (int i = 0; i < data.length; i += 1) { // for every run
+			for (int j = 0; j < data[0].size(); j++) { // for every generation
+				double elt = data[i].get(j);
+				int tmp = clustering.get(elt);
+				//System.out.print(elt + ":" + tmp + " ");
+				previousState = (short) tmp;
+
+				if (!noRepeat)
+					stateSequence.add(tmp); // if repeating states : add
+											// anyways
+
+				if (previousState != tmp) {
+					if (noRepeat)
+						stateSequence.add(tmp); // if not repeating states :
+												// add
+												// only if different from
+												// previous state
+				}
+			}
 		}
-    	System.out.print("\n#data = "+count+" ");
-    	System.out.println("#successive states = "+stateSequence.size());
-    	System.out.println("#max successive stable transitions = "+maxRepetitionCount);
+
+    	/*System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
+    	for (int i = 0; i < stateSequence.size(); i++) {
+			System.out.print(stateSequence.get(i)+"->"); //showing every single transition
+		}*/
+    	//System.out.print("\n#data = "+count+" ");
+    	System.out.println("Number of states: "+stateSequence.size());
     	
     	int clusterNum = stateSequence.size();
-    	Integer[] states = new Integer[clusterNum];
-    	for (int i = 0; i < count; i++) {
-			states[i] = stateSequence.get(i);
+    	Short[] states = new Short[clusterNum];
+    	for (int i = 0; i < clusterNum; i++) {
+			states[i] = stateSequence.get(i).shortValue();
 		}
 		return states;
     }
 
     
 	public static void main(String[] args) {
-		new Launcher();
+		//long heapSize = Runtime.getRuntime().totalMemory();
+		//System.out.println("Java heap size = "+ heapSize);
+	    new Launcher();
 	}
 
 }		
