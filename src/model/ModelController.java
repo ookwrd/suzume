@@ -161,6 +161,7 @@ public class ModelController implements Runnable {
 				colSum += matrix[i][j];
 			}
 			for (int j = 0; j < matrix[i].length; j++) {
+				if (colSum == 0) colSum = 1;
 				result[i][j] = matrix[i][j]/colSum;
 			}
 		}
@@ -183,6 +184,11 @@ public class ModelController implements Runnable {
 	 */
 	private double[][] stateTransitions(Short[] stateSequence, int step) {
 		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
+		/*for (int i=0; i<MAX_NUM_STATES; i++) {
+			for (int j=0; j<MAX_NUM_STATES; j++) {
+				transitions[i][j] = 0.0;
+			}
+		}*/
 		int from, to = 0;
 		if(stateSequence.length>1)
 			from=stateSequence[0];
