@@ -76,8 +76,6 @@ public class ModelController implements Runnable {
 	private int currentGeneration = 0;
 	private int currentRun = 0;
 
-	private ModelStatistics statisticsWindow;
-
 	public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
 		this.config = configuration;
 		this.visualConfig = visualizationConfiguration;
@@ -150,24 +148,17 @@ public class ModelController implements Runnable {
 	 * Compute the Markov probabilistic model for the data
 	 */
 	private void findMarkov() {
-		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,2000,geneGrammarMatches[0].size());
-		Hashtable<Double, Integer> clustering = cluster(data);
+		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
+		Hashtable<Double, Integer> clusteringRes = cluster(data);
 		//System.out.print("OH data size "+data[0].size());
 		//System.out.println("OH clustering size : "+clustering.size());
 		// render diagram
 		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
-		stateTransitionsNormalized(data, clustering, 1);
-		stateTransitionsNormalized(data, clustering, 2);
-		stateTransitionsNormalized(data, clustering, 3);
-		stateTransitionsNormalized(data, clustering, 4);
-		stateTransitionsNormalized(data, clustering, 5);
-		stateTransitionsNormalized(data, clustering, 10);
-		stateTransitionsNormalized(data, clustering, 20);
-		stateTransitionsNormalized(data, clustering, 30);
-		stateTransitionsNormalized(data, clustering, 40);
-		stateTransitionsNormalized(data, clustering, 50);
-		stateTransitionsNormalized(data, clustering, 100);
-		stateTransitionsNormalized(data, clustering, 200);
+		stateTransitionsNormalized(data, clusteringRes, 1);
+		stateTransitionsNormalized(data, clusteringRes, 10);
+		stateTransitionsNormalized(data, clusteringRes, 50);
+		stateTransitionsNormalized(data, clusteringRes, 100);
+		stateTransitionsNormalized(data, clusteringRes, 200);
 		
 		// plot the sequence 
 		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
@@ -175,7 +166,7 @@ public class ModelController implements Runnable {
 		for(int i = 0; i < data.length; i++){
 			clusteringVal[i] = new ArrayList<Double>();
 			for(int j =0; j < data[0].size(); j++) {
-				clusteringVal[i].add((double) clustering.get(data[i].get(j)));
+				clusteringVal[i].add((double) clusteringRes.get(data[i].get(j)));
 			}
 		}
 		statisticsWindow.plot(clusteringVal, "Clustering 200-trimmed Gene Grammar Matches", "State", "", "States sequence");
@@ -246,8 +237,11 @@ public class ModelController implements Runnable {
 			from = to;
 			to = stateSequence[i];
 			System.out.print(", "+to);
-			if ((i-step)/config.generationCount == (i)/config.generationCount) // if jumped far enough to reach another run : don't update
-				transitions[from][to] +=1; 
+			if ((i-step)/config.generationCount == (i)/config.generationCount) // if did not reach another run
+			{	
+				transitions[from][to] +=1;
+			}
+			//else System.out.println("reached another run (from "+(i-step)+" to "+i+" in the state sequence)");
 			
 			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
 			if (to > toMax) toMax = to;
@@ -476,9 +470,9 @@ public class ModelController implements Runnable {
 	 */
 	private void plotStatistics() {
 		
-		statisticsWindow = new ModelStatistics(getTitleString());
+		ModelStatistics statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-
+		
 		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
 		statisticsWindow.plot(calculateDensity(aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
 		statisticsWindow.plot(calculateDensity(aggregateArrayLists(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
@@ -693,7 +687,12 @@ public class ModelController implements Runnable {
      *         key) and its cluster index (integer value)
      */
     public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
-            Clustering clustering = new SimpleClustering(); // using a very simple version of clustering TODO to be improved later
+            SimpleClustering clustering = new SimpleClustering(SimpleClustering.DEFAULT_CENTERS); // using a very simple version of clustering TODO to be improved later
+            System.out.print("\nStates:");
+            for(int i = 0; i < clustering.centers.length; i++) {
+    			System.out.print(" "+i+":"+clustering.centers[i]);
+    		}
+            System.out.println();
             Hashtable<Double, Integer> clusters = clustering.cluster(array);
             return clusters;
     }
@@ -752,8 +751,6 @@ public class ModelController implements Runnable {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
 		
 		short previousState = 0;
-		//System.out.print("AH CLUSTERING "+clustering.size());
-		//System.out.print("AH DATA"+data[0].size());
 		for (int i = 0; i < data.length; i += 1) { // for every run
 			for (int j = 0; j < data[0].size(); j++) { // for every generation
 				double elt = data[i].get(j);
