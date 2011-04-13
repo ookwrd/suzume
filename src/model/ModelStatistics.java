@@ -7,13 +7,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -54,7 +51,6 @@ public class ModelStatistics extends JPanel {
  // for the current graph
 	private String title = "The current chart";
 	private BufferedImage currentImage;
-	private JFreeChart curChart;
 	private String curFilename;
 
 	private ArrayList<BufferedImage> images;
@@ -99,7 +95,8 @@ public class ModelStatistics extends JPanel {
 	public void display() {
 		frame.setVisible(true);
 	}
-
+	
+	
 	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
 			String xLabel, String experiment) {
 		this.experiment = experiment;
@@ -127,10 +124,12 @@ public class ModelStatistics extends JPanel {
 
 		}
 
-		add(new JLabel(new ImageIcon(createImage(createChart(newSeries, type)))));
+		JFreeChart chart = createChart(newSeries, type);
+		
+		add(new JLabel(new ImageIcon(createImage(chart))));
 		validate();
 
-		saveCurChart();
+		saveCurChart(chart);
 	}
 
 	public void plot(ArrayList<Pair<Double, Double>> table, String title,
@@ -148,10 +147,12 @@ public class ModelStatistics extends JPanel {
 			newSeries[0].add(pair.first, pair.second);
 		}
 
-		add(new JLabel(new ImageIcon(createImage(createChart(newSeries, type)))));
+		JFreeChart chart = createChart(newSeries, type);
+		
+		add(new JLabel(new ImageIcon(createImage(chart))));
 		validate();
 		frame.validate();
-		saveCurChart();
+		saveCurChart(chart);
 	}
 
 	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
@@ -225,12 +226,11 @@ public class ModelStatistics extends JPanel {
 	 * @return
 	 */
 	private BufferedImage createImage(JFreeChart chart) {
-		curChart = chart;
-		currentImage = curChart.createBufferedImage(imageRatio[0]
+		currentImage = chart.createBufferedImage(imageRatio[0]
 		    * smallSize, imageRatio[1] * smallSize);
 		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
 		
-		charts.add(curChart);
+		charts.add(chart);
 		images.add(currentImage);
 		filenames.add(curFilename);
 		JLabel lblChart = new JLabel();
@@ -259,22 +259,14 @@ public class ModelStatistics extends JPanel {
 		}
 	}
 
-	/**
-	 * Create a directory
-	 * 
-	 * @param name
-	 */
-	private void cd(String name) {
-		System.setProperty("user.dir", name);
-		System.out.println(System.getProperty("user.dir"));
-	}
+
 
 	/**
 	 * This only prints the current curChart to file without showing it in a window
 	 */
-	private void saveCurChart() {
+	private void saveCurChart(JFreeChart chart) {
 		
-		createFile(curChart, currentImage, curFilename, smallSize);
+		createFile(chart, currentImage, curFilename, smallSize);
 
 	}
 	
@@ -299,24 +291,18 @@ public class ModelStatistics extends JPanel {
 			if (success) {
 				System.out.println("Folder " + dir + " created");
 			}
-
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
-
 	}
-
-	private void displayChart(BufferedImage image) {//TODO olaf can this be removed?
-		try {
-			System.out.println("Enter currentImage name\n");
-			BufferedReader bf = new BufferedReader(new InputStreamReader(
-					System.in));
-			String imageName = bf.readLine();
-			File input = new File(imageName);
-			image = ImageIO.read(input);
-		} catch (IOException ie) {
-			System.out.println("Error:" + ie.getMessage());
-		}
+	
+	/**
+	 * Change to a directory
+	 * 
+	 * @param name
+	 */
+	private void cd(String name) {
+		System.setProperty("user.dir", name);
 	}
 
 }
