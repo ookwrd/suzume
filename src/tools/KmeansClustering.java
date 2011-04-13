@@ -25,7 +25,7 @@ public class KmeansClustering implements Clustering {
 
 	private static final int KMEANS_NUM_ITERATIONS = 100;
 
-	public static final int MAX_NUM_CLUSTERS = 100;
+	public static final int MAX_NUM_CLUSTERS = 10;
 
 	public static final int MIN_NUM_CLUSTERS = 4;
 	
