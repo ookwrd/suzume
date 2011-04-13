@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,8 +42,9 @@ public class ChartPanel extends JPanel {
 			String yLabel, String xLabel, String experiment){
 		super();
 		this.chart = createChart(data, type, title, xLabel, yLabel);
-		add(createImageJLabel(chart));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
+		add(createImageJLabel(chart));
 	}
 	
 	private JLabel createImageJLabel(JFreeChart chart) {

@@ -6,6 +6,7 @@ import java.util.Hashtable;
 
 import tools.Clustering;
 import tools.KmeansClustering;
+import tools.Pair;
 import tools.Statistics;
 
 import Agents.Agent;
@@ -22,12 +23,12 @@ public class ModelController implements Runnable {
 	private RandomGenerator randomGenerator;
 
 	//Statistics
-	private ArrayList<Double>[] totalNumberGenotypes;
-	private ArrayList<Double>[] totalNumberPhenotypes;
-	private ArrayList<Double>[] totalFitnesses;
-	private ArrayList<Double>[] learningIntensities;
-	private ArrayList<Double>[] geneGrammarMatches;
-	private ArrayList<Double>[] numberNulls;
+	private ArrayList<Pair<Double,Double>>[] totalNumberGenotypes;
+	private ArrayList<Pair<Double,Double>>[] totalNumberPhenotypes;
+	private ArrayList<Pair<Double,Double>>[] totalFitnesses;
+	private ArrayList<Pair<Double,Double>>[] learningIntensities;
+	private ArrayList<Pair<Double,Double>>[] geneGrammarMatches;
+	private ArrayList<Pair<Double,Double>>[] numberNulls;
 
 	//Model
 	private PopulationModel population;
@@ -37,7 +38,7 @@ public class ModelController implements Runnable {
 	private ModelStatistics statisticsWindow;
 
 	//Progress counters
-	private int currentGeneration = 0;
+	private Integer currentGeneration = 0;
 	private int currentRun = 0;
 
 	public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
@@ -72,10 +73,10 @@ public class ModelController implements Runnable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ArrayList<Double>[] getInitializedStatisticsArraylist(){
-		ArrayList<Double>[] arrayLists = new ArrayList[config.numberRuns];
+	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
+		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.numberRuns];
 		for(int i = 0;i < config.numberRuns; i++){
-			arrayLists[i] = new ArrayList<Double>();
+			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
 		}
 		return arrayLists;
 	}
@@ -105,7 +106,7 @@ public class ModelController implements Runnable {
 		communication();
 
 		plotStatistics();
-		findMarkov();
+		//findMarkov();
 	}
 	
 	/**
@@ -301,12 +302,12 @@ public class ModelController implements Runnable {
 
 		double learningIntensity = (config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
 
-		totalFitnesses[currentRun].add(totalFitness/config.populationSize);
-		learningIntensities[currentRun].add(learningIntensity/config.populationSize);
-		geneGrammarMatches[currentRun].add(genomeGrammarMatch/config.populationSize);
-		numberNulls[currentRun].add(numberNull/config.populationSize);
-		totalNumberGenotypes[currentRun].add((double)genotypes.size());
-		totalNumberPhenotypes[currentRun].add((double)phenotypes.size());
+		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.populationSize));
+		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.populationSize));
+		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.populationSize));
+		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.populationSize));
+		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
+		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
 
 	}
 	
