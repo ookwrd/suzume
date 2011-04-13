@@ -7,6 +7,7 @@ import tools.Clustering;
 
 public class SimpleClustering implements Clustering {
 
+	private static final double[] NML_CENTERS = { 11.5, 10.75, 10.25, 9.5, 8.5, 7.5};
 	//private final double[] DEFAULT_THRESHOLDS = { 12, 11.75, 10.5, 10.25, 9.5,
 	//		8.5, 7.5 }; // must be in decreasing order
 	private final double[] DEFAULT_CENTERS = { 12, 11, 10.5, 10, 9, 8 };
@@ -39,33 +40,41 @@ public class SimpleClustering implements Clustering {
 			 * System.out.println("not classified: "+value); }
 			 */
 			
-			int prevState = 0; 
+			int prevStateIndex = 0; 
+			double prevStateCenter = centers[0];
+				
 			for (Double value : arrayList) {
-				double[] c = DEFAULT_CENTERS;
+				 
 				double s = DEFAULT_SIGMA;
-				int state = prevState;
+				int stateIndex = prevStateIndex; // if distance not enough from previous center, the previous state will be copied
 				
-				if (c[0] + s > value && value > c[0] - s)
-					state = 0;
-				else if (c[1] + s > value && value > c[1] - s)
-					state = 1;
-				else if (c[2] + s > value && value > c[2] - s)
-					state = 2;
-				else if (c[3] + s > value && value > c[3] - s)
-					state = 3;
-				else if (c[4] + s > value && value > c[4] - s)
-					state = 4;
-				else if (c[5] + s > value && value > c[5] - s)
-					state = 5;
+				if ( Math.abs(value-prevStateCenter) > 0.25 ) { // if large distance from the previous center, look up where we are
+					
+					if (centers[0] + s > value && value > centers[0] - s)
+						stateIndex = 0;
+					else if (centers[1] + s > value && value > centers[1] - s)
+						stateIndex = 1;
+					else if (centers[2] + s > value && value > centers[2] - s)
+						stateIndex = 2;
+					else if (centers[3] + s > value && value > centers[3] - s)
+						stateIndex = 3;
+					else if (centers[4] + s > value && value > centers[4] - s)
+						stateIndex = 4;
+					else if (centers[5] + s > value && value > centers[5] - s)
+						stateIndex = 5;
+				}
 				
-				results.put(value, state);
+				prevStateCenter = centers[stateIndex];
+				prevStateIndex = stateIndex;
+				results.put(value, stateIndex);
 			}
 		}
 		return results;
 	}
 
 	public static void main(String[] args) {
-		int r = 47 / 10;
-		System.out.println("result=" + r);
+		//int r = 47 / 10;
+		//System.out.println("result=" + r);
+		ModelController.main(null);
 	}
 }
