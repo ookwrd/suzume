@@ -86,50 +86,25 @@ public class ModelStatistics extends JPanel {
 		frame.setVisible(true);
 		saveAllCharts();
 	}
-	
-	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
-			String xLabel, String experiment) {
 
-		ChartType type = ChartType.LINE_CHART;
-		XYSeries[] newSeries = new XYSeries[dataSets.length];
-
-		for (int j = 0; j < dataSets.length; j++) {
-
-			newSeries[j] = new XYSeries(yLabel + j);
-
-			ArrayList<Double> data = dataSets[j];
-
-			for (int i = 0; i < data.size(); i++) {
-				newSeries[j].add(new Double(
-
-				i // x
-						), new Double(
-
-						data.get(i) // y
-						));
-			}
-
-		}
-
-		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
-		
-		add(createImageJLabel(chart, title, experiment));
-		validate();
-
-	}
-
-	public void plot(ArrayList<Pair<Double, Double>> table, String title,
+	public void plot(ArrayList<Pair<Double, Double>>[] table, String title,
 			String yLabel, String xLabel, String experiment) {
+		
 		ChartType type = ChartType.SCATTER_PLOT;//TODO
 		
 		//Testing
 		//add(new ChartPanel(table, type, title, yLabel, xLabel, experiment));
 		
-		XYSeries[] newSeries = new XYSeries[1];
-		newSeries[0] = new XYSeries(yLabel);
+		XYSeries[] newSeries = new XYSeries[table.length];
+		for(int i = 0; i < newSeries.length; i++){
+			newSeries[i] = new XYSeries(yLabel);
+		}
 
-		for(Pair<Double, Double> pair : table){
-			newSeries[0].add(pair.first, pair.second);
+		for(int i = 0; i < newSeries.length; i++){
+			for(int j = 0; j < table[i].size(); j++){
+				Pair<Double, Double> value = table[i].get(j);
+				newSeries[i].add(value.first, value.second);
+			}
 		}
 
 		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
