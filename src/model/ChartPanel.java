@@ -2,6 +2,8 @@ package model;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -10,13 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
-import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -153,6 +154,57 @@ public class ChartPanel extends JPanel {
 		return createXyDataset(series);
 		
 		//return null;//TODO
+	}
+	
+	public void saveThumbNailSizeChart(){
+		saveChartToFile(THUMBNAIL_DIMENSION);
+	}
+	
+	public void saveFullSizeChart(){
+		saveChartToFile(SAVE_DIMENSION);
+	}
+
+	public void saveChartToFile(Dimension printSize) {
+
+		cd("/");
+		mkdir("/suzume-charts");//TODO extract to configuration file
+		try {
+
+			ChartUtilities.saveChartAsJPEG(
+					new File("/suzume-charts/" + filename), 
+					chart,
+					printSize.width, 
+					printSize.height
+					);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Change to a directory
+	 * 
+	 * @param name
+	 */
+	private void cd(String name) {
+		System.setProperty("user.dir", name);
+	}
+	
+	/**
+	 * Create a directory
+	 * 
+	 * @param dir
+	 */
+	private void mkdir(String dir) {
+
+		try {
+			boolean success = (new File(dir)).mkdir();
+			if (success) {
+				System.out.println("Folder " + dir + " created");
+			}
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
 	}
 	
 }
