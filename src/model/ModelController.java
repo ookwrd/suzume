@@ -5,10 +5,12 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
@@ -71,6 +73,8 @@ public class ModelController implements Runnable {
 	//Progress counters
 	private int currentGeneration = 0;
 	private int currentRun = 0;
+
+	private ModelStatistics statisticsWindow;
 
 	public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
 		this.config = configuration;
@@ -144,9 +148,10 @@ public class ModelController implements Runnable {
 	 * Compute the Markov probabilistic model for the data
 	 */
 	private void findMarkov() {
-		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
+		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,2000,geneGrammarMatches[0].size());
 		Hashtable<Double, Integer> clustering = cluster(data);
-		System.out.println("clustering size : "+clustering.size());
+		//System.out.print("OH data size "+data[0].size());
+		//System.out.println("OH clustering size : "+clustering.size());
 		// render diagram
 		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
 		stateTransitionsNormalized(data, clustering, 1);
@@ -162,7 +167,19 @@ public class ModelController implements Runnable {
 		stateTransitionsNormalized(data, clustering, 100);
 		stateTransitionsNormalized(data, clustering, 200);
 		
+		// plot the sequence 
+		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
+		
+		for(int i = 0; i < data.length; i++){
+			clusteringVal[i] = new ArrayList<Double>();
+			for(int j =0; j < data[0].size(); j++) {
+				clusteringVal[i].add((double) clustering.get(data[i].get(j)));
+			}
+		}
+		statisticsWindow.plot(clusteringVal, "Clustering 200-trimmed Gene Grammar Matches", "State", "", "States sequence");
+		*/
 		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
+		
 	}
 	
 	/**
@@ -214,7 +231,10 @@ public class ModelController implements Runnable {
 		int from, to = 0;
 		if(stateSequence.length>1)
 			from=stateSequence[0];
-		else return transitions;
+		else { 
+			System.out.println("Empty state sequence !");
+			return transitions;
+		}
 		int fromMax = 0;
 		int toMax = 0;
 		if (step<1) step = 1;
@@ -454,7 +474,7 @@ public class ModelController implements Runnable {
 	 */
 	private void plotStatistics() {
 		
-		ModelStatistics statisticsWindow = new ModelStatistics(getTitleString());
+		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
@@ -464,7 +484,9 @@ public class ModelController implements Runnable {
 		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
 		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
 		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
-		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);		
+		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
+		statisticsWindow.plot(trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName);
+		statisticsWindow.plot(trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName);
 		
 		statisticsWindow.display();
 	}
@@ -727,9 +749,9 @@ public class ModelController implements Runnable {
     public static Short[] stateSequence(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
     	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
 		
-    	//Enumeration<Double> e = clustering.keys();
 		short previousState = 0;
-		
+		//System.out.print("AH CLUSTERING "+clustering.size());
+		//System.out.print("AH DATA"+data[0].size());
 		for (int i = 0; i < data.length; i += 1) { // for every run
 			for (int j = 0; j < data[0].size(); j++) { // for every generation
 				double elt = data[i].get(j);
@@ -739,7 +761,7 @@ public class ModelController implements Runnable {
 
 				if (!noRepeat)
 					stateSequence.add(tmp); // if repeating states : add
-											// anyways
+											// anyway
 
 				if (previousState != tmp) {
 					if (noRepeat)
