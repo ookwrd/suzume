@@ -42,6 +42,7 @@ public class ChartPanel extends JPanel {
 	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
 			String yLabel, String xLabel, String experiment){
 		super();
+		
 		this.chart = createChart(data, type, title, xLabel, yLabel);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
