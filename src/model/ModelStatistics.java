@@ -1,7 +1,6 @@
 
 package model;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -28,14 +27,10 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.FastScatterPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -46,18 +41,14 @@ public class ModelStatistics extends JPanel {
 	public int smallSize = 100;
 	public int[] imageRatio = {5, 3};
 	
-	private final static boolean SAVE_WHILE_PROCESSING = false;
-	
-	private static enum chartType {LINE_CHART, BAR_CHART, SCATTER_PLOT};
+	private static enum ChartType {LINE_CHART, BAR_CHART, SCATTER_PLOT};
 
 	private String experiment = "default";
 	private String yLabel = "";
 	private String xLabel = "";
-	
-	private chartType type;//TODO olaf can this be removed?
 
     private JFrame frame;
-    JScrollPane scrollPane;
+    private JScrollPane scrollPane;
     private JButton saveButton;
     
  // for the current graph
@@ -115,7 +106,7 @@ public class ModelStatistics extends JPanel {
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
-		this.type = chartType.LINE_CHART;
+		ChartType type = ChartType.LINE_CHART;
 		XYSeries[] newSeries = new XYSeries[dataSets.length];
 
 		for (int j = 0; j < dataSets.length; j++) {
@@ -136,34 +127,40 @@ public class ModelStatistics extends JPanel {
 
 		}
 
-		add(new JLabel(new ImageIcon(createImage(newSeries))));
+		add(new JLabel(new ImageIcon(createImage(createChart(newSeries, type)))));
 		validate();
 
 		saveCurChart();
 	}
 
-	public void plot(ArrayList<Pair<Double, Integer>> table, String title,
+	public void plot(ArrayList<Pair<Double, Double>> table, String title,
 			String yLabel, String xLabel, String experiment) {
 		this.experiment = experiment;
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
-		this.type = chartType.SCATTER_PLOT;//TODO
+		ChartType type = ChartType.SCATTER_PLOT;//TODO
 		
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
 
-		for(Pair<Double, Integer> pair : table){
+		for(Pair<Double, Double> pair : table){
 			newSeries[0].add(pair.first, pair.second);
 		}
 
-		add(new JLabel(new ImageIcon(createImage(newSeries))));
+		add(new JLabel(new ImageIcon(createImage(createChart(newSeries, type)))));
 		validate();
 		frame.validate();
 		saveCurChart();
 	}
 
-	private JFreeChart createChart(XYSeries[] series, chartType type) {
+	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
+		
+		return null;
+	}
+
+	
+	private JFreeChart createChart(XYSeries[] series, ChartType type) {
 
 		XYSeriesCollection dataset = new XYSeriesCollection();
 
@@ -219,10 +216,6 @@ public class ModelStatistics extends JPanel {
 		return chart;
 	}
 
-	private BufferedImage createImage(XYSeries[] series) {
-		return createImage(series, SAVE_WHILE_PROCESSING, type);
-	}
-
 	/**
 	 * 
 	 * @param currentSeries
@@ -231,9 +224,8 @@ public class ModelStatistics extends JPanel {
 	 *            : if true, the corresponding file is created
 	 * @return
 	 */
-	private BufferedImage createImage(XYSeries[] series,
-			boolean printToFile, chartType type) {
-		curChart = createChart(series, type);
+	private BufferedImage createImage(JFreeChart chart) {
+		curChart = chart;
 		currentImage = curChart.createBufferedImage(imageRatio[0]
 		    * smallSize, imageRatio[1] * smallSize);
 		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
