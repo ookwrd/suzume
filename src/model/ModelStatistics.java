@@ -36,16 +36,11 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
 
-	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
-	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
-
     private JFrame frame;
     private JScrollPane scrollPane;
     private JButton saveButton;
     
-	private ArrayList<BufferedImage> images;
-	private ArrayList<JFreeChart> charts;
-	private ArrayList<String> filenames;
+    private ArrayList<ChartPanel> chartPanels;
 	
 	public ModelStatistics(String title) {
 		
@@ -64,9 +59,7 @@ public class ModelStatistics extends JPanel {
 		
 		frame.add(scrollPane);
 		
-		this.images = new ArrayList<BufferedImage>();
-		this.charts = new ArrayList<JFreeChart>();
-		this.filenames = new ArrayList<String>();
+		this.chartPanels = new ArrayList<ChartPanel>();
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -84,7 +77,7 @@ public class ModelStatistics extends JPanel {
 
 	public void display() {
 		frame.setVisible(true);
-		saveAllCharts();
+		saveAllChartsThumbnail();
 	}
 
 	public void plot(ArrayList<Pair<Double, Double>>[] table, String title,
@@ -93,7 +86,10 @@ public class ModelStatistics extends JPanel {
 		ChartType type = ChartType.SCATTER_PLOT;//TODO
 		
 		//Testing
-		//add(new ChartPanel(table, type, title, yLabel, xLabel, experiment));
+		ChartPanel chartPanel = new ChartPanel(table, type, title, yLabel, xLabel, experiment);
+		add(chartPanel);
+		chartPanels.add(chartPanel);
+		
 		
 		XYSeries[] newSeries = new XYSeries[table.length];
 		for(int i = 0; i < newSeries.length; i++){
@@ -109,7 +105,6 @@ public class ModelStatistics extends JPanel {
 
 		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
 		
-		add(createImageJLabel(chart, title, experiment));
 		validate();
 		frame.validate();
 	}
@@ -169,88 +164,20 @@ public class ModelStatistics extends JPanel {
 
 		return chart;
 	}
-
-	/**
-	 * 
-	 * @param currentSeries
-	 * @param title
-	 * @param printToFile
-	 *            : if true, the corresponding file is created
-	 * @return
-	 */
-	private JLabel createImageJLabel(JFreeChart chart, String title, String experiment) {
-		
-		BufferedImage image = chart.createBufferedImage(
-				THUMBNAIL_DIMENSION.width, 
-				THUMBNAIL_DIMENSION.height
-				);
-		String filename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
-		
-		charts.add(chart);
-		images.add(image);
-		filenames.add(filename);
-		JLabel lblChart = new JLabel();
-		lblChart.setIcon(new ImageIcon(image));
-
-		return lblChart;
-	}
-
-	/**
-	 * Create a jpg file for the currentImage of the curChart
-	 * 
-	 * @param curChart
-	 * @param currentImage
-	 */
-	private void createFile(JFreeChart chart, BufferedImage image, String filename, Dimension printSize) {
-
-		cd("/");
-		mkdir("/suzume-charts");
-		try {
-
-			ChartUtilities.saveChartAsJPEG(
-					new File("/suzume-charts/" + filename), 
-					chart,
-					printSize.width, 
-					printSize.height
-					);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * Save all charts displayed in window. The smaller images are replaced by larger ones.
 	 */
 	public void saveAllCharts() {
-		for (int i = 0; i < images.size(); i++) {
-			createFile(charts.get(i), images.get(i), filenames.get(i), SAVE_DIMENSION);
+		for (ChartPanel panel : chartPanels) {
+			panel.saveFullSizeChart();
 		}
 	}
 	
-	/**
-	 * Create a directory
-	 * 
-	 * @param dir
-	 */
-	private void mkdir(String dir) {
-
-		try {
-			boolean success = (new File(dir)).mkdir();
-			if (success) {
-				System.out.println("Folder " + dir + " created");
-			}
-		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+	public void saveAllChartsThumbnail() {
+		for (ChartPanel panel : chartPanels) {
+			panel.saveThumbNailSizeChart();
 		}
-	}
-	
-	/**
-	 * Change to a directory
-	 * 
-	 * @param name
-	 */
-	private void cd(String name) {
-		System.setProperty("user.dir", name);
 	}
 
 }
