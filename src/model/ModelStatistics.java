@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 
 import tools.Pair;
 
+import model.ChartPanel.ChartType;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -36,8 +38,6 @@ public class ModelStatistics extends JPanel {
 
 	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
-	
-	private static enum ChartType {LINE_CHART, BAR_CHART, SCATTER_PLOT};
 
     private JFrame frame;
     private JScrollPane scrollPane;
@@ -113,7 +113,7 @@ public class ModelStatistics extends JPanel {
 
 		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
 		
-		add(new JLabel(new ImageIcon(createImage(chart, title, experiment))));
+		add(createImageJLabel(chart, title, experiment));
 		validate();
 
 	}
@@ -121,6 +121,9 @@ public class ModelStatistics extends JPanel {
 	public void plot(ArrayList<Pair<Double, Double>> table, String title,
 			String yLabel, String xLabel, String experiment) {
 		ChartType type = ChartType.SCATTER_PLOT;//TODO
+		
+		//Testing
+		//add(new ChartPanel(table, type, title, yLabel, xLabel, experiment));
 		
 		XYSeries[] newSeries = new XYSeries[1];
 		newSeries[0] = new XYSeries(yLabel);
@@ -131,16 +134,10 @@ public class ModelStatistics extends JPanel {
 
 		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
 		
-		add(new JLabel(new ImageIcon(createImage(chart, title, experiment))));
+		add(createImageJLabel(chart, title, experiment));
 		validate();
 		frame.validate();
 	}
-
-	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
-		
-		return null;
-	}
-
 	
 	private JFreeChart createChart(XYSeries[] series, ChartType type, String title, String xLabel, String yLabel) {
 
@@ -153,7 +150,7 @@ public class ModelStatistics extends JPanel {
 		JFreeChart chart;
 		switch (type) {
 
-		case BAR_CHART:
+		case HISTOGRAM:
 			chart = ChartFactory.createHistogram(title, // Title
 					xLabel, // X-Axis label
 					yLabel, // Y-Axis label
@@ -206,7 +203,7 @@ public class ModelStatistics extends JPanel {
 	 *            : if true, the corresponding file is created
 	 * @return
 	 */
-	private BufferedImage createImage(JFreeChart chart, String title, String experiment) {
+	private JLabel createImageJLabel(JFreeChart chart, String title, String experiment) {
 		
 		BufferedImage image = chart.createBufferedImage(
 				THUMBNAIL_DIMENSION.width, 
@@ -220,7 +217,7 @@ public class ModelStatistics extends JPanel {
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
 
-		return image;
+		return lblChart;
 	}
 
 	/**
