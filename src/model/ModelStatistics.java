@@ -43,11 +43,6 @@ public class ModelStatistics extends JPanel {
     private JScrollPane scrollPane;
     private JButton saveButton;
     
- // for the current graph
-//	private String title = "The current chart";
-	private BufferedImage currentImage;
-	private String curFilename;
-
 	private ArrayList<BufferedImage> images;
 	private ArrayList<JFreeChart> charts;
 	private ArrayList<String> filenames;
@@ -89,8 +84,8 @@ public class ModelStatistics extends JPanel {
 
 	public void display() {
 		frame.setVisible(true);
+		saveAllCharts();
 	}
-	
 	
 	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
 			String xLabel, String experiment) {
@@ -121,7 +116,6 @@ public class ModelStatistics extends JPanel {
 		add(new JLabel(new ImageIcon(createImage(chart, title, experiment))));
 		validate();
 
-		saveCurChart(chart);
 	}
 
 	public void plot(ArrayList<Pair<Double, Double>> table, String title,
@@ -140,7 +134,6 @@ public class ModelStatistics extends JPanel {
 		add(new JLabel(new ImageIcon(createImage(chart, title, experiment))));
 		validate();
 		frame.validate();
-		saveCurChart(chart);
 	}
 
 	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
@@ -214,19 +207,20 @@ public class ModelStatistics extends JPanel {
 	 * @return
 	 */
 	private BufferedImage createImage(JFreeChart chart, String title, String experiment) {
-		currentImage = chart.createBufferedImage(
+		
+		BufferedImage image = chart.createBufferedImage(
 				THUMBNAIL_DIMENSION.width, 
 				THUMBNAIL_DIMENSION.height
 				);
-		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
+		String filename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
 		
 		charts.add(chart);
-		images.add(currentImage);
-		filenames.add(curFilename);
+		images.add(image);
+		filenames.add(filename);
 		JLabel lblChart = new JLabel();
-		lblChart.setIcon(new ImageIcon(currentImage));
+		lblChart.setIcon(new ImageIcon(image));
 
-		return currentImage;
+		return image;
 	}
 
 	/**
@@ -250,17 +244,6 @@ public class ModelStatistics extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-
-
-	/**
-	 * This only prints the current curChart to file without showing it in a window
-	 */
-	private void saveCurChart(JFreeChart chart) {
-		
-		createFile(chart, currentImage, curFilename, THUMBNAIL_DIMENSION);
-
 	}
 	
 	/**
