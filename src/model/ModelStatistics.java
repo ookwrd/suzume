@@ -34,22 +34,17 @@ import org.jfree.data.xy.XYSeriesCollection;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
 
-	public int saveSize = 200;
-	public int smallSize = 100;
-	public int[] imageRatio = {5, 3};
+	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
+	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
 	private static enum ChartType {LINE_CHART, BAR_CHART, SCATTER_PLOT};
-
-	private String experiment = "default";
-	private String yLabel = "";
-	private String xLabel = "";
 
     private JFrame frame;
     private JScrollPane scrollPane;
     private JButton saveButton;
     
  // for the current graph
-	private String title = "The current chart";
+//	private String title = "The current chart";
 	private BufferedImage currentImage;
 	private String curFilename;
 
@@ -99,10 +94,7 @@ public class ModelStatistics extends JPanel {
 	
 	public void plot(ArrayList<Double>[] dataSets, String title, String yLabel,
 			String xLabel, String experiment) {
-		this.experiment = experiment;
-		this.title = title;
-		this.yLabel = yLabel;
-		this.xLabel = xLabel;
+
 		ChartType type = ChartType.LINE_CHART;
 		XYSeries[] newSeries = new XYSeries[dataSets.length];
 
@@ -124,9 +116,9 @@ public class ModelStatistics extends JPanel {
 
 		}
 
-		JFreeChart chart = createChart(newSeries, type);
+		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
 		
-		add(new JLabel(new ImageIcon(createImage(chart))));
+		add(new JLabel(new ImageIcon(createImage(chart, title, experiment))));
 		validate();
 
 		saveCurChart(chart);
@@ -134,10 +126,6 @@ public class ModelStatistics extends JPanel {
 
 	public void plot(ArrayList<Pair<Double, Double>> table, String title,
 			String yLabel, String xLabel, String experiment) {
-		this.experiment = experiment;
-		this.title = title;
-		this.yLabel = yLabel;
-		this.xLabel = xLabel;
 		ChartType type = ChartType.SCATTER_PLOT;//TODO
 		
 		XYSeries[] newSeries = new XYSeries[1];
@@ -147,9 +135,9 @@ public class ModelStatistics extends JPanel {
 			newSeries[0].add(pair.first, pair.second);
 		}
 
-		JFreeChart chart = createChart(newSeries, type);
+		JFreeChart chart = createChart(newSeries, type, title, xLabel, yLabel);
 		
-		add(new JLabel(new ImageIcon(createImage(chart))));
+		add(new JLabel(new ImageIcon(createImage(chart, title, experiment))));
 		validate();
 		frame.validate();
 		saveCurChart(chart);
@@ -161,7 +149,7 @@ public class ModelStatistics extends JPanel {
 	}
 
 	
-	private JFreeChart createChart(XYSeries[] series, ChartType type) {
+	private JFreeChart createChart(XYSeries[] series, ChartType type, String title, String xLabel, String yLabel) {
 
 		XYSeriesCollection dataset = new XYSeriesCollection();
 
@@ -225,9 +213,11 @@ public class ModelStatistics extends JPanel {
 	 *            : if true, the corresponding file is created
 	 * @return
 	 */
-	private BufferedImage createImage(JFreeChart chart) {
-		currentImage = chart.createBufferedImage(imageRatio[0]
-		    * smallSize, imageRatio[1] * smallSize);
+	private BufferedImage createImage(JFreeChart chart, String title, String experiment) {
+		currentImage = chart.createBufferedImage(
+				THUMBNAIL_DIMENSION.width, 
+				THUMBNAIL_DIMENSION.height
+				);
 		curFilename = title.replaceAll(" ", "") + "-" + experiment + ".jpg";
 		
 		charts.add(chart);
@@ -245,15 +235,18 @@ public class ModelStatistics extends JPanel {
 	 * @param curChart
 	 * @param currentImage
 	 */
-	private void createFile(JFreeChart chart, BufferedImage image, String filename, int printSize) {
+	private void createFile(JFreeChart chart, BufferedImage image, String filename, Dimension printSize) {
 
 		cd("/");
 		mkdir("/suzume-charts");
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File("/suzume-charts/" + filename), chart,
-					imageRatio[0] * printSize, imageRatio[1] * printSize);
+					new File("/suzume-charts/" + filename), 
+					chart,
+					printSize.width, 
+					printSize.height
+					);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -266,7 +259,7 @@ public class ModelStatistics extends JPanel {
 	 */
 	private void saveCurChart(JFreeChart chart) {
 		
-		createFile(chart, currentImage, curFilename, smallSize);
+		createFile(chart, currentImage, curFilename, THUMBNAIL_DIMENSION);
 
 	}
 	
@@ -275,7 +268,7 @@ public class ModelStatistics extends JPanel {
 	 */
 	public void saveAllCharts() {
 		for (int i = 0; i < images.size(); i++) {
-			createFile(charts.get(i), images.get(i), filenames.get(i), saveSize);
+			createFile(charts.get(i), images.get(i), filenames.get(i), SAVE_DIMENSION);
 		}
 	}
 	
