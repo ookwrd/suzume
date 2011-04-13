@@ -43,6 +43,8 @@ public class ModelController implements Runnable {
 		}
 	}
 	
+	private static final int NUMBER_DENSITY_BUCKETS = 100;
+	
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.01;//should be set lower than 0.01 //TODO refactor
 
 	private static final int DEFAULT_STATE_TRANSITION_STEP = 1;
@@ -530,10 +532,10 @@ public class ModelController implements Runnable {
 		}
 			
 		double range = max - min;
-		double step = range/1000;
+		double step = range/NUMBER_DENSITY_BUCKETS;
 		ArrayList<Integer> numOccurrences = new ArrayList<Integer>();
 
-		for(int i = 0; i < 1001; i++){
+		for(int i = 0; i < NUMBER_DENSITY_BUCKETS+1; i++){//TODO why the plus 1?
 			numOccurrences.add(0);
 		}
 		
