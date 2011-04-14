@@ -38,7 +38,6 @@ public class ModelStatistics extends JPanel {
 		
 		frame = new JFrame();
 		frame.setTitle(title);
-		frame.setSize(new Dimension(1000, 500));
 		
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
@@ -65,6 +64,7 @@ public class ModelStatistics extends JPanel {
 	}
 
 	public void display() {
+		frame.pack();
 		frame.setVisible(true);
 		saveAllChartsThumbnail();
 	}

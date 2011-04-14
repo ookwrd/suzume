@@ -59,7 +59,7 @@ public class ChartPanel extends JPanel {
 			int length = data[0].size();
 			int trimStart = this.trimStart < length? this.trimStart : 0;
 			int trimEnd = this.trimEnd < length? this.trimEnd : length;
-			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, this.trimStart, trimEnd);
+			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, trimStart, trimEnd);
 			JFreeChart trimmedChart = createChart(trimmedDataArrayList, type, title + " (Trimmed " + trimStart + "-" + trimEnd+")", xLabel, yLabel);
 			add(createImageJLabel(trimmedChart));
 		}
