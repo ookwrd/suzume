@@ -129,7 +129,7 @@ public class ModelController implements Runnable {
 	 * Compute the Markov probabilistic model for the data
 	 */
 	private void findMarkov() {
-		ArrayList<Double>[] data = trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
+		ArrayList<Double>[] data = Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
 		Hashtable<Double, Integer> clusteringRes = cluster(data);
 		//System.out.print("OH data size "+data[0].size());
 		//System.out.println("OH clustering size : "+clustering.size());
@@ -472,118 +472,6 @@ public class ModelController implements Runnable {
 	private String getTitleString(){
 		return "[Seed: " + randomGenerator.getSeed() + "   " + config + "]";
 	}
-
-	/**
-	 * Internally statistics are handled as time ordered arraylists, this method allows the user to 
-	 * take a subsection of these arrays to focus on a section of interest.
-	 * 
-	 * @param arrays
-	 * @param start
-	 * @param finish
-	 * @return
-	 */
-	public static <E> ArrayList<E>[] trimArrayLists(ArrayList<E>[] arrays, int start, int finish){
-
-		@SuppressWarnings("unchecked")
-		ArrayList<E>[] outputArrays = new ArrayList[arrays.length];
-
-		for(int i = 0; i < arrays.length && i < finish; i++){
-			outputArrays[i] = new ArrayList<E>();
-
-			for(int j = start; j < arrays[i].size(); j++){
-				outputArrays[i].add(arrays[i].get(j));
-			}
-		}
-
-		return outputArrays;
-	}
-	
-	public static <E> ArrayList<E> aggregateArrayLists(ArrayList<E>[] arrayLists){
-		
-		ArrayList<E> retVal = new ArrayList<E>();
-		
-		for(ArrayList<E> arrayList : arrayLists){
-			retVal.addAll(arrayList);
-		}
-		
-		return retVal;
-	}
-	
-
-	/**
-	 * Calculate density for an array
-	 * @param array
-	 */
-	public static ArrayList<Pair<Double, Integer>> calculateDensity(ArrayList<Double> array) {
-
-		// find range
-		Double min = Double.MAX_VALUE;
-		Double max = Double.MIN_VALUE;
-			for (int j = 0; j < array.size(); j++) {
-			Double value = array.get(j);
-			if (value > max) {
-				max = value;
-			}
-			if(value < min){
-				min = value;
-			}
-		}
-			
-		double range = max - min;
-		double step = range/NUMBER_DENSITY_BUCKETS;
-		ArrayList<Integer> numOccurrences = new ArrayList<Integer>();
-
-		for(int i = 0; i < NUMBER_DENSITY_BUCKETS+1; i++){//TODO why the plus 1?
-			numOccurrences.add(0);
-		}
-		
-		for(Double value : array){
-			int index = (int)((value-min)/step);
-			numOccurrences.set(index, numOccurrences.get(index)+1);
-		}
-		
-		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<Pair<Double,Integer>>();
-		
-		for(int i = 0; i < numOccurrences.size(); i++){
-			double reconstruct = min + i * step;
-			retVal.add(new Pair<Double, Integer>(reconstruct, numOccurrences.get(i)));
-		}
-		
-		return retVal;
-		
-	/*	Hashtable<Double, Integer> numOccurrences = new Hashtable<Double, Integer>();
-		
-		//Make sure all possible counters in the range initialized to zero.
-		double intializedSoFar = max;
-		while(true){
-			double value = intializedSoFar/step;
-			numOccurrences.put(value, 0);
-			intializedSoFar -= step;
-			if(intializedSoFar < min){
-				break;
-			}
-		}
-		
-		//Count occurrences within each step
-		for (Double value : array) {
-			// cluster value
-			double clusterVal = value/step;
-
-			// count
-			if(numOccurrences.containsKey(clusterVal)) {
-				numOccurrences.put(clusterVal, numOccurrences.get(clusterVal)+1);
-			} else {
-				numOccurrences.put(clusterVal, 1);
-			}
-		}
-		
-		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
-		for(Double key : numOccurrences.keySet()){
-			retVal.add(new Pair<Double, Integer>(key, numOccurrences.get(key)));
-		}
-		
-		return retVal;*/
-	}
 	
 	public static ArrayList<Pair<Double, Integer>> smooth(ArrayList<Pair<Double, Integer>> series, int maxWindow){
 		
@@ -606,38 +494,6 @@ public class ModelController implements Runnable {
 		}
 		
 		return retVal;
-		
-	}
-	
-	public static ArrayList<Double> findLocalMinima(ArrayList<Pair<Double, Integer>> series){
-		
-		ArrayList<Double> retVal = new ArrayList<Double>();
-		Collections.sort(series);
-		for(int i = 1; i < series.size()-1; i++){
-			
-			Pair<Double, Integer> pair =series.get(i);
-			if(pair.second < series.get(i-1).second && pair.second < series.get(i+1).second){
-				retVal.add(pair.first);
-			}	
-			
-		}
-		
-		System.out.println("RetVal");
-		System.out.print(retVal);
-		
-		return null;
-		
-	}
-	
-	public static <E extends Comparable<E>, J> void print(ArrayList<Pair<E, J>> series){
-		
-		System.out.println("printing");
-		
-		for(Pair<E, J> pair : series){
-			
-			System.out.println(pair);
-			
-		}
 		
 	}
 
