@@ -13,7 +13,7 @@ public class SimpleClustering implements Clustering {
 	public static final double[] DEFAULT_CENTERS = { 12, 11, 10.5, 10, 9, 8 };
 	public static final double DEFAULT_SIGMA = 0.2;
 	
-	public double[] centers; 
+	public double[] centers;
 	
 	public SimpleClustering(double[] centers) {
 		// TODO Auto-generated constructor stub

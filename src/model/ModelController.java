@@ -17,6 +17,7 @@ import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import tools.Clustering;
 import tools.KmeansClustering;
+import tools.Pair;
 import tools.StateTransitionVisualizer;
 import tools.Statistics;
 
@@ -25,34 +26,12 @@ import Agents.AgentFactory;
 import Launcher.Launcher;
 
 public class ModelController implements Runnable {
-
-	public static class Pair<A extends Comparable<A>,B> implements Comparable<Pair<A, B>> {
-		public A first;
-		public B second;
-		
-		public Pair(A first, B second) {
-			this.first = first;
-			this.second = second;
-		}
-		
-		@Override
-		public String toString(){
-			return ""+first + " " +second;
-		}
-		
-		@Override
-		public int compareTo(Pair<A, B> pair){
-			return first.compareTo(pair.first);
-		}
-	}
 	
 	private static final int NUMBER_DENSITY_BUCKETS = 100;
 	
 	private static final double DEFAULT_DENSITY_GRANULARITY = 0.01;//should be set lower than 0.01 //TODO refactor
 
 	private static final int DEFAULT_STATE_TRANSITION_STEP = 1;
-
-	private static final int MAX_NUM_STATES = KmeansClustering.MAX_NUM_CLUSTERS;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -218,7 +197,7 @@ public class ModelController implements Runnable {
 	 * @return
 	 */
 	private double[][] stateTransitions(Short[] stateSequence, int step) {
-		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
+		double[][] transitions = new double[Clustering.MAX_NUM_CLUSTERS][Clustering.MAX_NUM_CLUSTERS];
 		/*for (int i=0; i<MAX_NUM_STATES; i++) {
 			for (int j=0; j<MAX_NUM_STATES; j++) {
 				transitions[i][j] = 0.0;
@@ -563,7 +542,7 @@ public class ModelController implements Runnable {
 			numOccurrences.set(index, numOccurrences.get(index)+1);
 		}
 		
-		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
+		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<Pair<Double,Integer>>();
 		
 		for(int i = 0; i < numOccurrences.size(); i++){
 			double reconstruct = min + i * step;
@@ -608,7 +587,7 @@ public class ModelController implements Runnable {
 	
 	public static ArrayList<Pair<Double, Integer>> smooth(ArrayList<Pair<Double, Integer>> series, int maxWindow){
 		
-		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<ModelController.Pair<Double,Integer>>();
+		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<Pair<Double,Integer>>();
 		Collections.sort(series);
 		
 		for(int i = maxWindow; i < series.size()-maxWindow; i++){
