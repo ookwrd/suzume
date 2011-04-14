@@ -71,7 +71,7 @@ public class GraphView {
 		DirectedGraph<Integer, String> g = new DirectedOrderedSparseMultigraph<Integer, String>();
 		
 		// add vertices
-		for (int i=0; i<adjacencyMatrix.length; i++) {
+		for (int i=1; i<adjacencyMatrix.length; i++) {
 			g.addVertex((Integer) i);
 		}
 		
