@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import model.RandomGenerator;
 
-public class AlteredAgent extends OriginalAgent implements Agent {
+public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
 	
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.jfree.ui.Size2D;
 
 import Agents.Agent;
-import Agents.OriginalAgent;
+import Agents.YamauchiHashimoto2010;
 
 /**
  * Population model corresponding to a cyclical distribution of agents as seen in:

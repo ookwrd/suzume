@@ -7,7 +7,7 @@ import java.util.HashMap;
 import model.RandomGenerator;
 
 
-public class OriginalAgent extends AbstractAgent implements Agent {
+public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	
 	protected ArrayList<Integer> chromosome;
 	
@@ -27,7 +27,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 		put("Invention Probability", new ConfigurationParameter(0.01));
 	}};
 	
-	public OriginalAgent(){}
+	public YamauchiHashimoto2010(){}
 	
 	@Override
 	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
@@ -58,8 +58,8 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
 		
-		OriginalAgent parent1 = (OriginalAgent)parentA;
-		OriginalAgent parent2 = (OriginalAgent)parentB;
+		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
+		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
 		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
@@ -88,7 +88,7 @@ public class OriginalAgent extends AbstractAgent implements Agent {
 	
 	@Override
 	public String getName(){
-		return "Original Agent";
+		return "Yamauchi & Hashimoto 2010 Agent";
 	}
 	
 	/**

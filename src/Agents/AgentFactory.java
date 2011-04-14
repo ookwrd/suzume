@@ -10,8 +10,8 @@ public class AgentFactory {
 	public static Agent constructUninitializedAgent(AgentType type){
 		
 		switch (type) {
-		case OriginalAgent:
-			return new OriginalAgent();
+		case YamauchiHashimoto2010:
+			return new YamauchiHashimoto2010();
 			
 		case AlteredAgent:
 			return new AlteredAgent();
