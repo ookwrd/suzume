@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import tools.graphs.GraphView;
+
 import model.SimpleClustering;
 
 public abstract class Clustering {
@@ -30,21 +32,27 @@ public abstract class Clustering {
 		return null;
 	}*/
 	
+	public void visualize(double[][] adjacencyMatrix) {
+		GraphView gv = new GraphView(adjacencyMatrix); // This builds the graph
+		//sgv.render();
+	}
+	
 	/**
 	 * Compute the Markov probabilistic model for the data
 	 */
 	public void findMarkov() {
 		
 		Hashtable<Double, Integer> clustering = cluster(array);
-		//System.out.print("OH data size "+data[0].size());
-		//System.out.println("OH clustering size : "+clustering.size());
 		// render diagram
 		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
-		stateTransitionsNormalized(array, clustering, 1);
-		stateTransitionsNormalized(array, clustering, 10);
-		stateTransitionsNormalized(array, clustering, 50);
-		stateTransitionsNormalized(array, clustering, 100);
-		stateTransitionsNormalized(array, clustering, 200);
+		
+		//stateTransitionsNormalized(array, clustering, 1);
+		//stateTransitionsNormalized(array, clustering, 10);
+		visualize(stateTransitionsNormalized(array, clustering, 1));
+		visualize(stateTransitionsNormalized(array, clustering, 10));
+		visualize(stateTransitionsNormalized(array, clustering, 50));
+		//stateTransitionsNormalized(array, clustering, 100);
+		//stateTransitionsNormalized(array, clustering, 200);
 		
 		// plot the sequence 
 		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
