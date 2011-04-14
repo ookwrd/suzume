@@ -323,13 +323,13 @@ public class ModelController implements Runnable {
 		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", "Generation", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Match", "Occurrences", "Gene Grammar Match", printName, PlotType.DENSITY);
-		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Learning Intensity", "Generation", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(numberNulls, "Number of Nulls", "Number of Nulls", "Generation", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(totalFitnesses, "Fitness", "Fitness", "Generation", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes", "Generation", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes", "Generation", printName,PlotType.TIMESERIES);
+		statisticsWindow.plotTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
+		statisticsWindow.plotDensity(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
+		statisticsWindow.plotTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
+		statisticsWindow.plotTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);
+		statisticsWindow.plotTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
+		statisticsWindow.plotTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.plotTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
 	
 		statisticsWindow.display();
 	}
