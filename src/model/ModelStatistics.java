@@ -2,7 +2,6 @@
 package model;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,17 +12,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.jfree.chart.JFreeChart;
+
 import tools.Pair;
+import tools.Statistics;
 
 import model.ChartPanel.ChartType;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.StandardChartTheme;
 
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
 
 	public enum PlotType {TIMESERIES, DENSITY}
+	
+	private boolean trim = true;
+	private int trimStart = 2000;
+	private int trimEnd = Integer.MAX_VALUE;
 	
     private JFrame frame;
     private JScrollPane scrollPane;
@@ -34,7 +38,7 @@ public class ModelStatistics extends JPanel {
 	public ModelStatistics(String title) {
 		
 		//Gets rid of all the fancy graph settings.
-		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+		//ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 		
 		frame = new JFrame();
 		frame.setTitle(title);
@@ -75,16 +79,39 @@ public class ModelStatistics extends JPanel {
 		ChartPanel chartPanel;
 		switch (plotType) {
 		case DENSITY:
-			chartPanel = new ChartPanel(table, ChartType.SCATTER_PLOT, title, yLabel, xLabel, experiment);
+			ArrayList<Pair<Double, Double>>[] densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(table));
+			chartPanel = new ChartPanel(densityData, ChartType.SCATTER_PLOT, title + "(Density)", yLabel, xLabel, experiment);
+			addChartPanel(chartPanel);
+			
+			//Do we also trim?
+			if(trim){
+				int length = table[0].size();
+				int trimStart = this.trimStart < length? this.trimStart : 0;
+				int trimEnd = this.trimEnd < length? this.trimEnd : length;
+				
+				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
+				densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
+				chartPanel.addAdditionalChart(densityData, ChartType.SCATTER_PLOT, title + " (Density Trimmed " + trimStart + "-" + trimEnd+")", yLabel, xLabel);
+			}
 			break;
 
 		case TIMESERIES:
 		default:
 			chartPanel = new ChartPanel(table, ChartType.LINE_CHART, title, yLabel, xLabel, experiment);
+			addChartPanel(chartPanel);
+			
+			//Do we also trim?
+			if(trim){
+				int length = table[0].size();
+				int trimStart = this.trimStart < length? this.trimStart : 0;
+				int trimEnd = this.trimEnd < length? this.trimEnd : length;
+				
+				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
+				chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title + " (Trimmed " + trimStart + "-" + trimEnd+")", yLabel, xLabel);
+			}
 			break;
 		}
 		
-		addChartPanel(chartPanel);
 	}
 	
 	public void addChartPanel(ChartPanel chartPanel){
