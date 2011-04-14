@@ -16,6 +16,8 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.*;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.decorators.GradientEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 
@@ -23,7 +25,7 @@ public class GraphView {
 
 	public DirectedGraph<Integer, String> g;
 	
-	public GraphView(double[][] adjacencyMatrix) {
+	public GraphView(double[][] adjacencyMatrix, String name) {
 		
 		g = getSimpleGraph(adjacencyMatrix);
 		
@@ -35,12 +37,16 @@ public class GraphView {
 				layout);
 		vv.setPreferredSize(new Dimension(350, 350));
 		
-		// Setup up a new vertex to paint transformer...
+		// Set up a new vertex to paint transformer...
 		Transformer<Integer, Paint> vertexPaint = new Transformer<Integer, Paint>() {
 			public Paint transform(Integer i) {
 				return Color.WHITE;
 			}
 		};
+		
+		// Set up coloring for edges 
+		//vv.getRenderContext().setEdgeFillPaintTransformer(new GradientEdgePaintTransformer(Color.blue, Color.red, new VisualizationViewer(new CircleLayout(g))));
+		//vv.getRenderContext().setEdgeFontTransformer();
 		
 		vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 		//vv.getRenderContext().setEdgeStrokeTransformer(edgeStrokeTransformer);
@@ -48,7 +54,7 @@ public class GraphView {
 		vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 
-		JFrame frame = new JFrame("Graph Visualization");
+		JFrame frame = new JFrame(name);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(vv);
 		frame.pack();
@@ -70,8 +76,8 @@ public class GraphView {
 		}
 		
 		// add edges
-		for (int i=0; i<adjacencyMatrix.length; i++) {
-			for (int j=0; j<adjacencyMatrix[i].length; j++) {
+		for (int i=1; i<adjacencyMatrix.length; i++) {
+			for (int j=1; j<adjacencyMatrix[i].length; j++) {
 				
 				DecimalFormat df = new DecimalFormat("########.00");
 				String w = df.format(adjacencyMatrix[i][j]);
@@ -86,7 +92,7 @@ public class GraphView {
 	
 	public static void main(String[] args) {
 		double[][] am = {{1.0,2.0},{3.0,5.0}};
-		GraphView gv = new GraphView(am);
+		GraphView gv = new GraphView(am, "Test");
 	}
 
 }
