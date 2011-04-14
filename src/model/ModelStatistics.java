@@ -23,6 +23,8 @@ import org.jfree.chart.StandardChartTheme;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
 
+	public enum PlotType {TIMESERIES, DENSITY}
+	
     private JFrame frame;
     private JScrollPane scrollPane;
     private JButton saveButton;
@@ -66,26 +68,22 @@ public class ModelStatistics extends JPanel {
 		frame.setVisible(true);
 		saveAllChartsThumbnail();
 	}
-
-	public void plotLineGraph(ArrayList<Pair<Double, Double>>[] table, String title,
-			String yLabel, String xLabel, String experiment){
-		plot(table, title, yLabel, xLabel, experiment, ChartType.LINE_CHART);
-	} 
-	
-	public void plotScatterPlot(ArrayList<Pair<Double, Double>>[] table, String title,
-			String yLabel, String xLabel, String experiment){
-		plot(table, title, yLabel, xLabel, experiment, ChartType.SCATTER_PLOT);
-	} 
-	
-	public void plotHistogram(ArrayList<Pair<Double, Double>>[] table, String title,
-			String yLabel, String xLabel, String experiment){
-		plot(table, title, yLabel, xLabel, experiment, ChartType.HISTOGRAM);
-	} 
 	
 	public void plot(ArrayList<Pair<Double, Double>>[] table, String title,
-			String yLabel, String xLabel, String experiment, ChartType type) {
+			String yLabel, String xLabel, String experiment, PlotType plotType) {
 		
-		ChartPanel chartPanel = new ChartPanel(table, type, title, yLabel, xLabel, experiment);
+		ChartPanel chartPanel;
+		switch (plotType) {
+		case DENSITY:
+			chartPanel = new ChartPanel(table, ChartType.SCATTER_PLOT, title, yLabel, xLabel, experiment);
+			break;
+
+		case TIMESERIES:
+		default:
+			chartPanel = new ChartPanel(table, ChartType.LINE_CHART, title, yLabel, xLabel, experiment);
+			break;
+		}
+		
 		addChartPanel(chartPanel);
 	}
 	
