@@ -128,6 +128,7 @@ public class ModelController implements Runnable {
 		}
 		SimpleClustering geneClustering = new SimpleClustering(array);
 		geneClustering.findMarkov();
+		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole);
 	}
 
 	/**
