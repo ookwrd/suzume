@@ -7,7 +7,7 @@ import tools.Pair;
 public class Statistics {
 	
 
-	public static final int NUMBER_DENSITY_BUCKETS = 100;
+	public static final int NUMBER_DENSITY_BUCKETS = 1000;
 
 	/**
 	 * Convenience  method for printing an arraylist of pairs as a vertical list.

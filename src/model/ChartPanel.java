@@ -19,6 +19,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.ClusteredXYBarRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
+import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -31,7 +32,7 @@ public class ChartPanel extends JPanel {
 	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
-	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT};
+	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
 	private JFreeChart chart;
 	private String filename;
@@ -93,18 +94,30 @@ public class ChartPanel extends JPanel {
 		switch (type) {
 
 		case HISTOGRAM:
-			chart = ChartFactory.createXYBarChart(title, // Title
+			chart = ChartFactory.createHistogram(title, 
+					xLabel,
+					yLabel, 
+					createHistogramDataset(series), 
+					PlotOrientation.VERTICAL,
+					false, 
+					false, 
+					false
+					);
+			XYPlot catPlot = chart.getXYPlot();
+            ((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
+			break;
+		
+		case AREA_CHART:
+			chart = ChartFactory.createXYAreaChart(title, // Title
 					xLabel, // X-Axis label
-					false,
+				//	false,
 					yLabel, // Y-Axis label
-					createHistogramDataset(series), // Dataset
+					createXyDataset(series), // Dataset
 					PlotOrientation.VERTICAL, // Plot orientation
 					false, // Show legend
 					false, // Tooltips
-					false); // URL
-			XYPlot catPlot = chart.getXYPlot();
-			catPlot.setRenderer(new ClusteredXYBarRenderer());
-			//((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
+					false// URL
+					); 
 			break;
 			
 		case SCATTER_PLOT:
@@ -116,7 +129,8 @@ public class ChartPanel extends JPanel {
 					PlotOrientation.VERTICAL, 
 					false, 
 					false, 
-					false);
+					false
+					);
 			XYPlot plot = (XYPlot)chart.getPlot();
 			XYDotRenderer renderer = new XYDotRenderer();
 			renderer.setDotWidth(2);
@@ -162,11 +176,34 @@ public class ChartPanel extends JPanel {
 		return series;
 	}
 	
-	private /*HistogramDataset*/ XYSeriesCollection createHistogramDataset(ArrayList<Pair<Double, Double>>[] series){
+	private HistogramDataset createHistogramDataset(ArrayList<Pair<Double, Double>>[] series){
 		
-		return createXyDataset(series);
+	
+		HistogramDataset dataSet = new HistogramDataset();
 		
-		//return null;//TODO
+		dataSet.addSeries(new Double(1), stripValues(series), 1000);
+		
+		return dataSet;
+	}
+	
+	//TODO factor this into Statistics class
+	private double[] stripValues(ArrayList<Pair<Double, Double>>[] series){
+		
+		ArrayList<Double> dataset = new ArrayList<Double>();
+		
+		for(ArrayList<Pair<Double, Double>> list : series){
+			for(Pair<Double, Double> pair : list){
+				dataset.add(pair.second);
+			}
+		}
+		
+		//Convert to doubles
+		double[] retVal = new double[dataset.size()];
+		for(int i =0; i < dataset.size(); i++){
+			retVal[i] = dataset.get(i);
+		}
+		
+		return retVal;
 	}
 	
 	public void saveThumbNailSizeChart(){
