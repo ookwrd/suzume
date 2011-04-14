@@ -12,6 +12,8 @@ public abstract class Clustering {
 	public static final int MIN_NUM_CLUSTERS = 4;
 	
 	public ArrayList<Double>[] array;
+	
+	public String clusteringConsole;
 
 	/**
 	 * Constructor 
@@ -20,6 +22,7 @@ public abstract class Clustering {
 	 */
 	public Clustering(ArrayList<Double>[] array) {
 		this.array = array;
+		clusteringConsole = "";
 	}
 	
 	/*
@@ -38,14 +41,7 @@ public abstract class Clustering {
 		// render diagram
 		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
 		stateTransitionsNormalized(array, clustering, 1);
-		stateTransitionsNormalized(array, clustering, 2);
-		stateTransitionsNormalized(array, clustering, 3);
-		stateTransitionsNormalized(array, clustering, 4);
-		stateTransitionsNormalized(array, clustering, 5);
 		stateTransitionsNormalized(array, clustering, 10);
-		stateTransitionsNormalized(array, clustering, 20);
-		stateTransitionsNormalized(array, clustering, 30);
-		stateTransitionsNormalized(array, clustering, 40);
 		stateTransitionsNormalized(array, clustering, 50);
 		stateTransitionsNormalized(array, clustering, 100);
 		stateTransitionsNormalized(array, clustering, 200);
@@ -98,14 +94,19 @@ public abstract class Clustering {
 			}
 		}
 		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("\nTransition probabilities (single step: "+step+", X:gap)");
+		appendConsole("\nTransition probabilities (single step: "+step+", X:gap)");
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
+				appendConsole("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
 			}
 			System.out.println();
 		}
 		return result;
+	}
+	
+	private void appendConsole(String string) {
+		clusteringConsole += string+("\n");
+		System.out.println(string);
 	}
 
 	/**
