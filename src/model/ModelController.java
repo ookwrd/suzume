@@ -1,19 +1,11 @@
 package model;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Set;
 
-import javax.swing.JFrame;
-import javax.swing.text.StyledEditorKit.ForegroundAction;
+import model.ChartPanel.ChartType;
+import model.ModelStatistics.PlotType;
 
 import tools.Clustering;
 import tools.KmeansClustering;
@@ -26,12 +18,8 @@ import Agents.AgentFactory;
 import Launcher.Launcher;
 
 public class ModelController implements Runnable {
-	
-	private static final int NUMBER_DENSITY_BUCKETS = 100;
-	
-	private static final double DEFAULT_DENSITY_GRANULARITY = 0.01;//should be set lower than 0.01 //TODO refactor
 
-	private static final int DEFAULT_STATE_TRANSITION_STEP = 1;
+	private static final int MAX_NUM_STATES = KmeansClustering.MAX_NUM_CLUSTERS;
 
 	//Configuration Settings
 	private ModelConfiguration config;
@@ -39,12 +27,12 @@ public class ModelController implements Runnable {
 	private RandomGenerator randomGenerator;
 
 	//Statistics
-	private ArrayList<Double>[] totalNumberGenotypes;
-	private ArrayList<Double>[] totalNumberPhenotypes;
-	private ArrayList<Double>[] totalFitnesses;
-	private ArrayList<Double>[] learningIntensities;
-	private ArrayList<Double>[] geneGrammarMatches;
-	private ArrayList<Double>[] numberNulls;
+	private ArrayList<Pair<Double,Double>>[] totalNumberGenotypes;
+	private ArrayList<Pair<Double,Double>>[] totalNumberPhenotypes;
+	private ArrayList<Pair<Double,Double>>[] totalFitnesses;
+	private ArrayList<Pair<Double,Double>>[] learningIntensities;
+	private ArrayList<Pair<Double,Double>>[] geneGrammarMatches;
+	private ArrayList<Pair<Double,Double>>[] numberNulls;
 
 	//Model
 	private PopulationModel population;
@@ -54,7 +42,7 @@ public class ModelController implements Runnable {
 	private ModelStatistics statisticsWindow;
 
 	//Progress counters
-	private int currentGeneration = 0;
+	private Integer currentGeneration = 0;
 	private int currentRun = 0;
 
 	public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
@@ -89,10 +77,10 @@ public class ModelController implements Runnable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ArrayList<Double>[] getInitializedStatisticsArraylist(){
-		ArrayList<Double>[] arrayLists = new ArrayList[config.numberRuns];
+	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
+		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.numberRuns];
 		for(int i = 0;i < config.numberRuns; i++){
-			arrayLists[i] = new ArrayList<Double>();
+			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
 		}
 		return arrayLists;
 	}
@@ -155,96 +143,7 @@ public class ModelController implements Runnable {
 		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
 		
 	}
-
-
-	/**
-	 * Normalize the probability matrix so that every column sums up to 1
-	 * @param i 
-	 * @param clustering 
-	 * 
-	 * @param matrix
-	 * @return
-	 */
-	private double[][] stateTransitionsNormalized(ArrayList<Double>[] ar, Hashtable<Double, Integer> clustering, int step) {
-		Short[] stateSequence = stateSequence(ar, clustering, false);
-		double[][] matrix = stateTransitions(stateSequence, step);
-		double[][] result = new double[matrix.length][matrix[0].length]; 
-		for (int i = 0; i < matrix.length; i++) {
-			int colSum = 0;
-			for (int j = 0; j < matrix[i].length; j++) {
-				colSum += matrix[i][j];
-			}
-			for (int j = 0; j < matrix[i].length; j++) {
-				if (colSum == 0) colSum = 1;
-				result[i][j] = matrix[i][j]/colSum;
-			}
-		}
-		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("\nTransition probabilities (single step: "+step+", X:gap)");
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
-			}
-			System.out.println();
-		}
-		return result;
-	}
-
-	/**
-	 * Compute the state transition probability matrix 
-	 * 
-	 * @param stateSequence
-	 * @return
-	 */
-	private double[][] stateTransitions(Short[] stateSequence, int step) {
-		double[][] transitions = new double[Clustering.MAX_NUM_CLUSTERS][Clustering.MAX_NUM_CLUSTERS];
-		/*for (int i=0; i<MAX_NUM_STATES; i++) {
-			for (int j=0; j<MAX_NUM_STATES; j++) {
-				transitions[i][j] = 0.0;
-			}
-		}*/
-		int from, to = 0;
-		if(stateSequence.length>1)
-			from=stateSequence[0];
-		else { 
-			System.out.println("Empty state sequence !");
-			return transitions;
-		}
-		int fromMax = 0;
-		int toMax = 0;
-		if (step<1) step = 1;
-		int start = 1;
-		System.out.print("\nState transitions: "+from);
-		for (int i = start; i < stateSequence.length; i+=step) {
-			from = to;
-			to = stateSequence[i];
-			System.out.print(", "+to);
-			if ((i-step)/config.generationCount == (i)/config.generationCount) // if did not reach another run
-			{	
-				transitions[from][to] +=1;
-			}
-			//else System.out.println("reached another run (from "+(i-step)+" to "+i+" in the state sequence)");
-			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
-			if (to > toMax) toMax = to;
-		}
-		System.out.println();
-		fromMax++; // matrix length
-		toMax++; // matrix width
-		
-		//return a smaller matrix
-		double[][] result = new double[fromMax][toMax];
-		
-		//System.out.println("\nTransition count (single step: "+step+", X:gap)");
-		for (int i = 0; i < fromMax; i++) {
-			for (int j = 0; j < toMax; j++) {
-				result[i][j] = transitions[i][j];
-				//System.out.print("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"):"+transitions[i][j]+" ");
-			}
-			//System.out.println();
-		}
-		return result;
-	}
-
+	
 	/**
 	 * Main method to run the simulation.
 	 */
@@ -438,12 +337,12 @@ public class ModelController implements Runnable {
 
 		double learningIntensity = (config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
 
-		totalFitnesses[currentRun].add(totalFitness/config.populationSize);
-		learningIntensities[currentRun].add(learningIntensity/config.populationSize);
-		geneGrammarMatches[currentRun].add(genomeGrammarMatch/config.populationSize);
-		numberNulls[currentRun].add(numberNull/config.populationSize);
-		totalNumberGenotypes[currentRun].add((double)genotypes.size());
-		totalNumberPhenotypes[currentRun].add((double)phenotypes.size());
+		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.populationSize));
+		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.populationSize));
+		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.populationSize));
+		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.populationSize));
+		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
+		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
 
 	}
 	
@@ -455,16 +354,16 @@ public class ModelController implements Runnable {
 		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
-		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
-		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
-		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
-		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
-		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName);
-		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName);
+		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName, PlotType.DENSITY);
+		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName, PlotType.DENSITY);
+		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName,PlotType.TIMESERIES);
+		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName,PlotType.TIMESERIES);
 		
 		statisticsWindow.display();
 	}
@@ -472,51 +371,8 @@ public class ModelController implements Runnable {
 	private String getTitleString(){
 		return "[Seed: " + randomGenerator.getSeed() + "   " + config + "]";
 	}
-	
-	public static ArrayList<Pair<Double, Integer>> smooth(ArrayList<Pair<Double, Integer>> series, int maxWindow){
-		
-		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<Pair<Double,Integer>>();
-		Collections.sort(series);
-		
-		for(int i = maxWindow; i < series.size()-maxWindow; i++){
 
-			double count = 0;
-
-			for(int window = 1; window <= maxWindow; window++){
-				for(int j = 0; j < window; j++){
-					count += series.get(i-j).second * (window - j);
-					count += series.get(i+j).second * (window - j);
-				}
-				
-				count += series.get(i).second;
-			}
-			retVal.add(new Pair<Double, Integer>(series.get(i).first, (int)(count/*/(window*2+1)*/)));
-		}
-		
-		return retVal;
-		
-	}
-
-    /**
-     * Cluster points from an array and computes the standard deviation (sigma)
-     * 
-     * @param an array of values to cluster, each entry represents one
-     *            occurrence of the value
-     * @param i number of clusters
-     * @return std deviation
-     */
-    /*public static double clusterSigma(ArrayList<Double>[] array, int i) {
-            //Hashtable<Double, Integer> clusters = null; //null
-            //for(int i=2; i<=10; i++) {
-            
-            double sigma = KmeansClustering.sigmaKmeans(array, i);
-            System.out.println("total deviation = ["+Math.round(sigma*1000000.0)/10000.0+"%]");
-            
-            //}
-            return sigma;
-    }*/
-    
-    /**
+	/**
      * Cluster points from an array
      * 
      * @param an array of values to cluster, each entry represents one
@@ -529,48 +385,6 @@ public class ModelController implements Runnable {
             Hashtable<Double, Integer> clusters = clustering.cluster(array);
             return clusters;
     }
-    
-    /** 
-     * Extract non-state-repeating transitions (deprecated)
-     * 
-     * @param clustering
-     * @return
-     */
-    /*public static ArrayList<Integer> extractStateTransitionsNoRepeat(ArrayList<Double>[] a, Hashtable<Double, Integer> clustering) {
-    	ArrayList<Integer> stateSequence = new ArrayList<Integer>();
-		
-		Enumeration<Double> e = clustering.keys();
-		int previousState = 0;
-		int count = 0;
-		int stableCount = 0;
-		int maxStableCount = 0;
-		while (e.hasMoreElements()) {
-			double elt = e.nextElement();
-			int tmp = clustering.get(elt);
-			//System.out.print(elt + ":" + tmp + " ");
-			count++;
-			if (previousState != tmp) {
-				stateSequence.add(tmp);
-				previousState = tmp;
-				stableCount = 0;
-			}
-			else { 
-				stableCount++;
-				if (maxStableCount<stableCount) maxStableCount=stableCount;
-			}
-			
-
-		} //TODO : virer les states qui n'ont pas lieu, quand on passe au run suivant
-		
-    	System.out.print("\nState transitions: ");
-    	for (int i = 0; i < stateSequence.size(); i++) {
-			System.out.print((int) stateSequence.get(i)+"->");
-		}
-    	//System.out.print("\n#data = "+count+" ");
-    	//System.out.println("#successive states = "+stateSequence.size());
-    	//System.out.println("#max successive stable transitions = "+maxStableCount);
-		return stateSequence;
-    }*/
     
     /**
      * Extract state transitions
@@ -619,11 +433,133 @@ public class ModelController implements Runnable {
 		}
 		return states;
     }
+    
+	
+	/**
+	 * Compute the Markov probabilistic model for the data
+	 */
+	private void findMarkov() {
+		ArrayList<Double>[] data = Statistics.trimArrayLists(geneGrammarMatches,2000,geneGrammarMatches[0].size());
+		Hashtable<Double, Integer> clustering = cluster(data);
+		//System.out.print("OH data size "+data[0].size());
+		//System.out.println("OH clustering size : "+clustering.size());
+		// render diagram
+		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
+		stateTransitionsNormalized(data, clustering, 1);
+		stateTransitionsNormalized(data, clustering, 2);
+		stateTransitionsNormalized(data, clustering, 3);
+		stateTransitionsNormalized(data, clustering, 4);
+		stateTransitionsNormalized(data, clustering, 5);
+		stateTransitionsNormalized(data, clustering, 10);
+		stateTransitionsNormalized(data, clustering, 20);
+		stateTransitionsNormalized(data, clustering, 30);
+		stateTransitionsNormalized(data, clustering, 40);
+		stateTransitionsNormalized(data, clustering, 50);
+		stateTransitionsNormalized(data, clustering, 100);
+		stateTransitionsNormalized(data, clustering, 200);
+		
+		// plot the sequence 
+		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
+		
+		for(int i = 0; i < data.length; i++){
+			clusteringVal[i] = new ArrayList<Double>();
+			for(int j =0; j < data[0].size(); j++) {
+				clusteringVal[i].add((double) clustering.get(data[i].get(j)));
+			}
+		}
+		statisticsWindow.plot(clusteringVal, "Clustering 200-trimmed Gene Grammar Matches", "State", "", "States sequence");
+		*/
+		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
+		
+	}
+	
+	/**
+	 * Normalize the probability matrix so that every column sums up to 1
+	 * @param i 
+	 * @param clustering 
+	 * 
+	 * @param matrix
+	 * @return
+	 */
+	private double[][] stateTransitionsNormalized(ArrayList<Double>[] ar, Hashtable<Double, Integer> clustering, int step) {
+		Short[] stateSequence = stateSequence(ar, clustering, false);
+		double[][] matrix = stateTransitions(stateSequence, step);
+		double[][] result = new double[matrix.length][matrix[0].length]; 
+		for (int i = 0; i < matrix.length; i++) {
+			int colSum = 0;
+			for (int j = 0; j < matrix[i].length; j++) {
+				colSum += matrix[i][j];
+			}
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (colSum == 0) colSum = 1;
+				result[i][j] = matrix[i][j]/colSum;
+			}
+		}
+		DecimalFormat df = new DecimalFormat("########.00"); 
+		System.out.println("\nTransition probabilities (single step: "+step+")");
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[0].length; j++) {
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
+			}
+			System.out.println();
+		}
+		return result;
+	}
+
+	/**
+	 * Compute the state transition probability matrix 
+	 * 
+	 * @param stateSequence
+	 * @return
+	 */
+	private double[][] stateTransitions(Short[] stateSequence, int step) {
+		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
+		/*for (int i=0; i<MAX_NUM_STATES; i++) {
+			for (int j=0; j<MAX_NUM_STATES; j++) {
+				transitions[i][j] = 0.0;
+			}
+		}*/
+		int from, to = 0;
+		if(stateSequence.length>1)
+			from=stateSequence[0];
+		else { 
+			System.out.println("Empty state sequence !");
+			return transitions;
+		}
+		int fromMax = 0;
+		int toMax = 0;
+		if (step<1) step = 1;
+		int start = 1;
+		System.out.print("\nState transitions: "+from);
+		for (int i = start; i < stateSequence.length; i+=step) {
+			from = to;
+			to = stateSequence[i];
+			System.out.print(", "+to);
+			if ((i-step)/config.generationCount == (i)/config.generationCount) // if jumped far enough to reach another run : don't update
+				transitions[from][to] +=1; 
+			
+			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
+			if (to > toMax) toMax = to;
+		}
+		fromMax++; // matrix length
+		toMax++; // matrix width
+		
+		//return a smaller matrix
+		double[][] result = new double[fromMax][toMax];
+		
+		System.out.println("\nTransition count (single step: "+step+")");
+		for (int i = 0; i < fromMax; i++) {
+			for (int j = 0; j < toMax; j++) {
+				result[i][j] = transitions[i][j];
+				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
+			}
+			System.out.println();
+		}
+		return result;
+	}
 
     
 	public static void main(String[] args) {
-		//long heapSize = Runtime.getRuntime().totalMemory();
-		//System.out.println("Java heap size = "+ heapSize);
 	    new Launcher();
 	}
 

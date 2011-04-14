@@ -82,13 +82,13 @@ public class Statistics {
 	 * 
 	 * @param inputArray
 	 */
-	public static ArrayList<Pair<Double, Integer>> calculateDensity(ArrayList<Double> inputArray) {
+	public static ArrayList<Pair<Double, Double>>[] calculateDensity(ArrayList<Pair<Double, Double>> inputArray) {
 	
 		// find range
 		Double min = Double.MAX_VALUE;
 		Double max = Double.MIN_VALUE;
 			for (int j = 0; j < inputArray.size(); j++) {
-			Double value = inputArray.get(j);
+			Double value = inputArray.get(j).second;
 			if (value > max) {
 				max = value;
 			}
@@ -105,16 +105,17 @@ public class Statistics {
 			numOccurrences.add(0);
 		}
 		
-		for(Double value : inputArray){
-			int index = (int)((value-min)/step);
+		for(Pair<Double, Double> value : inputArray){
+			int index = (int)((value.second-min)/step);
 			numOccurrences.set(index, numOccurrences.get(index)+1);
 		}
 		
-		ArrayList<Pair<Double, Integer>> retVal = new ArrayList<Pair<Double,Integer>>();
+		ArrayList<Pair<Double, Double>>[] retVal = new ArrayList[1];
+		retVal[0] = new ArrayList<Pair<Double,Double>>();
 		
 		for(int i = 0; i < numOccurrences.size(); i++){
 			double reconstruct = min + i * step;
-			retVal.add(new Pair<Double, Integer>(reconstruct, numOccurrences.get(i)));
+			retVal[0].add(new Pair<Double, Double>(reconstruct, numOccurrences.get(i).doubleValue()));
 		}
 		
 		return retVal;
