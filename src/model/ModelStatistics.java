@@ -67,12 +67,29 @@ public class ModelStatistics extends JPanel {
 		saveAllChartsThumbnail();
 	}
 
+	public void plotLineGraph(ArrayList<Pair<Double, Double>>[] table, String title,
+			String yLabel, String xLabel, String experiment){
+		plot(table, title, yLabel, xLabel, experiment, ChartType.LINE_CHART);
+	} 
+	
+	public void plotScatterPlot(ArrayList<Pair<Double, Double>>[] table, String title,
+			String yLabel, String xLabel, String experiment){
+		plot(table, title, yLabel, xLabel, experiment, ChartType.SCATTER_PLOT);
+	} 
+	
+	public void plotHistogram(ArrayList<Pair<Double, Double>>[] table, String title,
+			String yLabel, String xLabel, String experiment){
+		plot(table, title, yLabel, xLabel, experiment, ChartType.HISTOGRAM);
+	} 
+	
 	public void plot(ArrayList<Pair<Double, Double>>[] table, String title,
-			String yLabel, String xLabel, String experiment) {
-		
-		ChartType type = ChartType.SCATTER_PLOT;//TODO
+			String yLabel, String xLabel, String experiment, ChartType type) {
 		
 		ChartPanel chartPanel = new ChartPanel(table, type, title, yLabel, xLabel, experiment);
+		addChartPanel(chartPanel);
+	}
+	
+	public void addChartPanel(ChartPanel chartPanel){
 		add(chartPanel);
 		chartPanels.add(chartPanel);
 

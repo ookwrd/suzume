@@ -35,13 +35,15 @@ public class ChartPanel extends JPanel {
 	private String filename;
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>> data, ChartType type, String title,
-			String yLabel, String xLabel, String experiment){
-		this(wrapArrayList(data), type, title, yLabel, xLabel, experiment);			
+			String yLabel, String xLabel, String printName){
+		this(wrapArrayList(data), type, title, yLabel, xLabel, printName);			
 	}
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
-			String yLabel, String xLabel, String experiment){
+			String yLabel, String xLabel, String printName){
 		super();
+		
+		this.filename = title.replaceAll(" ", "") + "-" + printName + ".jpg";
 		
 		this.chart = createChart(data, type, title, xLabel, yLabel);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
