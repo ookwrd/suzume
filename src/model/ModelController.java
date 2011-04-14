@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import model.ChartPanel.ChartType;
+
 import tools.Clustering;
 import tools.KmeansClustering;
 import tools.Pair;
@@ -319,16 +321,16 @@ public class ModelController implements Runnable {
 		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
-		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
-		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
-		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
-		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
-		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName);
-		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName);
+		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName, ChartType.SCATTER_PLOT);
+		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName, ChartType.SCATTER_PLOT);
+		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName,ChartType.LINE_CHART);
+		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName,ChartType.LINE_CHART);
 		
 		statisticsWindow.display();
 	}
