@@ -22,6 +22,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import tools.Pair;
+import tools.Statistics;
 
 @SuppressWarnings("serial")
 public class ChartPanel extends JPanel {
@@ -30,6 +31,10 @@ public class ChartPanel extends JPanel {
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT};
+	
+	private boolean trim = true;
+	private int trimStart = 2000;
+	private int trimEnd = Integer.MAX_VALUE;
 	
 	private JFreeChart chart;
 	private String filename;
@@ -44,11 +49,20 @@ public class ChartPanel extends JPanel {
 		super();
 		
 		this.filename = title.replaceAll(" ", "") + "-" + printName + ".jpg";
-		
-		this.chart = createChart(data, type, title, xLabel, yLabel);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
+		this.chart = createChart(data, type, title, xLabel, yLabel);
 		add(createImageJLabel(chart));
+		
+		//Do we also trim?
+		if(trim){
+			int length = data[0].size();
+			int trimStart = this.trimStart < length? this.trimStart : 0;
+			int trimEnd = this.trimEnd < length? this.trimEnd : length;
+			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, this.trimStart, trimEnd);
+			JFreeChart trimmedChart = createChart(trimmedDataArrayList, type, title + " (Trimmed " + trimStart + "-" + trimEnd+")", xLabel, yLabel);
+			add(createImageJLabel(trimmedChart));
+		}
 	}
 	
 	private JLabel createImageJLabel(JFreeChart chart) {
