@@ -15,15 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
 
 import tools.Pair;
 import tools.Statistics;
 
 import model.ChartPanel.ChartType;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.StandardChartTheme;
 
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
@@ -44,7 +44,7 @@ public class ModelStatistics extends JPanel {
 	public ModelStatistics(String title) {
 		
 		//Gets rid of all the fancy graph settings.
-		//ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 		
 		frame = new JFrame();
 		frame.setTitle(title);
@@ -61,6 +61,7 @@ public class ModelStatistics extends JPanel {
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		
 		saveButton = new JButton("Save all graphs");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -81,8 +82,9 @@ public class ModelStatistics extends JPanel {
 	public void plotDensity(ArrayList<Pair<Double, Double>>[] table, String title,
 			 String xLabel, String experiment) {
 
-		ArrayList<Pair<Double, Double>>[] densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(table));
-		ChartPanel chartPanel = new ChartPanel(densityData, ChartType.SCATTER_PLOT, title + "(Density)", "Occurences", xLabel, experiment);
+		ChartType type = ChartType.HISTOGRAM;
+		//ArrayList<Pair<Double, Double>>[] densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(table));
+		ChartPanel chartPanel = new ChartPanel(table, type, title + "(Density)", "Occurences", xLabel, experiment);
 		addChartPanel(chartPanel);
 
 		//Do we also trim?
@@ -92,8 +94,8 @@ public class ModelStatistics extends JPanel {
 			int trimEnd = this.trimEnd < length? this.trimEnd : length;
 
 			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-			densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
-			chartPanel.addAdditionalChart(densityData, ChartType.SCATTER_PLOT, title + " (Density Trimmed " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
+			//densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
+			chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Density Trimmed " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
 		}
 		
 	}
