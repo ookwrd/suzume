@@ -18,6 +18,7 @@ import javax.swing.text.StyledEditorKit.ForegroundAction;
 import tools.Clustering;
 import tools.KmeansClustering;
 import tools.StateTransitionVisualizer;
+import tools.Statistics;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -71,6 +72,7 @@ public class ModelController implements Runnable {
 	
 	//Visualization
 	private StepwiseVisualizer visualizer;
+	private ModelStatistics statisticsWindow;
 
 	//Progress counters
 	private int currentGeneration = 0;
@@ -174,7 +176,8 @@ public class ModelController implements Runnable {
 		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
 		
 	}
-	
+
+
 	/**
 	 * Normalize the probability matrix so that every column sums up to 1
 	 * @param i 
@@ -262,7 +265,7 @@ public class ModelController implements Runnable {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Main method to run the simulation.
 	 */
@@ -470,19 +473,19 @@ public class ModelController implements Runnable {
 	 */
 	private void plotStatistics() {
 		
-		ModelStatistics statisticsWindow = new ModelStatistics(getTitleString());
+		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
-		
+
 		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(calculateDensity(aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
-		statisticsWindow.plot(calculateDensity(aggregateArrayLists(trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
+		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName);
 		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName);
 		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName);
 		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName);
 		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName);
 		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName);
-		statisticsWindow.plot(trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName);
-		statisticsWindow.plot(trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName);
+		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName);
+		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName);
 		
 		statisticsWindow.display();
 	}
@@ -688,11 +691,6 @@ public class ModelController implements Runnable {
      */
     public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
             SimpleClustering clustering = new SimpleClustering(SimpleClustering.DEFAULT_CENTERS); // using a very simple version of clustering TODO to be improved later
-            System.out.print("\nStates:");
-            for(int i = 0; i < clustering.centers.length; i++) {
-    			System.out.print(" "+i+":"+clustering.centers[i]);
-    		}
-            System.out.println();
             Hashtable<Double, Integer> clusters = clustering.cluster(array);
             return clusters;
     }

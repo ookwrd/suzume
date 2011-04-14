@@ -13,8 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -24,7 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import model.ModelController.Pair;
+import tools.Pair;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
