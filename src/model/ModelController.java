@@ -340,17 +340,14 @@ public class ModelController implements Runnable {
 		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.plot(geneGrammarMatches, "Gene Grammar Matches", "Occurrences", "Gene Grammar Matches", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(geneGrammarMatches)), "Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName, PlotType.DENSITY);
-		statisticsWindow.plot(Statistics.calculateDensity(Statistics.aggregateArrayLists(Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size()))), "200 onwards...Density (Gene Grammar Matches)", "Occurrences", "Gene Grammar Matches", printName, PlotType.DENSITY);
-		statisticsWindow.plot(learningIntensities, "Learning Intensity", "Occurrences", "Learning Intensity", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(numberNulls, "Number of Nulls", "Occurrences", "Number of Nulls", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(totalFitnesses, "Fitnesses", "Occurrences", "Fitnesses", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(totalNumberGenotypes, "Number of Genotypes", "Occurrences", "Number of Genotypes", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(totalNumberPhenotypes, "Number of Phenotypes", "Occurrences", "Number of Phenotypes", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberGenotypes, 200, totalNumberGenotypes[0].size()), "Number of Genotypes (trim)", "Occurrences", "Number of Genotypes", printName,PlotType.TIMESERIES);
-		statisticsWindow.plot(Statistics.trimArrayLists(totalNumberPhenotypes, 200, totalNumberPhenotypes[0].size()), "Number of Phenotypes (trim)", "Occurrences", "Number of Phenotypes", printName,PlotType.TIMESERIES);
-		
+		statisticsWindow.plotTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
+		statisticsWindow.plotDensity(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
+		statisticsWindow.plotTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
+		statisticsWindow.plotTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);
+		statisticsWindow.plotTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
+		statisticsWindow.plotTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.plotTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
+	
 		statisticsWindow.display();
 	}
 	

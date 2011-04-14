@@ -16,6 +16,7 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.ClusteredXYBarRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.data.xy.XYSeries;
@@ -31,10 +32,6 @@ public class ChartPanel extends JPanel {
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT};
-	
-	private boolean trim = true;
-	private int trimStart = 2000;
-	private int trimEnd = Integer.MAX_VALUE;
 	
 	private JFreeChart chart;
 	private String filename;
@@ -54,15 +51,12 @@ public class ChartPanel extends JPanel {
 		this.chart = createChart(data, type, title, xLabel, yLabel);
 		add(createImageJLabel(chart));
 		
-		//Do we also trim?
-		if(trim){
-			int length = data[0].size();
-			int trimStart = this.trimStart < length? this.trimStart : 0;
-			int trimEnd = this.trimEnd < length? this.trimEnd : length;
-			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, this.trimStart, trimEnd);
-			JFreeChart trimmedChart = createChart(trimmedDataArrayList, type, title + " (Trimmed " + trimStart + "-" + trimEnd+")", xLabel, yLabel);
-			add(createImageJLabel(trimmedChart));
-		}
+	}
+	
+	public void addAdditionalChart(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
+			String yLabel, String xLabel){
+		JFreeChart chart = createChart(data, type, title, xLabel, yLabel);
+		add(createImageJLabel(chart));
 	}
 	
 	private JLabel createImageJLabel(JFreeChart chart) {
@@ -99,8 +93,9 @@ public class ChartPanel extends JPanel {
 		switch (type) {
 
 		case HISTOGRAM:
-			chart = ChartFactory.createHistogram(title, // Title
+			chart = ChartFactory.createXYBarChart(title, // Title
 					xLabel, // X-Axis label
+					false,
 					yLabel, // Y-Axis label
 					createHistogramDataset(series), // Dataset
 					PlotOrientation.VERTICAL, // Plot orientation
@@ -108,7 +103,8 @@ public class ChartPanel extends JPanel {
 					false, // Tooltips
 					false); // URL
 			XYPlot catPlot = chart.getXYPlot();
-			((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
+			catPlot.setRenderer(new ClusteredXYBarRenderer());
+			//((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
 			break;
 			
 		case SCATTER_PLOT:
