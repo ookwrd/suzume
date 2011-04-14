@@ -198,10 +198,10 @@ public class ModelController implements Runnable {
 			}
 		}
 		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("\nTransition probabilities (single step: "+step+")");
+		System.out.println("\nTransition probabilities (single step: "+step+", X:gap)");
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
+				System.out.print("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
 			}
 			System.out.println();
 		}
@@ -242,23 +242,23 @@ public class ModelController implements Runnable {
 				transitions[from][to] +=1;
 			}
 			//else System.out.println("reached another run (from "+(i-step)+" to "+i+" in the state sequence)");
-			
 			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
 			if (to > toMax) toMax = to;
 		}
+		System.out.println();
 		fromMax++; // matrix length
 		toMax++; // matrix width
 		
 		//return a smaller matrix
 		double[][] result = new double[fromMax][toMax];
 		
-		System.out.println("\nTransition count (single step: "+step+")");
+		//System.out.println("\nTransition count (single step: "+step+", X:gap)");
 		for (int i = 0; i < fromMax; i++) {
 			for (int j = 0; j < toMax; j++) {
 				result[i][j] = transitions[i][j];
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
+				//System.out.print("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"):"+transitions[i][j]+" ");
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		return result;
 	}
