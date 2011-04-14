@@ -2,7 +2,9 @@
 package model;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.jfree.chart.JFreeChart;
 
@@ -19,6 +22,8 @@ import tools.Statistics;
 
 import model.ChartPanel.ChartType;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.StandardChartTheme;
 
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
@@ -34,6 +39,7 @@ public class ModelStatistics extends JPanel {
     private JButton saveButton;
     
     private ArrayList<ChartPanel> chartPanels;
+	private TextArea textArea;
 	
 	public ModelStatistics(String title) {
 		
@@ -52,10 +58,10 @@ public class ModelStatistics extends JPanel {
 		frame.add(scrollPane);
 		
 		this.chartPanels = new ArrayList<ChartPanel>();
+		addConsolePanel("");
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		
 		saveButton = new JButton("Save all graphs");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -116,6 +122,21 @@ public class ModelStatistics extends JPanel {
 
 		validate();
 		frame.validate();
+	}
+	
+	private void addConsolePanel(String text) {
+		JPanel consolePanel = new JPanel();
+		textArea = new TextArea(text);
+		textArea.setSize(this.getSize());
+		consolePanel.add(textArea);
+		frame.add(consolePanel, BorderLayout.AFTER_LAST_LINE);
+		
+		validate();
+		frame.validate();
+	}
+	
+	public void updateConsoleText(String text) {
+		textArea.setText(text);
 	}
 	
 	/**
