@@ -35,8 +35,8 @@ public class SimpleClustering extends Clustering {
 			/*
 			 * for (Double value : arrayList) { for (int i=1;
 			 * i<thresholds.length; i++) { if (thresholds[i-1] > value && value
-			 * >= thresholds[i]) results.put(value, i-1); } if
-			 * (!results.containsKey(value))
+			 * >= thresholds[i]) clusteringConsole.put(value, i-1); } if
+			 * (!clusteringConsole.containsKey(value))
 			 * System.out.println("not classified: "+value); }
 			 */
 			
