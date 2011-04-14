@@ -94,19 +94,19 @@ public abstract class Clustering {
 			}
 		}
 		DecimalFormat df = new DecimalFormat("########.00"); 
-		appendConsole("\nTransition probabilities (single step: "+step+", X:gap)");
+		appendConsole("\nTransition probabilities (single step: "+step+", X:gap)\n");
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[0].length; j++) {
 				appendConsole("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
 			}
-			System.out.println();
+			appendConsole("\n");
 		}
 		return result;
 	}
 	
 	private void appendConsole(String string) {
-		clusteringConsole += string+("\n");
-		System.out.println(string);
+		clusteringConsole += string+("");
+		System.out.print(string);
 	}
 
 	/**
