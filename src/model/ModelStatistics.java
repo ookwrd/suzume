@@ -2,7 +2,9 @@
 package model;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -36,6 +39,7 @@ public class ModelStatistics extends JPanel {
     private JButton saveButton;
     
     private ArrayList<ChartPanel> chartPanels;
+	private TextArea textArea = null;
 	
 	public ModelStatistics(String title) {
 		
@@ -119,6 +123,21 @@ public class ModelStatistics extends JPanel {
 
 		validate();
 		frame.validate();
+	}
+	
+	private void addConsolePanel(String text) {
+		JPanel consolePanel = new JPanel();
+		textArea = new TextArea(text);
+		consolePanel.add(textArea);
+		add(consolePanel);
+		
+		validate();
+		frame.validate();
+	}
+	
+	public void updateConsoleText(String text) {
+		if(textArea==null) addConsolePanel(text); // lazy
+		else textArea.setText(text);
 	}
 	
 	/**
