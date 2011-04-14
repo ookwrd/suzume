@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 import tools.Clustering;
 
-public class SimpleClustering implements Clustering {
+public class SimpleClustering extends Clustering {
 
 	public static final double[] GAP_CENTERS = { 11.5, 10.75, 10.25, 9.5, 8.5, 7.5};
 	//private final double[] DEFAULT_THRESHOLDS = { 12, 11.75, 10.5, 10.25, 9.5,
@@ -15,20 +15,21 @@ public class SimpleClustering implements Clustering {
 	
 	public double[] centers;
 	
-	public SimpleClustering(double[] centers) {
-		// TODO Auto-generated constructor stub
-		this.centers = centers;
+	public SimpleClustering(ArrayList<Double>[] array) {
+		super(array);
+		this.centers = DEFAULT_CENTERS;
+		this.array = array; // TODO
 	}
 	
 	/**
 	 * Cluster into predetermined classes using simple threshold values
 	 * 
 	 * @param array
-	 * @param thresholds
 	 * @return hashtable representing the binding between values and their
 	 *         corresponding classes
 	 */
 	public Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
+		
 		Hashtable<Double, Integer> results = new Hashtable<Double, Integer>();
 		for (ArrayList<Double> arrayList : array) {
 			/*
@@ -41,7 +42,10 @@ public class SimpleClustering implements Clustering {
 			
 			int prevStateIndex = 0; 
 			//double prevStateCenter = centers[0];
-				
+			
+			System.out.println("CLUSTERING");
+			System.out.println("SIZE of the ARRAY of all RUNs = "+array.length); //debug
+			
 			for (Double value : arrayList) {
 				 
 				double s = DEFAULT_SIGMA;

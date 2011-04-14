@@ -21,7 +21,11 @@ import model.ModelController;
  * @author Olaf
  */
 
-public class KmeansClustering implements Clustering {
+public class KmeansClustering extends Clustering {
+
+	public KmeansClustering(ArrayList<Double>[] array) {
+		super(array);
+	}
 
 	private static final int KMEANS_NUM_ITERATIONS = 100;
 	

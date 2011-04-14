@@ -19,8 +19,6 @@ import Launcher.Launcher;
 
 public class ModelController implements Runnable {
 
-	private static final int MAX_NUM_STATES = KmeansClustering.MAX_NUM_CLUSTERS;
-
 	//Configuration Settings
 	private ModelConfiguration config;
 	private VisualizationConfiguration visualConfig;
@@ -110,9 +108,28 @@ public class ModelController implements Runnable {
 		communication();
 
 		plotStatistics();
-		findMarkov();
+		
+		clustering(geneGrammarMatches);
 	}
 	
+	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
+		ArrayList<Pair<Double, Double>>[] pairData = data;//Statistics.trimArrayLists(data,2000,data[0].size());
+		
+		ArrayList<Double>[] array = new ArrayList[pairData.length];
+		
+		for (int i = 0; i < pairData.length; i++) {
+			array[i] = new ArrayList<Double>();
+			for (int j = 0; j < pairData[0].size(); j++) {
+				ArrayList<Pair<Double, Double>> tmp = pairData[i];
+				Pair<Double, Double> tmp2 = tmp.get(j);
+				double d = tmp2.second;
+				array[i].add(d);
+			}
+		}
+		SimpleClustering geneClustering = new SimpleClustering(array);
+		geneClustering.findMarkov();
+	}
+
 	/**
 	 * Main method to run the simulation.
 	 */
@@ -337,195 +354,8 @@ public class ModelController implements Runnable {
 	private String getTitleString(){
 		return "[Seed: " + randomGenerator.getSeed() + "   " + config + "]";
 	}
-
-	/**
-     * Cluster points from an array
-     * 
-     * @param an array of values to cluster, each entry represents one
-     *            occurrence of the value
-     * @return a hashtable representing the mapping between each point (double
-     *         key) and its cluster index (integer value)
-     */
-    public static Hashtable<Double, Integer> cluster(ArrayList<Double>[] array) {
-            SimpleClustering clustering = new SimpleClustering(SimpleClustering.DEFAULT_CENTERS); // using a very simple version of clustering TODO to be improved later
-            Hashtable<Double, Integer> clusters = clustering.cluster(array);
-            return clusters;
-    }
     
-    /**
-     * Extract state transitions
-     * 
-     * @param data array of the original data
-     * @param clustering result of the classification (values-to-classes table)
-     * @param noRepeat if true, don't take any repeated state into account
-     * @return state sequence
-     */
-    public static Short[] stateSequence(ArrayList<Double>[] data, Hashtable<Double, Integer> clustering, boolean noRepeat) {
-    	ArrayList<Integer> stateSequence = new ArrayList<Integer>(0);
-		
-		short previousState = 0;
-		for (int i = 0; i < data.length; i += 1) { // for every run
-			for (int j = 0; j < data[0].size(); j++) { // for every generation
-				double elt = data[i].get(j);
-				int tmp = clustering.get(elt);
-				//System.out.print(elt + ":" + tmp + " ");
-				previousState = (short) tmp;
-
-				if (!noRepeat)
-					stateSequence.add(tmp); // if repeating states : add
-											// anyway
-
-				if (previousState != tmp) {
-					if (noRepeat)
-						stateSequence.add(tmp); // if not repeating states :
-												// add
-												// only if different from
-												// previous state
-				}
-			}
-		}
-
-    	/*System.out.print("\nState transitions ("+stateSequence.size()+" in total) : ");
-    	for (int i = 0; i < stateSequence.size(); i++) {
-			System.out.print(stateSequence.get(i)+"->"); //showing every single transition
-		}*/
-    	//System.out.print("\n#data = "+count+" ");
-    	System.out.println("Number of states: "+stateSequence.size());
-    	
-    	int clusterNum = stateSequence.size();
-    	Short[] states = new Short[clusterNum];
-    	for (int i = 0; i < clusterNum; i++) {
-			states[i] = stateSequence.get(i).shortValue();
-		}
-		return states;
-    }
-    
-	
-	/**
-	 * Compute the Markov probabilistic model for the data
-	 */
-	private void findMarkov() {
-		ArrayList<Double>[] data = Statistics.trimArrayLists(geneGrammarMatches,2000,geneGrammarMatches[0].size());
-		Hashtable<Double, Integer> clustering = cluster(data);
-		//System.out.print("OH data size "+data[0].size());
-		//System.out.println("OH clustering size : "+clustering.size());
-		// render diagram
-		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
-		stateTransitionsNormalized(data, clustering, 1);
-		stateTransitionsNormalized(data, clustering, 2);
-		stateTransitionsNormalized(data, clustering, 3);
-		stateTransitionsNormalized(data, clustering, 4);
-		stateTransitionsNormalized(data, clustering, 5);
-		stateTransitionsNormalized(data, clustering, 10);
-		stateTransitionsNormalized(data, clustering, 20);
-		stateTransitionsNormalized(data, clustering, 30);
-		stateTransitionsNormalized(data, clustering, 40);
-		stateTransitionsNormalized(data, clustering, 50);
-		stateTransitionsNormalized(data, clustering, 100);
-		stateTransitionsNormalized(data, clustering, 200);
-		
-		// plot the sequence 
-		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
-		
-		for(int i = 0; i < data.length; i++){
-			clusteringVal[i] = new ArrayList<Double>();
-			for(int j =0; j < data[0].size(); j++) {
-				clusteringVal[i].add((double) clustering.get(data[i].get(j)));
-			}
-		}
-		statisticsWindow.plot(clusteringVal, "Clustering 200-trimmed Gene Grammar Matches", "State", "", "States sequence");
-		*/
-		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
-		
-	}
-	
-	/**
-	 * Normalize the probability matrix so that every column sums up to 1
-	 * @param i 
-	 * @param clustering 
-	 * 
-	 * @param matrix
-	 * @return
-	 */
-	private double[][] stateTransitionsNormalized(ArrayList<Double>[] ar, Hashtable<Double, Integer> clustering, int step) {
-		Short[] stateSequence = stateSequence(ar, clustering, false);
-		double[][] matrix = stateTransitions(stateSequence, step);
-		double[][] result = new double[matrix.length][matrix[0].length]; 
-		for (int i = 0; i < matrix.length; i++) {
-			int colSum = 0;
-			for (int j = 0; j < matrix[i].length; j++) {
-				colSum += matrix[i][j];
-			}
-			for (int j = 0; j < matrix[i].length; j++) {
-				if (colSum == 0) colSum = 1;
-				result[i][j] = matrix[i][j]/colSum;
-			}
-		}
-		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("\nTransition probabilities (single step: "+step+")");
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+df.format(result[i][j])+" ");
-			}
-			System.out.println();
-		}
-		return result;
-	}
-
-	/**
-	 * Compute the state transition probability matrix 
-	 * 
-	 * @param stateSequence
-	 * @return
-	 */
-	private double[][] stateTransitions(Short[] stateSequence, int step) {
-		double[][] transitions = new double[MAX_NUM_STATES][MAX_NUM_STATES];
-		/*for (int i=0; i<MAX_NUM_STATES; i++) {
-			for (int j=0; j<MAX_NUM_STATES; j++) {
-				transitions[i][j] = 0.0;
-			}
-		}*/
-		int from, to = 0;
-		if(stateSequence.length>1)
-			from=stateSequence[0];
-		else { 
-			System.out.println("Empty state sequence !");
-			return transitions;
-		}
-		int fromMax = 0;
-		int toMax = 0;
-		if (step<1) step = 1;
-		int start = 1;
-		System.out.print("\nState transitions: "+from);
-		for (int i = start; i < stateSequence.length; i+=step) {
-			from = to;
-			to = stateSequence[i];
-			System.out.print(", "+to);
-			if ((i-step)/config.generationCount == (i)/config.generationCount) // if jumped far enough to reach another run : don't update
-				transitions[from][to] +=1; 
-			
-			if (from > fromMax) fromMax = from; //TODO get it directly from the clustering
-			if (to > toMax) toMax = to;
-		}
-		fromMax++; // matrix length
-		toMax++; // matrix width
-		
-		//return a smaller matrix
-		double[][] result = new double[fromMax][toMax];
-		
-		System.out.println("\nTransition count (single step: "+step+")");
-		for (int i = 0; i < fromMax; i++) {
-			for (int j = 0; j < toMax; j++) {
-				result[i][j] = transitions[i][j];
-				System.out.print("("+(i+1)+"->"+(j+1)+"): "+transitions[i][j]+" ");
-			}
-			System.out.println();
-		}
-		return result;
-	}
-
-    
-	public static void main(String[] args) {
+   	public static void main(String[] args) {
 	    new Launcher();
 	}
 
