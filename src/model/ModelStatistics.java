@@ -39,7 +39,7 @@ public class ModelStatistics extends JPanel {
     private JButton saveButton;
     
     private ArrayList<ChartPanel> chartPanels;
-	private TextArea textArea;
+	private TextArea textArea = null;
 	
 	public ModelStatistics(String title) {
 		
@@ -58,7 +58,6 @@ public class ModelStatistics extends JPanel {
 		frame.add(scrollPane);
 		
 		this.chartPanels = new ArrayList<ChartPanel>();
-		addConsolePanel("");
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -127,16 +126,16 @@ public class ModelStatistics extends JPanel {
 	private void addConsolePanel(String text) {
 		JPanel consolePanel = new JPanel();
 		textArea = new TextArea(text);
-		textArea.setSize(this.getSize());
 		consolePanel.add(textArea);
-		frame.add(consolePanel, BorderLayout.AFTER_LAST_LINE);
+		add(consolePanel);
 		
 		validate();
 		frame.validate();
 	}
 	
 	public void updateConsoleText(String text) {
-		textArea.setText(text);
+		if(textArea==null) addConsolePanel(text); // lazy
+		else textArea.setText(text);
 	}
 	
 	/**
