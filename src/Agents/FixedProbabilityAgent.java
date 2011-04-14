@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import model.RandomGenerator;
 
-public class FixedProbabilityAgent extends OriginalAgent {
+public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{

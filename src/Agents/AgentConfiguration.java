@@ -5,9 +5,9 @@ import java.util.StringTokenizer;
 
 public class AgentConfiguration {
 
-	public enum AgentType { OriginalAgent, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent }
+	public enum AgentType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent }
 
-	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.OriginalAgent;//See *** below if you change this.
+	public static final AgentType DEFAULT_AGENT_TYPE = AgentType.YamauchiHashimoto2010;//See *** below if you change this.
 	
 	public AgentType type;
 	
