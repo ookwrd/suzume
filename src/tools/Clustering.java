@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import tools.graphs.GraphView;
+
 import model.SimpleClustering;
 
 public abstract class Clustering {
@@ -12,6 +14,8 @@ public abstract class Clustering {
 	public static final int MIN_NUM_CLUSTERS = 4;
 	
 	public ArrayList<Double>[] array;
+	
+	public String clusteringConsole;
 
 	/**
 	 * Constructor 
@@ -20,6 +24,7 @@ public abstract class Clustering {
 	 */
 	public Clustering(ArrayList<Double>[] array) {
 		this.array = array;
+		clusteringConsole = "";
 	}
 	
 	/*
@@ -27,28 +32,27 @@ public abstract class Clustering {
 		return null;
 	}*/
 	
+	public void visualize(double[][] adjacencyMatrix) {
+		GraphView gv = new GraphView(adjacencyMatrix); // This builds the graph
+		//sgv.render();
+	}
+	
 	/**
 	 * Compute the Markov probabilistic model for the data
 	 */
 	public void findMarkov() {
 		
 		Hashtable<Double, Integer> clustering = cluster(array);
-		//System.out.print("OH data size "+data[0].size());
-		//System.out.println("OH clustering size : "+clustering.size());
 		// render diagram
 		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
-		stateTransitionsNormalized(array, clustering, 1);
-		stateTransitionsNormalized(array, clustering, 2);
-		stateTransitionsNormalized(array, clustering, 3);
-		stateTransitionsNormalized(array, clustering, 4);
-		stateTransitionsNormalized(array, clustering, 5);
-		stateTransitionsNormalized(array, clustering, 10);
-		stateTransitionsNormalized(array, clustering, 20);
-		stateTransitionsNormalized(array, clustering, 30);
-		stateTransitionsNormalized(array, clustering, 40);
-		stateTransitionsNormalized(array, clustering, 50);
-		stateTransitionsNormalized(array, clustering, 100);
-		stateTransitionsNormalized(array, clustering, 200);
+		
+		//stateTransitionsNormalized(array, clustering, 1);
+		//stateTransitionsNormalized(array, clustering, 10);
+		visualize(stateTransitionsNormalized(array, clustering, 1));
+		visualize(stateTransitionsNormalized(array, clustering, 10));
+		visualize(stateTransitionsNormalized(array, clustering, 50));
+		//stateTransitionsNormalized(array, clustering, 100);
+		//stateTransitionsNormalized(array, clustering, 200);
 		
 		// plot the sequence 
 		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
@@ -98,14 +102,19 @@ public abstract class Clustering {
 			}
 		}
 		DecimalFormat df = new DecimalFormat("########.00"); 
-		System.out.println("\nTransition probabilities (single step: "+step+", X:gap)");
+		appendConsole("\nTransition probabilities (single step: "+step+", X:gap)\n");
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[0].length; j++) {
-				System.out.print("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
+				appendConsole("("+(i==0?"X":i)+"->"+(j==0?"X":j)+"): "+df.format(result[i][j])+" ");
 			}
-			System.out.println();
+			appendConsole("\n");
 		}
 		return result;
+	}
+	
+	private void appendConsole(String string) {
+		clusteringConsole += string+("");
+		System.out.print(string);
 	}
 
 	/**
