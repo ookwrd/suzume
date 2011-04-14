@@ -114,37 +114,6 @@ public class ModelController implements Runnable {
 	}
 	
 	/**
-	 * Compute the Markov probabilistic model for the data
-	 */
-	private void findMarkov() {
-		ArrayList<Double>[] data = Statistics.trimArrayLists(geneGrammarMatches,200,geneGrammarMatches[0].size());
-		Hashtable<Double, Integer> clusteringRes = cluster(data);
-		//System.out.print("OH data size "+data[0].size());
-		//System.out.println("OH clustering size : "+clustering.size());
-		// render diagram
-		// stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP);
-		stateTransitionsNormalized(data, clusteringRes, 1);
-		stateTransitionsNormalized(data, clusteringRes, 10);
-		stateTransitionsNormalized(data, clusteringRes, 50);
-		stateTransitionsNormalized(data, clusteringRes, 100);
-		stateTransitionsNormalized(data, clusteringRes, 200);
-		
-		// plot the sequence 
-		/*ArrayList<Double>[] clusteringVal = new ArrayList[config.numberRuns];
-		
-		for(int i = 0; i < data.length; i++){
-			clusteringVal[i] = new ArrayList<Double>();
-			for(int j =0; j < data[0].size(); j++) {
-				clusteringVal[i].add((double) clusteringRes.get(data[i].get(j)));
-			}
-		}
-		statisticsWindow.plot(clusteringVal, "Clustering 200-trimmed Gene Grammar Matches", "State", "", "States sequence");
-		*/
-		//StateTransitionVisualizer.render(stateTransitionsNormalized(stateSequence, DEFAULT_STATE_TRANSITION_STEP));
-		
-	}
-	
-	/**
 	 * Main method to run the simulation.
 	 */
 	public void runSimulation(){
