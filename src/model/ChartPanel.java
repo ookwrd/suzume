@@ -16,7 +16,6 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.ClusteredXYBarRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.data.statistics.HistogramDataset;
@@ -24,13 +23,14 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import tools.Pair;
-import tools.Statistics;
 
 @SuppressWarnings("serial")
 public class ChartPanel extends JPanel {
 
 	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
+	
+	private static final int NUMBER_OF_BINS = 1000;
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
@@ -110,7 +110,6 @@ public class ChartPanel extends JPanel {
 		case AREA_CHART:
 			chart = ChartFactory.createXYAreaChart(title, // Title
 					xLabel, // X-Axis label
-				//	false,
 					yLabel, // Y-Axis label
 					createXyDataset(series), // Dataset
 					PlotOrientation.VERTICAL, // Plot orientation
@@ -181,7 +180,7 @@ public class ChartPanel extends JPanel {
 	
 		HistogramDataset dataSet = new HistogramDataset();
 		
-		dataSet.addSeries(new Double(1), stripValues(series), 1000);
+		dataSet.addSeries(new Double(1), stripValues(series), NUMBER_OF_BINS);
 		
 		return dataSet;
 	}
