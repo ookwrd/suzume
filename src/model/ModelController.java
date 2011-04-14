@@ -408,7 +408,13 @@ public class ModelController implements Runnable {
 	 * Compute the Markov probabilistic model for the data
 	 */
 	private void findMarkov() {
-		ArrayList<Double>[] data = Statistics.trimArrayLists(geneGrammarMatches,2000,geneGrammarMatches[0].size());
+		ArrayList<Pair<Double, Double>>[] pairData = Statistics.trimArrayLists(geneGrammarMatches,2000,geneGrammarMatches[0].size());
+		ArrayList<Double>[] data = new ArrayList[config.generationCount];
+		for (int i = 0; i < pairData.length; i++) {
+			for(int j = 0; j < pairData[0].size(); j++) {
+				data[i].add(pairData[i].get(j).second);
+			}
+		}
 		Hashtable<Double, Integer> clustering = cluster(data);
 		//System.out.print("OH data size "+data[0].size());
 		//System.out.println("OH clustering size : "+clustering.size());
