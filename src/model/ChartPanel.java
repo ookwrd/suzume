@@ -206,21 +206,21 @@ public class ChartPanel extends JPanel {
 	}
 	
 	public void saveThumbNailSizeChart(){
-		saveChartToFile(THUMBNAIL_DIMENSION);
+		saveChartToFile(THUMBNAIL_DIMENSION, ModelStatistics.DEFAULT_SAVE_LOCATION);
 	}
 	
-	public void saveFullSizeChart(){
-		saveChartToFile(SAVE_DIMENSION);
+	public void saveFullSizeChart(String location){
+		saveChartToFile(SAVE_DIMENSION, location);
 	}
 
-	public void saveChartToFile(Dimension printSize) {
+	public void saveChartToFile(Dimension printSize, String location) {
 
 		cd("/");
-		mkdir("/suzume-charts");//TODO extract to configuration file
+		mkdir(location);
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File("/suzume-charts/" + filename), 
+					new File(location + "/" + filename), 
 					chart,
 					printSize.width, 
 					printSize.height

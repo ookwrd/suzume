@@ -11,9 +11,11 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -28,6 +30,8 @@ import model.ChartPanel.ChartType;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
 
+	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts";
+	
 	public enum PlotType {TIMESERIES, DENSITY}
 	
 	private boolean trim = true;
@@ -62,10 +66,14 @@ public class ModelStatistics extends JPanel {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
+		final JTextField saveDestination = new JTextField(DEFAULT_SAVE_LOCATION);
+		buttonPanel.add(new JLabel("Save images to:"));
+		buttonPanel.add(saveDestination);
+		
 		saveButton = new JButton("Save all graphs");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				saveAllCharts();
+				saveAllCharts(saveDestination.getText());
 			}
 		});
 		buttonPanel.add(saveButton);
@@ -143,9 +151,9 @@ public class ModelStatistics extends JPanel {
 	/**
 	 * Save all charts displayed in window. The smaller images are replaced by larger ones.
 	 */
-	public void saveAllCharts() {
+	public void saveAllCharts(String location) {
 		for (ChartPanel panel : chartPanels) {
-			panel.saveFullSizeChart();
+			panel.saveFullSizeChart(location);
 		}
 	}
 	
