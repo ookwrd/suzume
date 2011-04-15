@@ -1,16 +1,7 @@
 package model;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
-
-import model.ChartPanel.ChartType;
-import model.ModelStatistics.PlotType;
-
-import tools.Clustering;
-import tools.KmeansClustering;
 import tools.Pair;
-import tools.Statistics;
 
 import Agents.Agent;
 import Agents.AgentFactory;
