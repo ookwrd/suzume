@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+
 import tools.graphs.GraphView;
 
 import model.SimpleClustering;
@@ -32,12 +34,18 @@ public abstract class Clustering {
 		return null;
 	}*/
 	
-	public void visualize(double[][] adjacencyMatrix, String name) {
+	public BasicVisualizationServer<Integer, String> visualize(String name, int i) {
+		
+		Hashtable<Double, Integer> clustering = cluster(array);
+		double[][] adjacencyMatrix = stateTransitionsNormalized(array, clustering, i); // i
+		         
 		GraphView gv = new GraphView(adjacencyMatrix, name); // This builds the graph
-		//sgv.render();
+		
+		return gv.getVV();
 	}
 	
 	/**
+	 * @deprecated
 	 * Compute the Markov probabilistic model for the data
 	 */
 	public void findMarkov() {
@@ -48,10 +56,8 @@ public abstract class Clustering {
 		
 		//stateTransitionsNormalized(array, clustering, 1);
 		//stateTransitionsNormalized(array, clustering, 10);
-		visualize(stateTransitionsNormalized(array, clustering, 1), "Clustering with step:"+1);
-		visualize(stateTransitionsNormalized(array, clustering, 10), "Clustering with step:"+10);
-		visualize(stateTransitionsNormalized(array, clustering, 50), "Clustering with step:"+50);
-		visualize(stateTransitionsNormalized(array, clustering, 100), "Clustering with step:"+100);
+		//visualize(stateTransitionsNormalized(array, clustering, 1), "Clustering with step:"+1);
+		//visualize(stateTransitionsNormalized(array, clustering, 10), "Clustering with step:"+10);
 		//stateTransitionsNormalized(array, clustering, 100);
 		//stateTransitionsNormalized(array, clustering, 200);
 		
@@ -113,7 +119,7 @@ public abstract class Clustering {
 		return result;
 	}
 	
-	private void appendConsole(String string) {
+	protected void appendConsole(String string) {
 		clusteringConsole += string+("");
 		System.out.print(string);
 	}
