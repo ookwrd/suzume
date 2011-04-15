@@ -33,6 +33,7 @@ public class ModelController implements Runnable {
 
 	//Model
 	private PopulationModel population;
+	private SelectionModel selectionModel;
 	
 	//Visualization
 	private StepwiseVisualizer visualizer;
@@ -46,6 +47,8 @@ public class ModelController implements Runnable {
 		this.config = configuration;
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
+		
+		this.selectionModel = SelectionModel.constructSelectionModel(config.selectionModelType, randomGenerator);
 		
 		resetModel();
 
@@ -237,7 +240,7 @@ public class ModelController implements Runnable {
 	 */
 	private ArrayList<Agent> selection(){
 
-		ArrayList<Agent> selected = select(config.populationSize*2, population.getCurrentGeneration());
+		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.populationSize*2);
 
 		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
 		int i = 0;
@@ -249,45 +252,6 @@ public class ModelController implements Runnable {
 		}
 
 		return newGenerationAgents;
-	}
-
-	/**
-	 * TODO optimize this class
-	 * TODO allow ability to disable the selection of multiples
-	 * 
-	 * @param toSelect
-	 * @param agents
-	 * @return
-	 */
-	public ArrayList<Agent> select(int toSelect, ArrayList<Agent> agents){
-
-		ArrayList<Agent> toReturn = new ArrayList<Agent>();
-
-		//Calculate total fitness of all agents.
-		int totalFitness = 0;
-		for(Agent agent : agents){
-			totalFitness += agent.getFitness();
-		}
-
-		//Loop once for each individual
-		for(int i = 0; i < toSelect; i++){
-
-			int selectionPoint = randomGenerator.randomInt(totalFitness);
-			int pointer = 0;
-
-			for(Agent agent : agents){
-				//move the pointer along to the next agents borderline
-				pointer += agent.getFitness();
-
-				//have we gone past the selectionPoint?
-				if(pointer > selectionPoint){
-					toReturn.add(agent);
-					break;
-				}
-			}
-		}
-
-		return toReturn;
 	}
 
 	/**
