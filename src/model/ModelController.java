@@ -79,8 +79,8 @@ public class ModelController implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
-		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.numberRuns];
-		for(int i = 0;i < config.numberRuns; i++){
+		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.runCount];
+		for(int i = 0;i < config.runCount; i++){
 			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
 		}
 		return arrayLists;
@@ -147,7 +147,7 @@ public class ModelController implements Runnable {
 	public void runSimulation(){
 
 		
-		while(currentRun < config.numberRuns){
+		while(currentRun < config.runCount){
 		
 			while(currentGeneration < config.generationCount){
 	
