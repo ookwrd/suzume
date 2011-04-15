@@ -38,8 +38,7 @@ public class ModelStatistics extends JPanel {
 	
 	private boolean trim = true;
 	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{1000,2000},{4000,5000},{7000,8000},{10000,11000}};
-//	public static final int trimStart = 2000;
-//	public static final int trimEnd = Integer.MAX_VALUE;
+
 	
     private JFrame frame;
     private JScrollPane scrollPane;
@@ -47,7 +46,7 @@ public class ModelStatistics extends JPanel {
     
     private ArrayList<ChartPanel> chartPanels;
 	private TextArea textArea = null;
-	private BasicVisualizationServer<Integer, String> vv = null;
+	private BasicVisualizationServer<Integer, String> vv = null; //TODO why? /luke
 	private JPanel clusteringPanel;
 	
 	public ModelStatistics(String title) {
@@ -61,7 +60,7 @@ public class ModelStatistics extends JPanel {
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		scrollPane = new JScrollPane(this);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 		
 		frame.add(scrollPane);
@@ -106,13 +105,19 @@ public class ModelStatistics extends JPanel {
 
 		//Do we also trim?
 		if(trim){
-			int length = table[0].size();
-			int trimStart = TRIM_INTERVALS[0][0] < length ? TRIM_INTERVALS[0][0] : 0;
-			int trimEnd = TRIM_INTERVALS[0][1] < length? TRIM_INTERVALS[0][1] : length;
 
-			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-			//densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
-			chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Density Trimmed " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
+			int length = table[0].size();
+			
+			for(int i = 0; i < TRIM_INTERVALS.length; i++){
+				int trimStart = TRIM_INTERVALS[i][0] < length ? TRIM_INTERVALS[i][0] : 0;
+				int trimEnd = TRIM_INTERVALS[i][1] < length? TRIM_INTERVALS[i][1] : length;
+				
+				//TODO break on passing the size
+		
+				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
+				//densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
+				chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Density Trimmed " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
+			}
 		}
 		
 	}
@@ -126,11 +131,17 @@ public class ModelStatistics extends JPanel {
 		//Do we also trim?
 		if(trim){
 			int length = table[0].size();
-			int trimStart = TRIM_INTERVALS[0][0] < length ? TRIM_INTERVALS[0][0] : 0;
-			int trimEnd = TRIM_INTERVALS[0][1] < length? TRIM_INTERVALS[0][1] : length;
-	
-			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-			chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title + " (Trimmed " + trimStart + "-" + trimEnd+")", label, "Generations");
+			
+			for(int i = 0; i < TRIM_INTERVALS.length; i++){
+				int trimStart = TRIM_INTERVALS[i][0] < length ? TRIM_INTERVALS[i][0] : 0;
+				int trimEnd = TRIM_INTERVALS[i][1] < length? TRIM_INTERVALS[i][1] : length;
+				
+				//TODO break on passing the size
+		
+				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
+				chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title + " (Trimmed " + trimStart + "-" + trimEnd+")", label, "Generations");
+			
+			}
 		}
 	}
 	
