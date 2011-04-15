@@ -106,7 +106,7 @@ public class ModelController implements Runnable {
 
 		plotStatistics();
 		
-		clustering(geneGrammarMatches);
+		clustering(Statistics.trimArrayLists(geneGrammarMatches, ModelStatistics.trimStart, ModelStatistics.trimEnd));
 		
 
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
@@ -127,9 +127,9 @@ public class ModelController implements Runnable {
 			}
 		}
 		SimpleClustering geneClustering = new SimpleClustering(array);
-		geneClustering.findMarkov();
-		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole);
-		
+		//geneClustering.findMarkov();
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=50)", 50));
+		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
 	}
 
 	/**
