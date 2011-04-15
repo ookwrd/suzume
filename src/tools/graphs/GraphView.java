@@ -83,7 +83,7 @@ public class GraphView {
 				
 				DecimalFormat df = new DecimalFormat("########.00");
 				double p = adjacencyMatrix[i][j];
-				if (p>0.0) {
+				if (p>=0.1) {
 					String w = df.format(p);
 					g.addEdge("("+i+","+j+"): "+w, i, j, EdgeType.DIRECTED);
 				}
