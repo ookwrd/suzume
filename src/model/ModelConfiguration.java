@@ -19,6 +19,7 @@ public class ModelConfiguration {
 	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelectionModel;
 	
 	public static final int DEFAULT_GENERATION_COUNT = 1000;
+	public static final int DEFAULT_RUN_COUNT = 1;
 	public static final int DEFAULT_POPULATION_SIZE = 200;
 	
 	//The base fitness score assigned to all agents before communication round
@@ -30,7 +31,6 @@ public class ModelConfiguration {
 	//Maximum number of utterances presented to agents during learning.
 	public static final int DEFAULT_CRITICAL_PERIOD = 200; 
 	
-	public static final int DEFAULT_NUMBER_RUNS = 1;
 	
 	protected AgentConfiguration agentConfig;
 	
@@ -38,6 +38,8 @@ public class ModelConfiguration {
 	protected SelectionModels selectionModelType;
 	
 	protected int generationCount;
+	protected int runCount;
+	
 	protected int populationSize;
 	
 	protected int baseFitness;
@@ -45,7 +47,6 @@ public class ModelConfiguration {
 	
 	protected int criticalPeriod; //TODO move into agent.
 	
-	protected int numberRuns;
 	
 	/**
 	 * Create a configuration based on the default values.
@@ -63,7 +64,7 @@ public class ModelConfiguration {
 		
 		this.criticalPeriod= DEFAULT_CRITICAL_PERIOD;
 		
-		this.numberRuns = DEFAULT_NUMBER_RUNS;
+		this.runCount = DEFAULT_RUN_COUNT;
 	}
 	
 	/**
@@ -94,7 +95,7 @@ public class ModelConfiguration {
 		this.baseFitness = baseFitness;
 		this.communicationsPerNeighbour = communicationsPerNeighbour;
 		this.criticalPeriod = criticalPeriod;
-		this.numberRuns = numberRuns;
+		this.runCount = numberRuns;
 	}
 	
 	/**
@@ -117,7 +118,7 @@ public class ModelConfiguration {
 		
 		this.criticalPeriod = Integer.parseInt(tokenizer.nextToken());
 		
-		this.numberRuns = Integer.parseInt(tokenizer.nextToken());
+		this.runCount = Integer.parseInt(tokenizer.nextToken());
 	}
 	
 	/**
@@ -134,7 +135,7 @@ public class ModelConfiguration {
 		+ " " + baseFitness
 		+ " " + communicationsPerNeighbour
 		+ " " + criticalPeriod
-		+ " " + numberRuns;
+		+ " " + runCount;
 	}
 	
 	
@@ -147,13 +148,14 @@ public class ModelConfiguration {
 		
 		return agentConfig.toString() + 
 		"   GenerationCount: " + generationCount + 
+		"   RunCount: " + runCount + 
 		"   PopulationSize: " + populationSize + 
 		"   CriticalPeriod: " + criticalPeriod;
 	}
 	
 	
 	public String printName(){
-		return "" + agentConfig.type + " " + "gen_" + generationCount + "pop_" + populationSize + "crit_" + criticalPeriod;
+		return "" + agentConfig.type + " " + "gen_" + generationCount + "run_" + runCount + "pop_" + populationSize + "crit_" + criticalPeriod;
 	}
 	
 }
