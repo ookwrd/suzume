@@ -113,13 +113,15 @@ public class ModelStatistics extends JPanel {
 			int length = table[0].size();
 			
 			for(int i = 0; i < TRIM_INTERVALS.length; i++){
-				int trimStart = TRIM_INTERVALS[i][0] < length ? TRIM_INTERVALS[i][0] : 0;
-				int trimEnd = TRIM_INTERVALS[i][1] < length? TRIM_INTERVALS[i][1] : length;
 				
-				//TODO break on passing the size
+				if(length <= TRIM_INTERVALS[i][0]){
+					continue;
+				}
+				
+				int trimStart = TRIM_INTERVALS[i][0] <= length ? TRIM_INTERVALS[i][0] : 0;
+				int trimEnd = length > TRIM_INTERVALS[i][1] ? TRIM_INTERVALS[i][1] : length;
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-				//densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
 				chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Density Trimmed " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
 			}
 		}
@@ -137,10 +139,13 @@ public class ModelStatistics extends JPanel {
 			int length = table[0].size();
 			
 			for(int i = 0; i < TRIM_INTERVALS.length; i++){
-				int trimStart = TRIM_INTERVALS[i][0] < length ? TRIM_INTERVALS[i][0] : 0;
-				int trimEnd = TRIM_INTERVALS[i][1] < length? TRIM_INTERVALS[i][1] : length;
 				
-				//TODO break on passing the size
+				if(length <= TRIM_INTERVALS[i][0]){
+					continue;
+				}
+				
+				int trimStart = TRIM_INTERVALS[i][0] <= length ? TRIM_INTERVALS[i][0] : 0;
+				int trimEnd = length > TRIM_INTERVALS[i][1] ? TRIM_INTERVALS[i][1] : length;
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
 				chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title + " (Trimmed " + trimStart + "-" + trimEnd+")", label, "Generations");
