@@ -48,9 +48,10 @@ public abstract class Clustering {
 		
 		//stateTransitionsNormalized(array, clustering, 1);
 		//stateTransitionsNormalized(array, clustering, 10);
-		//visualize(stateTransitionsNormalized(array, clustering, 1), "Clustering with step:"+1);
+		visualize(stateTransitionsNormalized(array, clustering, 1), "Clustering with step:"+1);
 		visualize(stateTransitionsNormalized(array, clustering, 10), "Clustering with step:"+10);
 		visualize(stateTransitionsNormalized(array, clustering, 50), "Clustering with step:"+50);
+		visualize(stateTransitionsNormalized(array, clustering, 100), "Clustering with step:"+100);
 		//stateTransitionsNormalized(array, clustering, 100);
 		//stateTransitionsNormalized(array, clustering, 200);
 		
