@@ -9,6 +9,8 @@ import java.text.DecimalFormat;
 
 import javax.swing.JFrame;
 
+import model.ModelController;
+
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -55,7 +57,7 @@ public class GraphView {
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 
 		JFrame frame = new JFrame(name);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(vv);
 		frame.pack();
 		frame.setVisible(true);
@@ -80,8 +82,11 @@ public class GraphView {
 			for (int j=1; j<adjacencyMatrix[i].length; j++) {
 				
 				DecimalFormat df = new DecimalFormat("########.00");
-				String w = df.format(adjacencyMatrix[i][j]);
-				g.addEdge("("+i+","+j+"): "+w, i, j, EdgeType.DIRECTED);
+				double p = adjacencyMatrix[i][j];
+				if (p>0.0) {
+					String w = df.format(p);
+					g.addEdge("("+i+","+j+"): "+w, i, j, EdgeType.DIRECTED);
+				}
 			}
 		}
 		
@@ -91,8 +96,9 @@ public class GraphView {
 	}
 	
 	public static void main(String[] args) {
-		double[][] am = {{1.0,2.0},{3.0,5.0}};
-		GraphView gv = new GraphView(am, "Test");
+		ModelController.main(null);
+		/*double[][] am = {{1.0,2.0},{3.0,5.0}};
+		GraphView gv = new GraphView(am, "Test");*/
 	}
 
 }
