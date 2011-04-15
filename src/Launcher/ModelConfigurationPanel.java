@@ -28,7 +28,7 @@ public class ModelConfigurationPanel extends JPanel {
 	
 	private JTextField criticalPeriodField;
 
-	private JTextField numberRunsField;
+	private JTextField runCountField;
 	
 	public ModelConfigurationPanel(){
 		
@@ -46,11 +46,11 @@ public class ModelConfigurationPanel extends JPanel {
 		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", PopulationModelType.values(), innerPanel);
 		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
 		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
+		runCountField = ConfigurationPanelTools.addField("Rumber of Runs", ""+ModelConfiguration.DEFAULT_RUN_COUNT,innerPanel);
 		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, innerPanel); 
 		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
 		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, innerPanel);
 		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD, innerPanel);
-		numberRunsField = ConfigurationPanelTools.addField("Rumber of Runs", ""+ModelConfiguration.DEFAULT_RUN_COUNT,innerPanel);
 		
 		ConfigurationPanelTools.makeGrid(innerPanel);
 	}
@@ -66,7 +66,7 @@ public class ModelConfigurationPanel extends JPanel {
 				Integer.parseInt(baseFitnessField.getText().trim()),
 				Integer.parseInt(communicationPerNeighbourField.getText().trim()),
 				Integer.parseInt(criticalPeriodField.getText().trim()),
-				Integer.parseInt(numberRunsField.getText().trim()));
+				Integer.parseInt(runCountField.getText().trim()));
 	}
 	
 }

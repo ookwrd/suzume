@@ -18,8 +18,8 @@ public class ModelConfiguration {
 	
 	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelectionModel;
 	
-	public static final int DEFAULT_GENERATION_COUNT = 1000;
-	public static final int DEFAULT_RUN_COUNT = 1;
+	public static final int DEFAULT_GENERATION_COUNT = 5000;
+	public static final int DEFAULT_RUN_COUNT = 5;
 	public static final int DEFAULT_POPULATION_SIZE = 200;
 	
 	//The base fitness score assigned to all agents before communication round
