@@ -6,10 +6,12 @@ import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import model.ModelController;
+import model.SimpleClustering;
 
 import org.apache.commons.collections15.Transformer;
 
@@ -25,7 +27,8 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 
 public class GraphView {
 
-	public DirectedGraph<Integer, String> g;
+	public DirectedGraph<Integer, ClusterLink> g;
+	protected BasicVisualizationServer<Integer, String> vv;
 	
 	public GraphView(double[][] adjacencyMatrix, String name) {
 		
@@ -35,10 +38,12 @@ public class GraphView {
 		Layout<Integer, String> layout = new CircleLayout(g);
 		
 		layout.setSize(new Dimension(300, 300));
-		BasicVisualizationServer<Integer, String> vv = new BasicVisualizationServer<Integer, String>(
+		vv = new BasicVisualizationServer<Integer, String>(
 				layout);
 		vv.setPreferredSize(new Dimension(350, 350));
 		
+        //vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        
 		// Set up a new vertex to paint transformer...
 		Transformer<Integer, Paint> vertexPaint = new Transformer<Integer, Paint>() {
 			public Paint transform(Integer i) {
@@ -46,7 +51,16 @@ public class GraphView {
 			}
 		};
 		
-		// Set up coloring for edges 
+		/*Transformer labelTransformer = new ChainedTransformer<String,String>(new Transformer[]{
+	            new ToStringLabeller<String>(),
+	            new Transformer<String,String>() {
+	            public String transform(String input) {
+	                return "<html><font color=\"yellow\">"+input;
+	            }}});
+
+		context.setVertexLabelTransformer(labelTransformer);*/
+		
+		// Set up coloring for edges... uh no it looks ugly
 		//vv.getRenderContext().setEdgeFillPaintTransformer(new GradientEdgePaintTransformer(Color.blue, Color.red, new VisualizationViewer(new CircleLayout(g))));
 		//vv.getRenderContext().setEdgeFontTransformer();
 		
@@ -55,12 +69,10 @@ public class GraphView {
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
 		vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-
-		JFrame frame = new JFrame(name);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(vv);
-		frame.pack();
-		frame.setVisible(true);
+	}
+	
+	public BasicVisualizationServer<Integer, String> getVV() {
+		return this.vv;
 	}
 	
 	/**
@@ -69,13 +81,19 @@ public class GraphView {
 	 * 
 	 * @return
 	 */
-	public DirectedGraph<Integer, String> getSimpleGraph(double[][] adjacencyMatrix) {
-		DirectedGraph<Integer, String> g = new DirectedOrderedSparseMultigraph<Integer, String>();
+	public DirectedGraph<Integer, ClusterLink> getSimpleGraph(double[][] adjacencyMatrix) {
+		DirectedGraph<Integer, ClusterLink> g = new DirectedOrderedSparseMultigraph<Integer, ClusterLink>();
 		
 		// add vertices
+		ArrayList<Integer> nodes = new ArrayList<Integer>();
+		nodes.add(0, new Integer(0));
 		for (int i=1; i<adjacencyMatrix.length; i++) {
-			g.addVertex((Integer) i);
+			Integer vertex = (Integer) i;
+			System.out.println("Node "+i+": "+SimpleClustering.getCenter(i));
+			g.addVertex(vertex);
+			nodes.add(i, vertex);
 		}
+		nodes.remove(0);
 		
 		// add edges
 		for (int i=1; i<adjacencyMatrix.length; i++) {
@@ -83,9 +101,9 @@ public class GraphView {
 				
 				DecimalFormat df = new DecimalFormat("########.00");
 				double p = adjacencyMatrix[i][j];
-				if (p>=0.1) {
+				if (p>=0.01) {
 					String w = df.format(p);
-					g.addEdge("("+i+","+j+"): "+w, i, j, EdgeType.DIRECTED);
+					g.addEdge(new ClusterLink(w), nodes.get(i-1), nodes.get(j-1), EdgeType.DIRECTED);
 				}
 			}
 		}
@@ -96,9 +114,13 @@ public class GraphView {
 	}
 	
 	public static void main(String[] args) {
-		ModelController.main(null);
-		/*double[][] am = {{1.0,2.0},{3.0,5.0}};
-		GraphView gv = new GraphView(am, "Test");*/
+		//ModelController.main(null);
+		double[][] am = {
+				{	3000.0,			4000.0,		4000.0,		40000.0},
+				{	300000.1,		3000.1,		2.1,	4.1},
+				{	300000.2,		5.2,		2.2,	4.2},
+				{	30000.3,		5.3,		2.3,	2.3}};
+		GraphView gv = new GraphView(am, "Test");
 	}
 
 }
