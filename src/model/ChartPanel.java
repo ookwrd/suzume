@@ -35,6 +35,7 @@ public class ChartPanel extends JPanel {
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
 	private JFreeChart chart;
+	private ArrayList<JFreeChart> extraCharts = new ArrayList<JFreeChart>();
 	private String filename;
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>> data, ChartType type, String title,
@@ -46,7 +47,7 @@ public class ChartPanel extends JPanel {
 			String yLabel, String xLabel, String printName){
 		super();
 		
-		this.filename = title.replaceAll(" ", "") + "-" + printName + ".jpg";
+		this.filename = title.replaceAll(" ", "") + "-" + printName;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.chart = createChart(data, type, title, xLabel, yLabel);
@@ -54,9 +55,11 @@ public class ChartPanel extends JPanel {
 		
 	}
 	
+	//TODO factor creation of trimmed datasets into this class.
 	public void addAdditionalChart(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
 			String yLabel, String xLabel){
 		JFreeChart chart = createChart(data, type, title, xLabel, yLabel);
+		extraCharts.add(chart);
 		add(createImageJLabel(chart));
 	}
 	
@@ -180,13 +183,13 @@ public class ChartPanel extends JPanel {
 	
 		HistogramDataset dataSet = new HistogramDataset();
 		
-		dataSet.addSeries(new Double(1), stripValues(series), NUMBER_OF_BINS);
+		dataSet.addSeries(new Double(1), stripIndexValues(series), NUMBER_OF_BINS);
 		
 		return dataSet;
 	}
 	
 	//TODO factor this into Statistics class
-	private double[] stripValues(ArrayList<Pair<Double, Double>>[] series){
+	private double[] stripIndexValues(ArrayList<Pair<Double, Double>>[] series){
 		
 		ArrayList<Double> dataset = new ArrayList<Double>();
 		
@@ -215,12 +218,21 @@ public class ChartPanel extends JPanel {
 
 	public void saveChartToFile(Dimension printSize, String location) {
 
+		saveChartToFile(chart, printSize, location, filename);
+		
+		for(JFreeChart extraChart : extraCharts){
+			saveChartToFile(extraChart, printSize, location, filename+(extraCharts.indexOf(extraChart)+1));
+		}
+		
+	}
+	
+	private void saveChartToFile(JFreeChart chart, Dimension printSize, String location, String filename){
 		cd("/");
 		mkdir(location);
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File(location + "/" + filename), 
+					new File(location + "/" + filename + ".jpg"), 
 					chart,
 					printSize.width, 
 					printSize.height

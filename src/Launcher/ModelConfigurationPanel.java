@@ -46,7 +46,7 @@ public class ModelConfigurationPanel extends JPanel {
 		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", PopulationModelType.values(), innerPanel);
 		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
 		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
-		runCountField = ConfigurationPanelTools.addField("Rumber of Runs", ""+ModelConfiguration.DEFAULT_RUN_COUNT,innerPanel);
+		runCountField = ConfigurationPanelTools.addField("Number of Runs", ""+ModelConfiguration.DEFAULT_RUN_COUNT,innerPanel);
 		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, innerPanel); 
 		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
 		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, innerPanel);

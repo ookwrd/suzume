@@ -113,7 +113,7 @@ public class ModelController implements Runnable {
 	}
 	
 	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
-		ArrayList<Pair<Double, Double>>[] pairData = data;//Statistics.trimArrayLists(data,2000,data[0].size());
+		ArrayList<Pair<Double, Double>>[] pairData = data;
 		
 		ArrayList<Double>[] array = new ArrayList[pairData.length];
 		
@@ -146,7 +146,7 @@ public class ModelController implements Runnable {
 	
 				//Print progress information
 				if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
-					System.out.println("Run " + currentRun + "/" +config.runCount +" Generation " + currentGeneration + "/"+config.generationCount+ " Elapsed time: " + longTimeToString(elapsedTime()));
+					System.out.println("Run " + currentRun + "/" +config.runCount +"\tGeneration " + currentGeneration + "/"+config.generationCount+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
