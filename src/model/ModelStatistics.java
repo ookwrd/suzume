@@ -37,8 +37,9 @@ public class ModelStatistics extends JPanel {
 	public enum PlotType {TIMESERIES, DENSITY}
 	
 	private boolean trim = true;
-	public static final int trimStart = 2000;
-	public static final int trimEnd = Integer.MAX_VALUE;
+	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{1000,2000},{4000,5000},{7000,8000},{10000,11000}};
+//	public static final int trimStart = 2000;
+//	public static final int trimEnd = Integer.MAX_VALUE;
 	
     private JFrame frame;
     private JScrollPane scrollPane;
@@ -106,8 +107,8 @@ public class ModelStatistics extends JPanel {
 		//Do we also trim?
 		if(trim){
 			int length = table[0].size();
-			int trimStart = this.trimStart < length? this.trimStart : 0;
-			int trimEnd = this.trimEnd < length? this.trimEnd : length;
+			int trimStart = TRIM_INTERVALS[0][0] < length ? TRIM_INTERVALS[0][0] : 0;
+			int trimEnd = TRIM_INTERVALS[0][1] < length? TRIM_INTERVALS[0][1] : length;
 
 			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
 			//densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(trimmedDataArrayList));
@@ -125,9 +126,9 @@ public class ModelStatistics extends JPanel {
 		//Do we also trim?
 		if(trim){
 			int length = table[0].size();
-			int trimStart = this.trimStart < length? this.trimStart : 0;
-			int trimEnd = this.trimEnd < length? this.trimEnd : length;
-			
+			int trimStart = TRIM_INTERVALS[0][0] < length ? TRIM_INTERVALS[0][0] : 0;
+			int trimEnd = TRIM_INTERVALS[0][1] < length? TRIM_INTERVALS[0][1] : length;
+	
 			ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
 			chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title + " (Trimmed " + trimStart + "-" + trimEnd+")", label, "Generations");
 		}

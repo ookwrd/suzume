@@ -107,7 +107,7 @@ public class ModelController implements Runnable {
 
 		plotStatistics();
 		
-		clustering(Statistics.trimArrayLists(geneGrammarMatches, ModelStatistics.trimStart, ModelStatistics.trimEnd));
+		clustering(Statistics.trimArrayLists(geneGrammarMatches, ModelStatistics.TRIM_INTERVALS[0][0], ModelStatistics.TRIM_INTERVALS[0][1]));
 		
 
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
