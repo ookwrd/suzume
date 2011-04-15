@@ -42,6 +42,7 @@ public class ModelController implements Runnable {
 	//Progress counters
 	private Integer currentGeneration = 0;
 	private int currentRun = 0;
+	private long simulationStart;
 
 	public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
 		this.config = configuration;
@@ -103,15 +104,21 @@ public class ModelController implements Runnable {
 
 	@Override
 	public void run(){
+		
+		startTimer();
+		
 		runSimulation();
 
 		//Extra steps so we can get to where we can plot statistics.
 		training();
-		communication();
+		communication(); //TODO Collect statistics in multiple places.
 
 		plotStatistics();
 		
 		clustering(geneGrammarMatches);
+		
+
+		System.out.println("Execution completed in: " + longTimeToString(stopTimer()));
 	}
 	
 	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
@@ -131,6 +138,7 @@ public class ModelController implements Runnable {
 		SimpleClustering geneClustering = new SimpleClustering(array);
 		geneClustering.findMarkov();
 		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole);
+		
 	}
 
 	/**
@@ -138,32 +146,33 @@ public class ModelController implements Runnable {
 	 */
 	public void runSimulation(){
 
-		currentGeneration = 0;
-
-		while(currentGeneration < config.generationCount){
-
-			iterateGeneration();
-
-			//Print progress information
-			if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
-				System.out.println("Run " + currentRun + " Generation " + currentGeneration);
+		
+		while(currentRun < config.numberRuns){
+		
+			while(currentGeneration < config.generationCount){
+	
+				iterateGeneration();
+	
+				//Print progress information
+				if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
+					System.out.println("Run " + currentRun + " Generation " + currentGeneration);
+				}
+	
+				//Update stepwise visualization
+				if(visualConfig.enableContinuousVisualization){
+					visualizer.update(currentRun, currentGeneration);
+				}
+	
+				currentGeneration++;
 			}
-
-			//Update stepwise visualization
-			if(visualConfig.enableContinuousVisualization){
-				visualizer.update(currentRun, currentGeneration);
-			}
-
-			currentGeneration++;
-		}
-
-		currentRun++;
-
-		//Have we completed the required number of runs?
-		if (currentRun < config.numberRuns) {
+	
+			currentRun++;
+			currentGeneration = 0;
+			
 			resetModel();
-			runSimulation();
+
 		}
+		
 	}
 
 	/**
@@ -319,6 +328,19 @@ public class ModelController implements Runnable {
 		return "[Seed: " + randomGenerator.getSeed() + "   " + config + "]";
 	}
     
+	private void startTimer(){
+		simulationStart = System.currentTimeMillis();
+	}
+	
+	private long stopTimer(){
+		return System.currentTimeMillis() - simulationStart;
+	}
+	
+	private String longTimeToString(long period){
+		long seconds = period/1000;
+		return "Seconds " + seconds;//TODO
+	}
+	
    	public static void main(String[] args) {
 	    new Launcher();
 	}
