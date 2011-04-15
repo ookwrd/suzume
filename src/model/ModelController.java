@@ -1,7 +1,16 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Hashtable;
+
+import model.ChartPanel.ChartType;
+import model.ModelStatistics.PlotType;
+
+import tools.Clustering;
+import tools.KmeansClustering;
 import tools.Pair;
+import tools.Statistics;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -106,7 +115,7 @@ public class ModelController implements Runnable {
 
 		plotStatistics();
 		
-		clustering(geneGrammarMatches);
+		clustering(Statistics.trimArrayLists(geneGrammarMatches, ModelStatistics.trimStart, ModelStatistics.trimEnd));
 		
 
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
@@ -127,9 +136,9 @@ public class ModelController implements Runnable {
 			}
 		}
 		SimpleClustering geneClustering = new SimpleClustering(array);
-		geneClustering.findMarkov();
-		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole);
-		
+		//geneClustering.findMarkov();
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=50)", 50));
+		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
 	}
 
 	/**
@@ -163,7 +172,14 @@ public class ModelController implements Runnable {
 			resetModel();
 
 		}
-		
+
+		currentRun++;
+
+		//Have we completed the required number of runs?
+		if (currentRun < config.runCount) {
+			resetModel();
+			runSimulation();
+		}
 	}
 
 	/**
