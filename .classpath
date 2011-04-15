@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="jgrapht-jdk1.6.jar"/>
 	<classpathentry kind="lib" path="prefuse.jar"/>
 	<classpathentry kind="lib" path="jung-3d-demos-2.0.1.jar"/>
-	<classpathentry kind="lib" path="/Users/olaf/workspace/suzume/jung-3d-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jung-3d-2.0.1.jar"/>
 	<classpathentry kind="lib" path="/Users/olaf/workspace/suzume/jung-jai-samples-2.0.1.jar"/>
 	<classpathentry kind="lib" path="/Users/olaf/workspace/suzume/jung-jai-2.0.1.jar"/>
 	<classpathentry kind="lib" path="/Users/olaf/workspace/suzume/jung-samples-2.0.1.jar"/>
