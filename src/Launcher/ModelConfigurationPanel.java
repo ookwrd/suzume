@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import model.ModelConfiguration;
 import model.ModelConfiguration.PopulationModelType;
+import model.SelectionModel.SelectionModels;
 
 @SuppressWarnings("serial")
 public class ModelConfigurationPanel extends JPanel {
@@ -17,6 +18,7 @@ public class ModelConfigurationPanel extends JPanel {
 	private JPanel innerPanel;
 	
 	private JComboBox populationModelTypeBox;
+	private JComboBox selectionModelTypeBox;
 	
 	private JTextField generationCountField;
 	private JTextField populationSizeField;
@@ -41,7 +43,8 @@ public class ModelConfigurationPanel extends JPanel {
 		
 		ConfigurationPanelTools.configurePanel(innerPanel);
 		
-		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", ModelConfiguration.PopulationModelType.values(), innerPanel);
+		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", PopulationModelType.values(), innerPanel);
+		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
 		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
 		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, innerPanel); 
 		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
@@ -57,6 +60,7 @@ public class ModelConfigurationPanel extends JPanel {
 		return new ModelConfiguration(
 				agentConfigurationPanel.getConfiguration(),
 				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
+				(SelectionModels)selectionModelTypeBox.getSelectedItem(),
 				Integer.parseInt(generationCountField.getText().trim()),
 				Integer.parseInt(populationSizeField.getText().trim()),
 				Integer.parseInt(baseFitnessField.getText().trim()),

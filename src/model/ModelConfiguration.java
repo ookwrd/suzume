@@ -2,6 +2,8 @@ package model;
 
 import java.util.StringTokenizer;
 
+import model.SelectionModel.SelectionModels;
+
 import Agents.AgentConfiguration;
 
 /**
@@ -13,6 +15,8 @@ public class ModelConfiguration {
 
 	public enum PopulationModelType {OriginalPopulationModel}
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
+	
+	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelectionModel;
 	
 	public static final int DEFAULT_GENERATION_COUNT = 1000;
 	public static final int DEFAULT_POPULATION_SIZE = 200;
@@ -31,6 +35,7 @@ public class ModelConfiguration {
 	protected AgentConfiguration agentConfig;
 	
 	protected PopulationModelType populationModelType;
+	protected SelectionModels selectionModelType;
 	
 	protected int generationCount;
 	protected int populationSize;
@@ -48,6 +53,7 @@ public class ModelConfiguration {
 	public ModelConfiguration(){
 		this.agentConfig = new AgentConfiguration();
 		this.populationModelType = DEFAULT_POPULATION_MODEL;
+		this.selectionModelType = DEFAULT_SELECTION_MODEL;
 		
 		this.generationCount = DEFAULT_GENERATION_COUNT;
 		this.populationSize = DEFAULT_POPULATION_SIZE;
@@ -71,9 +77,18 @@ public class ModelConfiguration {
 	 * @param communicationsPerNeighbour
 	 * @param criticalPeriod
 	 */
-	public ModelConfiguration(AgentConfiguration agentConfig, PopulationModelType populationModelType, int generationCount, int populationSize, int baseFitness, int communicationsPerNeighbour, int criticalPeriod, int numberRuns){
+	public ModelConfiguration(AgentConfiguration agentConfig, 
+			PopulationModelType populationModelType, 
+			SelectionModels selectionModelType,
+			int generationCount, 
+			int populationSize, 
+			int baseFitness, 
+			int communicationsPerNeighbour, 
+			int criticalPeriod, 
+			int numberRuns){
 		this.agentConfig = agentConfig;
 		this.populationModelType = populationModelType;
+		this.selectionModelType = selectionModelType;
 		this.generationCount = generationCount;
 		this.populationSize = populationSize;
 		this.baseFitness = baseFitness;
@@ -92,6 +107,7 @@ public class ModelConfiguration {
 		
 		this.agentConfig = new AgentConfiguration(tokenizer);
 		this.populationModelType = PopulationModelType.valueOf(tokenizer.nextToken());
+		this.selectionModelType = SelectionModels.valueOf(tokenizer.nextToken());
 		
 		this.generationCount = Integer.parseInt(tokenizer.nextToken());
 		this.populationSize = Integer.parseInt(tokenizer.nextToken());
@@ -112,6 +128,7 @@ public class ModelConfiguration {
 	public String saveString(){
 		return "" + agentConfig.saveString() //TODO Make this work.
 		+ " " + populationModelType 
+		+ " " + selectionModelType
 		+ " " + generationCount 
 		+ " " + populationSize 
 		+ " " + baseFitness
