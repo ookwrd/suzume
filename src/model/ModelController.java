@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import tools.Pair;
+import tools.Statistics;
 
 import Agents.Agent;
 import Agents.AgentFactory;
