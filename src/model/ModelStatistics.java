@@ -19,6 +19,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+
 import tools.Pair;
 import tools.Statistics;
 
@@ -31,8 +33,8 @@ public class ModelStatistics extends JPanel {
 	public enum PlotType {TIMESERIES, DENSITY}
 	
 	private boolean trim = true;
-	private int trimStart = 2000;
-	private int trimEnd = Integer.MAX_VALUE;
+	public static final int trimStart = 2000;
+	public static final int trimEnd = Integer.MAX_VALUE;
 	
     private JFrame frame;
     private JScrollPane scrollPane;
@@ -40,6 +42,8 @@ public class ModelStatistics extends JPanel {
     
     private ArrayList<ChartPanel> chartPanels;
 	private TextArea textArea = null;
+	private BasicVisualizationServer<Integer, String> vv = null;
+	private JPanel clusteringPanel;
 	
 	public ModelStatistics(String title) {
 		
@@ -69,6 +73,10 @@ public class ModelStatistics extends JPanel {
 			}
 		});
 		buttonPanel.add(saveButton);
+		
+		clusteringPanel = new JPanel();
+		clusteringPanel.setLayout(new BorderLayout());
+		add(clusteringPanel);
 		
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -129,10 +137,23 @@ public class ModelStatistics extends JPanel {
 		JPanel consolePanel = new JPanel();
 		textArea = new TextArea(text);
 		consolePanel.add(textArea);
-		add(consolePanel);
+		clusteringPanel.add(consolePanel, BorderLayout.SOUTH);
 		
 		validate();
 		frame.validate();
+	}
+	
+	private void addGraphPanel(BasicVisualizationServer<Integer, String> vv) {
+		JPanel graphPanel = new JPanel();
+		clusteringPanel.add(graphPanel, BorderLayout.NORTH);
+		graphPanel.add(vv);
+		validate();
+		frame.validate();
+	}
+	
+	public void addGraph(BasicVisualizationServer<Integer, String> vv) {
+		if(this.vv==null) addGraphPanel(vv); // lazy
+		else this.vv = vv;
 	}
 	
 	public void updateConsoleText(String text) {

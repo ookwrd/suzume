@@ -7,7 +7,7 @@ import tools.Clustering;
 
 public class SimpleClustering extends Clustering {
 
-	public static final double[] GAP_CENTERS = { 11.5, 10.75, 10.25, 9.5, 8.5, 7.5};
+	//public static final double[] GAP_CENTERS = { 11.5, 10.75, 10.25, 9.5, 8.5, 7.5};
 	//private final double[] DEFAULT_THRESHOLDS = { 12, 11.75, 10.5, 10.25, 9.5,
 	//		8.5, 7.5 }; // must be in decreasing order
 	public static final double[] DEFAULT_CENTERS = { 12, 11, 10.5, 10, 9, 8 };
@@ -19,6 +19,23 @@ public class SimpleClustering extends Clustering {
 		super(array);
 		this.centers = DEFAULT_CENTERS;
 		this.array = array; // TODO
+		
+	}
+	
+	// index 0 corresponds to a gap 
+	public static double getCenter(int index) {
+		if (index==0) return -1.0;
+		else return DEFAULT_CENTERS[index-1];
+	}
+	
+	public void findMarkov() {
+		super.findMarkov();
+		
+		appendConsole("Clustering centers: ");
+		for(int i = 0; i < SimpleClustering.DEFAULT_CENTERS.length; i++) {
+			appendConsole((i+1)+":"+SimpleClustering.DEFAULT_CENTERS[i]+" ");
+		}
+		appendConsole("\n");
 	}
 	
 	/**
@@ -42,9 +59,6 @@ public class SimpleClustering extends Clustering {
 			
 			int prevStateIndex = 0; 
 			//double prevStateCenter = centers[0];
-			
-			System.out.println("CLUSTERING");
-			System.out.println("SIZE of the ARRAY of all RUNs = "+array.length); //debug
 			
 			for (Double value : arrayList) {
 				 
