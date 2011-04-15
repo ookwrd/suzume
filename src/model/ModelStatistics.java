@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -48,6 +50,7 @@ public class ModelStatistics extends JPanel {
 	private TextArea textArea = null;
 	private BasicVisualizationServer<Integer, String> vv = null; //TODO why? /luke
 	private JPanel clusteringPanel;
+	private JPanel graphPanel;
 	
 	public ModelStatistics(String title) {
 		
@@ -82,6 +85,7 @@ public class ModelStatistics extends JPanel {
 		});
 		buttonPanel.add(saveButton);
 		
+		graphPanel = null;
 		clusteringPanel = new JPanel();
 		clusteringPanel.setLayout(new BorderLayout());
 		add(clusteringPanel);
@@ -148,7 +152,6 @@ public class ModelStatistics extends JPanel {
 	public void addChartPanel(ChartPanel chartPanel){
 		add(chartPanel);
 		chartPanels.add(chartPanel);
-
 		validate();
 		frame.validate();
 	}
@@ -156,24 +159,35 @@ public class ModelStatistics extends JPanel {
 	private void addConsolePanel(String text) {
 		JPanel consolePanel = new JPanel();
 		textArea = new TextArea(text);
+		textArea.setEditable(false);
 		consolePanel.add(textArea);
 		clusteringPanel.add(consolePanel, BorderLayout.SOUTH);
-		
 		validate();
 		frame.validate();
 	}
 	
-	private void addGraphPanel(BasicVisualizationServer<Integer, String> vv) {
-		JPanel graphPanel = new JPanel();
+	private void addGraphPanel(BasicVisualizationServer<Integer, String> vv, String title) {
+		graphPanel = new JPanel();
+		graphPanel.setLayout(new BoxLayout(graphPanel, BoxLayout.PAGE_AXIS));
 		clusteringPanel.add(graphPanel, BorderLayout.NORTH);
+		JTextArea t = new JTextArea(title);
+		t.setEditable(false);
+		graphPanel.add(t);
 		graphPanel.add(vv);
 		validate();
 		frame.validate();
 	}
 	
-	public void addGraph(BasicVisualizationServer<Integer, String> vv) {
-		if(this.vv==null) addGraphPanel(vv); // lazy
-		else this.vv = vv;
+	public void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
+		if(this.graphPanel==null) addGraphPanel(vv, title); // lazy
+		else {
+			JTextArea t = new JTextArea(title);
+			t.setEditable(false);
+			graphPanel.add(t);
+			graphPanel.add(vv);
+			validate();
+			frame.validate();
+		}
 	}
 	
 	public void updateConsoleText(String text) {

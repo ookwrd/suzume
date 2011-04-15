@@ -38,7 +38,7 @@ public abstract class Clustering {
 		
 		Hashtable<Double, Integer> clustering = cluster(array);
 		double[][] adjacencyMatrix = stateTransitionsNormalized(array, clustering, i); // i
-		         
+		
 		GraphView gv = new GraphView(adjacencyMatrix, name); // This builds the graph
 		
 		return gv.getVV();
