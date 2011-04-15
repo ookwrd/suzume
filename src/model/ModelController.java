@@ -10,7 +10,6 @@ import model.ModelStatistics.PlotType;
 import tools.Clustering;
 import tools.KmeansClustering;
 import tools.Pair;
-import tools.StateTransitionVisualizer;
 import tools.Statistics;
 
 import Agents.Agent;
