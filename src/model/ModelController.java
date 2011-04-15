@@ -118,7 +118,7 @@ public class ModelController implements Runnable {
 		clustering(geneGrammarMatches);
 		
 
-		System.out.println("Execution completed in: " + longTimeToString(stopTimer()));
+		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
 	}
 	
 	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
@@ -155,7 +155,7 @@ public class ModelController implements Runnable {
 	
 				//Print progress information
 				if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
-					System.out.println("Run " + currentRun + " Generation " + currentGeneration);
+					System.out.println("Run " + currentRun + "/" +config.runCount +" Generation " + currentGeneration + "/"+config.generationCount+ " Elapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
@@ -332,7 +332,7 @@ public class ModelController implements Runnable {
 		simulationStart = System.currentTimeMillis();
 	}
 	
-	private long stopTimer(){
+	private long elapsedTime(){
 		return System.currentTimeMillis() - simulationStart;
 	}
 	
