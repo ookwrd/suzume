@@ -53,7 +53,7 @@ public class ModelStatistics extends JPanel {
     
     private ArrayList<ChartPanel> chartPanels;
 	private TextArea textArea = null;
-	private BasicVisualizationServer<Integer, String> vv = null; //TODO why? /luke
+	private BasicVisualizationServer<Integer, String> vv;
 	private JPanel clusteringPanel;
 	private JPanel graphPanel;
 	
@@ -90,7 +90,8 @@ public class ModelStatistics extends JPanel {
 		});
 		buttonPanel.add(saveButton);
 		
-		graphPanel = null; //TODO why /luke
+		this.graphPanel = null; //TODO why /luke
+		this.vv = null; //TODO why /luke
 		clusteringPanel = new JPanel();
 		clusteringPanel.setLayout(new BorderLayout());
 		add(clusteringPanel);
