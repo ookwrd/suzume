@@ -227,7 +227,7 @@ public class ChartPanel extends JPanel {
 	}
 	
 	public void saveFullSizeChart(String location){
-		saveChartToFile(SAVE_DIMENSION, location);//TODO change back
+		saveChartToFile(SAVE_DIMENSION, location);
 	}
 
 	public void saveChartToFile(Dimension printSize, String location) {
@@ -250,6 +250,15 @@ public class ChartPanel extends JPanel {
 					chart,
 					printSize.width, 
 					printSize.height
+					);
+			
+			//TODO refator this out
+			
+			ChartUtilities.saveChartAsJPEG(
+					new File(location + "/" + filename + "-small.jpg"), 
+					chart,
+					THUMBNAIL_DIMENSION.width, 
+					THUMBNAIL_DIMENSION.height
 					);
 		} catch (IOException e) {
 			e.printStackTrace();

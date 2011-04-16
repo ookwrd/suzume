@@ -109,7 +109,7 @@ public class ModelStatistics extends JPanel {
 			 String xLabel, String experiment) {
 
 		ChartType type = ChartType.HISTOGRAM;
-		ChartPanel chartPanel = new ChartPanel(table, type, title
+		ChartPanel chartPanel = new ChartPanel(table, type, title + " (Generations " + 0 + "-" + table[0].size() + ")"
 , "Occurences", xLabel, experiment);
 		addChartPanel(chartPanel);
 
@@ -128,7 +128,7 @@ public class ModelStatistics extends JPanel {
 				int trimEnd =  TRIM_INTERVALS[i][1] < length ? TRIM_INTERVALS[i][1] : length;
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-				chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Generations" + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
+				chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Generations " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
 			}
 		}
 		
