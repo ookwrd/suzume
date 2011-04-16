@@ -151,10 +151,10 @@ public class Statistics {
 		@SuppressWarnings("unchecked")
 		ArrayList<E>[] outputArrays = new ArrayList[arrays.length];
 	
-		for(int i = 0; i < arrays.length && i < finish; i++){
+		for(int i = 0; i < arrays.length; i++){
 			outputArrays[i] = new ArrayList<E>();
 	
-			for(int j = start; j < arrays[i].size(); j++){
+			for(int j = start; j < arrays[i].size() && j < finish; j++){
 				outputArrays[i].add(arrays[i].get(j));
 			}
 		}
