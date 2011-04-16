@@ -35,10 +35,10 @@ public class ChartPanel extends JPanel {
 	
 	private static final int NUMBER_OF_BINS = 200;
 	
-	private static double HISTOGRAM_X_MIN = 7;
-	private static double HISTOGRAM_X_MAX = 12;
-	private static double HISTOGRAM_Y_MIN = -1; // a negative value means no min value
-	private static double HISTOGRAM_Y_MAX = -1; // a negative value means no max value
+	public static double HISTOGRAM_X_MIN = 7;
+	public static double HISTOGRAM_X_MAX = 12;
+	public static double HISTOGRAM_Y_MIN = -1; // a negative value means no min value
+	public static double HISTOGRAM_Y_MAX = -1; // a negative value means no max value
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
