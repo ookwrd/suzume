@@ -44,8 +44,9 @@ public class ModelStatistics extends JPanel {
 	public enum PlotType {TIMESERIES, DENSITY}
 	
 	private boolean trim = true;
-	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{1000,2000},{4000,5000},{7000,8000},{10000,11000}};
-	
+	//public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{0,1000},{1000,2000},{2000,3000},{3000,4000},{4000,5000},{9000,11000},{15000,16000},{19000,21000}};
+	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{0,1000},{0,2000},{0,3000},{2000,4000},{0,5000}}; //Genotypes vs time
+
 	
     private JFrame frame;
     private JScrollPane scrollPane;
@@ -90,8 +91,7 @@ public class ModelStatistics extends JPanel {
 		});
 		buttonPanel.add(saveButton);
 		
-		this.graphPanel = null; //TODO why /luke
-		this.vv = null; //TODO why /luke
+
 		clusteringPanel = new JPanel();
 		clusteringPanel.setLayout(new BorderLayout());
 		add(clusteringPanel);
@@ -123,8 +123,8 @@ public class ModelStatistics extends JPanel {
 					continue;
 				}
 				
-				int trimStart = TRIM_INTERVALS[i][0] <= length ? TRIM_INTERVALS[i][0] : 0;
-				int trimEnd = length > TRIM_INTERVALS[i][1] ? TRIM_INTERVALS[i][1] : length;
+				int trimStart = TRIM_INTERVALS[i][0];// <= length ? TRIM_INTERVALS[i][0] : 0;
+				int trimEnd =  TRIM_INTERVALS[i][1] < length ? TRIM_INTERVALS[i][1] : length;
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
 				chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Density " + trimStart + "-" + trimEnd+" Generations)", "Occurences", xLabel);
@@ -149,10 +149,11 @@ public class ModelStatistics extends JPanel {
 					continue;
 				}
 				
-				int trimStart = TRIM_INTERVALS[i][0] <= length ? TRIM_INTERVALS[i][0] : 0;
-				int trimEnd = length > TRIM_INTERVALS[i][1] ? TRIM_INTERVALS[i][1] : length;
+				int trimStart = TRIM_INTERVALS[i][0];
+				int trimEnd =  TRIM_INTERVALS[i][1] < length ? TRIM_INTERVALS[i][1] : length;
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
+				
 				chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title + " (Trimmed " + trimStart + "-" + trimEnd+" Generations)", label, "Generations");
 			
 			}
@@ -231,6 +232,5 @@ public class ModelStatistics extends JPanel {
 		       System.out.println("writeToImageFile(): " + e.getMessage());
 		   }
 	}
-	
 
 }
