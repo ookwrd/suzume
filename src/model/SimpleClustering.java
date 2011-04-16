@@ -19,7 +19,6 @@ public class SimpleClustering extends Clustering {
 		super(array);
 		this.centers = DEFAULT_CENTERS;
 		this.array = array; // TODO
-		
 	}
 	
 	// index 0 corresponds to a gap 
