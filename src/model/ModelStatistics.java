@@ -7,10 +7,14 @@ import java.awt.FlowLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,6 +30,7 @@ import org.jfree.chart.StandardChartTheme;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 import tools.Pair;
+import tools.ScreenImage;
 import tools.Statistics;
 
 import model.ChartPanel.ChartType;
@@ -213,5 +218,18 @@ public class ModelStatistics extends JPanel {
 			panel.saveThumbNailSizeChart();
 		}
 	}
+	
+	public void saveGraphs(String imageFileName) {
+
+		   BufferedImage bufImage = ScreenImage.createImage((JComponent) graphPanel);
+		   try {
+		       File outFile = new File(imageFileName);
+		       ImageIO.write(bufImage, "png", outFile);
+		       System.out.println("wrote image to " + imageFileName +".png");
+		   } catch (Exception e) {
+		       System.out.println("writeToImageFile(): " + e.getMessage());
+		   }
+	}
+	
 
 }
