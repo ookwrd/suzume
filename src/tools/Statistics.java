@@ -162,6 +162,27 @@ public class Statistics {
 		return outputArrays;
 	}
 
+	
+	public static ArrayList<Pair<Double,Double>>[] averageArrayLists(ArrayList<Pair<Double,Double>>[] arrayLists){
+
+		ArrayList<Pair<Double,Double>>[] retVal = new ArrayList[1];
+		retVal[0] = new ArrayList<Pair<Double,Double>>();
+		
+		for(int i = 0; i < arrayLists[0].size(); i++){
+			
+			double count = 0;//TODO this shouldn't be a double
+			
+			for(int j = 0; j < arrayLists.length; j++){
+				count += arrayLists[j].get(i).second;
+			}
+			
+			retVal[0].add(new Pair<Double, Double>(new Double((double)i), count/arrayLists.length));
+		}
+		
+		
+		return retVal;
+	}
+	
 	/**
 	 * Helper method for aggregating together an array of arraylists into a single arraylist
 	 * 
@@ -179,4 +200,5 @@ public class Statistics {
 		
 		return retVal;
 	}
+
 }
