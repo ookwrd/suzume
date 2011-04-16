@@ -33,7 +33,7 @@ public class ChartPanel extends JPanel {
 	private static final Dimension PAPER_DIMENSION = new Dimension(750,450);
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
-	private static final int NUMBER_OF_BINS = 1000;
+	private static final int NUMBER_OF_BINS = 400;
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
