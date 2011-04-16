@@ -109,7 +109,8 @@ public class ModelStatistics extends JPanel {
 			 String xLabel, String experiment) {
 
 		ChartType type = ChartType.HISTOGRAM;
-		ChartPanel chartPanel = new ChartPanel(table, type, title + "(Density)", "Occurences", xLabel, experiment);
+		ChartPanel chartPanel = new ChartPanel(table, type, title
+, "Occurences", xLabel, experiment);
 		addChartPanel(chartPanel);
 
 		//Do we also trim?
