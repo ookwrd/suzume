@@ -45,7 +45,7 @@ public class ModelStatistics extends JPanel {
 	
 	private boolean trim = true;
 	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{1000,2000},{4000,5000},{7000,8000},{10000,11000}};
-
+	
 	
     private JFrame frame;
     private JScrollPane scrollPane;
