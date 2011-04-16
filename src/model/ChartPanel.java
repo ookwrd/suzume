@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +15,7 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
@@ -28,6 +30,7 @@ import tools.Pair;
 public class ChartPanel extends JPanel {
 
 	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
+	private static final Dimension PAPER_DIMENSION = new Dimension(750,450);
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
 	private static final int NUMBER_OF_BINS = 1000;
@@ -71,8 +74,9 @@ public class ChartPanel extends JPanel {
 				);
 
 		JLabel chartLabel = new JLabel();
-		chartLabel.setIcon(new ImageIcon(image));
-
+		ImageIcon icon = new ImageIcon(image);
+		chartLabel.setIcon(icon);
+		
 		return chartLabel;
 	}
 	
@@ -108,6 +112,9 @@ public class ChartPanel extends JPanel {
 					);
 			XYPlot catPlot = chart.getXYPlot();
             ((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
+
+			chart.getPlot().setBackgroundPaint(Color.WHITE);
+			chart.setBackgroundPaint(Color.WHITE);
 			break;
 		
 		case AREA_CHART:
@@ -119,7 +126,10 @@ public class ChartPanel extends JPanel {
 					false, // Show legend
 					false, // Tooltips
 					false// URL
-					); 
+					);
+
+			chart.getPlot().setBackgroundPaint(Color.WHITE);
+			chart.setBackgroundPaint(Color.WHITE);
 			break;
 			
 		case SCATTER_PLOT:
@@ -138,6 +148,8 @@ public class ChartPanel extends JPanel {
 			renderer.setDotWidth(2);
 			renderer.setDotHeight(2);
 			plot.setRenderer(renderer);
+			chart.getPlot().setBackgroundPaint(Color.WHITE);
+			chart.setBackgroundPaint(Color.WHITE);
 			break;
 
 		case LINE_CHART:
@@ -150,6 +162,8 @@ public class ChartPanel extends JPanel {
 					false, // Show legend
 					false, // Tooltips
 					false); // URL;
+			chart.getPlot().setBackgroundPaint(Color.WHITE);
+			chart.setBackgroundPaint(Color.WHITE);
 		}
 
 		return chart;
@@ -213,7 +227,7 @@ public class ChartPanel extends JPanel {
 	}
 	
 	public void saveFullSizeChart(String location){
-		saveChartToFile(SAVE_DIMENSION, location);
+		saveChartToFile(SAVE_DIMENSION, location);//TODO change back
 	}
 
 	public void saveChartToFile(Dimension printSize, String location) {
@@ -221,7 +235,7 @@ public class ChartPanel extends JPanel {
 		saveChartToFile(chart, printSize, location, filename);
 		
 		for(JFreeChart extraChart : extraCharts){
-			saveChartToFile(extraChart, printSize, location, filename+(extraCharts.indexOf(extraChart)+1));
+			saveChartToFile(extraChart, printSize, location, filename+"-"+(extraCharts.indexOf(extraChart)+1));
 		}
 		
 	}

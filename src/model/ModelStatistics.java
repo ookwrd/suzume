@@ -99,7 +99,6 @@ public class ModelStatistics extends JPanel {
 			 String xLabel, String experiment) {
 
 		ChartType type = ChartType.HISTOGRAM;
-		//ArrayList<Pair<Double, Double>>[] densityData = Statistics.calculateDensity(Statistics.aggregateArrayLists(table));
 		ChartPanel chartPanel = new ChartPanel(table, type, title + "(Density)", "Occurences", xLabel, experiment);
 		addChartPanel(chartPanel);
 
