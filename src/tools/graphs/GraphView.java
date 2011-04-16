@@ -100,7 +100,6 @@ public class GraphView {
 		// add edges
 		for (int i=1; i<adjacencyMatrix.length; i++) {
 			for (int j=1; j<adjacencyMatrix[i].length; j++) {
-				
 				DecimalFormat df = new DecimalFormat("########.00");
 				double p = adjacencyMatrix[i][j];
 				if (p>=0.01) {
@@ -118,11 +117,17 @@ public class GraphView {
 	public static void main(String[] args) {
 		//ModelController.main(null);
 		double[][] am = {
-				{	3000.0,			4000.0,		4000.0,		40000.0},
-				{	300000.1,		3000.1,		2.1,	4.1},
-				{	300000.2,		5.2,		2.2,	4.2},
-				{	30000.3,		5.3,		2.3,	2.3}};
+				{	3000.0,			4000.0,		4000.0,		4000.0},
+				{	3000.1,		300.1,		2.1,	4.1},
+				{	3000.2,		5.2,		2.2,	4.2},
+				{	3000.3,		5.3,		2.3,	2.3}};
 		GraphView gv = new GraphView(am, "Test");
+		JFrame frame = new JFrame();
+		frame.getContentPane().add(gv.getVV());
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 }
