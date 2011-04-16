@@ -317,7 +317,10 @@ public class ModelController implements Runnable {
 		statisticsWindow.plotTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
 		statisticsWindow.plotTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
 		statisticsWindow.plotTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
+		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberGenotypes), "Average Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberPhenotypes), "Average Number of Phenotypes", "Number of Phenotypes",  printName);
 	
+		
 		statisticsWindow.display();
 	}
 	

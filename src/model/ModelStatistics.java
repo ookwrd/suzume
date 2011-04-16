@@ -39,7 +39,7 @@ public class ModelStatistics extends JPanel {
 	public enum PlotType {TIMESERIES, DENSITY}
 	
 	private boolean trim = true;
-	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{1000,2000},{4000,5000},{7000,8000},{10000,11000}};
+	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{1000,2000},{2000,3000},{3000,4000},{4000,6000},{9000,11000},{15000,16000},{19000,21000}};
 
 	
     private JFrame frame;
