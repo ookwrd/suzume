@@ -224,7 +224,7 @@ public class ModelStatistics extends JPanel {
 
 		   BufferedImage bufImage = ScreenImage.createImage((JComponent) graphPanel);
 		   try {
-		       File outFile = new File(imageFileName);
+		       File outFile = new File(imageFileName+".png");
 		       ImageIO.write(bufImage, "png", outFile);
 		       System.out.println("wrote image to " + imageFileName +".png");
 		   } catch (Exception e) {
