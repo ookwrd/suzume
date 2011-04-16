@@ -7,10 +7,14 @@ import java.awt.FlowLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,7 +52,7 @@ public class ModelStatistics extends JPanel {
     
     private ArrayList<ChartPanel> chartPanels;
 	private TextArea textArea = null;
-	private BasicVisualizationServer<Integer, String> vv = null; //TODO why? /luke
+	private BasicVisualizationServer<Integer, String> vv;
 	private JPanel clusteringPanel;
 	private JPanel graphPanel;
 	
@@ -85,7 +89,7 @@ public class ModelStatistics extends JPanel {
 		});
 		buttonPanel.add(saveButton);
 		
-		graphPanel = null; //TODO why /luke
+
 		clusteringPanel = new JPanel();
 		clusteringPanel.setLayout(new BorderLayout());
 		add(clusteringPanel);
@@ -212,6 +216,18 @@ public class ModelStatistics extends JPanel {
 		for (ChartPanel panel : chartPanels) {
 			panel.saveThumbNailSizeChart();
 		}
+	}
+	
+	public void saveGraphs(String imageFileName) {
+
+		   BufferedImage bufImage = ScreenImage.createImage((JComponent) graphPanel);
+		   try {
+		       File outFile = new File(imageFileName+".png");
+		       ImageIO.write(bufImage, "png", outFile);
+		       System.out.println("wrote image to " + imageFileName +".png");
+		   } catch (Exception e) {
+		       System.out.println("writeToImageFile(): " + e.getMessage());
+		   }
 	}
 
 }

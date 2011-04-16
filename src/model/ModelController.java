@@ -131,10 +131,13 @@ public class ModelController implements Runnable {
 		SimpleClustering geneClustering = new SimpleClustering(array);
 		
 		//geneClustering.findMarkov();
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=20)", 20), "Clustering Graph (step=20)");
 		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=50)", 50), "Clustering Graph (step=50)");
 		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=100)", 100), "Clustering Graph (step=100)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=100)", 200), "Clustering Graph (step=200)");
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=200)", 200), "Clustering Graph (step=200)");
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=500)", 500), "Clustering Graph (step=500)");
 		
+		this.statisticsWindow.saveGraphs("state-transition-graphs-"+this.getTitleString());
 		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
 	}
 
@@ -320,7 +323,6 @@ public class ModelController implements Runnable {
 		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberGenotypes), "Average Number of Genotypes","Number of Genotypes",  printName);
 		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberPhenotypes), "Average Number of Phenotypes", "Number of Phenotypes",  printName);
 	
-		
 		statisticsWindow.display();
 	}
 	

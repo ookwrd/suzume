@@ -69,6 +69,8 @@ public class GraphView {
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
 		vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
+		
+		vv.setBackground(Color.white);
 	}
 	
 	public BasicVisualizationServer<Integer, String> getVV() {
