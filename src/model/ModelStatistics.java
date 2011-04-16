@@ -30,6 +30,7 @@ import org.jfree.chart.StandardChartTheme;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 import tools.Pair;
+import tools.ScreenImage;
 import tools.Statistics;
 
 import model.ChartPanel.ChartType;
