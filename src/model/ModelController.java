@@ -268,8 +268,8 @@ public class ModelController implements Runnable {
 	 */
 	private void gatherStatistics(){
 
-		ArrayList genotypes = new ArrayList();
-		ArrayList phenotypes = new ArrayList();
+		ArrayList<ArrayList<Integer>> genotypes = new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<Integer>> phenotypes = new ArrayList<ArrayList<Integer>>();
 		double antiLearningIntensity = 0;
 		double totalFitness = 0;
 		double genomeGrammarMatch = 0;
@@ -314,6 +314,10 @@ public class ModelController implements Runnable {
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		statisticsWindow.plotTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
+		
+		
+		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(geneGrammarMatches), "Average Gene Grammar Match", "Average Gene Grammar Match",printName);
+		
 		statisticsWindow.plotDensity(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
 		statisticsWindow.plotTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
 		statisticsWindow.plotTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);

@@ -10,7 +10,7 @@ public class SimpleClustering extends Clustering {
 	//public static final double[] GAP_CENTERS = { 11.5, 10.75, 10.25, 9.5, 8.5, 7.5};
 	//private final double[] DEFAULT_THRESHOLDS = { 12, 11.75, 10.5, 10.25, 9.5,
 	//		8.5, 7.5 }; // must be in decreasing order
-	public static final double[] DEFAULT_CENTERS = { 12, 11, 10.5, 10, 9, 8 };
+	public static final double[] DEFAULT_CENTERS = { 12, 11, /*10.5, */10, 9, 8 }; //TODO check state transition diagram : est-ce que tout va bien apres avoir supprime le 10.5
 	public static final double DEFAULT_SIGMA = 0.2;
 	
 	public double[] centers;
@@ -75,8 +75,8 @@ public class SimpleClustering extends Clustering {
 						results.put(value, 4);
 					else if (centers[4] + s > value && value > centers[4] - s)
 						results.put(value, 5);
-					else if (centers[5] + s > value && value > centers[5] - s)
-						results.put(value, 6);
+					//else if (centers[5] + s > value && value > centers[5] - s)
+					//	results.put(value, 6);
 					else results.put(value, 0);
 				//}
 				
