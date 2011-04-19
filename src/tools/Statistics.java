@@ -200,5 +200,24 @@ public class Statistics {
 		
 		return retVal;
 	}
+	
+	public static double[] stripIndexValues(ArrayList<Pair<Double, Double>>[] series){
+		
+		ArrayList<Double> dataset = new ArrayList<Double>();
+		
+		for(ArrayList<Pair<Double, Double>> list : series){
+			for(Pair<Double, Double> pair : list){
+				dataset.add(pair.second);
+			}
+		}
+		
+		//Convert to doubles
+		double[] retVal = new double[dataset.size()];
+		for(int i =0; i < dataset.size(); i++){
+			retVal[i] = dataset.get(i);
+		}
+		
+		return retVal;
+	}
 
 }
