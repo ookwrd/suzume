@@ -27,6 +27,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import tools.Pair;
+import tools.Statistics;
 
 @SuppressWarnings("serial")
 public class ChartPanel extends JPanel {
@@ -212,30 +213,13 @@ public class ChartPanel extends JPanel {
 	
 		HistogramDataset dataSet = new HistogramDataset();
 		
-		dataSet.addSeries(new Double(1), stripIndexValues(series), NUMBER_OF_BINS);
+		dataSet.addSeries(new Double(1), Statistics.stripIndexValues(series), NUMBER_OF_BINS);
 		
 		return dataSet;
 	}
 	
-	//TODO factor this into Statistics class
-	private double[] stripIndexValues(ArrayList<Pair<Double, Double>>[] series){
-		
-		ArrayList<Double> dataset = new ArrayList<Double>();
-		
-		for(ArrayList<Pair<Double, Double>> list : series){
-			for(Pair<Double, Double> pair : list){
-				dataset.add(pair.second);
-			}
-		}
-		
-		//Convert to doubles
-		double[] retVal = new double[dataset.size()];
-		for(int i =0; i < dataset.size(); i++){
-			retVal[i] = dataset.get(i);
-		}
-		
-		return retVal;
-	}
+
+	
 	
 	public void saveChart(String location, PrintSize size){
 		
