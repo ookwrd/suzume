@@ -76,12 +76,38 @@ public class ModelStatistics extends JPanel {
 		
 		this.chartPanels = new ArrayList<DataPanel>();
 		
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
+		initializeTopBar();
+
+		initializeBottomBar();
+		
+	}
+	
+	private void initializeTopBar(){
+		
+		JPanel topBar = new JPanel();
+		topBar.setLayout(new FlowLayout());
+		
+		JButton importButton = new JButton("Import Dataset");
+		importButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				importDataset();
+			}
+		});
+		
+		topBar.add(importButton);
+		
+		frame.add(topBar, BorderLayout.NORTH);
+	}
+	
+	private void initializeBottomBar(){
+		
+		JPanel bottomBar = new JPanel();
+		bottomBar.setLayout(new FlowLayout());
 		
 		final JTextField saveDestination = new JTextField(DEFAULT_SAVE_LOCATION);
-		buttonPanel.add(new JLabel("Save images to:"));
-		buttonPanel.add(saveDestination);
+		bottomBar.add(new JLabel("Save images to:"));
+		bottomBar.add(saveDestination);
 		
 		saveButton = new JButton("Save all graphs");
 		saveButton.addActionListener(new ActionListener(){
@@ -89,14 +115,14 @@ public class ModelStatistics extends JPanel {
 				saveAllCharts(saveDestination.getText(), PrintSize.LARGE);
 			}
 		});
-		buttonPanel.add(saveButton);
-		
+		bottomBar.add(saveButton);
 
 		clusteringPanel = new JPanel();
 		clusteringPanel.setLayout(new BorderLayout());
 		add(clusteringPanel);
 		
-		frame.add(buttonPanel, BorderLayout.SOUTH);
+		frame.add(bottomBar, BorderLayout.SOUTH);
+		
 	}
 
 	public void display() {
@@ -232,6 +258,11 @@ public class ModelStatistics extends JPanel {
 		   } catch (Exception e) {
 		       System.out.println("writeToImageFile(): " + e.getMessage());
 		   }
+	}
+	
+	private void importDataset(){
+		//TODO
+		System.out.println("Should be importing data set right now.");
 	}
 
 }
