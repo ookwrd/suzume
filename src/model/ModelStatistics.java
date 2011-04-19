@@ -33,7 +33,7 @@ import tools.Pair;
 import tools.ScreenImage;
 import tools.Statistics;
 
-import model.ChartPanel.ChartType;
+import model.DataPanel.ChartType;
 
 
 @SuppressWarnings("serial")
@@ -53,7 +53,7 @@ public class ModelStatistics extends JPanel {
     private JScrollPane scrollPane;
     private JButton saveButton;
     
-    private ArrayList<ChartPanel> chartPanels;
+    private ArrayList<DataPanel> chartPanels;
 	private TextArea textArea;
 	private JPanel clusteringPanel;
 	private JPanel graphPanel;
@@ -74,7 +74,7 @@ public class ModelStatistics extends JPanel {
 		
 		frame.add(scrollPane);
 		
-		this.chartPanels = new ArrayList<ChartPanel>();
+		this.chartPanels = new ArrayList<DataPanel>();
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -109,8 +109,8 @@ public class ModelStatistics extends JPanel {
 			 String xLabel, String experiment) {
 
 		ChartType type = ChartType.HISTOGRAM;
-		ChartPanel chartPanel = new ChartPanel(table, type, title + " (Generations " + 0 + "-" + table[0].size() + ")"
-, "Occurences", xLabel, experiment);
+		DataPanel chartPanel = new DataPanel(table, type, title + " (Generations " + 0 + "-" + table[0].size() + ")"
+, "Occurences", xLabel, experiment, this);
 		addChartPanel(chartPanel);
 
 		//Do we also trim?
@@ -128,7 +128,7 @@ public class ModelStatistics extends JPanel {
 				int trimEnd =  TRIM_INTERVALS[i][1] < length ? TRIM_INTERVALS[i][1] : length;
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-				chartPanel.addAdditionalChart(trimmedDataArrayList, type, title + " (Generations " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
+				chartPanel.addTrimmedChart(trimmedDataArrayList, type, title + " (Generations " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
 			}
 		}
 		
@@ -137,7 +137,7 @@ public class ModelStatistics extends JPanel {
 	public void plotTimeSeries(ArrayList<Pair<Double, Double>>[] table, String title,
 			String label, String experiment){
 
-		ChartPanel chartPanel = new ChartPanel(table, ChartType.LINE_CHART, title, label, "Generations", experiment);
+		DataPanel chartPanel = new DataPanel(table, ChartType.LINE_CHART, title, label, "Generations", experiment, this);
 		addChartPanel(chartPanel);
 		
 		//Do we also trim?
@@ -155,13 +155,13 @@ public class ModelStatistics extends JPanel {
 		
 				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
 				
-				chartPanel.addAdditionalChart(trimmedDataArrayList, ChartType.LINE_CHART, title, label, "Generations");
+				chartPanel.addTrimmedChart(trimmedDataArrayList, ChartType.LINE_CHART, title, label, "Generations");
 			
 			}
 		}
 	}
 	
-	public void addChartPanel(ChartPanel chartPanel){
+	public void addChartPanel(DataPanel chartPanel){
 		add(chartPanel);
 		chartPanels.add(chartPanel);
 		validate();
@@ -190,6 +190,12 @@ public class ModelStatistics extends JPanel {
 		frame.validate();
 	}
 	
+	public void removeDataPanel(DataPanel panel){
+		remove(panel);
+		revalidate();
+		System.out.println("Removing");
+	}
+	
 	public void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
 		if(this.graphPanel==null) addGraphPanel(vv, title); // lazy
 		else {
@@ -211,7 +217,7 @@ public class ModelStatistics extends JPanel {
 	 * Save all charts displayed in window. The smaller images are replaced by larger ones.
 	 */
 	public void saveAllCharts(String location, PrintSize size) {
-		for (ChartPanel panel : chartPanels) {
+		for (DataPanel panel : chartPanels) {
 			panel.saveChart(location, size);
 		}
 	}
