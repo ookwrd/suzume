@@ -12,10 +12,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.ModelStatistics.PrintSize;
+
+import org.apache.commons.collections15.map.CaseInsensitiveMap;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
@@ -29,9 +31,9 @@ import tools.Pair;
 @SuppressWarnings("serial")
 public class ChartPanel extends JPanel {
 
-	private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
-	private static final Dimension PAPER_DIMENSION = new Dimension(750,450);
-	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
+	private static final Dimension LARGE_DIMENSION = new Dimension(1000, 600);
+	private static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
+	private static final Dimension SMALL_DIMENSION = new Dimension(500,300);
 	
 	private static final int NUMBER_OF_BINS = 200;
 	
@@ -74,8 +76,8 @@ public class ChartPanel extends JPanel {
 	private JLabel createImageJLabel(JFreeChart chart) {
 		
 		BufferedImage image = chart.createBufferedImage(
-				THUMBNAIL_DIMENSION.width, 
-				THUMBNAIL_DIMENSION.height
+				SMALL_DIMENSION.width, 
+				SMALL_DIMENSION.height
 				);
 
 		JLabel chartLabel = new JLabel();
@@ -235,12 +237,26 @@ public class ChartPanel extends JPanel {
 		return retVal;
 	}
 	
-	public void saveThumbNailSizeChart(){
-		saveChartToFile(THUMBNAIL_DIMENSION, ModelStatistics.DEFAULT_SAVE_LOCATION);
-	}
-	
-	public void saveFullSizeChart(String location){
-		saveChartToFile(SAVE_DIMENSION, location);
+	public void saveChart(String location, PrintSize size){
+		
+		Dimension dimension;
+		switch(size){
+		
+		case SMALL:
+			dimension = SMALL_DIMENSION;
+			break;
+			
+		case MEDIUM:
+			dimension = MEDIUM_DIMENSION;
+			break;
+		
+		default:
+		case LARGE:
+			dimension = LARGE_DIMENSION;
+			break;
+		}
+		
+		saveChartToFile(dimension, ModelStatistics.DEFAULT_SAVE_LOCATION);
 	}
 
 	public void saveChartToFile(Dimension printSize, String location) {
@@ -270,8 +286,8 @@ public class ChartPanel extends JPanel {
 			ChartUtilities.saveChartAsJPEG(
 					new File(location + "/" + filename + "-small.jpg"), 
 					chart,
-					THUMBNAIL_DIMENSION.width, 
-					THUMBNAIL_DIMENSION.height
+					SMALL_DIMENSION.width, 
+					SMALL_DIMENSION.height
 					);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -294,6 +310,8 @@ public class ChartPanel extends JPanel {
 	 */
 	private void mkdir(String dir) {
 
+		//TODO make this work recursively on deep directories.
+		
 		try {
 			boolean success = (new File(dir)).mkdir();
 			if (success) {
