@@ -13,10 +13,10 @@ import Agents.AgentConfiguration;
  */
 public class ModelConfiguration {
 
-	public enum PopulationModelType {OriginalPopulationModel}
-	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.OriginalPopulationModel;
+	public enum PopulationModelType {CyclicBagModel}
+	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.CyclicBagModel;
 	
-	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelectionModel;
+	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelection;
 	
 	public static final int DEFAULT_GENERATION_COUNT = 5000;
 	public static final int DEFAULT_RUN_COUNT = 5;

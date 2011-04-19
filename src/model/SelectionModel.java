@@ -8,7 +8,7 @@ import Agents.Agent;
 
 public abstract class SelectionModel {
 
-	public enum SelectionModels {RouletteWheelSelectionModel, ConstantProbabilitySelectionModel}
+	public enum SelectionModels {RouletteWheelSelection, ConstantProbabilitySelection, RandomProbabilitySelection}
 	
 	protected RandomGenerator randomGenerator;
 	
@@ -22,13 +22,19 @@ public abstract class SelectionModel {
 		SelectionModel retVal;
 		
 		switch (type) {
-		case RouletteWheelSelectionModel:
+		case RouletteWheelSelection:
 
 			retVal = new RouletteWheelSelectionModel();
 			break;
 			
-		case ConstantProbabilitySelectionModel:
+		case RandomProbabilitySelection:
+			
+			retVal = new RandomProbabilitySelectionModel();
+			break;
+			
+		case ConstantProbabilitySelection:
 		default:
+			
 			retVal = new ConstantProbabilitySelectionModel();
 			break;
 		}
