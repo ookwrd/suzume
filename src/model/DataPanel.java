@@ -1,7 +1,11 @@
 package model;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +13,13 @@ import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import model.ModelStatistics.PrintSize;
 
-import org.apache.commons.collections15.map.CaseInsensitiveMap;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -30,7 +35,7 @@ import tools.Pair;
 import tools.Statistics;
 
 @SuppressWarnings("serial")
-public class ChartPanel extends JPanel {
+public class DataPanel extends JPanel {
 
 	private static final Dimension LARGE_DIMENSION = new Dimension(1000, 600);
 	private static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
@@ -45,33 +50,92 @@ public class ChartPanel extends JPanel {
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
+	private ModelStatistics parent;
+	
+	private ArrayList<Pair<Double, Double>>[] data;
+	
+	private static final int DEFAULT_TRIM_START = 0;
+	private static final int DEFAULT_TRIM_END = 5000;
+	
+	private JPanel buttonPanel;
+	private JTextField trimStartField;
+	private JTextField trimEndField;
+	private JButton trimButton;
+	
+	private int trimStart;
+	private int trimEnd;
+	
+	private JButton printButton;
+	private JButton removeButton;
+	
+	private JPanel chartPanel;
+	
 	private JFreeChart chart;
 	private ArrayList<JFreeChart> extraCharts = new ArrayList<JFreeChart>();
 	private String filename;
 	
-	public ChartPanel(ArrayList<Pair<Double, Double>> data, ChartType type, String title,
-			String yLabel, String xLabel, String printName){
-		this(wrapArrayList(data), type, title, yLabel, xLabel, printName);			
+	public DataPanel(ArrayList<Pair<Double, Double>> data, ChartType type, String title,
+			String yLabel, String xLabel, String printName, ModelStatistics parent){
+		this(wrapArrayList(data), type, title, yLabel, xLabel, printName, parent);			
 	}
 	
-	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
-			String yLabel, String xLabel, String printName){
+	public DataPanel(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
+			String yLabel, String xLabel, String printName, ModelStatistics parent){
 		super();
 		
+		this.setLayout(new BorderLayout());
+		
+		this.data = data;
+		this.parent= parent;
+		
 		this.filename = title.replaceAll(" ", "") + "-" + printName;
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		this.trimStart = DEFAULT_TRIM_START;
+		this.trimEnd = DEFAULT_TRIM_END;
+		
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
+		
+		trimStartField = new JTextField(""+trimStart);
+		trimEndField = new JTextField(""+trimEnd);
+		trimButton = new JButton("Trim");//TODO action Listener
+		printButton = new JButton("Print");//TODO action Listener
+		
+		removeButton = new JButton("Remove");
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				removeThisPanel();
+			}
+		});
+		
+		buttonPanel.add(new JLabel("Trim from:"));
+		buttonPanel.add(trimStartField);
+		buttonPanel.add(new JLabel("to:"));
+		buttonPanel.add(trimEndField);
+		buttonPanel.add(trimButton);
+		buttonPanel.add(printButton);
+		buttonPanel.add(removeButton);
+		
+		add(buttonPanel, BorderLayout.NORTH);
+		
+
+		chartPanel = new JPanel();
+		chartPanel.setLayout(new BoxLayout(chartPanel, BoxLayout.Y_AXIS));
+		
 		
 		this.chart = createChart(data, type, title, xLabel, yLabel);
-		add(createImageJLabel(chart));
+		chartPanel.add(createImageJLabel(chart));
 		
+		add(chartPanel);
 	}
 	
 	//TODO factor creation of trimmed datasets into this class.
-	public void addAdditionalChart(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
+	public void addTrimmedChart(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
 			String yLabel, String xLabel){
 		JFreeChart chart = createChart(data, type, title, xLabel, yLabel);
 		extraCharts.add(chart);
-		add(createImageJLabel(chart));
+		chartPanel.add(createImageJLabel(chart));
 	}
 	
 	private JLabel createImageJLabel(JFreeChart chart) {
@@ -210,7 +274,6 @@ public class ChartPanel extends JPanel {
 	
 	private HistogramDataset createHistogramDataset(ArrayList<Pair<Double, Double>>[] series){
 		
-	
 		HistogramDataset dataSet = new HistogramDataset();
 		
 		dataSet.addSeries(new Double(1), Statistics.stripIndexValues(series), NUMBER_OF_BINS);
@@ -276,6 +339,10 @@ public class ChartPanel extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void removeThisPanel(){
+		parent.removeDataPanel(this);
 	}
 	
 	/**
