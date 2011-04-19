@@ -39,7 +39,8 @@ import model.ChartPanel.ChartType;
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
 
-	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts";
+	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts"; //TODO refactor to a configuration class
+	public enum PrintSize {SMALL, MEDIUM, LARGE}
 	
 	public enum PlotType {TIMESERIES, DENSITY}
 	
@@ -53,8 +54,7 @@ public class ModelStatistics extends JPanel {
     private JButton saveButton;
     
     private ArrayList<ChartPanel> chartPanels;
-	private TextArea textArea = null;
-	private BasicVisualizationServer<Integer, String> vv;
+	private TextArea textArea;
 	private JPanel clusteringPanel;
 	private JPanel graphPanel;
 	
@@ -86,7 +86,7 @@ public class ModelStatistics extends JPanel {
 		saveButton = new JButton("Save all graphs");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				saveAllCharts(saveDestination.getText());
+				saveAllCharts(saveDestination.getText(), PrintSize.LARGE);
 			}
 		});
 		buttonPanel.add(saveButton);
@@ -102,7 +102,7 @@ public class ModelStatistics extends JPanel {
 	public void display() {
 		frame.pack();
 		frame.setVisible(true);
-		saveAllChartsThumbnail();
+		saveAllCharts(DEFAULT_SAVE_LOCATION, PrintSize.SMALL);
 	}
 	
 	public void plotDensity(ArrayList<Pair<Double, Double>>[] table, String title,
@@ -210,18 +210,12 @@ public class ModelStatistics extends JPanel {
 	/**
 	 * Save all charts displayed in window. The smaller images are replaced by larger ones.
 	 */
-	public void saveAllCharts(String location) {
+	public void saveAllCharts(String location, PrintSize size) {
 		for (ChartPanel panel : chartPanels) {
-			panel.saveFullSizeChart(location);
+			panel.saveChart(location, size);
 		}
 	}
-	
-	public void saveAllChartsThumbnail() {
-		for (ChartPanel panel : chartPanels) {
-			panel.saveThumbNailSizeChart();
-		}
-	}
-	
+
 	public void saveGraphs(String imageFileName) {
 
 		   BufferedImage bufImage = ScreenImage.createImage((JComponent) graphPanel);
