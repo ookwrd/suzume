@@ -65,8 +65,7 @@ public class DataPanel extends JPanel {
 	
 	private JPanel chartPanel;
 	
-	private JFreeChart chart; //TODO refactor together.
-	private ArrayList<JFreeChart> extraCharts = new ArrayList<JFreeChart>();
+	private ArrayList<JFreeChart> charts = new ArrayList<JFreeChart>();
 	private String filename;
 	
 	
@@ -139,9 +138,10 @@ public class DataPanel extends JPanel {
 		chartPanel = new JPanel();
 		chartPanel.setLayout(new BoxLayout(chartPanel, BoxLayout.Y_AXIS));
 		
-		
-		this.chart = createChart(data, type, title, xLabel, yLabel);
+		JFreeChart chart = createChart(data, type, title, xLabel, yLabel);
 		chartPanel.add(createImageJLabel(chart));
+		
+		charts.add(chart);
 		
 		add(chartPanel);
 	}
@@ -150,7 +150,7 @@ public class DataPanel extends JPanel {
 	public void addTrimmedChart(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
 			String yLabel, String xLabel){
 		JFreeChart chart = createChart(data, type, title, xLabel, yLabel);
-		extraCharts.add(chart);
+		charts.add(chart);
 		chartPanel.add(createImageJLabel(chart));
 	}
 	
@@ -173,14 +173,6 @@ public class DataPanel extends JPanel {
 		ArrayList<E>[] wrapper = new ArrayList[1];
 		wrapper[0] = input;
 		return wrapper;
-	}
-	
-	public JFreeChart getChart() {
-		return chart;
-	}
-
-	public String getFilename() {
-		return filename;
 	}
 
 	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type, String title, String xLabel, String yLabel){
@@ -323,13 +315,9 @@ public class DataPanel extends JPanel {
 	}
 
 	public void saveChartToFile(Dimension printSize, String location) {
-
-		saveChartToFile(chart, printSize, location, filename);
-		
-		for(JFreeChart extraChart : extraCharts){
-			saveChartToFile(extraChart, printSize, location, filename+"-"+(extraCharts.indexOf(extraChart)+1));
+		for(JFreeChart extraChart : charts){
+			saveChartToFile(extraChart, printSize, location, filename+"-"+(charts.indexOf(extraChart)+1));
 		}
-		
 	}
 	
 	private void saveChartToFile(JFreeChart chart, Dimension printSize, String location, String filename){
