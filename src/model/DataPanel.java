@@ -51,9 +51,7 @@ public class DataPanel extends JPanel {
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
 	private ModelStatistics parent;
-	
-	private ArrayList<Pair<Double, Double>>[] data;
-	
+
 	private static final int DEFAULT_TRIM_START = 0;
 	private static final int DEFAULT_TRIM_END = 5000;
 	
@@ -62,17 +60,22 @@ public class DataPanel extends JPanel {
 	private JTextField trimEndField;
 	private JButton trimButton;
 	
-	private int trimStart;
-	private int trimEnd;
-	
 	private JButton printButton;
 	private JButton removeButton;
 	
 	private JPanel chartPanel;
 	
-	private JFreeChart chart;
+	private JFreeChart chart; //TODO refactor together.
 	private ArrayList<JFreeChart> extraCharts = new ArrayList<JFreeChart>();
 	private String filename;
+	
+	
+	private ArrayList<Pair<Double, Double>>[] data;
+	private ChartType type;
+	private String title;
+	private String yLabel;
+	private String xLabel;
+	
 	
 	public DataPanel(ArrayList<Pair<Double, Double>> data, ChartType type, String title,
 			String yLabel, String xLabel, String printName, ModelStatistics parent){
@@ -80,25 +83,38 @@ public class DataPanel extends JPanel {
 	}
 	
 	public DataPanel(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
-			String yLabel, String xLabel, String printName, ModelStatistics parent){
+			String yLabel, String xLabel, String printName, ModelStatistics parent){//TODO remove external printName generation
 		super();
 		
 		this.setLayout(new BorderLayout());
 		
 		this.data = data;
+		this.type = type;
+		this.title = title;
+		this.yLabel = yLabel;
+		this.xLabel = xLabel;
+		
 		this.parent= parent;
 		
 		this.filename = title.replaceAll(" ", "") + "-" + printName;
 		
-		this.trimStart = DEFAULT_TRIM_START;
-		this.trimEnd = DEFAULT_TRIM_END;
-		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
-		trimStartField = new JTextField(""+trimStart);
-		trimEndField = new JTextField(""+trimEnd);
-		trimButton = new JButton("Trim");//TODO action Listener
+		trimStartField = new JTextField(""+DEFAULT_TRIM_START,5);
+		trimEndField = new JTextField(""+DEFAULT_TRIM_END,5);
+		
+		trimButton = new JButton("Trim");
+		trimButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int trimStart = Integer.parseInt(trimStartField.getText());
+				int trimEnd = Integer.parseInt(trimEndField.getText());
+				addTrimmedChart(trimStart, trimEnd);
+			}
+		});
+		
+		
 		printButton = new JButton("Print");//TODO action Listener
 		
 		removeButton = new JButton("Remove");
@@ -343,6 +359,25 @@ public class DataPanel extends JPanel {
 	
 	private void removeThisPanel(){
 		parent.removeDataPanel(this);
+	}
+	
+	private void addTrimmedChart(int trimStart, int trimEnd){
+		
+		int length = data[0].size();
+		
+		if(length <= trimStart){
+			//TODO error message
+			return;
+		}
+		
+		int trimStartAdjusted = trimStart;//TODO
+		int trimEndAdjusted =  trimEnd < length ? trimEnd : length;
+
+		ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, trimStartAdjusted, trimEndAdjusted);
+		
+		addTrimmedChart(trimmedDataArrayList, type, title + " (Generations " + trimStartAdjusted + "-" + trimEndAdjusted+")", "Occurences", xLabel);
+		
+		revalidate();
 	}
 	
 	/**

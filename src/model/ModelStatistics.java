@@ -45,7 +45,7 @@ public class ModelStatistics extends JPanel {
 	public enum PlotType {TIMESERIES, DENSITY}
 	
 	private boolean trim = true;
-	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{0,1000},{0,12000},{10000,12000},{15000,16000},{19000,21000}};
+	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE}}; //,{0,1000},{0,12000},{10000,12000},{15000,16000},{19000,21000}};
 	//public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{0,1000},{0,2000},{0,3000},{2000,4000},{0,5000}}; //Genotypes vs time
 
 	
