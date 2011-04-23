@@ -107,8 +107,8 @@ public class ModelController implements Runnable {
 
 		plotStatistics();
 		
-		if (geneGrammarMatches[0].size() > ModelStatistics.TRIM_INTERVALS[0][0]) 
-			clustering(Statistics.trimArrayLists(geneGrammarMatches, ModelStatistics.TRIM_INTERVALS[0][0], ModelStatistics.TRIM_INTERVALS[0][1]));
+		
+		clustering(geneGrammarMatches);//TODO add trimming to clustering.
 		
 		
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
@@ -313,15 +313,15 @@ public class ModelController implements Runnable {
 		statisticsWindow = new ModelStatistics(getTitleString());
 		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.plotTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
-		statisticsWindow.plotDensity(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
-		statisticsWindow.plotTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
-		statisticsWindow.plotTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);
-		statisticsWindow.plotTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
-		statisticsWindow.plotTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
-		statisticsWindow.plotTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
-		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberGenotypes), "Average Number of Genotypes","Number of Genotypes",  printName);
-		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberPhenotypes), "Average Number of Phenotypes", "Number of Phenotypes",  printName);
+		statisticsWindow.addTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
+		statisticsWindow.addDensityPlot(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
+		statisticsWindow.addTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
+		statisticsWindow.addTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);
+		statisticsWindow.addTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
+		statisticsWindow.addTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.addTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
+		statisticsWindow.addTimeSeries(Statistics.averageArrayLists(totalNumberGenotypes), "Average Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.addTimeSeries(Statistics.averageArrayLists(totalNumberPhenotypes), "Average Number of Phenotypes", "Number of Phenotypes",  printName);
 	
 		statisticsWindow.display();
 	}

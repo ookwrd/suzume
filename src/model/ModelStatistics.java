@@ -43,17 +43,15 @@ public class ModelStatistics extends JPanel {
 	public enum PrintSize {SMALL, MEDIUM, LARGE}
 	
 	public enum PlotType {TIMESERIES, DENSITY}
-	
-	private boolean trim = true;
-	public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE}}; //,{0,1000},{0,12000},{10000,12000},{15000,16000},{19000,21000}};
-	//public static Integer[][] TRIM_INTERVALS = {{2000,Integer.MAX_VALUE},{0,1000},{0,2000},{0,3000},{2000,4000},{0,5000}}; //Genotypes vs time
 
+	public ArrayList<DataPanel> panels = new ArrayList<DataPanel>();
 	
     private JFrame frame;
     private JScrollPane scrollPane;
     private JButton saveButton;
     
-    private ArrayList<DataPanel> chartPanels;
+    private ArrayList<DataPanel> dataPanels;
+    
 	private TextArea textArea;
 	private JPanel clusteringPanel;
 	private JPanel graphPanel;
@@ -74,7 +72,7 @@ public class ModelStatistics extends JPanel {
 		
 		frame.add(scrollPane);
 		
-		this.chartPanels = new ArrayList<DataPanel>();
+		this.dataPanels = new ArrayList<DataPanel>();
 		
 		initializeTopBar();
 
@@ -105,6 +103,23 @@ public class ModelStatistics extends JPanel {
 		JPanel bottomBar = new JPanel();
 		bottomBar.setLayout(new FlowLayout());
 		
+		final JTextField trimStart = new JTextField(""+DataPanel.DEFAULT_TRIM_START,5);
+		bottomBar.add(new JLabel("Trim from:"));
+		bottomBar.add(trimStart);
+		
+		final JTextField trimEnd = new JTextField(""+DataPanel.DEFAULT_TRIM_END,5);
+		bottomBar.add(new JLabel("to:"));
+		bottomBar.add(trimEnd);
+		
+		JButton trimButton = new JButton("Trim all");
+		trimButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				trimAll(Integer.parseInt(trimStart.getText()), Integer.parseInt(trimEnd.getText()));
+			}
+		});
+		bottomBar.add(trimButton);
+		
 		final JTextField saveDestination = new JTextField(DEFAULT_SAVE_LOCATION);
 		bottomBar.add(new JLabel("Save images to:"));
 		bottomBar.add(saveDestination);
@@ -131,77 +146,59 @@ public class ModelStatistics extends JPanel {
 		saveAllCharts(DEFAULT_SAVE_LOCATION, PrintSize.SMALL);
 	}
 	
-	public void plotDensity(ArrayList<Pair<Double, Double>>[] table, String title,
+	public void addDensityPlot(ArrayList<Pair<Double, Double>>[] table, String title,
 			 String xLabel, String experiment) {
 
 		ChartType type = ChartType.HISTOGRAM;
-		DataPanel chartPanel = new DataPanel(table, type, title + " (Generations " + 0 + "-" + table[0].size() + ")"
-, "Occurences", xLabel, experiment, this);
-		addChartPanel(chartPanel);
-
-		//Do we also trim?
-		if(trim){
-
-			int length = table[0].size();
-			
-			for(int i = 0; i < TRIM_INTERVALS.length; i++){
-				
-				if(length <= TRIM_INTERVALS[i][0]){
-					continue;
-				}
-				
-				int trimStart = TRIM_INTERVALS[i][0];// <= length ? TRIM_INTERVALS[i][0] : 0;
-				int trimEnd =  TRIM_INTERVALS[i][1] < length ? TRIM_INTERVALS[i][1] : length;
 		
-				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-				chartPanel.addTrimmedChart(trimmedDataArrayList, type, title + " (Generations " + trimStart + "-" + trimEnd+")", "Occurences", xLabel);
-			}
-		}
+		DataPanel dataPanel = new DataPanel(table, 
+				type, 
+				title + " (Generations " + 0 + "-" + table[0].size() + ")", 
+				"Occurences", 
+				xLabel, 
+				experiment, 
+				this);
 		
+		addDataPanel(dataPanel);
+
 	}
 	
-	public void plotTimeSeries(ArrayList<Pair<Double, Double>>[] table, String title,
+	public void addTimeSeries(ArrayList<Pair<Double, Double>>[] table, String title,
 			String label, String experiment){
 
-		DataPanel chartPanel = new DataPanel(table, ChartType.LINE_CHART, title, label, "Generations", experiment, this);
-		addChartPanel(chartPanel);
+		DataPanel dataPanel = new DataPanel(table, 
+				ChartType.LINE_CHART, 
+				title, 
+				label, 
+				"Generations", 
+				experiment, 
+				this);
 		
-		//Do we also trim?
-		if(trim){
-			int length = table[0].size();
-			
-			for(int i = 0; i < TRIM_INTERVALS.length; i++){
-				
-				if(length <= TRIM_INTERVALS[i][0]){
-					continue;
-				}
-				
-				int trimStart = TRIM_INTERVALS[i][0];
-				int trimEnd =  TRIM_INTERVALS[i][1] < length ? TRIM_INTERVALS[i][1] : length;
-		
-				ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(table, trimStart, trimEnd);
-				
-				chartPanel.addTrimmedChart(trimmedDataArrayList, ChartType.LINE_CHART, title, label, "Generations");
-			
-			}
-		}
+		addDataPanel(dataPanel);
+
 	}
 	
-	public void addChartPanel(DataPanel chartPanel){
+	public void addDataPanel(DataPanel chartPanel){
+		
 		add(chartPanel);
-		chartPanels.add(chartPanel);
+		dataPanels.add(chartPanel);
+		
 		validate();
 		frame.validate();
+
 	}
 	
 	private void addConsolePanel(String text) {
+		
 		JPanel consolePanel = new JPanel();
 		textArea = new TextArea(text);
 		textArea.setEditable(false);
 		consolePanel.add(textArea);
 		clusteringPanel.add(consolePanel, BorderLayout.SOUTH);
+		
 		validate();
 		frame.validate();
+		
 	}
 	
 	private void addGraphPanel(BasicVisualizationServer<Integer, String> vv, String title) {
@@ -217,9 +214,12 @@ public class ModelStatistics extends JPanel {
 	}
 	
 	public void removeDataPanel(DataPanel panel){
+		
 		remove(panel);
+		dataPanels.remove(panel);
+		
 		revalidate();
-		System.out.println("Removing");
+
 	}
 	
 	public void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
@@ -235,15 +235,18 @@ public class ModelStatistics extends JPanel {
 	}
 	
 	public void updateConsoleText(String text) {
-		if(textArea==null) addConsolePanel(text); // lazy
-		else textArea.setText(text);
+		if(textArea==null) {// lazy
+			addConsolePanel(text);
+		} else {
+			textArea.setText(text);
+		}
 	}
 	
 	/**
 	 * Save all charts displayed in window. The smaller images are replaced by larger ones.
 	 */
 	public void saveAllCharts(String location, PrintSize size) {
-		for (DataPanel panel : chartPanels) {
+		for (DataPanel panel : dataPanels) {
 			panel.saveChart(location, size);
 		}
 	}
@@ -258,6 +261,18 @@ public class ModelStatistics extends JPanel {
 		   } catch (Exception e) {
 		       System.out.println("writeToImageFile(): " + e.getMessage());
 		   }
+	}
+	
+	private void trimAll(int start, int end){
+		
+		for(DataPanel panel : dataPanels){
+			panel.addTrimmedChart(start, end);
+		}
+		
+	}
+	
+	private void exportAll(){
+		//TODO
 	}
 	
 	private void importDataset(){
