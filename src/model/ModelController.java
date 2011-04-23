@@ -36,7 +36,10 @@ public class ModelController implements Runnable {
 	private int currentRun = 0;
 	private long simulationStart;
 
-	public ModelController(ModelConfiguration configuration, VisualizationConfiguration visualizationConfiguration, RandomGenerator randomGenerator){
+	public ModelController(ModelConfiguration configuration, 
+			VisualizationConfiguration visualizationConfiguration, 
+			RandomGenerator randomGenerator){
+		
 		this.config = configuration;
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
@@ -50,9 +53,11 @@ public class ModelController implements Runnable {
 		if(visualConfig.enableContinuousVisualization){
 			this.visualizer = new StepwiseVisualizer(getTitleString(),population, visualizationConfiguration);
 		}
+		
 	}
 
 	private void resetModel(){
+		
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 		if(visualizer!=null){
 			visualizer.updateModel(population);
@@ -61,12 +66,14 @@ public class ModelController implements Runnable {
 	}
 
 	private void resetStatistics(){
+		
 		totalNumberGenotypes = getInitializedStatisticsArraylist();
 		totalNumberPhenotypes = getInitializedStatisticsArraylist();
 		totalFitnesses = getInitializedStatisticsArraylist();
 		learningIntensities = getInitializedStatisticsArraylist();
 		geneGrammarMatches = getInitializedStatisticsArraylist();
 		numberNulls = getInitializedStatisticsArraylist(); 
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,44 +108,13 @@ public class ModelController implements Runnable {
 		
 		runSimulation();
 
-		//Extra steps so we can get to where we can plot statistics.
-		training();
-		communication(); //TODO Collect statistics in multiple places.
-
 		plotStatistics();
 		
 		
-		clustering(geneGrammarMatches);//TODO add trimming to clustering.
+	//	clustering(geneGrammarMatches);//TODO add trimming to clustering.
 		
 		
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
-	}
-	
-	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
-		ArrayList<Pair<Double, Double>>[] pairData = data;
-		
-		ArrayList<Double>[] array = new ArrayList[pairData.length];
-		
-		for (int i = 0; i < pairData.length; i++) {
-			array[i] = new ArrayList<Double>();
-			for (int j = 0; j < pairData[0].size(); j++) {
-				ArrayList<Pair<Double, Double>> tmp = pairData[i];
-				Pair<Double, Double> tmp2 = tmp.get(j);
-				double d = tmp2.second;
-				array[i].add(d);
-			}
-		}
-		SimpleClustering geneClustering = new SimpleClustering(array);
-		
-		//geneClustering.findMarkov();
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=20)", 20), "Clustering Graph (step=20)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=50)", 50), "Clustering Graph (step=50)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=100)", 100), "Clustering Graph (step=100)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=200)", 200), "Clustering Graph (step=200)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=500)", 500), "Clustering Graph (step=500)");
-		
-		this.statisticsWindow.saveGraphs("state-transition-graphs-"+this.getTitleString());
-		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
 	}
 
 	/**
@@ -146,9 +122,10 @@ public class ModelController implements Runnable {
 	 */
 	public void runSimulation(){
 
-		
+		//Runs
 		while(currentRun < config.runCount){
 		
+			//Generations
 			while(currentGeneration < config.generationCount){
 	
 				iterateGeneration();
@@ -164,6 +141,7 @@ public class ModelController implements Runnable {
 				}
 	
 				currentGeneration++;
+				
 			}
 	
 			currentRun++;
@@ -311,19 +289,19 @@ public class ModelController implements Runnable {
 	private void plotStatistics() {
 		
 		statisticsWindow = new ModelStatistics(getTitleString());
-		String printName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String configName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.addTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
-		statisticsWindow.addDensityPlot(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
-		statisticsWindow.addTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
-		statisticsWindow.addTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);
-		statisticsWindow.addTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
-		statisticsWindow.addTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
-		statisticsWindow.addTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
-		statisticsWindow.addTimeSeries(Statistics.averageArrayLists(totalNumberGenotypes), "Average Number of Genotypes","Number of Genotypes",  printName);
-		statisticsWindow.addTimeSeries(Statistics.averageArrayLists(totalNumberPhenotypes), "Average Number of Phenotypes", "Number of Phenotypes",  printName);
-	
+		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, false);
+		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, true);
+		
+		statisticsWindow.addDataSeries(learningIntensities, "Learning Intensity", "Learning Intensity", configName, false);
+		statisticsWindow.addDataSeries(numberNulls, "Number of Nulls", "Number of Nulls",  configName, false);
+		statisticsWindow.addDataSeries(totalFitnesses, "Fitness", "Fitness",  configName, false);
+		statisticsWindow.addDataSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  configName, false);
+		statisticsWindow.addDataSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  configName, false);
+		
 		statisticsWindow.display();
+		
 	}
 	
 	private String getTitleString(){
@@ -342,6 +320,35 @@ public class ModelController implements Runnable {
 		long seconds = period/1000;
 		return "Seconds " + seconds;//TODO
 	}
+	
+	//TODO put this somewhere else.
+	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
+		ArrayList<Pair<Double, Double>>[] pairData = data;
+		
+		ArrayList<Double>[] array = new ArrayList[pairData.length];
+		
+		for (int i = 0; i < pairData.length; i++) {
+			array[i] = new ArrayList<Double>();
+			for (int j = 0; j < pairData[0].size(); j++) {
+				ArrayList<Pair<Double, Double>> tmp = pairData[i];
+				Pair<Double, Double> tmp2 = tmp.get(j);
+				double d = tmp2.second;
+				array[i].add(d);
+			}
+		}
+		SimpleClustering geneClustering = new SimpleClustering(array);
+		
+		//geneClustering.findMarkov();
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=20)", 20), "Clustering Graph (step=20)");
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=50)", 50), "Clustering Graph (step=50)");
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=100)", 100), "Clustering Graph (step=100)");
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=200)", 200), "Clustering Graph (step=200)");
+		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=500)", 500), "Clustering Graph (step=500)");
+		
+		this.statisticsWindow.saveGraphs("state-transition-graphs-"+this.getTitleString());
+		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
+	}
+	
 	
    	public static void main(String[] args) {
 	    new Launcher();

@@ -199,4 +199,12 @@ public class Statistics {
 		return retVal;
 	}
 
+
+	
+	private static <E> ArrayList<E>[] wrapArrayList(ArrayList<E> input){
+		@SuppressWarnings("unchecked")
+		ArrayList<E>[] wrapper = new ArrayList[1];
+		wrapper[0] = input;
+		return wrapper;
+	}
 }
