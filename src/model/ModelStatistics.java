@@ -48,7 +48,6 @@ public class ModelStatistics extends JPanel {
 	
     private JFrame frame;
     private JScrollPane scrollPane;
-    private JButton saveButton;
     
     private ArrayList<DataPanel> dataPanels;
     
@@ -78,6 +77,10 @@ public class ModelStatistics extends JPanel {
 
 		initializeBottomBar();
 		
+		clusteringPanel = new JPanel();
+		clusteringPanel.setLayout(new BorderLayout());
+		add(clusteringPanel);
+		
 	}
 	
 	private void initializeTopBar(){
@@ -103,6 +106,7 @@ public class ModelStatistics extends JPanel {
 		JPanel bottomBar = new JPanel();
 		bottomBar.setLayout(new FlowLayout());
 		
+		//Trim controls.
 		final JTextField trimStart = new JTextField(""+DataPanel.DEFAULT_TRIM_START,5);
 		bottomBar.add(new JLabel("Trim from:"));
 		bottomBar.add(trimStart);
@@ -120,21 +124,30 @@ public class ModelStatistics extends JPanel {
 		});
 		bottomBar.add(trimButton);
 		
+		
+		//Print controls
 		final JTextField saveDestination = new JTextField(DEFAULT_SAVE_LOCATION);
-		bottomBar.add(new JLabel("Save images to:"));
+		bottomBar.add(new JLabel("Output location:"));
 		bottomBar.add(saveDestination);
 		
-		saveButton = new JButton("Save all graphs");
+		JButton saveButton = new JButton("Print all");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				saveAllCharts(saveDestination.getText(), PrintSize.LARGE);
+				printAll(PrintSize.LARGE, saveDestination.getText());
 			}
 		});
 		bottomBar.add(saveButton);
 
-		clusteringPanel = new JPanel();
-		clusteringPanel.setLayout(new BorderLayout());
-		add(clusteringPanel);
+		
+		//Export controls
+		JButton exportButton = new JButton("Export all");
+		exportButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportAll(saveDestination.getText());
+			}
+		});
+		bottomBar.add(exportButton);
 		
 		frame.add(bottomBar, BorderLayout.SOUTH);
 		
@@ -143,7 +156,7 @@ public class ModelStatistics extends JPanel {
 	public void display() {
 		frame.pack();
 		frame.setVisible(true);
-		saveAllCharts(DEFAULT_SAVE_LOCATION, PrintSize.SMALL);
+		printAll(PrintSize.SMALL, DEFAULT_SAVE_LOCATION);
 	}
 	
 	public void addDensityPlot(ArrayList<Pair<Double, Double>>[] table, String title,
@@ -241,15 +254,6 @@ public class ModelStatistics extends JPanel {
 			textArea.setText(text);
 		}
 	}
-	
-	/**
-	 * Save all charts displayed in window. The smaller images are replaced by larger ones.
-	 */
-	public void saveAllCharts(String location, PrintSize size) {
-		for (DataPanel panel : dataPanels) {
-			panel.saveChart(location, size);
-		}
-	}
 
 	public void saveGraphs(String imageFileName) {
 
@@ -264,15 +268,21 @@ public class ModelStatistics extends JPanel {
 	}
 	
 	private void trimAll(int start, int end){
-		
 		for(DataPanel panel : dataPanels){
 			panel.addTrimmedChart(start, end);
 		}
-		
 	}
 	
-	private void exportAll(){
-		//TODO
+	private void printAll(PrintSize size, String location){
+		for(DataPanel panel : dataPanels){
+			panel.printToFile(size, location);
+		}
+	}
+	
+	private void exportAll(String location){
+		for(DataPanel panel : dataPanels){
+			//TODO
+		}
 	}
 	
 	private void importDataset(){
