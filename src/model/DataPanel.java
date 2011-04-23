@@ -52,8 +52,8 @@ public class DataPanel extends JPanel {
 	
 	private ModelStatistics parent;
 
-	private static final int DEFAULT_TRIM_START = 0;
-	private static final int DEFAULT_TRIM_END = 5000;
+	public static final int DEFAULT_TRIM_START = 0;
+	public static final int DEFAULT_TRIM_END = 5000;
 	
 	private JPanel buttonPanel;
 	private JTextField trimStartField;
@@ -144,14 +144,6 @@ public class DataPanel extends JPanel {
 		charts.add(chart);
 		
 		add(chartPanel);
-	}
-	
-	//TODO factor creation of trimmed datasets into this class.
-	public void addTrimmedChart(ArrayList<Pair<Double, Double>>[] data, ChartType type, String title,
-			String yLabel, String xLabel){
-		JFreeChart chart = createChart(data, type, title, xLabel, yLabel);
-		charts.add(chart);
-		chartPanel.add(createImageJLabel(chart));
 	}
 	
 	private JLabel createImageJLabel(JFreeChart chart) {
@@ -349,7 +341,7 @@ public class DataPanel extends JPanel {
 		parent.removeDataPanel(this);
 	}
 	
-	private void addTrimmedChart(int trimStart, int trimEnd){
+	public void addTrimmedChart(int trimStart, int trimEnd){
 		
 		int length = data[0].size();
 		
@@ -362,8 +354,11 @@ public class DataPanel extends JPanel {
 		int trimEndAdjusted =  trimEnd < length ? trimEnd : length;
 
 		ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, trimStartAdjusted, trimEndAdjusted);
+
+		JFreeChart chart = createChart(trimmedDataArrayList, type, title+ " (Generations " + trimStartAdjusted + "-" + trimEndAdjusted+")",  "Occurences", xLabel);
 		
-		addTrimmedChart(trimmedDataArrayList, type, title + " (Generations " + trimStartAdjusted + "-" + trimEndAdjusted+")", "Occurences", xLabel);
+		charts.add(chart);
+		chartPanel.add(createImageJLabel(chart));
 		
 		revalidate();
 	}
