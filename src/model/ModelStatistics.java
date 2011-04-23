@@ -254,7 +254,7 @@ public class ModelStatistics extends JPanel {
 	
 	private void trimAll(int start, int end){
 		for(DataPanel panel : dataPanels){
-			panel.addChart(start, end);
+			panel.addChart(start, end, false);
 		}
 	}
 	
