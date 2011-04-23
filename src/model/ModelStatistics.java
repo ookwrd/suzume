@@ -2,7 +2,6 @@
 package model;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
@@ -21,20 +20,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 import tools.Pair;
 import tools.ScreenImage;
-import tools.Statistics;
-
-import model.DataPanel.ChartType;
-
 
 @SuppressWarnings("serial")
 public class ModelStatistics extends JPanel {
@@ -42,7 +35,7 @@ public class ModelStatistics extends JPanel {
 	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts"; //TODO refactor to a configuration class
 	public enum PrintSize {SMALL, MEDIUM, LARGE}
 	
-	public enum PlotType {TIMESERIES, DENSITY}
+	public static final boolean PRINT_THUMBNAIL = true;
 
 	public ArrayList<DataPanel> panels = new ArrayList<DataPanel>();
 	
@@ -155,38 +148,29 @@ public class ModelStatistics extends JPanel {
 	}
 
 	public void display() {
+		
 		frame.pack();
 		frame.setVisible(true);
-		printAll(PrintSize.SMALL, DEFAULT_SAVE_LOCATION);
+		
+		if(PRINT_THUMBNAIL){
+			printAll(PrintSize.SMALL, DEFAULT_SAVE_LOCATION);
+		}
 	}
 	
-	public void addDensityPlot(ArrayList<Pair<Double, Double>>[] table, String title,
-			 String xLabel, String experiment) {
-
-		ChartType type = ChartType.HISTOGRAM;
-		
-		DataPanel dataPanel = new DataPanel(table, 
-				type, 
-				title + " (Generations " + 0 + "-" + table[0].size() + ")", 
-				"Occurences", 
-				xLabel, 
-				experiment, 
-				this);
-		
-		addDataPanel(dataPanel);
-
-	}
-	
-	public void addTimeSeries(ArrayList<Pair<Double, Double>>[] table, String title,
-			String label, String experiment){
+	public void addDataSeries(ArrayList<Pair<Double, Double>>[] table, 
+			String title,
+			String label, 
+			String experiment, 
+			boolean density){
 
 		DataPanel dataPanel = new DataPanel(table, 
-				ChartType.LINE_CHART, 
 				title, 
 				label, 
 				"Generations", 
 				experiment, 
-				this);
+				this,
+				false,
+				density);
 		
 		addDataPanel(dataPanel);
 
@@ -270,7 +254,7 @@ public class ModelStatistics extends JPanel {
 	
 	private void trimAll(int start, int end){
 		for(DataPanel panel : dataPanels){
-			panel.addTrimmedChart(start, end);
+			panel.addChart(start, end);
 		}
 	}
 	

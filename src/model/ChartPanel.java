@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.DataPanel.ChartType;
 import model.ModelStatistics.PrintSize;
 
 import org.jfree.chart.ChartFactory;
@@ -31,6 +30,8 @@ import tools.Statistics;
 @SuppressWarnings("serial")
 public class ChartPanel extends JPanel {
 	
+	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
+	
 	private static final Dimension LARGE_DIMENSION = new Dimension(1000, 600);
 	private static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
 	private static final Dimension SMALL_DIMENSION = new Dimension(500,300);
@@ -46,17 +47,44 @@ public class ChartPanel extends JPanel {
 	
 	JFreeChart chart;
 	
-	public ChartPanel(/*ArrayList<Pair<Double, Double>> data, boolean average, boolean density,*/ ArrayList<Pair<Double, Double>>[] series, ChartType type, String title, String xLabel, String yLabel, String printName){
+	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, 
+			String title, 
+			boolean average, 
+			boolean density, 
+			String xLabel, 
+			String yLabel, 
+			String configName){
+		
 		super();
 		
-		chart = createChart(series, type, title, xLabel, yLabel);
+		if(average){
+			data = Statistics.averageArrayLists(data);
+			title = "Average " + title;
+		}
+		
+		ChartType type = determineType(density);
+		
+		chart = createChart(data, type, title, xLabel, yLabel);
 		add(createImageJLabel());
 		
-		this.filename = title.replaceAll(" ", "") + "-" + printName;
+		this.filename = title.replaceAll(" ", "") + "-" + configName;
 		
 	}
 	
-	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type, String title, String xLabel, String yLabel){
+	private ChartType determineType(boolean density){
+		
+		if(density){
+			return ChartType.HISTOGRAM;
+		}
+		
+		return ChartType.LINE_CHART;
+	}
+	
+	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, 
+			ChartType type, 
+			String title, 
+			String xLabel, 
+			String yLabel){
 		
 		JFreeChart chart;
 		switch (type) {
