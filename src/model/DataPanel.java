@@ -280,13 +280,11 @@ public class DataPanel extends JPanel {
 		
 		return dataSet;
 	}
-	
 
-	
-	
-	public void saveChart(String location, PrintSize size){
+	public void printToFile(PrintSize size, String location) {
 		
 		Dimension dimension;
+		
 		switch(size){
 		
 		case SMALL:
@@ -303,18 +301,17 @@ public class DataPanel extends JPanel {
 			break;
 		}
 		
-		saveChartToFile(dimension, ModelStatistics.DEFAULT_SAVE_LOCATION);
-	}
-
-	public void saveChartToFile(Dimension printSize, String location) {
 		for(JFreeChart extraChart : charts){
-			saveChartToFile(extraChart, printSize, location, filename+"-"+(charts.indexOf(extraChart)+1));
+			printToFile(extraChart, dimension, location, filename+"-"+(charts.indexOf(extraChart)+1));
 		}
 	}
 	
-	private void saveChartToFile(JFreeChart chart, Dimension printSize, String location, String filename){
+	private void printToFile(JFreeChart chart, Dimension printSize, String location, String filename){
+		
+		//Location
 		cd("/");
 		mkdir(location);
+		
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
