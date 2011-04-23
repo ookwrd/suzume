@@ -149,6 +149,7 @@ public class ModelStatistics extends JPanel {
 		});
 		bottomBar.add(exportButton);
 		
+		
 		frame.add(bottomBar, BorderLayout.SOUTH);
 		
 	}

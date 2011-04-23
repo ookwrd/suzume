@@ -23,29 +23,8 @@ public class Statistics {
 			System.out.println(pair);
 		}
 		
-	}
-
-	/**
-	 * Find the set of keys that correspond to local minima in the input data 
-	 * 
-	 * @param series
-	 * @return
-	 */
-	public static ArrayList<Double> findLocalMinima(ArrayList<Pair<Double, Integer>> series){
-		
-		ArrayList<Double> retVal = new ArrayList<Double>();
-		Collections.sort(series);
-		
-		for(int i = 1; i < series.size()-1; i++){	
-			Pair<Double, Integer> pair =series.get(i);
-			if(pair.second < series.get(i-1).second && 
-					pair.second < series.get(i+1).second){
-				retVal.add(pair.first);
-			}	
-		}
-		
-		return retVal;
-	}
+	}  
+	
 
 	/**
 	 * Calculates moving average of data set for all points extending to a distance of windowRadius around the centre point.
