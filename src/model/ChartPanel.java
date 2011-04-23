@@ -200,16 +200,25 @@ public class ChartPanel extends JPanel {
 	
 	public JLabel createImageJLabel() {
 		
-		BufferedImage image = chart.createBufferedImage(
+		//TODO save these
+		BufferedImage imageSmall = chart.createBufferedImage(
 				SMALL_DIMENSION.width, 
 				SMALL_DIMENSION.height
 				);
+		
+		BufferedImage imageLarge = chart.createBufferedImage(
+				SMALL_DIMENSION.width, 
+				SMALL_DIMENSION.height
+				);
+		
+		
+		return new ZoomPanel(imageSmall, imageLarge);
 
-		JLabel chartLabel = new JLabel();
+		/*JLabel chartLabel = new JLabel();
 		ImageIcon icon = new ImageIcon(image);
 		chartLabel.setIcon(icon);
 		
-		return chartLabel;
+		return chartLabel;*/
 	}
 	
 	public void printToFile(PrintSize size, String location) {

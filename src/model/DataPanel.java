@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
 
 import model.ModelStatistics.PrintSize;
 
@@ -34,19 +36,29 @@ public class DataPanel extends JPanel {
 	private String title;
 	private String yLabel;
 	private String xLabel;
+	private String configName;
 	
 	private JPanel chartPanel;
 	
-	public DataPanel(ArrayList<Pair<Double, Double>>[] data,  String title,
-			String yLabel, String xLabel, String configName, ModelStatistics parent, boolean average, boolean density){
+	public DataPanel(ArrayList<Pair<Double, Double>>[] data,  
+			String title,
+			String yLabel, 
+			String xLabel, 
+			String configName, 
+			ModelStatistics parent, 
+			boolean average, 
+			boolean density){
+		
 		super();
 		
 		this.setLayout(new BorderLayout());
+		this.setBorder(new EtchedBorder());
 		
 		this.data = data;
 		this.title = title;
 		this.yLabel = yLabel;
 		this.xLabel = xLabel;
+		this.configName = configName;
 		this.average = average;
 		this.density = density;
 		
@@ -57,17 +69,18 @@ public class DataPanel extends JPanel {
 		
 		final JTextField trimStartField = new JTextField(""+DEFAULT_TRIM_START,5);
 		final JTextField trimEndField = new JTextField(""+DEFAULT_TRIM_END,5);
+		final JCheckBox averageCheckBox = new JCheckBox("average");
 		
-		JButton trimButton = new JButton("Trim");
-		trimButton.addActionListener(new ActionListener() {
+		JButton createButton = new JButton("Create Chart");
+		createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int trimStart = Integer.parseInt(trimStartField.getText());
 				int trimEnd = Integer.parseInt(trimEndField.getText());
-				addChart(trimStart, trimEnd);
+				boolean average = averageCheckBox.isSelected();
+				addChart(trimStart, trimEnd, average);
 			}
 		});
-		
 		
 		JButton printButton = new JButton("Print");
 		printButton.addActionListener(new ActionListener() {
@@ -89,7 +102,8 @@ public class DataPanel extends JPanel {
 		buttonPanel.add(trimStartField);
 		buttonPanel.add(new JLabel("to:"));
 		buttonPanel.add(trimEndField);
-		buttonPanel.add(trimButton);
+		buttonPanel.add(averageCheckBox);
+		buttonPanel.add(createButton);
 		buttonPanel.add(printButton);
 		buttonPanel.add(removeButton);
 		
@@ -99,7 +113,7 @@ public class DataPanel extends JPanel {
 		chartPanel = new JPanel();
 		chartPanel.setLayout(new BoxLayout(chartPanel, BoxLayout.Y_AXIS));
 		
-		addChart(0, Integer.MAX_VALUE);
+		addChart(0, Integer.MAX_VALUE, false);
 		
 		add(chartPanel);
 	}
@@ -116,7 +130,7 @@ public class DataPanel extends JPanel {
 		parent.removeDataPanel(this);
 	}
 	
-	public void addChart(int trimStart, int trimEnd){
+	public void addChart(int trimStart, int trimEnd, boolean average){
 		
 		int length = data[0].size();
 		
@@ -136,7 +150,7 @@ public class DataPanel extends JPanel {
 				density, 
 				xLabel, 
 				yLabel, 
-				"XXX");
+				configName);
 		
 		chartPanels.add(chart);
 		chartPanel.add(chart);
