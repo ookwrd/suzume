@@ -32,7 +32,7 @@ public class ChartPanel extends JPanel {
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
-	private static final Dimension LARGE_DIMENSION = new Dimension(1000, 600);
+	private static final Dimension LARGE_DIMENSION = new Dimension(1500, 900);
 	private static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
 	private static final Dimension SMALL_DIMENSION = new Dimension(500,300);
 

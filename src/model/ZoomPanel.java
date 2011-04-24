@@ -11,16 +11,21 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class ZoomPanel extends JLabel implements MouseMotionListener, MouseListener {
 
-	BufferedImage small;
-	BufferedImage large;
+	private BufferedImage small;
+	private BufferedImage large;
+	private ImageIcon icon;
 	
-	ImageIcon icon;
+	private int width;
+	private int height;
 	
 	public ZoomPanel(BufferedImage small, BufferedImage large){
 		super();
 		
 		this.small = small;
 		this.large = large;
+		
+		width = small.getWidth();
+		height = small.getHeight();
 		
 		icon = new ImageIcon(small);
 		setIcon(icon);
@@ -76,7 +81,30 @@ public class ZoomPanel extends JLabel implements MouseMotionListener, MouseListe
 	}
 
 	private void adjustViewport(int x, int y){
-		BufferedImage zoom = large.getSubimage(x, y, small.getWidth(), small.getHeight());//Works as the large panel is currently twice as large as the small
+		
+		//Calculate center in large image
+		double largeX = ((double)x / width)*large.getWidth();
+		double largeY = ((double)y / height)*large.getHeight();
+		
+		double startX = largeX - width/2;
+		double startY = largeY - height/2;
+		
+		//Adjust if it goes over borders
+		if(startX < 0){
+			startX = 0;
+		}
+		if(startY < 0){
+			startY = 0;
+		}
+		if(startX >= large.getWidth() - width){
+			startX = large.getWidth() - width - 1;
+		}
+		if(startY >= large.getHeight() - height){
+			startY = large.getHeight() - height -1;
+		}
+		
+		//Set icon image as a view based on those settings.
+		BufferedImage zoom = large.getSubimage((int)startX, (int)startY, width, height);
 		icon.setImage(zoom);
 		repaint();
 	}
