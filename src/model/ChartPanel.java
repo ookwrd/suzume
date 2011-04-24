@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.ModelStatistics.PrintSize;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -31,10 +29,18 @@ public class ChartPanel extends JPanel {
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
-	private static final Dimension LARGE_DIMENSION = new Dimension(1500, 900);
-	private static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
-	private static final Dimension SMALL_DIMENSION = new Dimension(500,300);
+	public enum PrintSize {SMALL, MEDIUM, LARGE, EXTRA_LARGE}
+	
+	protected static final Dimension EXTRA_LARGE_DIMENSION = new Dimension(1500,900);
+	protected static final Dimension LARGE_DIMENSION = new Dimension(1000, 600);
+	protected static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
+	protected static final Dimension SMALL_DIMENSION = new Dimension(500,300);
 
+	private BufferedImage extraLargeImage;
+	private BufferedImage largeImage;
+	private BufferedImage mediumImage;
+	private BufferedImage smallImage;
+	
 	public static double HISTOGRAM_X_MIN = 7;
 	public static double HISTOGRAM_X_MAX = 12;
 	public static double HISTOGRAM_Y_MIN = -1; // a negative value means no min value
@@ -198,26 +204,68 @@ public class ChartPanel extends JPanel {
 	}
 	
 	public JLabel createImageJLabel() {
+		return new ZoomPanel(getSmallImage(), getExtraLargeImage());
+	}
+	
+	protected BufferedImage getExtraLargeImage(){
+		if(extraLargeImage == null){
+			extraLargeImage = chart.createBufferedImage(
+					EXTRA_LARGE_DIMENSION.width, 
+					EXTRA_LARGE_DIMENSION.height
+					);
+		}
+		return extraLargeImage;
+	}
+	
+	protected BufferedImage getLargeImage(){
+		if(largeImage == null){
+			largeImage = chart.createBufferedImage(
+					LARGE_DIMENSION.width, 
+					LARGE_DIMENSION.height
+					);
+		}
+		return largeImage;
+	}
+	
+	protected BufferedImage getMediumImage(){
+		if(mediumImage == null){
+			mediumImage = chart.createBufferedImage(
+					MEDIUM_DIMENSION.width, 
+					MEDIUM_DIMENSION.height
+					);
+		}
+		return mediumImage;
+	}
+	
+	protected BufferedImage getSmallImage(){
+		if(smallImage == null){
+			smallImage = chart.createBufferedImage(
+					SMALL_DIMENSION.width,
+					SMALL_DIMENSION.height
+					);
+		}
+		return smallImage;
+	}
+	
+	
+	protected BufferedImage getImage(PrintSize size){
 		
-		//TODO save these
-		BufferedImage imageSmall = chart.createBufferedImage(
-				SMALL_DIMENSION.width, 
-				SMALL_DIMENSION.height
-				);
+		switch(size){
 		
-		BufferedImage imageLarge = chart.createBufferedImage(
-				LARGE_DIMENSION.width, 
-				LARGE_DIMENSION.height
-				);
+		case SMALL:
+			return getSmallImage();
+			
+		case MEDIUM:
+			return getMediumImage();
 		
+		default:
+		case LARGE:
+			return getLargeImage();
+			
+		case EXTRA_LARGE:
+			return getExtraLargeImage();
+		}
 		
-		return new ZoomPanel(imageSmall, imageLarge);
-
-		/*JLabel chartLabel = new JLabel();
-		ImageIcon icon = new ImageIcon(image);
-		chartLabel.setIcon(icon);
-		
-		return chartLabel;*/
 	}
 	
 	public void printToFile(PrintSize size, String location) {
@@ -235,16 +283,21 @@ public class ChartPanel extends JPanel {
 			break;
 		
 		default:
+			System.out.println("Defaulting to large");
 		case LARGE:
 			dimension = LARGE_DIMENSION;
 			break;
+			
+		case EXTRA_LARGE:
+			dimension = EXTRA_LARGE_DIMENSION;
+			break;
 		}
 		
-		printToFile(dimension, location, filename);
+		printToFile(dimension, location);
 		
 	}
 	
-	private void printToFile(Dimension printSize, String location, String filename){
+	private void printToFile(Dimension printSize, String location){
 		
 		//Location
 		cd("/");

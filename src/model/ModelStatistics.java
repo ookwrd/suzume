@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import model.ChartPanel.PrintSize;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
@@ -33,7 +36,6 @@ import tools.ScreenImage;
 public class ModelStatistics extends JPanel {
 
 	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts"; //TODO refactor to a configuration class
-	public enum PrintSize {SMALL, MEDIUM, LARGE}
 	
 	public static final boolean PRINT_THUMBNAIL = true;
 
@@ -123,10 +125,34 @@ public class ModelStatistics extends JPanel {
 		bottomBar.add(new JLabel("Output location:"));
 		bottomBar.add(saveDestination);
 		
+		final JCheckBox smallCheck = new JCheckBox("small");
+		final JCheckBox mediumCheckBox = new JCheckBox("medium");
+		final JCheckBox largeCheckBox = new JCheckBox("large");
+		final JCheckBox extraLargeCheckBox = new JCheckBox("ExtraLarge");
+		
+		largeCheckBox.setSelected(true);
+		
+		bottomBar.add(smallCheck);
+		bottomBar.add(mediumCheckBox);
+		bottomBar.add(largeCheckBox);
+		bottomBar.add(extraLargeCheckBox);
+		
 		JButton saveButton = new JButton("Print all");
 		saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				printAll(PrintSize.LARGE, saveDestination.getText());
+				if(smallCheck.isSelected()){
+					printAll(PrintSize.SMALL, saveDestination.getText());
+				}
+				if(mediumCheckBox.isSelected()){
+					printAll(PrintSize.MEDIUM, saveDestination.getText());
+				}
+				if(largeCheckBox.isSelected()){
+					printAll(PrintSize.LARGE, saveDestination.getText());
+				}
+				if(extraLargeCheckBox.isSelected()){
+					System.out.println("Here");
+					printAll(PrintSize.EXTRA_LARGE, saveDestination.getText());
+				}
 			}
 		});
 		bottomBar.add(saveButton);

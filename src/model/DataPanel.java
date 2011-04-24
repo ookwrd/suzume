@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-import model.ModelStatistics.PrintSize;
+import model.ChartPanel.PrintSize;
 
 import tools.Pair;
 import tools.Statistics;
