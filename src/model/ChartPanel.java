@@ -207,8 +207,8 @@ public class ChartPanel extends JPanel {
 				);
 		
 		BufferedImage imageLarge = chart.createBufferedImage(
-				SMALL_DIMENSION.width, 
-				SMALL_DIMENSION.height
+				LARGE_DIMENSION.width, 
+				LARGE_DIMENSION.height
 				);
 		
 		
