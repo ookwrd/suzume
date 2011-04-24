@@ -19,6 +19,7 @@ public class ZoomPanel extends JLabel implements MouseMotionListener, MouseListe
 	private int height;
 	
 	public ZoomPanel(BufferedImage small, BufferedImage large){
+		
 		super();
 		
 		this.small = small;
