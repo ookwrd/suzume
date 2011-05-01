@@ -1,7 +1,16 @@
 package tools;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.StringTokenizer;
+
+import org.w3c.dom.CDATASection;
+
 import tools.Pair;
 
 public class Statistics {
@@ -206,5 +215,71 @@ public class Statistics {
 		ArrayList<E>[] wrapper = new ArrayList[1];
 		wrapper[0] = input;
 		return wrapper;
+	}
+	
+	public static ArrayList<Pair<Double, Double>> readFromFile(BufferedReader reader){
+		
+		ArrayList<Pair<Double, Double>> retVal = new ArrayList<Pair<Double,Double>>();
+		
+		try {
+			while(true){
+				
+				StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
+				
+				if(!tokenizer.hasMoreElements()){
+					break;
+				}
+				
+				Double first = Double.valueOf(tokenizer.nextToken());
+				Double second = Double.valueOf(tokenizer.nextToken());
+				
+				retVal.add(new Pair<Double, Double>(first, second));
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return retVal;
+	}
+	
+	public static void writeToFile(BufferedWriter writer, ArrayList<Pair<Double, Double>> data){
+		try{
+			for(Pair<Double, Double> dataPair : data){
+				writer.write(dataPair.first + " " + dataPair.second+"\n");
+			}
+			
+			writer.write("\n");
+		} catch (Exception e) {
+			System.out.println("Something went wrong when writing");
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+		ArrayList<Pair<Double, Double>> dataArrayList = new ArrayList<Pair<Double,Double>>();
+		dataArrayList.add(new Pair<Double, Double>(new Double(1), new Double(2)));
+		dataArrayList.add(new Pair<Double, Double>(new Double(1), new Double(2)));
+		dataArrayList.add(new Pair<Double, Double>(new Double(3), new Double(4)));
+		dataArrayList.add(new Pair<Double, Double>(new Double(5), new Double(6)));
+		
+		
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("/suzume-charts/Test.dat"));
+			writeToFile(writer, dataArrayList);
+			
+			writer.flush();
+			writer.close();
+			
+			BufferedReader reader = new BufferedReader(new FileReader("/suzume-charts/Test.dat"));
+			ArrayList<Pair<Double, Double>> outputs = readFromFile(reader);
+			
+			printPairList(outputs);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
