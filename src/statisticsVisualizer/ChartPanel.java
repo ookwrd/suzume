@@ -63,6 +63,7 @@ public class ChartPanel extends JPanel {
 	private JFreeChart chart;
 	private JPanel buttonPanel;
 	
+	private DataPanel parent;
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, 
 			String title, 
@@ -70,10 +71,13 @@ public class ChartPanel extends JPanel {
 			boolean density, 
 			String xLabel, 
 			String yLabel, 
-			String configName){
+			String configName,
+			DataPanel parent){
 		
 		super();
 		loadIcons();
+		
+		this.parent = parent;
 		
 		setLayout(new OverlayLayout(this));
 		
@@ -118,7 +122,7 @@ public class ChartPanel extends JPanel {
 		configureChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Configure");
+				System.out.println("Configure");//TODO
 			}
 		});
 		buttonPanel.add(configureChartButton);
@@ -127,7 +131,7 @@ public class ChartPanel extends JPanel {
 		printChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("print");
+				System.out.println("print");//TODO
 			}
 		});
 		buttonPanel.add(printChartButton);
@@ -136,7 +140,7 @@ public class ChartPanel extends JPanel {
 		removeChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("remove");
+				removeThisChart();
 			}
 		});
 		buttonPanel.add(removeChartButton);
@@ -409,6 +413,10 @@ public class ChartPanel extends JPanel {
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
+	}
+	
+	private void removeThisChart(){
+		parent.removeChartPanel(this);
 	}
 
 	private static final String REMOVE_ICON_LOCATION = "../graphics/icon_remove.png";
