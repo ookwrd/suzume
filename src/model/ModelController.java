@@ -1,8 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+
+import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
-import tools.Statistics;
 
 import Agents.Agent;
 import Agents.AgentFactory;
@@ -29,7 +30,7 @@ public class ModelController implements Runnable {
 	
 	//Visualization
 	private StepwiseVisualizer visualizer;
-	private ModelStatistics statisticsWindow;
+	private StatisticsVisualizer statisticsWindow;
 
 	//Progress counters
 	private Integer currentGeneration = 0;
@@ -288,7 +289,7 @@ public class ModelController implements Runnable {
 	 */
 	private void plotStatistics() {
 		
-		statisticsWindow = new ModelStatistics(getTitleString());
+		statisticsWindow = new StatisticsVisualizer(getTitleString());
 		String configName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, false);

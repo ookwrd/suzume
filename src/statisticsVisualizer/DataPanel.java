@@ -1,4 +1,4 @@
-package model;
+package statisticsVisualizer;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -14,15 +14,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-import model.ChartPanel.PrintSize;
 
+
+import statisticsVisualizer.ChartPanel.PrintSize;
 import tools.Pair;
 import tools.Statistics;
 
 @SuppressWarnings("serial")
 public class DataPanel extends JPanel {
 	
-	private ModelStatistics parent;
+	private StatisticsVisualizer parent;
 
 	public static final int DEFAULT_TRIM_START = 0;
 	public static final int DEFAULT_TRIM_END = 5000;
@@ -45,7 +46,7 @@ public class DataPanel extends JPanel {
 			String yLabel, 
 			String xLabel, 
 			String configName, 
-			ModelStatistics parent, 
+			StatisticsVisualizer parent, 
 			boolean average, 
 			boolean density){
 		

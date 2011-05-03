@@ -1,14 +1,23 @@
-package model;
+package statisticsVisualizer;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
+
+import model.ZoomPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -28,8 +37,7 @@ import tools.Statistics;
 public class ChartPanel extends JPanel {
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
-	
-	public enum PrintSize {SMALL, MEDIUM, LARGE, EXTRA_LARGE}
+	public static enum PrintSize {SMALL, MEDIUM, LARGE, EXTRA_LARGE}
 	
 	protected static final Dimension EXTRA_LARGE_DIMENSION = new Dimension(1500,900);
 	protected static final Dimension LARGE_DIMENSION = new Dimension(1000, 600);
@@ -41,6 +49,8 @@ public class ChartPanel extends JPanel {
 	private BufferedImage mediumImage;
 	private BufferedImage smallImage;
 	
+	private static boolean iconsLoaded = false;
+	
 	public static double HISTOGRAM_X_MIN = 7;
 	public static double HISTOGRAM_X_MAX = 12;
 	public static double HISTOGRAM_Y_MIN = -1; // a negative value means no min value
@@ -50,7 +60,9 @@ public class ChartPanel extends JPanel {
 	
 	private String filename;
 	
-	JFreeChart chart;
+	private JFreeChart chart;
+	private JPanel buttonPanel;
+	
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, 
 			String title, 
@@ -61,6 +73,9 @@ public class ChartPanel extends JPanel {
 			String configName){
 		
 		super();
+		loadIcons();
+		
+		setLayout(new OverlayLayout(this));
 		
 		if(average){
 			data = Statistics.averageArrayLists(data);
@@ -70,7 +85,11 @@ public class ChartPanel extends JPanel {
 		ChartType type = determineType(density);
 		
 		chart = createChart(data, type, title, xLabel, yLabel);
+
+		setupButtonPanel();
+		
 		add(createImageJLabel());
+		
 		
 		this.filename = title.replaceAll(" ", "") + "-" + configName;
 		
@@ -83,6 +102,45 @@ public class ChartPanel extends JPanel {
 		}
 		
 		return ChartType.LINE_CHART;
+		
+	}
+	
+	private void setupButtonPanel(){
+		
+		//Setup the Panel
+		buttonPanel = new JPanel();
+		buttonPanel.setOpaque(false);
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,0,0));
+		add(buttonPanel);
+		
+		//Setup the buttons
+		JButton configureChartButton = new HighlightButton(configureIcon);
+		configureChartButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Configure");
+			}
+		});
+		buttonPanel.add(configureChartButton);
+
+		JButton printChartButton = new HighlightButton(printIcon);
+		printChartButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("print");
+			}
+		});
+		buttonPanel.add(printChartButton);
+		
+		JButton removeChartButton = new HighlightButton(removeIcon);
+		removeChartButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("remove");
+			}
+		});
+		buttonPanel.add(removeChartButton);
+		
 	}
 	
 	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, 
@@ -107,11 +165,19 @@ public class ChartPanel extends JPanel {
 			XYPlot catPlot = chart.getXYPlot();
 			
 			//TODO provisoire !
-			if (HISTOGRAM_Y_MIN>=0.0) catPlot.getRangeAxis().setLowerBound(HISTOGRAM_Y_MIN);
-			if (HISTOGRAM_Y_MAX>=0.0) catPlot.getRangeAxis().setUpperBound(HISTOGRAM_Y_MAX);
+			if (HISTOGRAM_Y_MIN >= 0) {
+				catPlot.getRangeAxis().setLowerBound(HISTOGRAM_Y_MIN);
+			}
+			if (HISTOGRAM_Y_MAX >= 0) {
+				catPlot.getRangeAxis().setUpperBound(HISTOGRAM_Y_MAX);
+			}
 			
-			if (HISTOGRAM_X_MIN>=0.0) catPlot.getDomainAxis().setLowerBound(HISTOGRAM_X_MIN);
-			if (HISTOGRAM_X_MAX>=0.0) catPlot.getDomainAxis().setUpperBound(HISTOGRAM_X_MAX);
+			if (HISTOGRAM_X_MIN >= 0) {
+				catPlot.getDomainAxis().setLowerBound(HISTOGRAM_X_MIN);
+			}
+			if (HISTOGRAM_X_MAX >= 0) {
+				catPlot.getDomainAxis().setUpperBound(HISTOGRAM_X_MAX);
+			}
             
 			((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
             
@@ -345,5 +411,33 @@ public class ChartPanel extends JPanel {
 		}
 	}
 
+	private static final String REMOVE_ICON_LOCATION = "../graphics/icon_remove.png";
+	private static final String PRINT_ICON_LOCATION = "../graphics/icon_print.png";
+	private static final String CONFIGURE_ICON_LOCATION = "../graphics/icon_configure.png";
 	
+	private static ImageIcon removeIcon;
+	private static ImageIcon printIcon;
+	private static ImageIcon configureIcon;
+	
+	protected static synchronized void loadIcons() {
+		if (iconsLoaded == true) {
+			return;
+		}
+		
+		URL image_url;
+		image_url = ChartPanel.class.getResource(REMOVE_ICON_LOCATION);
+		assert image_url != null;
+		removeIcon = new ImageIcon(image_url, "Remove");
+		
+		image_url = ChartPanel.class.getResource(PRINT_ICON_LOCATION);
+		assert image_url != null;
+		printIcon = new ImageIcon(image_url, "Print");
+		
+		image_url = ChartPanel.class.getResource(CONFIGURE_ICON_LOCATION);
+		assert image_url != null;
+		configureIcon = new ImageIcon(image_url, "Configure");
+		
+		iconsLoaded = true;
+		return;
+	}
 }

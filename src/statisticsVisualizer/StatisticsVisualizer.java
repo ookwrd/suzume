@@ -1,5 +1,5 @@
 
-package model;
+package statisticsVisualizer;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -22,18 +22,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import model.ChartPanel.PrintSize;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
 
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
+import statisticsVisualizer.ChartPanel.PrintSize;
 import tools.Pair;
 import tools.ScreenImage;
 
 @SuppressWarnings("serial")
-public class ModelStatistics extends JPanel {
+public class StatisticsVisualizer extends JPanel {
 
 	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts"; //TODO refactor to a configuration class
 	
@@ -50,7 +50,7 @@ public class ModelStatistics extends JPanel {
 	private JPanel clusteringPanel;
 	private JPanel graphPanel;
 	
-	public ModelStatistics(String title) {
+	public StatisticsVisualizer(String title) {
 		
 		//Gets rid of all the fancy graph settings.
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
