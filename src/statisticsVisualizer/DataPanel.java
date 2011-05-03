@@ -152,11 +152,7 @@ public class DataPanel extends JPanel {
 		ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, trimStartAdjusted, trimEndAdjusted);
 
 		ChartPanel chart = new ChartPanel(trimmedDataArrayList, 
-				title, 
-				average, 
-				density, 
-				xLabel, 
-				yLabel, 
+				new ChartConfiguration(title, xLabel, yLabel, average, density),
 				configName,
 				this);
 		
