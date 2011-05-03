@@ -131,6 +131,12 @@ public class DataPanel extends JPanel {
 		parent.removeDataPanel(this);
 	}
 	
+	public void removeChartPanel(ChartPanel panel){
+		chartPanel.remove(panel);
+		chartPanels.remove(panel);
+		revalidate();
+	}
+	
 	public void addChart(int trimStart, int trimEnd, boolean average){
 		
 		int length = data[0].size();
@@ -151,7 +157,8 @@ public class DataPanel extends JPanel {
 				density, 
 				xLabel, 
 				yLabel, 
-				configName);
+				configName,
+				this);
 		
 		chartPanels.add(chart);
 		chartPanel.add(chart);
