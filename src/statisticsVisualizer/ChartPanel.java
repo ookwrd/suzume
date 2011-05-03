@@ -30,13 +30,13 @@ import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import statisticsVisualizer.ChartConfiguration.ChartType;
 import tools.Pair;
 import tools.Statistics;
 
 @SuppressWarnings("serial")
 public class ChartPanel extends JPanel {
 	
-	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	public static enum PrintSize {SMALL, MEDIUM, LARGE, EXTRA_LARGE}
 	
 	protected static final Dimension EXTRA_LARGE_DIMENSION = new Dimension(1500,900);
@@ -64,38 +64,41 @@ public class ChartPanel extends JPanel {
 	private JPanel buttonPanel;
 	
 	private DataPanel parent;
+	private ChartConfiguration config;
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, 
-			String title, 
+			ChartConfiguration config,
+			/*String title, 
 			boolean average, 
 			boolean density, 
 			String xLabel, 
-			String yLabel, 
+			String yLabel,*/
 			String configName,
 			DataPanel parent){
 		
 		super();
 		loadIcons();
 		
+		this.config = config;
 		this.parent = parent;
 		
 		setLayout(new OverlayLayout(this));
 		
-		if(average){
+		if(config.average){
 			data = Statistics.averageArrayLists(data);
-			title = "Average " + title;
+			config.title = "Average " + config.title;
 		}
 		
-		ChartType type = determineType(density);
+		ChartType type = determineType(config.density);
 		
-		chart = createChart(data, type, title, xLabel, yLabel);
+		chart = createChart(data, type);
 
 		setupButtonPanel();
 		
 		add(createImageJLabel());
 		
 		
-		this.filename = title.replaceAll(" ", "") + "-" + configName;
+		this.filename = config.title.replaceAll(" ", "") + "-" + configName;
 		
 	}
 	
@@ -147,19 +150,15 @@ public class ChartPanel extends JPanel {
 		
 	}
 	
-	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, 
-			ChartType type, 
-			String title, 
-			String xLabel, 
-			String yLabel){
+	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
 		
 		JFreeChart chart;
 		switch (type) {
 
 		case HISTOGRAM:
-			chart = ChartFactory.createHistogram(title, 
-					xLabel,
-					yLabel, 
+			chart = ChartFactory.createHistogram(config.title, 
+					config.xLabel,
+					config.yLabel, 
 					createHistogramDataset(series), 
 					PlotOrientation.VERTICAL,
 					false, 
@@ -190,9 +189,9 @@ public class ChartPanel extends JPanel {
 			break;
 		
 		case AREA_CHART:
-			chart = ChartFactory.createXYAreaChart(title, // Title
-					xLabel, // X-Axis label
-					yLabel, // Y-Axis label
+			chart = ChartFactory.createXYAreaChart(config.title, // Title
+					config.xLabel, // X-Axis label
+					config.yLabel, // Y-Axis label
 					createXyDataset(series), // Dataset
 					PlotOrientation.VERTICAL, // Plot orientation
 					false, // Show legend
@@ -206,9 +205,9 @@ public class ChartPanel extends JPanel {
 			
 		case SCATTER_PLOT:
 			
-			chart = ChartFactory.createScatterPlot(title, 
-					xLabel, 
-					yLabel, 
+			chart = ChartFactory.createScatterPlot(config.title, 
+					config.xLabel, 
+					config.yLabel, 
 					createXyDataset(series), 
 					PlotOrientation.VERTICAL, 
 					false, 
@@ -226,9 +225,9 @@ public class ChartPanel extends JPanel {
 
 		case LINE_CHART:
 		default:
-			chart = ChartFactory.createXYLineChart(title,
-					xLabel,
-					yLabel,
+			chart = ChartFactory.createXYLineChart(config.title,
+					config.xLabel,
+					config.yLabel,
 					createXyDataset(series),
 					PlotOrientation.VERTICAL, 
 					false, // Show legend
