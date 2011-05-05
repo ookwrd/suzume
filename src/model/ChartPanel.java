@@ -7,12 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
@@ -36,6 +39,11 @@ public class ChartPanel extends JPanel {
 	protected static final Dimension MEDIUM_DIMENSION = new Dimension(750,450);
 	protected static final Dimension SMALL_DIMENSION = new Dimension(500,300);
 
+	/*private static final Dimension SAVE_DIMENSION = new Dimension(1000, 600);
+	private static final Dimension PAPER_DIMENSION = new Dimension(750,450);
+	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
+	
+	private static final int NUMBER_OF_BINS = 2000;*/
 	private BufferedImage extraLargeImage;
 	private BufferedImage largeImage;
 	private BufferedImage mediumImage;
