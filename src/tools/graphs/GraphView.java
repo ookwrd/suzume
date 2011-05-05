@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import edu.uci.ics.jung.algorithms.layout.*;
 
 import model.ModelController;
 import model.SimpleClustering;
@@ -36,6 +37,7 @@ public class GraphView {
 		
 		// Layout<V, E>, BasicVisualizationServer<V,E>
 		Layout<Integer, String> layout = new CircleLayout(g);
+		//ISOMLayout layout = new edu.uci.ics.jung.algorithms.layout.ISOMLayout(g);
 		
 		layout.setSize(new Dimension(300, 300));
 		vv = new BasicVisualizationServer<Integer, String>(
@@ -102,7 +104,7 @@ public class GraphView {
 			for (int j=1; j<adjacencyMatrix[i].length; j++) {
 				DecimalFormat df = new DecimalFormat("########.00");
 				double p = adjacencyMatrix[i][j];
-				if (p>=0.01) {
+				if (p>=0.001) {
 					String w = df.format(p);
 					g.addEdge(new ClusterLink(w), nodes.get(i-1), nodes.get(j-1), EdgeType.DIRECTED);
 				}
@@ -116,7 +118,7 @@ public class GraphView {
 	
 	public static void main(String[] args) {
 		//ModelController.main(null);
-		/*double[][] am = {
+		double[][] am = {
 				{	3000.0,			4000.0,		4000.0,		4000.0},
 				{	3000.1,		300.1,		2.1,	4.1},
 				{	3000.2,		5.2,		2.2,	4.2},
@@ -127,10 +129,11 @@ public class GraphView {
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		frame.setVisible(true);*/
-		for(int i=0; i<101; i++) {
+		frame.setVisible(true);
+		
+		/*for(int i=0; i<101; i++) {
 			System.out.println("{"+i+"000,"+(i+1)+"000},");
-		}
+		}*/
 	}
 
 }

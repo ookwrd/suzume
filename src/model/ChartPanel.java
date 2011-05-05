@@ -33,12 +33,12 @@ public class ChartPanel extends JPanel {
 	private static final Dimension PAPER_DIMENSION = new Dimension(750,450);
 	private static final Dimension THUMBNAIL_DIMENSION = new Dimension(500,300);
 	
-	private static final int NUMBER_OF_BINS = 400;
+	private static final int NUMBER_OF_BINS = 2000;
 	
-	public static double HISTOGRAM_X_MIN = 7;
-	public static double HISTOGRAM_X_MAX = 12.5;
+	public static double HISTOGRAM_X_MIN = -7;
+	public static double HISTOGRAM_X_MAX = -12.5;
 	public static double HISTOGRAM_Y_MIN = -1; // a negative value means no min value
-	public static double HISTOGRAM_Y_MAX = 2000; // a negative value means no max value
+	public static double HISTOGRAM_Y_MAX = -1;//2000; // a negative value means no max value
 	
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
 	
