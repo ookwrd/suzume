@@ -110,8 +110,10 @@ public class ModelController implements Runnable {
 
 		plotStatistics();
 		
+		//if (geneGrammarMatches[0].size() > ModelStatistics.TRIM_INTERVALS[0][0]) 
+		//	clustering(Statistics.trimArrayLists(geneGrammarMatches, ModelStatistics.TRIM_INTERVALS[0][0], ModelStatistics.TRIM_INTERVALS[0][1]));
 		
-	//	clustering(geneGrammarMatches);//TODO add trimming to clustering.
+		//	clustering(geneGrammarMatches);//TODO add trimming to clustering.
 		
 		
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
@@ -291,6 +293,21 @@ public class ModelController implements Runnable {
 		statisticsWindow = new ModelStatistics(getTitleString());
 		String configName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
+		/*
+		statisticsWindow.plotTimeSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match",printName);
+		
+		
+		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(geneGrammarMatches), "Average Gene Grammar Match", "Average Gene Grammar Match",printName);
+		
+		statisticsWindow.plotDensity(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", printName);
+		statisticsWindow.plotTimeSeries(learningIntensities, "Learning Intensity", "Learning Intensity", printName);
+		statisticsWindow.plotTimeSeries(numberNulls, "Number of Nulls", "Number of Nulls",  printName);
+		statisticsWindow.plotTimeSeries(totalFitnesses, "Fitness", "Fitness",  printName);
+		statisticsWindow.plotTimeSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.plotTimeSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  printName);
+		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberGenotypes), "Average Number of Genotypes","Number of Genotypes",  printName);
+		statisticsWindow.plotTimeSeries(Statistics.averageArrayLists(totalNumberPhenotypes), "Average Number of Phenotypes", "Number of Phenotypes",  printName);
+		*/
 		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, false);
 		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, true);
 		
