@@ -8,15 +8,21 @@ public class ChartConfiguration {
 	
 	private ArrayList<ConfigurationParameterChangedListener> listeners = new ArrayList<ConfigurationParameterChangedListener>();
 	
-	protected boolean average; //TODO getters and setters
-	protected boolean density;
-	
 	private String configName = "Unnamed";
 	
 	private String title = "Untitled";
 	private String xLabel = "X Label";
 	private String yLabel = "Y Label";
+	
+	private int generationTrimStart = 0;
+	private int generationTrimEnd = Integer.MAX_VALUE;
+	
+	private int runTrimStart = 0;
+	private int runTrimEnd = Integer.MAX_VALUE;
 
+	private boolean average;
+	private boolean density;
+	
 	// a negative value means no limit
 	private double histogramYMax = -1;
 	private double histogramYMin = -1; 
@@ -96,6 +102,60 @@ public class ChartConfiguration {
 		notifyConfigurationParameterChangeListeners();
 	}
 	
+	public int getGenerationTrimStart() {
+		return generationTrimStart;
+	}
+
+	public void setGenerationTrimStart(int generationTrimStart) {
+		this.generationTrimStart = generationTrimStart;
+		notifyConfigurationParameterChangeListeners();
+	}
+
+	public int getGenerationTrimEnd() {
+		return generationTrimEnd;
+	}
+
+	public void setGenerationTrimEnd(int generationTrimEnd) {
+		this.generationTrimEnd = generationTrimEnd;
+		notifyConfigurationParameterChangeListeners();
+	}
+
+	public int getRunTrimStart() {
+		return runTrimStart;
+	}
+
+	public void setRunTrimStart(int runTrimStart) {
+		this.runTrimStart = runTrimStart;
+		notifyConfigurationParameterChangeListeners();
+	}
+
+	public int getRunTrimEnd() {
+		return runTrimEnd;
+	}
+
+	public void setRunTrimEnd(int runTrimEnd) {
+		this.runTrimEnd = runTrimEnd;
+		notifyConfigurationParameterChangeListeners();
+	}
+
+	public boolean isAverage() {
+		return average;
+	}
+
+	public void setAverage(boolean average) {
+		this.average = average;//TODO
+		notifyConfigurationParameterChangeListeners();
+	}
+
+	public boolean isDensity() {
+		return density;
+	}
+
+	public void setDensity(boolean density) {
+		this.density = density;
+		notifyConfigurationParameterChangeListeners();
+	}
+
 	public double getHistogramYMax() {
 		return histogramYMax;
 	}

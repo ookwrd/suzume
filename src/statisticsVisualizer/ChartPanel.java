@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
@@ -49,7 +48,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private BufferedImage mediumImage;
 	private BufferedImage smallImage;
 	
-	private static boolean iconsLoaded = false;
+	private static boolean iconsLoaded = false; 
 	
 	private JFreeChart chart;
 	private ZoomPanel chartImagePanel;
@@ -58,7 +57,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private DataPanel parent;
 	private ChartConfiguration config;
 	
-	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, 
+	public ChartPanel(
 			ChartConfiguration config,
 			DataPanel parent){
 		
@@ -68,33 +67,16 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		this.config = config;
 		this.parent = parent;
 		
-		config.registerParameterChangeListener(this);
-		parent.registerDatasetChangedListener(this);
-		
+		createChart();
+
 		setLayout(new OverlayLayout(this));
 		
-		if(config.average){
-			data = Statistics.averageArrayLists(data);
-			config.setTitle("Average " + config.getTitle());
-		}
-		
-		ChartType type = determineType(config.density);
-		
-		chart = createChart(data, type);
-
 		setupButtonPanel();
 		
-		add(createImageJLabel());
+		addChartImage();
 		
-	}
-	
-	private ChartType determineType(boolean density){
-		
-		if(density){
-			return ChartType.HISTOGRAM;
-		}
-		
-		return ChartType.LINE_CHART;
+		config.registerParameterChangeListener(this);
+		parent.registerDatasetChangedListener(this);
 		
 	}
 	
@@ -259,11 +241,11 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		return dataSet;
 	}
 	
-	public JLabel createImageJLabel() {
+	public void addChartImage() {
 		
 		chartImagePanel = new ZoomPanel(getSmallImage(), getExtraLargeImage());
 		
-		return chartImagePanel;
+		add(chartImagePanel);
 		
 	}
 	
@@ -448,22 +430,52 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	@Override
 	public void configurationParameterChanged() {
 		
+		if(chart == null){System.out.println("Chart is null");}
+
+		if(config == null){System.out.println("Config is null");}
+		
 		//Reset cached image 
 		smallImage = null;
 		mediumImage = null;
 		largeImage = null;
 		extraLargeImage = null;
 		
+		//rebuild the underlying chart.
+		createChart();
+		
 		//Replace currently displayed chart
 		remove(chartImagePanel);
 		
-		add(new JLabel("Place Holder"));
+		addChartImage();
 		revalidate();
-		//TODO
 		
 	}
 	
-	private void replaceChart(){
+	private void createChart(){
+		
+		//Trim generations
+		int length = parent.data[0].size();
+		int trimStartAdjusted = config.getGenerationTrimStart();//TODO
+		int trimEndAdjusted =  config.getGenerationTrimEnd() < length ? config.getGenerationTrimEnd() : length;
+		ArrayList<Pair<Double, Double>>[] localData = Statistics.trimArrayLists(parent.data, trimStartAdjusted, trimEndAdjusted);
+		
+		if(config.isAverage()){
+			localData = Statistics.averageArrayLists(localData);
+			config.setTitle("Average " + config.getTitle());
+		}
+		
+		ChartType type = determineType(config.isDensity());
+		
+		chart = createChart(localData, type);
+	}
+	
+	
+	private ChartType determineType(boolean density){
+		
+		if(density){
+			return ChartType.HISTOGRAM;
+		}
+		return ChartType.LINE_CHART;
 		
 	}
 }
