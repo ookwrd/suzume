@@ -24,34 +24,69 @@ import tools.Statistics;
 public class DataPanel extends JPanel {
 	
 	private StatisticsVisualizer parent;
-
-	public static final int DEFAULT_TRIM_START = 0; //TODO remove into config
-	public static final int DEFAULT_TRIM_END = 5000;
 	
 	private ArrayList<ChartPanel> chartPanels = new ArrayList<ChartPanel>();
+
+	public ArrayList<Pair<Double, Double>>[] data;
 	
-	private boolean density;//TODO remove
-	private boolean average;
-	
-	private ArrayList<Pair<Double, Double>>[] data;
-	
-	private String title; //TODO remove into a default config.
-	private String yLabel;
-	private String xLabel;
-	private String configName;
+	private ChartConfiguration defaultConfiguration = new ChartConfiguration();
 	
 	private JPanel chartPanel;
 	
 	private ArrayList<DataSetChangedListener> dataSetChangedListeners = new ArrayList<DataSetChangedListener>();
 	
-	public DataPanel(ArrayList<Pair<Double, Double>>[] data,  
+	
+	/**
+	 * Create a DataPanel with the default parameters
+	 * 
+	 * @param data
+	 * @param parent
+	 */
+	public DataPanel(ArrayList<Pair<Double, Double>>[] data,
+			StatisticsVisualizer parent){
+	
+			this(data, parent, new ChartConfiguration());
+		
+	}
+	
+	/**
+	 * Create a DataPanel with the specified parameters.
+	 * 
+	 * @param data
+	 * @param title
+	 * @param yLabel
+	 * @param xLabel
+	 * @param configName
+	 * @param parent
+	 * @param average
+	 * @param density
+	 */
+	public DataPanel(
+			ArrayList<Pair<Double, Double>>[] data, 
+			StatisticsVisualizer parent, 
 			String title,
 			String yLabel, 
 			String xLabel, 
 			String configName, 
-			StatisticsVisualizer parent, 
 			boolean average, 
 			boolean density){
+		
+		this(data, parent, new ChartConfiguration(title, xLabel, yLabel, configName, average, density));
+		
+	}	
+	
+	/**
+	 * Creates a Datapanel with parameters taken from the specified configuration.
+	 * 
+	 * @param data
+	 * @param parent
+	 * @param config
+	 */
+	public DataPanel(
+			ArrayList<Pair<Double, Double>>[] data,
+			StatisticsVisualizer parent, 
+			ChartConfiguration config
+			){
 		
 		super();
 		
@@ -59,20 +94,15 @@ public class DataPanel extends JPanel {
 		this.setBorder(new EtchedBorder());
 		
 		this.data = data;
-		this.title = title;
-		this.yLabel = yLabel;
-		this.xLabel = xLabel;
-		this.configName = configName;
-		this.average = average;
-		this.density = density;
+		this.defaultConfiguration = config;
 		
 		this.parent= parent;
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
-		final JTextField trimStartField = new JTextField(""+DEFAULT_TRIM_START,5);
-		final JTextField trimEndField = new JTextField(""+DEFAULT_TRIM_END,5);
+		final JTextField trimStartField = new JTextField(""+defaultConfiguration.getGenerationTrimStart(),5);
+		final JTextField trimEndField = new JTextField(""+defaultConfiguration.getGenerationTrimEnd(),5);
 		final JCheckBox averageCheckBox = new JCheckBox("average");
 		
 		JButton createButton = new JButton("Create Chart");
@@ -142,20 +172,15 @@ public class DataPanel extends JPanel {
 	
 	public void addChart(int trimStart, int trimEnd, boolean average){
 		
-		int length = data[0].size();
-		
-		if(length <= trimStart){
-			//TODO error message
-			return;
-		}
-		
-		int trimStartAdjusted = trimStart;//TODO
-		int trimEndAdjusted =  trimEnd < length ? trimEnd : length;
 
-		ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, trimStartAdjusted, trimEndAdjusted);
+		ChartConfiguration config = defaultConfiguration.clone();
+		
+		config.setGenerationTrimStart(trimStart);
+		config.setGenerationTrimEnd(trimEnd);
+		config.setAverage(average);
 
-		ChartPanel chart = new ChartPanel(trimmedDataArrayList, 
-				new ChartConfiguration(title, xLabel, yLabel, configName, average, density),
+		ChartPanel chart = new ChartPanel( 
+				config,
 				this);
 		
 		chartPanels.add(chart);
@@ -168,7 +193,7 @@ public class DataPanel extends JPanel {
 		dataSetChangedListeners.add(listener);
 	}
 	
-	//TOOD make useable
+	//TODO make useable
 	private void notifyDataSetChangeListeners(){
 		for(DataSetChangedListener listener : dataSetChangedListeners){
 			listener.dataSetChangedListener(data);

@@ -102,11 +102,11 @@ public class StatisticsVisualizer extends JPanel {
 		bottomBar.setLayout(new FlowLayout());
 		
 		//Trim controls.
-		final JTextField trimStart = new JTextField(""+DataPanel.DEFAULT_TRIM_START,5);
+		final JTextField trimStart = new JTextField(""+0,5);
 		bottomBar.add(new JLabel("Trim from:"));
 		bottomBar.add(trimStart);
 		
-		final JTextField trimEnd = new JTextField(""+DataPanel.DEFAULT_TRIM_END,5);
+		final JTextField trimEnd = new JTextField(""+5000,5);
 		bottomBar.add(new JLabel("to:"));
 		bottomBar.add(trimEnd);
 		
@@ -189,12 +189,12 @@ public class StatisticsVisualizer extends JPanel {
 			String experiment, 
 			boolean density){
 
-		DataPanel dataPanel = new DataPanel(table, 
+		DataPanel dataPanel = new DataPanel(table,
+				this,
 				title, 
 				label, 
 				"Generations", 
 				experiment, 
-				this,
 				false,
 				density);
 		
