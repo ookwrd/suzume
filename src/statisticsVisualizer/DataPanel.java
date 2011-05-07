@@ -25,21 +25,24 @@ public class DataPanel extends JPanel {
 	
 	private StatisticsVisualizer parent;
 
-	public static final int DEFAULT_TRIM_START = 0;
+	public static final int DEFAULT_TRIM_START = 0; //TODO remove into config
 	public static final int DEFAULT_TRIM_END = 5000;
 	
 	private ArrayList<ChartPanel> chartPanels = new ArrayList<ChartPanel>();
 	
+	private boolean density;//TODO remove
 	private boolean average;
-	private boolean density;
 	
 	private ArrayList<Pair<Double, Double>>[] data;
-	private String title;
+	
+	private String title; //TODO remove into a default config.
 	private String yLabel;
 	private String xLabel;
 	private String configName;
 	
 	private JPanel chartPanel;
+	
+	private ArrayList<DataSetChangedListener> dataSetChangedListeners = new ArrayList<DataSetChangedListener>();
 	
 	public DataPanel(ArrayList<Pair<Double, Double>>[] data,  
 			String title,
@@ -152,8 +155,7 @@ public class DataPanel extends JPanel {
 		ArrayList<Pair<Double, Double>>[] trimmedDataArrayList = Statistics.trimArrayLists(data, trimStartAdjusted, trimEndAdjusted);
 
 		ChartPanel chart = new ChartPanel(trimmedDataArrayList, 
-				new ChartConfiguration(title, xLabel, yLabel, average, density),
-				configName,
+				new ChartConfiguration(title, xLabel, yLabel, configName, average, density),
 				this);
 		
 		chartPanels.add(chart);
@@ -162,6 +164,15 @@ public class DataPanel extends JPanel {
 		revalidate();
 	}
 	
-
+	public void registerDatasetChangedListener(DataSetChangedListener listener){
+		dataSetChangedListeners.add(listener);
+	}
+	
+	//TOOD make useable
+	private void notifyDataSetChangeListeners(){
+		for(DataSetChangedListener listener : dataSetChangedListeners){
+			listener.dataSetChangedListener(data);
+		}
+	}
 	
 }
