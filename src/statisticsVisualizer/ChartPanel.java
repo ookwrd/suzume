@@ -35,7 +35,7 @@ import tools.Pair;
 import tools.Statistics;
 
 @SuppressWarnings("serial")
-public class ChartPanel extends JPanel {
+public class ChartPanel extends JPanel implements ConfigurationParameterChangedListener, DataSetChangedListener {
 	
 	public static enum PrintSize {SMALL, MEDIUM, LARGE, EXTRA_LARGE}
 	
@@ -51,16 +51,8 @@ public class ChartPanel extends JPanel {
 	
 	private static boolean iconsLoaded = false;
 	
-	public static double HISTOGRAM_X_MIN = 7;
-	public static double HISTOGRAM_X_MAX = 12;
-	public static double HISTOGRAM_Y_MIN = -1; // a negative value means no min value
-	public static double HISTOGRAM_Y_MAX = -1; // a negative value means no max value
-	
-	private static final int NUMBER_OF_BINS = 200;
-	
-	private String filename;
-	
 	private JFreeChart chart;
+	private ZoomPanel chartImagePanel;
 	private JPanel buttonPanel;
 	
 	private DataPanel parent;
@@ -68,12 +60,6 @@ public class ChartPanel extends JPanel {
 	
 	public ChartPanel(ArrayList<Pair<Double, Double>>[] data, 
 			ChartConfiguration config,
-			/*String title, 
-			boolean average, 
-			boolean density, 
-			String xLabel, 
-			String yLabel,*/
-			String configName,
 			DataPanel parent){
 		
 		super();
@@ -82,11 +68,14 @@ public class ChartPanel extends JPanel {
 		this.config = config;
 		this.parent = parent;
 		
+		config.registerParameterChangeListener(this);
+		parent.registerDatasetChangedListener(this);
+		
 		setLayout(new OverlayLayout(this));
 		
 		if(config.average){
 			data = Statistics.averageArrayLists(data);
-			config.title = "Average " + config.title;
+			config.setTitle("Average " + config.getTitle());
 		}
 		
 		ChartType type = determineType(config.density);
@@ -96,9 +85,6 @@ public class ChartPanel extends JPanel {
 		setupButtonPanel();
 		
 		add(createImageJLabel());
-		
-		
-		this.filename = config.title.replaceAll(" ", "") + "-" + configName;
 		
 	}
 	
@@ -125,6 +111,7 @@ public class ChartPanel extends JPanel {
 		configureChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				config.setTitle("THis is the new title");
 				System.out.println("Configure");//TODO
 			}
 		});
@@ -156,42 +143,42 @@ public class ChartPanel extends JPanel {
 		switch (type) {
 
 		case HISTOGRAM:
-			chart = ChartFactory.createHistogram(config.title, 
-					config.xLabel,
-					config.yLabel, 
+			chart = ChartFactory.createHistogram(config.getTitle(), 
+					config.getxLabel(),
+					config.getyLabel(), 
 					createHistogramDataset(series), 
 					PlotOrientation.VERTICAL,
 					false, 
 					false, 
 					false
 					);
-			XYPlot catPlot = chart.getXYPlot();
 			
-			//TODO provisoire !
-			if (HISTOGRAM_Y_MIN >= 0) {
-				catPlot.getRangeAxis().setLowerBound(HISTOGRAM_Y_MIN);
+			XYPlot xyPlot = chart.getXYPlot();
+			
+			if (config.getHistogramYMin() >= 0) {
+				xyPlot.getRangeAxis().setLowerBound(config.getHistogramYMin());
 			}
-			if (HISTOGRAM_Y_MAX >= 0) {
-				catPlot.getRangeAxis().setUpperBound(HISTOGRAM_Y_MAX);
+			if (config.getHistogramYMax() >= 0) {
+				xyPlot.getRangeAxis().setUpperBound(config.getHistogramYMax());
 			}
 			
-			if (HISTOGRAM_X_MIN >= 0) {
-				catPlot.getDomainAxis().setLowerBound(HISTOGRAM_X_MIN);
+			if (config.getHistogramXMin() >= 0) {
+				xyPlot.getDomainAxis().setLowerBound(config.getHistogramXMax());
 			}
-			if (HISTOGRAM_X_MAX >= 0) {
-				catPlot.getDomainAxis().setUpperBound(HISTOGRAM_X_MAX);
+			if (config.getHistogramXMax() >= 0) {
+				xyPlot.getDomainAxis().setUpperBound(config.getHistogramXMax());
 			}
             
-			((XYBarRenderer)catPlot.getRenderer()).setShadowVisible(false);
+			((XYBarRenderer)xyPlot.getRenderer()).setShadowVisible(false);
             
 			chart.getPlot().setBackgroundPaint(Color.WHITE);
 			chart.setBackgroundPaint(Color.WHITE);
 			break;
 		
 		case AREA_CHART:
-			chart = ChartFactory.createXYAreaChart(config.title, // Title
-					config.xLabel, // X-Axis label
-					config.yLabel, // Y-Axis label
+			chart = ChartFactory.createXYAreaChart(config.getTitle(), // Title
+					config.getxLabel(), // X-Axis label
+					config.getyLabel(), // Y-Axis label
 					createXyDataset(series), // Dataset
 					PlotOrientation.VERTICAL, // Plot orientation
 					false, // Show legend
@@ -205,9 +192,9 @@ public class ChartPanel extends JPanel {
 			
 		case SCATTER_PLOT:
 			
-			chart = ChartFactory.createScatterPlot(config.title, 
-					config.xLabel, 
-					config.yLabel, 
+			chart = ChartFactory.createScatterPlot(config.getTitle(), 
+					config.getxLabel(), 
+					config.getyLabel(), 
 					createXyDataset(series), 
 					PlotOrientation.VERTICAL, 
 					false, 
@@ -225,9 +212,9 @@ public class ChartPanel extends JPanel {
 
 		case LINE_CHART:
 		default:
-			chart = ChartFactory.createXYLineChart(config.title,
-					config.xLabel,
-					config.yLabel,
+			chart = ChartFactory.createXYLineChart(config.getTitle(),
+					config.getxLabel(),
+					config.getyLabel(),
 					createXyDataset(series),
 					PlotOrientation.VERTICAL, 
 					false, // Show legend
@@ -267,13 +254,17 @@ public class ChartPanel extends JPanel {
 		
 		HistogramDataset dataSet = new HistogramDataset();
 		
-		dataSet.addSeries(new Double(1), Statistics.stripIndexValues(series), NUMBER_OF_BINS);
+		dataSet.addSeries(new Double(1), Statistics.stripIndexValues(series), config.getNumberOfHistogramBins());
 		
 		return dataSet;
 	}
 	
 	public JLabel createImageJLabel() {
-		return new ZoomPanel(getSmallImage(), getExtraLargeImage());
+		
+		chartImagePanel = new ZoomPanel(getSmallImage(), getExtraLargeImage());
+		
+		return chartImagePanel;
+		
 	}
 	
 	protected BufferedImage getExtraLargeImage(){
@@ -375,7 +366,7 @@ public class ChartPanel extends JPanel {
 		try {
 
 			ChartUtilities.saveChartAsJPEG(
-					new File(location + "/" + filename + "-" + printSize.height + "x" + printSize.width + ".jpg"), 
+					new File(location + "/" + config.getTitle().replaceAll(" ", "") + "-" + config.getConfigName() + "-" + printSize.height + "x" + printSize.width + ".jpg"), 
 					chart,
 					printSize.width, 
 					printSize.height
@@ -446,5 +437,33 @@ public class ChartPanel extends JPanel {
 		
 		iconsLoaded = true;
 		return;
+	}
+
+	@Override
+	public void dataSetChangedListener(ArrayList<Pair<Double, Double>>[] dataSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void configurationParameterChanged() {
+		
+		//Reset cached image 
+		smallImage = null;
+		mediumImage = null;
+		largeImage = null;
+		extraLargeImage = null;
+		
+		//Replace currently displayed chart
+		remove(chartImagePanel);
+		
+		add(new JLabel("Place Holder"));
+		revalidate();
+		//TODO
+		
+	}
+	
+	private void replaceChart(){
+		
 	}
 }
