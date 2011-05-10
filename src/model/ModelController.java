@@ -178,7 +178,7 @@ public class ModelController implements Runnable {
 		for(Agent learner : population.getCurrentGeneration()){
 
 			//get its ancestors (teachers)
-			ArrayList<Agent> teachers = population.getAncestors(learner, 2);
+			ArrayList<Agent> teachers = population.getAncestors(learner, 2);//TODO make this configurable
 
 			for(int i = 0; i < config.criticalPeriod; i++){
 
