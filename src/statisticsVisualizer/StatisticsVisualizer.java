@@ -21,9 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+import javax.swing.JTextPane;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
