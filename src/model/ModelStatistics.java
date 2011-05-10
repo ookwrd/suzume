@@ -268,6 +268,7 @@ public class ModelStatistics extends JPanel {
 	}
 	
 	private void addGraphPanel(BasicVisualizationServer<Integer, String> vv, String title) {
+		
 		graphPanel = new JPanel();
 		graphPanel.setLayout(new BoxLayout(graphPanel, BoxLayout.PAGE_AXIS));
 		clusteringPanel.add(graphPanel, BorderLayout.NORTH);
@@ -289,7 +290,8 @@ public class ModelStatistics extends JPanel {
 	}
 	
 	public void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
-		if(this.graphPanel==null) addGraphPanel(vv, title); // lazy
+		
+		if (this.graphPanel==null) addGraphPanel(vv, title); // lazy
 		else {
 			JTextArea t = new JTextArea(title);
 			t.setEditable(false);
@@ -301,7 +303,8 @@ public class ModelStatistics extends JPanel {
 	}
 	
 	public void updateConsoleText(String text) {
-		if(textArea==null) {// lazy
+		
+		if (textArea==null) {// lazy
 			addConsolePanel(text);
 		} else {
 			textArea.setText(text);
