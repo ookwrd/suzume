@@ -247,7 +247,8 @@ public class StatisticsVisualizer extends JPanel {
 	}
 	
 	public void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
-		if(this.graphPanel==null) addGraphPanel(vv, title); // lazy
+		
+		if (this.graphPanel==null) addGraphPanel(vv, title); // lazy
 		else {
 			JTextArea t = new JTextArea(title);
 			t.setEditable(false);
@@ -259,7 +260,8 @@ public class StatisticsVisualizer extends JPanel {
 	}
 	
 	public void updateConsoleText(String text) {
-		if(textArea==null) {// lazy
+		
+		if (textArea==null) {// lazy
 			addConsolePanel(text);
 		} else {
 			textArea.setText(text);
