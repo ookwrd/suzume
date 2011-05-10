@@ -224,8 +224,8 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		Color c;
 		
-		int numberOfNulls = numberOfNulls();
-		c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
+		//int numberOfNulls = numberOfNulls();
+		//c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
 		
 		/*c = new Color(
 				Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
@@ -233,6 +233,13 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 				Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 				);
 		*/
+		
+		c = new Color(
+				Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
+				Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
+				Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
+				);
+		
 		g.setColor(c);
 		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
 		
