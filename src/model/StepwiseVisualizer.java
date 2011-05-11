@@ -47,6 +47,8 @@ public class StepwiseVisualizer extends JPanel {
 	private boolean pauseStatus;
 	private int steps;
 	
+	private VisualizationType visualizationType = VisualizationType.vertical;
+	
 	public StepwiseVisualizer(String title, PopulationModel model, VisualizationConfiguration config){
 		
 		this.model = model;
@@ -56,9 +58,9 @@ public class StepwiseVisualizer extends JPanel {
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
 		
-		Dimension drawSize = model.getDimension(baseDimension, VisualizationType.layout);
+		Dimension drawSize = model.getDimension(baseDimension,visualizationType);
 		image = new BufferedImage(drawSize.width, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		model.draw(baseDimension,VisualizationType.layout,image.getGraphics());
+		model.draw(baseDimension,visualizationType,image.getGraphics());
 		
 		ImageIcon icon = new ImageIcon(image);
 		imageLabel = new JLabel(icon);
@@ -212,7 +214,7 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private void updateImage(){
 		
-		model.draw(baseDimension, VisualizationType.layout, image.getGraphics());
+		model.draw(baseDimension, visualizationType, image.getGraphics());
 		imageLabel.repaint();
 		
 	}

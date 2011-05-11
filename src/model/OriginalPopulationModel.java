@@ -137,21 +137,58 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 			System.out.print("Trying to get Dimension of empty population model");
 			return null;
 		}
-		
+	
+		switch(type){
+		case layout:
+			return getDimensionLayout(baseDimension, type);
+			
+		case vertical:
+			return getDimensionVertical(baseDimension, type);
+			
+		default:
+			System.out.println("Unsupported Visualization type");
+			return null;
+		}
+	
+	}
+	
+	private Dimension getDimensionLayout(Dimension baseDimension, VisualizationType type){
 		int size = currentGeneration.size();
 		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
 		
 		int agentsPerEdge = (size/4)+(size%4!=0?1:0) + 1;
 		
 		return new Dimension(agentsPerEdge*agentDimension.width, agentsPerEdge*agentDimension.height);
-		
 	}
+	
+	private Dimension getDimensionVertical(Dimension baseDimension, VisualizationType type){
+		int size = currentGeneration.size();
+		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
+		
+		return new Dimension(agentDimension.width, agentDimension.height*size);
+	}
+		
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
-		
+		switch(type){
+		case layout:
+			drawLayout(baseDimension, type, g);
+			break;
+			
+		case vertical:
+			drawVertical(baseDimension, type, g);
+			break;
+			
+		default:
+			System.out.println("Unrecognized Visualization type");
+			return;
+		}
+	}
+	
+	private void drawLayout(Dimension baseDimension, VisualizationType type, Graphics g){
 		int size = currentGeneration.size();
-		Dimension thisDimension = getDimension(baseDimension, VisualizationType.layout);
+		Dimension thisDimension = getDimension(baseDimension, type);
 		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
 
 		int agentsPerSection = (size/4)+(size%4!=0?1:0);
@@ -184,7 +221,17 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 			previousGeneration.get(i).draw(baseDimension,type,g);
 			g.translate(0, -agentDimension.height);
 		}
-		
+	}
+	
+
+	private void drawVertical(Dimension baseDimension, VisualizationType type, Graphics g){
+		int size = previousGeneration.size();
+		Dimension agentDimension = previousGeneration.get(0).getDimension(baseDimension, type);
+
+		for(int i = 0; i < size; i++){
+			previousGeneration.get(i).draw(baseDimension, type, g);
+			g.translate(0, agentDimension.height);
+		}
 	}
 	
 	/**
