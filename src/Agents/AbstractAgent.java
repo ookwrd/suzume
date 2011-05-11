@@ -12,7 +12,7 @@ public abstract class AbstractAgent implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
 	
-	protected static final Dimension DIMENSION = new Dimension(10,10);
+//	protected static final Dimension DIMENSION = new Dimension(10,10);
 	
 	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
 	
@@ -127,13 +127,13 @@ public abstract class AbstractAgent implements Agent {
 	}
 
 	@Override
-	public Dimension getDimension(){
-		return DIMENSION;
+	public Dimension getDimension(Dimension baseDimension){
+		return baseDimension;
 	}
 	
 	@Override
-	public void draw(Graphics g){
+	public void draw(Dimension baseDimension, Graphics g){
 		g.setColor(Color.green);
-		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
+		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 	}
 }

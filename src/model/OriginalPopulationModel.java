@@ -131,7 +131,7 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 	}
 	
 	@Override
-	public Dimension getDimension(){
+	public Dimension getDimension(Dimension baseDimension){
 		
 		if(currentGeneration.size() == 0){
 			System.out.print("Trying to get Dimension of empty population model");
@@ -139,7 +139,7 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 		}
 		
 		int size = currentGeneration.size();
-		Dimension agentDimension = currentGeneration.get(0).getDimension();
+		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension);
 		
 		int agentsPerEdge = (size/4)+(size%4!=0?1:0) + 1;
 		
@@ -148,11 +148,11 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 	}
 	
 	@Override
-	public void draw(Graphics g){
+	public void draw(Dimension baseDimension, Graphics g){
 		
 		int size = currentGeneration.size();
-		Dimension thisDimension = getDimension();
-		Dimension agentDimension = currentGeneration.get(0).getDimension();
+		Dimension thisDimension = getDimension(baseDimension);
+		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension);
 
 		int agentsPerSection = (size/4)+(size%4!=0?1:0);
 		
@@ -162,26 +162,26 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 		//Top edge
 		int i;
 		for(i = 0; i < agentsPerSection; i++){
-			previousGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(baseDimension,g);
 			g.translate(agentDimension.width, 0);
 		}
 		
 		//right edge
 		for(; i < 2*agentsPerSection; i++){
-			previousGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(baseDimension,g);
 			g.translate(0, agentDimension.height);
 		}
 		
 		//Bottom edge
 		for(; i < 3*agentsPerSection; i++){
-			previousGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(baseDimension,g);
 			g.translate(-agentDimension.width, 0);
 		}
 		
 		//Left edge
 		for(; i < size; i++){
 			//TODO reset the translate point.
-			previousGeneration.get(i).draw(g);
+			previousGeneration.get(i).draw(baseDimension,g);
 			g.translate(0, -agentDimension.height);
 		}
 		
