@@ -36,7 +36,9 @@ public class StepwiseVisualizer extends JPanel {
 	private Graphics layoutGraphics;
 	private JLabel layoutImageLabel;
 	
+	private BufferedImage verticalImage;
 	private Graphics verticalGraphics;
+	private Graphics verticalGraphicsTemp;
 	private JLabel verticalImageLabel;
 	
 	//Top bar
@@ -51,6 +53,8 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private boolean pauseStatus;
 	private int steps;
+	
+	private int runAtLastUpdate = -1;
 	
 	//private VisualizationType visualizationType = VisualizationType.vertical;
 	
@@ -75,7 +79,7 @@ public class StepwiseVisualizer extends JPanel {
 		
 		//Vertical visualization
 		drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		BufferedImage verticalImage = new BufferedImage(drawSize.width*1000 /*TODO*/, drawSize.height, BufferedImage.TYPE_INT_RGB);
+		verticalImage = new BufferedImage(drawSize.width*1000 /*TODO*/, drawSize.height, BufferedImage.TYPE_INT_RGB);
 		verticalGraphics = verticalImage.getGraphics();
 		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
 		
@@ -214,7 +218,7 @@ public class StepwiseVisualizer extends JPanel {
 		
 		updateCounter(run, generation);
 		
-		updateImage();
+		updateImage(run);
 				
 		if(config.visualizationPause > 0){
 			try {
@@ -225,18 +229,26 @@ public class StepwiseVisualizer extends JPanel {
 		}
 	}
 	
+	
 	private void updateCounter(int run, int generation){
 		runCounter.setText(RUN_COUNTER_PREFIX + run);
 		generationCounter.setText(GENERATION_COUNTER_PREFIX + generation);
 	}
 	
-	private void updateImage(){
+	private void updateImage(int run){
 		
 		model.draw(layoutBaseDimension, VisualizationType.layout, layoutGraphics.create());
 		layoutImageLabel.repaint();
 		
-		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphics.create());
-		verticalGraphics.translate(1, 0);
+		//Do we reset the visualization?
+		if(this.runAtLastUpdate < run){
+			verticalGraphicsTemp = verticalGraphics.create();
+			runAtLastUpdate = run;
+			//TODO Fill the old one.
+		}
+		
+		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphicsTemp.create());
+		verticalGraphicsTemp.translate(1, 0);
 		verticalImageLabel.repaint();
 		
 	}
