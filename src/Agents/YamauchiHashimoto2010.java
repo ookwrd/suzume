@@ -1,5 +1,6 @@
 package Agents;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -224,7 +225,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public void draw(Graphics g){
+	public void draw(Dimension baseDimension, Graphics g){
 		
 		Color c;
 		
@@ -249,7 +250,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		}
 
 		g.setColor(c);
-		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
+		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 		
 	}
 

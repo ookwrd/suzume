@@ -47,7 +47,7 @@ public interface Agent {
 	public void printAgent();
 	
 	//Visualization
-	public Dimension getDimension();
-	public void draw(Graphics g);
+	public Dimension getDimension(Dimension baseDimension);
+	public void draw(Dimension baseDimension, Graphics g);
 	
 }

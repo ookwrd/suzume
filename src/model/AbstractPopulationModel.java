@@ -7,14 +7,14 @@ import java.awt.Graphics;
 public abstract class AbstractPopulationModel implements PopulationModel {
 
 	@Override
-	public Dimension getDimension(){
-		return new Dimension(1,1);
+	public Dimension getDimension(Dimension baseDimension){
+		return baseDimension;
 	}
 	
 	@Override
-	public void draw(Graphics g){
+	public void draw(Dimension baseDimension, Graphics g){
 		g.setColor(Color.green);
-		g.drawRect(0, 0, 1, 1);
+		g.drawRect(0, 0, baseDimension.width, baseDimension.height);
 	}
 	
 }

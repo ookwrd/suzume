@@ -74,9 +74,9 @@ public interface PopulationModel {
 	public ArrayList<Agent> getAncestorGeneration();
 	
 	
-	public Dimension getDimension();
+	public Dimension getDimension(Dimension baseDimension);
 	
-	public void draw(Graphics g);
+	public void draw(Dimension baseDimension, Graphics g);
 	
 	public void print();
 
