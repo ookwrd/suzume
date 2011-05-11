@@ -2,7 +2,7 @@ package Agents;
 
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {String, Integer, Double, Boolean}
+	public enum ConfigurationParameterType {String, Integer, Double, Boolean, List}
 	
 	public ConfigurationParameterType type;
 	
@@ -11,6 +11,11 @@ public class ConfigurationParameter {
 	public ConfigurationParameter(String value){
 		type = ConfigurationParameterType.String;
 		this.value = value;
+	}
+	
+	public ConfigurationParameter(String[] values){
+		type = ConfigurationParameterType.List;
+		this.value = values;
 	}
 	
 	public ConfigurationParameter(Integer value){
@@ -30,6 +35,10 @@ public class ConfigurationParameter {
 	
 	public String getString(){
 		return (String)value;
+	}
+	
+	public String[] getList(){
+		return (String[])value;
 	}
 	
 	public Integer getInteger(){

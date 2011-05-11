@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -67,6 +68,11 @@ public class AgentConfigurationPanel extends JPanel {
 				components.put(key, field2);
 				break;
 				
+			case List:
+				JComboBox listBox = ConfigurationPanelTools.addComboBox(key, parameter.getList(), autoPanel);
+				components.put(key, listBox);
+				break;
+				
 			default:
 				System.out.println("Unsupported Configuration Parameter type.");
 				break;
@@ -113,6 +119,10 @@ public class AgentConfigurationPanel extends JPanel {
 				
 			case Boolean:
 				retParameters.put(key, new ConfigurationParameter(((JCheckBox)comp).isSelected()));
+				break;
+				
+			case List:
+				retParameters.put(key, new ConfigurationParameter((String)((JComboBox)comp).getSelectedItem()));
 				break;
 				
 			default:

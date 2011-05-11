@@ -9,6 +9,8 @@ import model.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	
+	protected static String[] visualizationTypes = {"numberNulls", "genotype", "phenotype"};
+	
 	protected ArrayList<Integer> chromosome;
 	
 	protected int learningResource;
@@ -25,9 +27,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		put("Learning Resource on MisMatch", new ConfigurationParameter(4));
 		put("Mutation Rate", new ConfigurationParameter(0.00025));
 		put("Invention Probability", new ConfigurationParameter(0.01));
+		put("Visualization Type", new ConfigurationParameter(visualizationTypes));
 	}};
 	
-	public YamauchiHashimoto2010(){}
+	public YamauchiHashimoto2010(){
+	}
 	
 	@Override
 	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
@@ -224,22 +228,26 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		Color c;
 		
-		//int numberOfNulls = numberOfNulls();
-		//c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		
-		/*c = new Color(
-				Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
-				Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
-				Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
-				);
-		*/
-		
-		c = new Color(
-				Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
-				Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
-				Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
-				);
-		
+		if(config.parameters.get("Visualization Type").getString().equals("numberNulls")){
+			int numberOfNulls = numberOfNulls();
+			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
+		}else if (config.parameters.get("Visualization Type").getString().equals("genotype")){
+			c = new Color(
+					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
+					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
+					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
+			);
+		}else if (config.parameters.get("Visualization Type").getString().equals("phenotype")){
+			c = new Color(
+					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
+					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
+					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
+					);
+		} else {
+			System.out.println("Unrecognized visualization type");
+			return;
+		}
+
 		g.setColor(c);
 		g.fillRect(0, 0, DIMENSION.width, DIMENSION.height);
 		
