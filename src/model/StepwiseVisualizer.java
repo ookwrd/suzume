@@ -3,6 +3,7 @@ package model;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -26,13 +27,17 @@ public class StepwiseVisualizer extends JPanel {
 	private VisualizationConfiguration config;
 	private PopulationModel model;	
 	
-	private Dimension baseDimension = new Dimension(5,5);
+	private Dimension layoutBaseDimension = new Dimension(5,5);
+	private Dimension verticalBaseDimension = new Dimension(1,1);
 	
 	private JFrame frame;
 	
 	//Main Visualization
-	private BufferedImage image;
-	private JLabel imageLabel;
+	private Graphics layoutGraphics;
+	private JLabel layoutImageLabel;
+	
+	private Graphics verticalGraphics;
+	private JLabel verticalImageLabel;
 	
 	//Top bar
 	private JTextField pauseField;
@@ -47,7 +52,7 @@ public class StepwiseVisualizer extends JPanel {
 	private boolean pauseStatus;
 	private int steps;
 	
-	private VisualizationType visualizationType = VisualizationType.vertical;
+	//private VisualizationType visualizationType = VisualizationType.vertical;
 	
 	public StepwiseVisualizer(String title, PopulationModel model, VisualizationConfiguration config){
 		
@@ -58,13 +63,26 @@ public class StepwiseVisualizer extends JPanel {
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
 		
-		Dimension drawSize = model.getDimension(baseDimension,visualizationType);
-		image = new BufferedImage(drawSize.width, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		model.draw(baseDimension,visualizationType,image.getGraphics());
+		//Layout visualization
+		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationType.layout);
+		BufferedImage layoutImage = new BufferedImage(drawSize.width, drawSize.height, BufferedImage.TYPE_INT_RGB);
+		layoutGraphics = layoutImage.getGraphics();
+		model.draw(layoutBaseDimension,VisualizationType.layout,layoutImage.getGraphics());
 		
-		ImageIcon icon = new ImageIcon(image);
-		imageLabel = new JLabel(icon);
-		add(imageLabel);
+		ImageIcon icon = new ImageIcon(layoutImage);
+		layoutImageLabel = new JLabel(icon);
+		add(layoutImageLabel);
+		
+		//Vertical visualization
+		drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
+		BufferedImage verticalImage = new BufferedImage(drawSize.width*1000 /*TODO*/, drawSize.height, BufferedImage.TYPE_INT_RGB);
+		verticalGraphics = verticalImage.getGraphics();
+		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
+		
+		icon = new ImageIcon(verticalImage);
+		verticalImageLabel = new JLabel(icon);
+		add(verticalImageLabel);
+		
 		
 		JScrollPane scrollPane = new JScrollPane(this);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -214,8 +232,12 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private void updateImage(){
 		
-		model.draw(baseDimension, visualizationType, image.getGraphics());
-		imageLabel.repaint();
+		model.draw(layoutBaseDimension, VisualizationType.layout, layoutGraphics.create());
+		layoutImageLabel.repaint();
+		
+		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphics.create());
+		verticalGraphics.translate(1, 0);
+		verticalImageLabel.repaint();
 		
 	}
 
