@@ -225,7 +225,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public void draw(Dimension baseDimension, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
 		
 		Color c;
 		
