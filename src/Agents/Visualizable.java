@@ -5,7 +5,9 @@ import java.awt.Graphics;
 
 public interface Visualizable {
 
-	public Dimension getDimension(Dimension baseDimension);
-	public void draw(Dimension baseDimension, Graphics g);
+	public enum VisualizationType {layout, vertical}
+	
+	public Dimension getDimension(Dimension baseDimension, VisualizationType type);
+	public void draw(Dimension baseDimension, VisualizationType type, Graphics g);
 	
 }
