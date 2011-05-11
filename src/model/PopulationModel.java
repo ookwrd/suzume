@@ -5,13 +5,14 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import Agents.Agent;
+import Agents.Visualizable;
 
 /**
  * Interface capturing the common elements of population structure. Makes the assumption of discrete generations.
  * 
  * @author Luke McCrohon
  */
-public interface PopulationModel {
+public interface PopulationModel extends Visualizable {
 
 	/**
 	 * Replaces the oldGeneration with the current generation, which is in turn replaced by the specified new set 
@@ -72,11 +73,6 @@ public interface PopulationModel {
 	 * @return
 	 */
 	public ArrayList<Agent> getAncestorGeneration();
-	
-	
-	public Dimension getDimension(Dimension baseDimension);
-	
-	public void draw(Dimension baseDimension, Graphics g);
 	
 	public void print();
 

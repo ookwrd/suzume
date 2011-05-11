@@ -1,13 +1,11 @@
 package Agents;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.RandomGenerator;
 
-public interface Agent {
+public interface Agent extends Visualizable {
 	
 	//Initialization
 	public HashMap<String, ConfigurationParameter> getDefaultParameters();
@@ -45,9 +43,5 @@ public interface Agent {
 	
 	//Display
 	public void printAgent();
-	
-	//Visualization
-	public Dimension getDimension(Dimension baseDimension);
-	public void draw(Dimension baseDimension, Graphics g);
 	
 }
