@@ -10,7 +10,7 @@ import model.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	
-	protected static String[] visualizationTypes = {"numberNulls", "genotype", "phenotype"};
+	protected static String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
 	
 	protected ArrayList<Integer> chromosome;
 	
@@ -244,7 +244,27 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else {
+		} else if (config.parameters.get("Visualization Type").getString().equals("singleGene")) {
+		
+			if(grammar.get(0) == 0){
+				c = Color.WHITE;
+			} else if (grammar.get(0) == 1){
+				c = Color.BLACK;
+			} else{
+				c = Color.RED;
+			}
+			
+		}	 else if (config.parameters.get("Visualization Type").getString().equals("singleWord")) {
+		
+			if(chromosome.get(0) == 0){
+				c = Color.WHITE;
+			} else if (chromosome.get(0) == 1){
+				c = Color.BLACK;
+			} else{
+				c = Color.RED;
+			}
+			
+		}			else {
 			System.out.println("Unrecognized visualization type");
 			return;
 		}
