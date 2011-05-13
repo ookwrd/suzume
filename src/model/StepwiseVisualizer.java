@@ -243,13 +243,17 @@ public class StepwiseVisualizer extends JPanel {
 		//Do we reset the visualization?
 		if(this.runAtLastUpdate < run){
 			verticalGraphicsTemp = verticalGraphics.create();
+		
+			//verticalGraphicsTemp = verticalImageLabel.getGraphics();
 			runAtLastUpdate = run;
 			//TODO Fill the old one.
 		}
 		
 		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphicsTemp.create());
 		verticalGraphicsTemp.translate(1, 0);
+		//verticalImageLabel.setPreferredSize(new Dimension(verticalImageLabel.getPreferredSize().width+1,verticalImageLabel.getPreferredSize().height));
 		verticalImageLabel.repaint();
+		//revalidate();
 		
 	}
 
