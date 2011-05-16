@@ -2,6 +2,8 @@ package Agents;
 
 import java.util.ArrayList;
 
+import PopulationModel.PopulationNode;
+
 import simulation.RandomGenerator;
 
 public class SynonymAgent extends AbstractAgent {
@@ -128,7 +130,7 @@ public class SynonymAgent extends AbstractAgent {
 	private static int forms = 0; //Unique static word form identifier, TODO should be replaced with a static get form method
 	
 	@Override
-	public void communicate(Agent partner) {
+	public void communicate(PopulationNode partner) {
 		
 		Utterance utterance = partner.getRandomUtterance();
 		
@@ -214,7 +216,7 @@ public class SynonymAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void initializeAgent(Agent parentA, Agent parentB, int id,
+	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id,
 			RandomGenerator randomGenerator) {
 		// TODO Auto-generated method stub
 		

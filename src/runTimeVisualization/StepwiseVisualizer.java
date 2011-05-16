@@ -17,9 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import runTimeVisualization.Visualizable.VisualizationType;
-
-import model.PopulationModel;
-import model.VisualizationConfiguration;
+import simulation.PopulationModel;
+import simulation.VisualizationConfiguration;
 
 
 

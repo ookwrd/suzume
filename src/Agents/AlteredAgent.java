@@ -5,6 +5,7 @@ import java.util.HashMap;
 import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
+import PopulationModel.PopulationNode;
 
 
 public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
@@ -19,7 +20,7 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
 	public AlteredAgent(){}
 	
 	@Override
-	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(parentA, parentB, id, randomGenerator);
 		resourceMultiplier = ((ConfigurationParameter)config.parameters.get("Leftover Resource Multiplier")).getDouble();
 	}

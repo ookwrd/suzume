@@ -1,14 +1,15 @@
 package Agents;
 
 import simulation.RandomGenerator;
-import Agents.NodeConfiguration.AgentType;
+import Agents.NodeConfiguration.NodeType;
 import PopulationModel.OriginalPopulationModel;
+import PopulationModel.PopulationNode;
 
 public class AgentFactory {
 
-	private static int nextAgentID = 0; // keeps count of all the next agents from this world
+	private static int nextNodeID = 0; // keeps count of all the next agents from this world
 	
-	public static Agent constructUninitializedNode(AgentType type){
+	public static PopulationNode constructUninitializedNode(NodeType type){
 		
 		switch (type) {
 		case YamauchiHashimoto2010:
@@ -36,32 +37,32 @@ public class AgentFactory {
 		
 	}
 	
-	public static Agent constructAgent(NodeConfiguration agentConfig, RandomGenerator randomGenerator){
+	public static PopulationNode constructPopulationNode(NodeConfiguration nodeConfig, RandomGenerator randomGenerator){
 		
-		Agent agent = constructUninitializedNode(agentConfig.type);
+		PopulationNode node = constructUninitializedNode(nodeConfig.type);
 		
-		agent.initializeAgent(agentConfig, nextAgentID++, randomGenerator);
+		node.initializeAgent(nodeConfig, nextNodeID++, randomGenerator);
 		
-		return agent;
+		return node;
 		
 	}
 	
-	public static Agent constructAgent(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
+	public static PopulationNode constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
-		AgentType agentType = parentA.getConfiguration().type; 
+		NodeType agentType = parentA.getConfiguration().type; 
 		
 		if(agentType != parentB.getConfiguration().type){
 			System.out.println("Agent type of parents do not match in AgentFactory. Sexual reproduction not possible.");
 			return null;
 		}	
 		
-		Agent returnVal = constructUninitializedNode(agentType);
+		PopulationNode returnVal = constructUninitializedNode(agentType);
 		
-		returnVal.initializeAgent(parentA, parentB, nextAgentID++, randomGenerator);
+		returnVal.initializeAgent(parentA, parentB, nextNodeID++, randomGenerator);
 		return returnVal;
 	}
 	
-	public static AgentConfigurationPanel getConfigurationPanel(AgentType type){
+	public static AgentConfigurationPanel getConfigurationPanel(NodeType type){
 	
 		switch (type) {//TODO
 

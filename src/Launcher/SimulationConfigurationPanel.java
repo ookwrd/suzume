@@ -1,19 +1,19 @@
 package Launcher;
 
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import model.ModelConfiguration;
-import model.ModelConfiguration.PopulationModelType;
-import model.SelectionModel.SelectionModels;
+
+import simulation.SimulationConfiguration;
+import simulation.SimulationConfiguration.PopulationModelType;
+import simulation.SelectionModel.SelectionModels;
 
 @SuppressWarnings("serial")
-public class ModelConfigurationPanel extends JPanel {
+public class SimulationConfigurationPanel extends JPanel {
 
-	private AgentTypeConfigurationPanel agentConfigurationPanel;
+	private NodeTypeConfigurationPanel agentConfigurationPanel;
 	
 	private JPanel innerPanel;
 	
@@ -30,12 +30,12 @@ public class ModelConfigurationPanel extends JPanel {
 
 	private JTextField runCountField;
 	
-	public ModelConfigurationPanel(){
+	public SimulationConfigurationPanel(){
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setBorder(new TitledBorder("Model Configuration:"));
+		setBorder(new TitledBorder("Simulation Configuration:"));
 		
-		agentConfigurationPanel = new AgentTypeConfigurationPanel();
+		agentConfigurationPanel = new NodeTypeConfigurationPanel();
 		add(agentConfigurationPanel);
 		
 		innerPanel = new JPanel();
@@ -45,19 +45,19 @@ public class ModelConfigurationPanel extends JPanel {
 		
 		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", PopulationModelType.values(), innerPanel);
 		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
-		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+ModelConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
-		runCountField = ConfigurationPanelTools.addField("Number of Runs", ""+ModelConfiguration.DEFAULT_RUN_COUNT,innerPanel);
-		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+ModelConfiguration.DEFAULT_POPULATION_SIZE, innerPanel); 
-		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+ModelConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
-		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+ModelConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, innerPanel);
-		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+ModelConfiguration.DEFAULT_CRITICAL_PERIOD, innerPanel);
+		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+SimulationConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
+		runCountField = ConfigurationPanelTools.addField("Number of Runs", ""+SimulationConfiguration.DEFAULT_RUN_COUNT,innerPanel);
+		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+SimulationConfiguration.DEFAULT_POPULATION_SIZE, innerPanel); 
+		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+SimulationConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
+		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+SimulationConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, innerPanel);
+		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+SimulationConfiguration.DEFAULT_CRITICAL_PERIOD, innerPanel);
 		
 		ConfigurationPanelTools.makeGrid(innerPanel);
 	}
 	
-	public ModelConfiguration getConfiguration(){
+	public SimulationConfiguration getConfiguration(){
 		
-		return new ModelConfiguration(
+		return new SimulationConfiguration(
 				agentConfigurationPanel.getConfiguration(),
 				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
 				(SelectionModels)selectionModelTypeBox.getSelectedItem(),

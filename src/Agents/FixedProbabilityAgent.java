@@ -5,6 +5,7 @@ import java.util.HashMap;
 import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
+import PopulationModel.PopulationNode;
 
 
 public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
@@ -33,7 +34,7 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 	}
 	
 	@Override
-	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(parentA, parentB, id, randomGenerator);
 		initializeParameters(parentA.getConfiguration());	
 		}

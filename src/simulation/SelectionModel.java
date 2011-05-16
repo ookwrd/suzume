@@ -1,8 +1,6 @@
-package model;
+package simulation;
 
 import java.util.ArrayList;
-
-import org.apache.commons.collections15.map.CaseInsensitiveMap;
 
 import Agents.Agent;
 

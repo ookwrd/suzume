@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import edu.uci.ics.jung.algorithms.layout.*;
 
-import model.ModelController;
-import model.SimpleClustering;
 
 import org.apache.commons.collections15.Transformer;
+
+import simulation.ModelController;
+import simulation.SimpleClustering;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
