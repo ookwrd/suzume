@@ -2,9 +2,10 @@ package Agents;
 
 import java.util.HashMap;
 
+import simulation.RandomGenerator;
+
 import AutoConfiguration.ConfigurationParameter;
 
-import model.RandomGenerator;
 
 public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 
@@ -26,7 +27,7 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 	}
 	
 	@Override
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(config, id, randomGenerator);
 		initializeParameters(config);
 	}
@@ -37,7 +38,7 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 		initializeParameters(parentA.getConfiguration());	
 		}
 	
-	private void initializeParameters(AgentConfiguration config){
+	private void initializeParameters(NodeConfiguration config){
 		matchingLearnProbability = config.parameters.get("Matching Learn Probability").getDouble();
 		nonMatchingLearnProbability = config.parameters.get("NonMatching Learn Probability").getDouble();
 		deductOnAttempt = config.parameters.get("Deduct Cost on attempt").getBoolean();
