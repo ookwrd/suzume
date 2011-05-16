@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Launcher.ConfigurationPanelTools;
+import Launcher.GraphTypeConfigurationPanel;
+import Launcher.NodeTypeConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class BasicConfigurationPanel extends JPanel {
@@ -60,6 +62,16 @@ public class BasicConfigurationPanel extends JPanel {
 			case List:
 				JComboBox listBox = ConfigurationPanelTools.addComboBox(key, parameter.getList(), autoPanel);
 				components.put(key, listBox);
+				break;
+				
+			case Graph:
+				GraphTypeConfigurationPanel panel = ConfigurationPanelTools.addGraphSelector(key, parameter.getGraph(), autoPanel);
+				components.put(key, panel);
+				break;
+				
+			case Node:
+				NodeTypeConfigurationPanel panel1 = ConfigurationPanelTools.addNodeSelector(key, parameter.getNode(), autoPanel);
+				components.put(key, panel1);
 				break;
 				
 			default:

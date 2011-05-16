@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
 
 import Agents.NodeConfiguration;
 import Agents.NodeConfiguration.NodeType;
-import Agents.AgentConfigurationPanel;
+import Agents.NodeConfigurationPanel;
 import Agents.AgentFactory;
 
 
@@ -20,7 +20,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 
 	private JComboBox agentTypesBox;
 	
-	private AgentConfigurationPanel subPanel;
+	private NodeConfigurationPanel subPanel;
 	
 	public NodeTypeConfigurationPanel(){
 		
