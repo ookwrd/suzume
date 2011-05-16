@@ -10,8 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import Agents.NodeConfiguration;
-import Agents.NodeConfiguration.NodeType;
+import Agents.AgentConfiguration;
+import Agents.AgentConfiguration.AgentType;
 import Agents.AgentConfigurationPanel;
 import Agents.AgentFactory;
 
@@ -29,7 +29,7 @@ public class AgentTypeConfigurationPanel extends JPanel {
 		
 		JPanel topPanel = new JPanel();
 		ConfigurationPanelTools.configurePanel(topPanel);
-		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", NodeConfiguration.NodeType.values(),topPanel);
+		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", AgentConfiguration.AgentType.values(),topPanel);
 		agentTypesBox.addActionListener(new ActionListener() {
 			
 			@Override
@@ -52,7 +52,7 @@ public class AgentTypeConfigurationPanel extends JPanel {
 			remove(subPanel);
 		}
 		
-		subPanel = AgentFactory.getConfigurationPanel((NodeType)agentTypesBox.getSelectedItem());
+		subPanel = AgentFactory.getConfigurationPanel((AgentType)agentTypesBox.getSelectedItem());
 			
 		add(subPanel);
 		
@@ -67,7 +67,7 @@ public class AgentTypeConfigurationPanel extends JPanel {
 		return subPanel;
 	}
 	
-	public NodeConfiguration getConfiguration(){
+	public AgentConfiguration getConfiguration(){
 		return subPanel.getConfiguration();
 	}
 	

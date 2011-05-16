@@ -16,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
-import model.ZoomPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -29,6 +28,7 @@ import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import runTimeVisualization.ZoomPanel;
 import statisticsVisualizer.ChartConfiguration.ChartType;
 import tools.Pair;
 import tools.Statistics;

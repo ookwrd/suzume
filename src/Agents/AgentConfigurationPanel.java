@@ -1,137 +1,29 @@
 package Agents;
 
-import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import Agents.NodeConfiguration.NodeType;
-import Launcher.ConfigurationPanelTools;
+import Agents.AgentConfiguration.AgentType;
+import AutoConfiguration.BasicConfigurationPanel;
 
+@SuppressWarnings("serial")
 public class AgentConfigurationPanel extends JPanel {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-		
-	private NodeType type;
-	private HashMap<String, ConfigurationParameter> parameters;
-	private HashMap<String, Component> components;
-
-	protected JPanel innerPanel;
+	private BasicConfigurationPanel basicPanel;
 	
-	public AgentConfigurationPanel(NodeType type){
-		
-		setBorder(new TitledBorder(type.toString() + " configuration"));
+	private AgentType type;
+	
+	public AgentConfigurationPanel(AgentType type){
 		
 		this.type = type;
-		
-		//Get default parameter map for this agent type
-		parameters = AgentFactory.constructUninitializedAgent(type).getDefaultParameters();
-		components = new HashMap<String, Component>();
-		
-		JPanel autoPanel = new JPanel();
-		ConfigurationPanelTools.configurePanel(autoPanel);
-		
-		//For each specified parameter add the appropriate configuration field to the configuration panel.
-		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
-			
-			String key = entry.getKey();
-			ConfigurationParameter parameter = entry.getValue();
-			
-			switch (parameter.type) {
-			case Integer:
-				JTextField field = ConfigurationPanelTools.addField(key, parameter.value.toString(), autoPanel);
-				components.put(key, field);
-				break;
-				
-			case Double:
-				JTextField field1 = ConfigurationPanelTools.addField(key, parameter.value.toString(), autoPanel);
-				components.put(key, field1);
-				break;
-				
-			case Boolean:
-				JCheckBox box = ConfigurationPanelTools.addCheckBox(key, parameter.getBoolean(), autoPanel);
-				components.put(key, box);
-				break;
-				
-			case String:
-				JTextField field2 = ConfigurationPanelTools.addField(key, parameter.getString(), autoPanel);
-				components.put(key, field2);
-				break;
-				
-			case List:
-				JComboBox listBox = ConfigurationPanelTools.addComboBox(key, parameter.getList(), autoPanel);
-				components.put(key, listBox);
-				break;
-				
-			default:
-				System.out.println("Unsupported Configuration Parameter type.");
-				break;
-			}
-			
-		}
-		
-		ConfigurationPanelTools.makeGrid(autoPanel);
-		
-		add(autoPanel);
-		
-		if(parameters.size()==0){
-			innerPanel = new JPanel();
-			innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-			innerPanel.add(new JLabel("No configuration required.")); 
-			add(innerPanel);
-		}
+		this.basicPanel = new BasicConfigurationPanel(AgentFactory.constructUninitializedAgent(type));
+
+		setBorder(new TitledBorder(type.toString() + " configuration"));
+		this.add(basicPanel);
 	}
 	
-	public NodeConfiguration getConfiguration(){
-	
-		HashMap<String, ConfigurationParameter> retParameters = new HashMap<String, ConfigurationParameter>();
-		
-		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
-			
-			String key = entry.getKey();
-			ConfigurationParameter parameter = entry.getValue();
-			
-			Component comp = components.get(key);
-			
-			switch (parameter.type) {
-			
-			case Integer:
-				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText().trim())) );
-				break;
-			
-			case Double:
-				retParameters.put(key, new ConfigurationParameter(Double.parseDouble(((JTextField)comp).getText().trim())) );
-				break;
-			
-			case String:
-				retParameters.put(key, new ConfigurationParameter(((JTextField)comp).getText()) );
-				break;				
-				
-			case Boolean:
-				retParameters.put(key, new ConfigurationParameter(((JCheckBox)comp).isSelected()));
-				break;
-				
-			case List:
-				retParameters.put(key, new ConfigurationParameter((String)((JComboBox)comp).getSelectedItem()));
-				break;
-				
-			default:
-				break;
-			}
-		
-		}
-		
-		return new NodeConfiguration(type, retParameters);
+	public AgentConfiguration getConfiguration(){
+		return new AgentConfiguration(type, basicPanel.getConfiguration());
 	}
 
 }

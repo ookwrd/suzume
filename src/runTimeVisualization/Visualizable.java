@@ -1,4 +1,4 @@
-package Agents;
+package runTimeVisualization;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -1,4 +1,4 @@
-package Agents;
+package AutoConfiguration;
 
 public class ConfigurationParameter {
 

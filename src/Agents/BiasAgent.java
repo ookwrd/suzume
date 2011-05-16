@@ -2,6 +2,8 @@ package Agents;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AutoConfiguration.ConfigurationParameter;
+
 import model.RandomGenerator;
 
 
@@ -25,7 +27,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	public BiasAgent(){}
 	
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		initializeParameters(config);
 		
@@ -123,7 +125,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		}
 	}
 	
-	private void initializeParameters(NodeConfiguration config){
+	private void initializeParameters(AgentConfiguration config){
 		dimensions = config.parameters.get("Dimensions").getInteger();
 		mutationRate = config.parameters.get("Mutation rate").getDouble();
 		inventionProbability= config.parameters.get("Invention Probability").getDouble();
