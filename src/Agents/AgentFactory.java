@@ -1,13 +1,13 @@
 package Agents;
 
 import model.RandomGenerator;
-import Agents.AgentConfiguration.AgentType;
+import Agents.NodeConfiguration.NodeType;
 
 public class AgentFactory {
 
 	private static int nextAgentID = 0; // keeps count of all the next agents from this world
 	
-	public static Agent constructUninitializedAgent(AgentType type){
+	public static Agent constructUninitializedAgent(NodeType type){
 		
 		switch (type) {
 		case YamauchiHashimoto2010:
@@ -32,7 +32,7 @@ public class AgentFactory {
 		
 	}
 	
-	public static Agent constructAgent(AgentConfiguration agentConfig, RandomGenerator randomGenerator){
+	public static Agent constructAgent(NodeConfiguration agentConfig, RandomGenerator randomGenerator){
 		
 		Agent returnVal = constructUninitializedAgent(agentConfig.type);
 		
@@ -43,7 +43,7 @@ public class AgentFactory {
 	
 	public static Agent constructAgent(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
-		AgentType agentType = parentA.getConfiguration().type; 
+		NodeType agentType = parentA.getConfiguration().type; 
 		
 		if(agentType != parentB.getConfiguration().type){
 			System.out.println("Agent type of parents do not match in AgentFactory. Sexual reproduction not possible.");
@@ -56,7 +56,7 @@ public class AgentFactory {
 		return returnVal;
 	}
 	
-	public static AgentConfigurationPanel getConfigurationPanel(AgentType type){
+	public static AgentConfigurationPanel getConfigurationPanel(NodeType type){
 	
 		switch (type) {
 

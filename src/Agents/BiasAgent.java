@@ -25,7 +25,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	public BiasAgent(){}
 	
 	@Override
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		initializeParameters(config);
 		
@@ -123,7 +123,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		}
 	}
 	
-	private void initializeParameters(AgentConfiguration config){
+	private void initializeParameters(NodeConfiguration config){
 		dimensions = config.parameters.get("Dimensions").getInteger();
 		mutationRate = config.parameters.get("Mutation rate").getDouble();
 		inventionProbability= config.parameters.get("Invention Probability").getDouble();

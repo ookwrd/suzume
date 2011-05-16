@@ -9,5 +9,6 @@ public interface Visualizable {
 	
 	public Dimension getDimension(Dimension baseDimension, VisualizationType type);
 	public void draw(Dimension baseDimension, VisualizationType type, Graphics g);
+	public void print();
 	
 }

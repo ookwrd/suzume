@@ -12,20 +12,18 @@ public abstract class AbstractAgent implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
 	
-//	protected static final Dimension DIMENSION = new Dimension(10,10);
-	
 	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
 	
 	private int fitness;
 	private int id;
-	protected AgentConfiguration config;
+	protected NodeConfiguration config;
 	protected RandomGenerator randomGenerator;
 	
 	protected ArrayList<Integer> grammar;
 	
 	public AbstractAgent(){}
 	
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		this.id = id;
 		this.config = config;
 		this.randomGenerator = randomGenerator;
@@ -58,7 +56,7 @@ public abstract class AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public AgentConfiguration getConfiguration(){
+	public NodeConfiguration getConfiguration(){
 		return config;
 	}
 
@@ -135,5 +133,10 @@ public abstract class AbstractAgent implements Agent {
 	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
 		g.setColor(Color.green);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+	}
+	
+	@Override
+	public void print(){
+		System.out.println(this.toString());
 	}
 }

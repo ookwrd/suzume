@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import Agents.AgentConfiguration.AgentType;
+import Agents.NodeConfiguration.NodeType;
 import Launcher.ConfigurationPanelTools;
 
 public class AgentConfigurationPanel extends JPanel {
@@ -22,13 +22,13 @@ public class AgentConfigurationPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 		
-	private AgentType type;
+	private NodeType type;
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components;
 
 	protected JPanel innerPanel;
 	
-	public AgentConfigurationPanel(AgentType type){
+	public AgentConfigurationPanel(NodeType type){
 		
 		setBorder(new TitledBorder(type.toString() + " configuration"));
 		
@@ -92,7 +92,7 @@ public class AgentConfigurationPanel extends JPanel {
 		}
 	}
 	
-	public AgentConfiguration getConfiguration(){
+	public NodeConfiguration getConfiguration(){
 	
 		HashMap<String, ConfigurationParameter> retParameters = new HashMap<String, ConfigurationParameter>();
 		
@@ -131,7 +131,7 @@ public class AgentConfigurationPanel extends JPanel {
 		
 		}
 		
-		return new AgentConfiguration(type, retParameters);
+		return new NodeConfiguration(type, retParameters);
 	}
 
 }

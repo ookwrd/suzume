@@ -8,6 +8,7 @@ import tools.Pair;
 import Agents.Agent;
 import Agents.AgentFactory;
 import Launcher.Launcher;
+import PopulationModel.OriginalPopulationModel;
 
 public class ModelController implements Runnable {
 
@@ -178,7 +179,7 @@ public class ModelController implements Runnable {
 		for(Agent learner : population.getCurrentGeneration()){
 
 			//get its ancestors (teachers)
-			ArrayList<Agent> teachers = population.getAncestors(learner, 2);//TODO make this configurable
+			ArrayList<Agent> teachers = population.getPossibleTeachers(learner);
 
 			for(int i = 0; i < config.criticalPeriod; i++){
 
@@ -205,7 +206,7 @@ public class ModelController implements Runnable {
 
 		for(Agent agent : population.getCurrentGeneration()){
 
-			ArrayList<Agent> neighbouringAgents = population.getNeighbors(agent, 1);
+			ArrayList<Agent> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Set the agents fitness to the default base level 
 			agent.setFitness(config.baseFitness);
@@ -227,7 +228,9 @@ public class ModelController implements Runnable {
 	 * @return
 	 */
 	private ArrayList<Agent> selection(){
-
+		
+		//TODO make selection dependent on the GetPossibleParents from the populationModel
+		
 		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.populationSize*2);
 
 		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
