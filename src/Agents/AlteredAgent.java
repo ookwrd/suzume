@@ -2,6 +2,8 @@ package Agents;
 
 import java.util.HashMap;
 
+import AutoConfiguration.ConfigurationParameter;
+
 import model.RandomGenerator;
 
 public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
@@ -22,7 +24,7 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
 	}
 	
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		resourceMultiplier = ((ConfigurationParameter)config.parameters.get("Leftover Resource Multiplier")).getDouble();
 	}

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import runTimeVisualization.StepwiseVisualizer;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 

@@ -2,15 +2,16 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import Agents.NodeConfiguration;
+import Agents.AgentConfiguration;
+import AutoConfiguration.AbstractConfigurable;
 
-public abstract class AbstractGraph implements PopulationGraph {
+public abstract class AbstractGraph extends AbstractConfigurable implements PopulationGraph {
 
 	protected ArrayList<PopulationNode> populations;
-	protected NodeConfiguration config;
+	protected AgentConfiguration config;
 	
 	@Override
-	public void init(ArrayList<PopulationNode> populations, NodeConfiguration config){
+	public void init(ArrayList<PopulationNode> populations, AgentConfiguration config){
 		this.config = config;
 		this.populations = populations; 
 	}

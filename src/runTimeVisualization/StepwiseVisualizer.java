@@ -1,4 +1,4 @@
-package model;
+package runTimeVisualization;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,7 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import Agents.Visualizable.VisualizationType;
+import runTimeVisualization.Visualizable.VisualizationType;
+
+import model.PopulationModel;
+import model.VisualizationConfiguration;
+
+
 
 @SuppressWarnings("serial")
 public class StepwiseVisualizer extends JPanel {

@@ -6,24 +6,27 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AutoConfiguration.AbstractConfigurable;
+
 import model.RandomGenerator;
 
-public abstract class AbstractAgent implements Agent {
+public abstract class AbstractAgent extends AbstractConfigurable implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
-	
-	protected static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>();
-	
+
 	private int fitness;
 	private int id;
-	protected NodeConfiguration config;
+	protected AgentConfiguration config;
 	protected RandomGenerator randomGenerator;
 	
 	protected ArrayList<Integer> grammar;
 	
-	public AbstractAgent(){}
+	public AbstractAgent(){		
+		super();
+		}
 	
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
+		
 		this.id = id;
 		this.config = config;
 		this.randomGenerator = randomGenerator;
@@ -33,11 +36,6 @@ public abstract class AbstractAgent implements Agent {
 		for (int j = 0; j < NUMBER_OF_MEANINGS; j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
-	}
-	
-	@Override
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		return defaultParameters;
 	}
 	
 	@Override
@@ -56,7 +54,7 @@ public abstract class AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public NodeConfiguration getConfiguration(){
+	public AgentConfiguration getConfiguration(){
 		return config;
 	}
 
