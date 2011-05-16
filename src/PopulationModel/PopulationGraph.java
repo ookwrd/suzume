@@ -2,12 +2,11 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import Agents.AgentConfiguration;
 import AutoConfiguration.Configurable;
 
 public interface PopulationGraph extends Configurable {
 
-	public void init(ArrayList<PopulationNode> populations, AgentConfiguration config);
+	public void init(ArrayList<PopulationNode> populations, GraphConfiguration config);
 	
 	public ArrayList<PopulationNode> getNodeSet();
 	
