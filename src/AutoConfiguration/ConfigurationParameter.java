@@ -1,8 +1,13 @@
 package AutoConfiguration;
 
+import Agents.NodeConfiguration;
+import Agents.NodeConfiguration.NodeType;
+import PopulationModel.GraphConfiguration;
+import PopulationModel.GraphConfiguration.GraphType;
+
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {String, Integer, Double, Boolean, List}
+	public enum ConfigurationParameterType {String, Integer, Double, Boolean, List, Graph, Node}
 	
 	public ConfigurationParameterType type;
 	
@@ -33,6 +38,16 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
+	public ConfigurationParameter(NodeType value){
+		type = ConfigurationParameterType.Node;
+		this.value = value;
+	}
+	
+	public ConfigurationParameter(GraphType value){
+		type = ConfigurationParameterType.Graph;
+		this.value = value;
+	}
+	
 	public String getString(){
 		return (String)value;
 	}
@@ -51,5 +66,13 @@ public class ConfigurationParameter {
 	
 	public Boolean getBoolean(){
 		return (Boolean)value;
+	}
+	
+	public NodeType getNode(){
+		return (NodeType)value;
+	}
+	
+	public GraphType getGraph(){
+		return (GraphType)value;
 	}
 }

@@ -62,12 +62,12 @@ public class AgentFactory {
 		return returnVal;
 	}
 	
-	public static AgentConfigurationPanel getConfigurationPanel(NodeType type){
+	public static NodeConfigurationPanel getConfigurationPanel(NodeType type){
 	
-		switch (type) {//TODO
+		switch (type) {
 
 		default:
-			return new AgentConfigurationPanel(type);
+			return new NodeConfigurationPanel(type);
 		}
 		
 	}

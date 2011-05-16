@@ -7,13 +7,13 @@ import Agents.NodeConfiguration.NodeType;
 import AutoConfiguration.BasicConfigurationPanel;
 
 @SuppressWarnings("serial")
-public class AgentConfigurationPanel extends JPanel {
+public class NodeConfigurationPanel extends JPanel {
 	
 	private BasicConfigurationPanel basicPanel;
 	
 	private NodeType type;
 	
-	public AgentConfigurationPanel(NodeType type){
+	public NodeConfigurationPanel(NodeType type){
 		
 		this.type = type;
 		this.basicPanel = new BasicConfigurationPanel(AgentFactory.constructUninitializedNode(type));

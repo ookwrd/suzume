@@ -4,15 +4,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import simulation.PopulationModel;
 import simulation.RandomGenerator;
-import simulation.SimulationConfiguration;
 
 
 import Agents.AbstractNode;
 import Agents.Agent;
+import Agents.NodeConfiguration.NodeType;
 import Agents.Utterance;
+import AutoConfiguration.ConfigurationParameter;
+import PopulationModel.GraphConfiguration.GraphType;
 
 /**
  * Population model corresponding to a cyclical distribution of agents as seen in:
@@ -24,6 +27,15 @@ import Agents.Utterance;
  */
 public class OriginalPopulationModel extends AbstractNode implements PopulationModel {
 
+	@SuppressWarnings("serial")
+	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
+		put("Population Size", new ConfigurationParameter(200));
+		put("Learning Graph", new ConfigurationParameter(GraphType.FullyConnected));
+		put("Communication Graph", new ConfigurationParameter(GraphType.CyclicGraph));
+		put("Reproduction Graph", new ConfigurationParameter(GraphType.CyclicGraph));
+		put("Sub node", new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
+	}};
+	
 	private Graph learningGraph;
 	private Graph communicationGraph;
 	private Graph reproductionGraph;
@@ -273,6 +285,11 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 		
 		System.out.println("In population mode this should never be called.");
 		
+	}
+	
+	@Override
+	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
+		return defaultParameters;
 	}
 
 	
