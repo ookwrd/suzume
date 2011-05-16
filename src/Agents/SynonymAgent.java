@@ -16,7 +16,7 @@ public class SynonymAgent extends AbstractAgent {
 	private ArrayList<Utterance>[] wordsPerMeaning; 
 	
 	@SuppressWarnings("unchecked")
-	public SynonymAgent(AgentConfiguration config, int id, int memorySize){
+	public SynonymAgent(NodeConfiguration config, int id, int memorySize){
 		//super(config, id);//TODO
 		memory = new Utterance[memorySize];
 		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];

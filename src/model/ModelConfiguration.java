@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 
 import model.SelectionModel.SelectionModels;
 
-import Agents.AgentConfiguration;
+import Agents.NodeConfiguration;
 
 /**
  * Class for storing Model Configuration parameters.
@@ -32,7 +32,7 @@ public class ModelConfiguration {
 	public static final int DEFAULT_CRITICAL_PERIOD = 200; 
 	
 	
-	protected AgentConfiguration agentConfig;
+	protected NodeConfiguration agentConfig;
 	
 	protected PopulationModelType populationModelType;
 	protected SelectionModels selectionModelType;
@@ -52,7 +52,7 @@ public class ModelConfiguration {
 	 * Create a configuration based on the default values.
 	 */
 	public ModelConfiguration(){
-		this.agentConfig = new AgentConfiguration();
+		this.agentConfig = new NodeConfiguration();//TODO make this top level node config
 		this.populationModelType = DEFAULT_POPULATION_MODEL;
 		this.selectionModelType = DEFAULT_SELECTION_MODEL;
 		
@@ -78,7 +78,7 @@ public class ModelConfiguration {
 	 * @param communicationsPerNeighbour
 	 * @param criticalPeriod
 	 */
-	public ModelConfiguration(AgentConfiguration agentConfig, 
+	public ModelConfiguration(NodeConfiguration agentConfig, 
 			PopulationModelType populationModelType, 
 			SelectionModels selectionModelType,
 			int generationCount, 
@@ -106,7 +106,7 @@ public class ModelConfiguration {
 	public ModelConfiguration(String inputString){
 		StringTokenizer tokenizer = new StringTokenizer(inputString);
 		
-		this.agentConfig = new AgentConfiguration(tokenizer);
+		this.agentConfig = new NodeConfiguration(tokenizer);
 		this.populationModelType = PopulationModelType.valueOf(tokenizer.nextToken());
 		this.selectionModelType = SelectionModels.valueOf(tokenizer.nextToken());
 		

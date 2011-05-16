@@ -1,9 +1,12 @@
-package model;
+package PopulationModel;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import model.AbstractPopulationModel;
+import model.PopulationModel;
 
 import org.jfree.ui.Size2D;
 
@@ -20,6 +23,10 @@ import Agents.YamauchiHashimoto2010;
  */
 public class OriginalPopulationModel extends AbstractPopulationModel implements PopulationModel {
 
+	private PopulationGraph learningGraph;
+	private PopulationGraph communicationGraph;
+	private PopulationGraph reproductionGraph;
+	
 	private ArrayList<Agent> previousGeneration = new ArrayList<Agent>();
 	private ArrayList<Agent> currentGeneration = new ArrayList<Agent>();
 	
@@ -41,20 +48,16 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 
 	}
 
-	@Override
-	public ArrayList<Agent> getNeighbors(Agent agent) {
-
-		return getNeighbors(agent, 1);
-	}
-
 	/**
 	 * 
 	 * size of returnValue = distance*2 
 	 * 
 	 */
 	@Override
-	public ArrayList<Agent> getNeighbors(Agent agent, int distance) {
+	public ArrayList<Agent> getPossibleCommunicators(Agent agent) {
 
+		int distance = 1;
+		
 		int location = currentGeneration.indexOf(agent);
 
 		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
@@ -79,18 +82,15 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 		return retValAgents;
 	}
 
-	@Override
-	public ArrayList<Agent> getAncestors(Agent agent) {
-		return getAncestors(agent, 0);
-	}
-
 	/**
 	 * 
 	 * size of return = agents*2 + 1
 	 */
 	@Override
-	public ArrayList<Agent> getAncestors(Agent agent, int distance) {
+	public ArrayList<Agent> getPossibleTeachers(Agent agent) {
 
+		int distance = 2;
+		
 		int location = currentGeneration.indexOf(agent);
 
 		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
@@ -245,5 +245,10 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 			System.out.println();
 		}
 	}
+
+	@Override
+	public ArrayList<Agent> getPossibleParents(Agent agent) {
+		return previousGeneration;
+	}//TODO w´switch out for a graphbased implemenation
 
 }

@@ -9,11 +9,11 @@ public interface Agent extends Visualizable {
 	
 	//Initialization
 	public HashMap<String, ConfigurationParameter> getDefaultParameters();
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator);
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator);
 	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator);
 	
 	//General Properties
-	public AgentConfiguration getConfiguration();
+	public NodeConfiguration getConfiguration();
 	public int getId();
 	public String getName();
 	public String getDescription();

@@ -39,7 +39,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		return defaultParameters;
 	}
 	
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator) {
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
@@ -50,7 +50,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		initializeParameters(config);
 	}
 	
-	private void initializeParameters(AgentConfiguration config){
+	private void initializeParameters(NodeConfiguration config){
 
 		learningResource = config.parameters.get("Learning Resource").getInteger();
 		matchingLearningCost = config.parameters.get("Learning Resource on Match").getInteger();
