@@ -1,13 +1,14 @@
 package Agents;
 
-import model.RandomGenerator;
-import Agents.AgentConfiguration.AgentType;
+import simulation.RandomGenerator;
+import Agents.NodeConfiguration.AgentType;
+import PopulationModel.OriginalPopulationModel;
 
 public class AgentFactory {
 
 	private static int nextAgentID = 0; // keeps count of all the next agents from this world
 	
-	public static Agent constructUninitializedAgent(AgentType type){
+	public static Agent constructUninitializedNode(AgentType type){
 		
 		switch (type) {
 		case YamauchiHashimoto2010:
@@ -21,6 +22,9 @@ public class AgentFactory {
 			
 		case FixedProbabilityAgent:
 			return new FixedProbabilityAgent();
+		
+		case ConfigurablePopulation:
+			return new OriginalPopulationModel();
 			
 	//	case SynonymAgent:
 	//		return new SynonymAgent();
@@ -32,9 +36,9 @@ public class AgentFactory {
 		
 	}
 	
-	public static Agent constructAgent(AgentConfiguration agentConfig, RandomGenerator randomGenerator){
+	public static Agent constructAgent(NodeConfiguration agentConfig, RandomGenerator randomGenerator){
 		
-		Agent agent = constructUninitializedAgent(agentConfig.type);
+		Agent agent = constructUninitializedNode(agentConfig.type);
 		
 		agent.initializeAgent(agentConfig, nextAgentID++, randomGenerator);
 		
@@ -51,7 +55,7 @@ public class AgentFactory {
 			return null;
 		}	
 		
-		Agent returnVal = constructUninitializedAgent(agentType);
+		Agent returnVal = constructUninitializedNode(agentType);
 		
 		returnVal.initializeAgent(parentA, parentB, nextAgentID++, randomGenerator);
 		return returnVal;

@@ -3,19 +3,19 @@ package Agents;
 import java.util.ArrayList;
 
 import runTimeVisualization.Visualizable;
+import simulation.RandomGenerator;
 
 import AutoConfiguration.Configurable;
 
-import model.RandomGenerator;
 
 public interface Agent extends Visualizable, Configurable {
 	
 	//Initialization
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator);
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator);
 	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator);
 	
 	//General Properties
-	public AgentConfiguration getConfiguration();
+	public NodeConfiguration getConfiguration();
 	public int getId();
 	public String getName();
 	public String getDescription();

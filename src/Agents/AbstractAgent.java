@@ -6,9 +6,10 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import simulation.RandomGenerator;
+
 import AutoConfiguration.AbstractConfigurable;
 
-import model.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractConfigurable implements Agent {
 	
@@ -16,7 +17,7 @@ public abstract class AbstractAgent extends AbstractConfigurable implements Agen
 
 	private int fitness;
 	private int id;
-	protected AgentConfiguration config;
+	protected NodeConfiguration config;
 	protected RandomGenerator randomGenerator;
 	
 	protected ArrayList<Integer> grammar;
@@ -25,7 +26,7 @@ public abstract class AbstractAgent extends AbstractConfigurable implements Agen
 		super();
 		}
 	
-	public void initializeAgent(AgentConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		
 		this.id = id;
 		this.config = config;
@@ -54,7 +55,7 @@ public abstract class AbstractAgent extends AbstractConfigurable implements Agen
 	}
 	
 	@Override
-	public AgentConfiguration getConfiguration(){
+	public NodeConfiguration getConfiguration(){
 		return config;
 	}
 

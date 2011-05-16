@@ -3,7 +3,7 @@ package Agents;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import Agents.AgentConfiguration.AgentType;
+import Agents.NodeConfiguration.AgentType;
 import AutoConfiguration.BasicConfigurationPanel;
 
 @SuppressWarnings("serial")
@@ -22,8 +22,8 @@ public class AgentConfigurationPanel extends JPanel {
 		this.add(basicPanel);
 	}
 	
-	public AgentConfiguration getConfiguration(){
-		return new AgentConfiguration(type, basicPanel.getConfiguration());
+	public NodeConfiguration getConfiguration(){
+		return new NodeConfiguration(type, basicPanel.getConfiguration());
 	}
 
 }
