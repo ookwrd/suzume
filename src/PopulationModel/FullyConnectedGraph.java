@@ -2,7 +2,7 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-public class FullyConnectedGraph extends AbstractGraph implements PopulationGraph {
+public class FullyConnectedGraph extends AbstractGraph implements Graph {
 
 	@Override
 	public ArrayList<PopulationNode> getOutNodes(PopulationNode node) {

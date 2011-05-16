@@ -1,17 +1,18 @@
-package model;
+package simulation;
 
 import java.util.StringTokenizer;
 
-import model.SelectionModel.SelectionModels;
+import simulation.SelectionModel.SelectionModels;
 
-import Agents.AgentConfiguration;
+
+import Agents.NodeConfiguration;
 
 /**
  * Class for storing Model Configuration parameters.
  * 
  * @author Luke McCrohon
  */
-public class ModelConfiguration {
+public class SimulationConfiguration {
 
 	public enum PopulationModelType {CyclicBagModel}
 	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.CyclicBagModel;
@@ -32,7 +33,7 @@ public class ModelConfiguration {
 	public static final int DEFAULT_CRITICAL_PERIOD = 200; 
 	
 	
-	protected AgentConfiguration agentConfig;
+	protected NodeConfiguration agentConfig;
 	
 	protected PopulationModelType populationModelType;
 	protected SelectionModels selectionModelType;
@@ -51,8 +52,8 @@ public class ModelConfiguration {
 	/**
 	 * Create a configuration based on the default values.
 	 */
-	public ModelConfiguration(){
-		this.agentConfig = new AgentConfiguration();//TODO make this top level node config
+	public SimulationConfiguration(){
+		this.agentConfig = new NodeConfiguration();//TODO make this top level node config
 		this.populationModelType = DEFAULT_POPULATION_MODEL;
 		this.selectionModelType = DEFAULT_SELECTION_MODEL;
 		
@@ -78,7 +79,7 @@ public class ModelConfiguration {
 	 * @param communicationsPerNeighbour
 	 * @param criticalPeriod
 	 */
-	public ModelConfiguration(AgentConfiguration agentConfig, 
+	public SimulationConfiguration(NodeConfiguration agentConfig, 
 			PopulationModelType populationModelType, 
 			SelectionModels selectionModelType,
 			int generationCount, 
@@ -103,7 +104,7 @@ public class ModelConfiguration {
 	 * 
 	 * @param inputString
 	 */
-	public ModelConfiguration(String inputString){
+	public SimulationConfiguration(String inputString){
 		StringTokenizer tokenizer = new StringTokenizer(inputString);
 		
 		//this.agentConfig = new AgentConfiguration(tokenizer);

@@ -7,7 +7,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.RandomGenerator;
+import simulation.RandomGenerator;
+
 
 @SuppressWarnings("serial")
 public class RandomConfigurationPanel extends JPanel {

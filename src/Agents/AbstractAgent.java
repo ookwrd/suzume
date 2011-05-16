@@ -4,21 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import PopulationModel.PopulationNode;
 
 import simulation.RandomGenerator;
 
-import AutoConfiguration.AbstractConfigurable;
-
-
-public abstract class AbstractAgent extends AbstractConfigurable implements Agent {
+public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	protected static final int NUMBER_OF_MEANINGS = 12;
 
 	private int fitness;
-	private int id;
-	protected NodeConfiguration config;
-	protected RandomGenerator randomGenerator;
 	
 	protected ArrayList<Integer> grammar;
 	
@@ -27,36 +22,14 @@ public abstract class AbstractAgent extends AbstractConfigurable implements Agen
 		}
 	
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
-		
-		this.id = id;
-		this.config = config;
-		this.randomGenerator = randomGenerator;
+		super.initializeAgent(config, id, randomGenerator);
+
 		fitness = 0;
 		
 		grammar = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		for (int j = 0; j < NUMBER_OF_MEANINGS; j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
-	}
-	
-	@Override
-	public int getId() {
-		return id;
-	}
-	
-	@Override
-	public String getName(){
-		return config.type.toString();
-	}
-	
-	@Override
-	public String getDescription(){
-		return "Undescribed";
-	}
-	
-	@Override
-	public NodeConfiguration getConfiguration(){
-		return config;
 	}
 
 	public ArrayList<Integer> getGrammar() {
@@ -97,19 +70,18 @@ public abstract class AbstractAgent extends AbstractConfigurable implements Agen
 	}
 	
 	@Override
-	public void teach(Agent learner) {
+	public void teach(PopulationNode learner) {
 		learner.learnUtterance(getRandomUtterance());
 	}
 	
 	@Override
-	public void communicate(Agent partner){
+	public void communicate(PopulationNode partner){
 		
 		Utterance utterance = partner.getRandomUtterance();
 
 		//If agent and neighbour agree update fitnes.
 		if(!utterance.isNull() && (getGrammar().get(utterance.meaning) == utterance.signal)){
 			setFitness(getFitness()+1);
-			//partner.setFitness(partner.getFitness()+1); TODO need to implement symetry
 		}
 	}
 	
@@ -122,20 +94,12 @@ public abstract class AbstractAgent extends AbstractConfigurable implements Agen
 	public ArrayList getPhenotype(){
 		return grammar;
 	}
+	
+	@Override
+	public ArrayList<Agent> getBaseAgents(){
+		ArrayList<Agent> retAgents = new ArrayList<Agent>();
+		retAgents.add(this);
+		return retAgents;
+	}
 
-	@Override
-	public Dimension getDimension(Dimension baseDimension, VisualizationType type){
-		return baseDimension;
-	}
-	
-	@Override
-	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
-		g.setColor(Color.green);
-		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
-	}
-	
-	@Override
-	public void print(){
-		System.out.println(this.toString());
-	}
 }

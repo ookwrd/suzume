@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import AutoConfiguration.ConfigurationParameter;
+import PopulationModel.PopulationNode;
 
 import simulation.RandomGenerator;
 
@@ -63,7 +64,8 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 	}
 	
-	public void initializeAgent(Agent parentA, Agent parentB, int id, RandomGenerator randomGenerator){
+	@Override
+	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
 		
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
@@ -141,16 +143,6 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	}
 	
 	/**
-	 * The agent teaches an agent an utterance
-	 * 
-	 * @param learner the agent being taught
-	 */
-	@Override
-	public void teach(Agent learner) {
-		learner.learnUtterance(getRandomUtterance());
-	}
-	
-	/**
 	 * The agent learns an utterance 
 	 * The learning resource is updated
 	 * 
@@ -187,7 +179,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public void printAgent(){
+	public void print(){
 		
 		System.out.println("Agent " + getId() + " has fitness of " + getFitness() + " has learning resource of " + learningResource + " fitness of  " + getFitness() +" match " + geneGrammarMatch());
 		System.out.println("P" + grammar);

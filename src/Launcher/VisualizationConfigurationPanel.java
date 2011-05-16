@@ -7,7 +7,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.VisualizationConfiguration;
+import simulation.VisualizationConfiguration;
 
 @SuppressWarnings("serial")
 public class VisualizationConfigurationPanel extends JPanel {

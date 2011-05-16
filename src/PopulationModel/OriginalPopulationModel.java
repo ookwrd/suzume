@@ -5,13 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import model.AbstractPopulationModel;
-import model.PopulationModel;
+import simulation.PopulationModel;
+import simulation.RandomGenerator;
+import simulation.SimulationConfiguration;
 
-import org.jfree.ui.Size2D;
 
+import Agents.AbstractNode;
 import Agents.Agent;
-import Agents.YamauchiHashimoto2010;
+import Agents.Utterance;
 
 /**
  * Population model corresponding to a cyclical distribution of agents as seen in:
@@ -21,31 +22,35 @@ import Agents.YamauchiHashimoto2010;
  * @author Luke McCrohon
  *
  */
-public class OriginalPopulationModel extends AbstractPopulationModel implements PopulationModel {
+public class OriginalPopulationModel extends AbstractNode implements PopulationModel {
 
-	private PopulationGraph learningGraph;
-	private PopulationGraph communicationGraph;
-	private PopulationGraph reproductionGraph;
+	private Graph learningGraph;
+	private Graph communicationGraph;
+	private Graph reproductionGraph;
 	
-	private ArrayList<Agent> previousGeneration = new ArrayList<Agent>();
-	private ArrayList<Agent> currentGeneration = new ArrayList<Agent>();
+	private ArrayList<PopulationNode> previousGeneration = new ArrayList<PopulationNode>();
+	private ArrayList<PopulationNode> currentGeneration = new ArrayList<PopulationNode>();
 	
-	/**
-	 * Create new population with the specified agents as the currentGeneration and previousGeneration.
-	 * 
-	 * @param agents
-	 */
-	public OriginalPopulationModel(ArrayList<Agent> currentGeneration, ArrayList<Agent> previousGeneration) {
+	public OriginalPopulationModel(){}//TODO kill this
+	
+	public OriginalPopulationModel(//TODO use initialization pattern
+			ArrayList<PopulationNode> currentGeneration, 
+			ArrayList<PopulationNode> previousGeneration 
+			//ModelConfiguration config
+			//GraphConfiguration learning, 
+			//GraphConfiguration communication, 
+			//GraphConfiguration reproduction
+			) 
+	{
 		this.currentGeneration = currentGeneration;
 		this.previousGeneration = previousGeneration;
 	}
+	
 
 	@Override
-	public void switchGenerations(ArrayList<Agent> newGeneration) {
-
+	public void switchGenerations(ArrayList<PopulationNode> newGeneration) {
 		previousGeneration = currentGeneration;
 		currentGeneration = newGeneration;
-
 	}
 
 	/**
@@ -54,13 +59,13 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 	 * 
 	 */
 	@Override
-	public ArrayList<Agent> getPossibleCommunicators(Agent agent) {
+	public ArrayList<PopulationNode> getPossibleCommunicators(PopulationNode agent) {
 
 		int distance = 1;
 		
 		int location = currentGeneration.indexOf(agent);
 
-		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
+		ArrayList<PopulationNode> retValAgents = new ArrayList<PopulationNode>();
 
 		for (int i = 1; i <= distance; i++) {
 			//Add pair of agents distance i from the central agent
@@ -87,13 +92,13 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 	 * size of return = agents*2 + 1
 	 */
 	@Override
-	public ArrayList<Agent> getPossibleTeachers(Agent agent) {
+	public ArrayList<PopulationNode> getPossibleTeachers(PopulationNode agent) {
 
 		int distance = 2;
 		
 		int location = currentGeneration.indexOf(agent);
 
-		ArrayList<Agent> retValAgents = new ArrayList<Agent>();
+		ArrayList<PopulationNode> retValAgents = new ArrayList<PopulationNode>();
 
 		//add the ancestor at the same point as the specified agent
 		retValAgents.add(previousGeneration.get(location));
@@ -122,12 +127,23 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 
 	@Override
 	public ArrayList<Agent> getAncestorGeneration() {
-		return previousGeneration;
+		
+		ArrayList<Agent> retAgents = new ArrayList<Agent>();
+		for(PopulationNode node :previousGeneration){
+			retAgents.addAll(node.getBaseAgents());
+		}
+		return retAgents;
 	}
 
 	@Override
 	public ArrayList<Agent> getCurrentGeneration() {
-		return currentGeneration;
+		
+		ArrayList<Agent> retAgents = new ArrayList<Agent>();
+		for(PopulationNode node :currentGeneration){
+			retAgents.addAll(node.getBaseAgents());
+		}
+		return retAgents;
+		
 	}
 	
 	@Override
@@ -240,15 +256,67 @@ public class OriginalPopulationModel extends AbstractPopulationModel implements 
 	@Override
 	public void print(){
 		System.out.println("Printing Previous Generation");	
-		for(Agent agent : getAncestorGeneration()){  
-			agent.printAgent();
+		for(PopulationNode agent : getAncestorGeneration()){  
+			agent.print();
 			System.out.println();
 		}
 	}
 
 	@Override
-	public ArrayList<Agent> getPossibleParents(Agent agent) {
+	public ArrayList<PopulationNode> getPossibleParents(PopulationNode agent) {
 		return previousGeneration;
 	}//TODO w´switch out for a graphbased implemenation
+
+	@Override
+	public void initializeAgent(PopulationNode parentA, PopulationNode parentB,
+			int id, RandomGenerator randomGenerator) {
+		
+		System.out.println("In population mode this should never be called.");
+		
+	}
+
+	
+	//TODO extract these to an interface
+	@Override
+	public void teach(PopulationNode agent) {
+
+		System.out.println("Shouldnt be here");
+	}
+
+	@Override
+	public void learnUtterance(Utterance utterance) {
+
+		System.out.println("Shouldnt be here");
+	}
+
+	@Override
+	public boolean canStillLearn() {
+
+		System.out.println("Shouldnt be here");
+		return false;
+	}
+
+	@Override
+	public Utterance getRandomUtterance() {
+		System.out.println("Shouldnt be here");
+		return null;
+	}
+
+	@Override
+	public void invent() {
+		System.out.println("Shouldnt be here");
+		
+	}
+
+	@Override
+	public ArrayList<Agent> getBaseAgents() {
+		System.out.println("Shouldnt be here");
+		return getCurrentGeneration();
+	}
+
+	@Override
+	public void communicate(PopulationNode partner) {
+		System.out.println("Shouldnt be here");
+	}
 
 }

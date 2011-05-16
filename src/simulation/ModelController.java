@@ -1,4 +1,4 @@
-package model;
+package simulation;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,12 @@ import Agents.Agent;
 import Agents.AgentFactory;
 import Launcher.Launcher;
 import PopulationModel.OriginalPopulationModel;
+import PopulationModel.PopulationNode;
 
 public class ModelController implements Runnable {
 
 	//Configuration Settings
-	private ModelConfiguration config;
+	private SimulationConfiguration config;
 	private VisualizationConfiguration visualConfig;
 	private RandomGenerator randomGenerator;
 
@@ -39,7 +40,7 @@ public class ModelController implements Runnable {
 	private int currentRun = 0;
 	private long simulationStart;
 
-	public ModelController(ModelConfiguration configuration, 
+	public ModelController(SimulationConfiguration configuration, 
 			VisualizationConfiguration visualizationConfiguration, 
 			RandomGenerator randomGenerator){
 		
@@ -62,6 +63,7 @@ public class ModelController implements Runnable {
 	private void resetModel(){
 		
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
+		
 		if(visualizer!=null){
 			visualizer.updateModel(population);
 		}
@@ -93,11 +95,11 @@ public class ModelController implements Runnable {
 	 * 
 	 * @return
 	 */
-	private ArrayList<Agent> createIntialAgents(){
+	private ArrayList<PopulationNode> createIntialAgents(){
 
-		ArrayList<Agent> agents = new ArrayList<Agent>();
+		ArrayList<PopulationNode> agents = new ArrayList<PopulationNode>();
 		for (int i = 1; i <= config.populationSize; i++) {
-			agents.add(AgentFactory.constructAgent(config.agentConfig, randomGenerator));
+			agents.add(AgentFactory.constructPopulationNode(config.agentConfig, randomGenerator));
 		}
 
 		return agents;
@@ -177,15 +179,15 @@ public class ModelController implements Runnable {
 	private void training(){
 
 		//for each agent
-		for(Agent learner : population.getCurrentGeneration()){
+		for(PopulationNode learner : population.getCurrentGeneration()){
 
 			//get its ancestors (teachers)
-			ArrayList<Agent> teachers = population.getPossibleTeachers(learner);
+			ArrayList<PopulationNode> teachers = population.getPossibleTeachers(learner);
 
 			for(int i = 0; i < config.criticalPeriod; i++){
 
 				//Get random teacher
-				Agent teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
+				PopulationNode teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
 
 				teacher.teach(learner);
 
@@ -207,13 +209,13 @@ public class ModelController implements Runnable {
 
 		for(Agent agent : population.getCurrentGeneration()){
 
-			ArrayList<Agent> neighbouringAgents = population.getPossibleCommunicators(agent);
+			ArrayList<PopulationNode> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Set the agents fitness to the default base level 
 			agent.setFitness(config.baseFitness);
 
 			//Communicate with all neighbours
-			for(Agent neighbour : neighbouringAgents){      
+			for(PopulationNode neighbour : neighbouringAgents){      
 				for(int i = 0; i < config.communicationsPerNeighbour; i++){
 					agent.communicate(neighbour);
 				}
@@ -228,19 +230,19 @@ public class ModelController implements Runnable {
 	 * 
 	 * @return
 	 */
-	private ArrayList<Agent> selection(){
+	private ArrayList<PopulationNode> selection(){
 		
 		//TODO make selection dependent on the GetPossibleParents from the populationModel
 		
 		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.populationSize*2);
 
-		ArrayList<Agent> newGenerationAgents = new ArrayList<Agent>();
+		ArrayList<PopulationNode> newGenerationAgents = new ArrayList<PopulationNode>();
 		int i = 0;
 		while(newGenerationAgents.size() < config.populationSize){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 
-			newGenerationAgents.add(AgentFactory.constructAgent(parent1, parent2, randomGenerator));
+			newGenerationAgents.add(AgentFactory.constructPopulationNode(parent1, parent2, randomGenerator));
 		}
 
 		return newGenerationAgents;

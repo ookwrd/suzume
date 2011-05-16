@@ -1,17 +1,18 @@
-package model;
+package simulation;
 
 import java.util.ArrayList;
 
 import runTimeVisualization.Visualizable;
 
 import Agents.Agent;
+import PopulationModel.PopulationNode;
 
 /**
  * Interface capturing the common elements of population structure. Makes the assumption of discrete generations.
  * 
  * @author Luke McCrohon
  */
-public interface PopulationModel extends Visualizable {
+public interface PopulationModel extends Visualizable, PopulationNode {
 
 	/**
 	 * Replaces the oldGeneration with the current generation, which is in turn replaced by the specified new set 
@@ -19,13 +20,13 @@ public interface PopulationModel extends Visualizable {
 	 * 
 	 * @param newGeneration
 	 */
-	public void switchGenerations(ArrayList<Agent> newGeneration);
+	public void switchGenerations(ArrayList<PopulationNode> newGeneration);
 
-	public ArrayList<Agent> getPossibleTeachers(Agent agent);
+	public ArrayList<PopulationNode> getPossibleTeachers(PopulationNode agent);
 
-	public ArrayList<Agent> getPossibleCommunicators(Agent agent);
+	public ArrayList<PopulationNode> getPossibleCommunicators(PopulationNode agent);
 	
-	public ArrayList<Agent> getPossibleParents(Agent agent);
+	public ArrayList<PopulationNode> getPossibleParents(PopulationNode agent);
 	
 	/**
 	 * Returns the set of agents representing the previous generation.

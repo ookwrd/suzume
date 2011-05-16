@@ -9,10 +9,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import model.ModelConfiguration;
-import model.ModelController;
-import model.RandomGenerator;
-import model.VisualizationConfiguration;
+import simulation.ModelController;
+import simulation.RandomGenerator;
+import simulation.SimulationConfiguration;
+import simulation.VisualizationConfiguration;
+
 
 @SuppressWarnings("serial")
 public class Launcher extends JPanel {
@@ -20,7 +21,7 @@ public class Launcher extends JPanel {
 	private JFrame window;
 	
 	private RandomConfigurationPanel randomOptions;
-	private ModelConfigurationPanel modelOptions;
+	private SimulationConfigurationPanel modelOptions;
 	private VisualizationConfigurationPanel visualOptions;
 	
 	private JPanel menuBar;
@@ -36,7 +37,7 @@ public class Launcher extends JPanel {
 		randomOptions = new RandomConfigurationPanel();
 		add(randomOptions);
 		
-		modelOptions = new ModelConfigurationPanel();
+		modelOptions = new SimulationConfigurationPanel();
 		add(modelOptions);
 		
 		visualOptions = new VisualizationConfigurationPanel();
@@ -67,7 +68,7 @@ public class Launcher extends JPanel {
 	
 	private void createSimulation(){
 		
-		ModelConfiguration configuration = modelOptions.getConfiguration();
+		SimulationConfiguration configuration = modelOptions.getConfiguration();
 		
 		VisualizationConfiguration visualizationConfiguration = visualOptions.getConfiguration();
 		

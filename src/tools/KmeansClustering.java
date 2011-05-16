@@ -7,9 +7,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import simulation.ModelController;
+
 import Launcher.Launcher;
 
-import model.ModelController;
 
 /**
  * This class is the entry point for constructing Cluster Analysis objects. Each

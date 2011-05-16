@@ -6,9 +6,9 @@ import java.util.Hashtable;
 
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
+import simulation.SimpleClustering;
 import tools.graphs.GraphView;
 
-import model.SimpleClustering;
 
 public abstract class Clustering {
 	
