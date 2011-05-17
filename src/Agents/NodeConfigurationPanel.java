@@ -18,7 +18,6 @@ public class NodeConfigurationPanel extends JPanel {
 		this.type = type;
 		this.basicPanel = new BasicConfigurationPanel(AgentFactory.constructUninitializedNode(type));
 
-		setBorder(new TitledBorder(type.toString() + " configuration"));
 		this.add(basicPanel);
 	}
 	

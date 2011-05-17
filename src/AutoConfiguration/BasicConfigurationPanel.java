@@ -11,6 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import simulation.RandomGenerator;
+
+import Agents.AgentFactory;
+import Agents.NodeConfigurationPanel;
 import Launcher.ConfigurationPanelTools;
 import Launcher.GraphTypeConfigurationPanel;
 import Launcher.NodeTypeConfigurationPanel;
@@ -65,12 +69,12 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case Graph:
-				GraphTypeConfigurationPanel panel = ConfigurationPanelTools.addGraphSelector(key, parameter.getGraph(), autoPanel);
+				GraphTypeConfigurationPanel panel = ConfigurationPanelTools.addGraphSelector(key, parameter.getGraphType(), autoPanel);
 				components.put(key, panel);
 				break;
 				
 			case Node:
-				NodeTypeConfigurationPanel panel1 = ConfigurationPanelTools.addNodeSelector(key, parameter.getNode(), autoPanel);
+				NodeTypeConfigurationPanel panel1 = ConfigurationPanelTools.addNodeSelector(key, parameter.getNodeType(), autoPanel);
 				components.put(key, panel1);
 				break;
 				
@@ -125,6 +129,14 @@ public class BasicConfigurationPanel extends JPanel {
 				
 			case List:
 				retParameters.put(key, new ConfigurationParameter((String)((JComboBox)comp).getSelectedItem()));
+				break;
+				
+			case Graph:
+				retParameters.put(key, new ConfigurationParameter(((GraphTypeConfigurationPanel)comp).getConfiguration()));
+				break;
+				
+			case Node:
+				retParameters.put(key, new ConfigurationParameter(((NodeTypeConfigurationPanel)comp).getConfiguration()));
 				break;
 				
 			default:
