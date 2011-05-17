@@ -8,6 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EtchedBorder;
 
 import Agents.NodeConfiguration;
 import Agents.NodeConfiguration.NodeType;
@@ -26,9 +27,11 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
+		setBorder(new EtchedBorder());
+		
 		JPanel topPanel = new JPanel();
 		ConfigurationPanelTools.configurePanel(topPanel);
-		agentTypesBox = ConfigurationPanelTools.addComboBox("Agent type:", NodeConfiguration.NodeType.values(),topPanel);
+		agentTypesBox = ConfigurationPanelTools.addComboBox("", NodeConfiguration.NodeType.values(),topPanel);
 		agentTypesBox.addActionListener(new ActionListener() {
 			
 			@Override
@@ -39,7 +42,6 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		ConfigurationPanelTools.makeGrid(topPanel);
 		
 		add(topPanel);
-		
 		
 		reconfigureSubPanel();
 		
