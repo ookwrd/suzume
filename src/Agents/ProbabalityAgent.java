@@ -1,80 +1,57 @@
 package Agents;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import runTimeVisualization.Visualizable.VisualizationType;
+import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationNode;
 
-import simulation.RandomGenerator;
+public class ProbabalityAgent extends AbstractAgent implements Agent {
 
-
-public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
+	protected static String[] visualizationTypes = {"numberNulls"};
 	
-	protected static String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
-	
-	protected ArrayList<Integer> chromosome;
-	
-	protected int learningResource;
-	protected int matchingLearningCost;
-	protected int nonMatchingLearningCost;
-	
-	protected double mutationRate;
-	protected double inventionProbability;
-
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Learning Resource", new ConfigurationParameter(24));
-		put("Learning Resource on Match", new ConfigurationParameter(1));
-		put("Learning Resource on MisMatch", new ConfigurationParameter(4));
+		put("Learning probability match", new ConfigurationParameter(0.7));
+		put("Learning probability mismatch", new ConfigurationParameter(0.5));
+		put("Number of syntactic tokens", new ConfigurationParameter(2));
 		put("Mutation Rate", new ConfigurationParameter(0.00025));
 		put("Invention Probability", new ConfigurationParameter(0.01));
+		put("Invention Chances", new ConfigurationParameter(5));
 		put("Visualization Type", new ConfigurationParameter(visualizationTypes));
 		//put("Meaning space size", new ConfigurationParameter(12));
 	}};
 	
-	public YamauchiHashimoto2010(){
-	}
+	protected ArrayList<Integer> chromosome;
 	
-	@Override//TODO addabstract agent parameters
+	@Override//TODO add abstract agent parameters
 	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
 		return defaultParameters;
 	}
 	
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
-		
+
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomBoolean()?0:1);
+			chromosome.add(randomGenerator.randomInt(config.get("Number of syntactic tokens").getInteger()));
 		}
-		
-		initializeParameters(config);
-	}
-	
-	private void initializeParameters(NodeConfiguration config){//TODO remove
-
-		learningResource = config.parameters.get("Learning Resource").getInteger();
-		matchingLearningCost = config.parameters.get("Learning Resource on Match").getInteger();
-		nonMatchingLearningCost = config.parameters.get("Learning Resource on MisMatch").getInteger();
-		
-		mutationRate = config.parameters.get("Mutation Rate").getDouble();
-		inventionProbability = config.parameters.get("Invention Probability").getDouble();
-		
 	}
 	
 	@Override
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(PopulationNode parentA, PopulationNode parentB,
+			int id, RandomGenerator randomGenerator) {
+		super.initializeAgent(parentA.getConfiguration(), id, randomGenerator);
 		
-		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
-		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
+		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
+		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;
 		
-		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
-
-		initializeParameters(config);
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
@@ -90,22 +67,17 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		//Mutation
 		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){
-			if(randomGenerator.random() < mutationRate){
-				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
+			if(randomGenerator.random() < config.get("Mutation Rate").getDouble()){
+				chromosome.set(j, randomGenerator.randomInt(config.get("Number of syntactic tokens").getInteger()));
 			}
 		}
 	}
 	
 	@Override
 	public String getName(){
-		return "Yamauchi & Hashimoto 2010 Agent";
+		return "Probability Agent";
 	}
 	
-	/**
-	 * Returns a random utterance from this agents grammar.
-	 * 
-	 * @return
-	 */
 	@Override
 	public Utterance getRandomUtterance() {
 		int index = randomGenerator.randomInt(chromosome.size());
@@ -113,17 +85,13 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		return new Utterance(index, value);
 	}
 	
-	/**
-	 * Use the remainder of the learning resource to potentially invent parts of the grammar.
-	 * The agent has a probability of 0.01 to turn an empty value to a 0 or a 1   
-	 */
 	@Override
 	public void invent() {
 		
-		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
+		int chances = config.get("Invention Chances").getInteger();
+		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
-			learningResource--;
-			if(randomGenerator.random() < inventionProbability){
+			if(randomGenerator.random() < config.get("Invention Probability").getDouble()){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -138,18 +106,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomBoolean()?0:1);
+				grammar.set(index, randomGenerator.randomInt(config.get("Number of syntactic tokens").getInteger()));
 			}
 		}
 	}
-	
-	/**
-	 * The agent learns an utterance 
-	 * The learning resource is updated
-	 * 
-	 * @param teacher the agent teaching
-	 * @param utterance the utterance taught
-	 */
+
 	@Override
 	public void learnUtterance(Utterance u) {
 		
@@ -159,44 +120,22 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < matchingLearningCost){
-				learningResource = 0;
-				return;
+
+			if(randomGenerator.random() < config.get("Learning probability match").getDouble()){
+				grammar.set(u.meaning, u.signal);
 			}
-			
-			grammar.set(u.meaning, u.signal);
-			learningResource -= matchingLearningCost;
-			
 		}else{//Doesn't match this agents UG
-			//TODO what do we do if we can't afford this anymore? Check with jimmy
-			if(learningResource < nonMatchingLearningCost){
-				learningResource = 0;
-				return;
+
+			if(randomGenerator.random() < config.get("Learning probability mismatch").getDouble()){
+				grammar.set(u.meaning, u.signal);
 			}
-			
-			grammar.set(u.meaning, u.signal);
-			learningResource -= nonMatchingLearningCost;
-			
 		}
 		
-	}
-	
-	@Override
-	public void print(){
-		
-		System.out.println("Agent " + getId() + " has fitness of " + getFitness() + " has learning resource of " + learningResource + " fitness of  " + getFitness() +" match " + geneGrammarMatch());
-		System.out.println("P" + grammar);
-		System.out.println("G" + chromosome);
-		
+
 	}
 
 	@Override
-	public boolean canStillLearn() {
-		return learningResource > 0;
-	}
-	
-	@Override
-	public double geneGrammarMatch(){
+	public double geneGrammarMatch() {
 		
 		int count = 0;
 		
@@ -211,17 +150,16 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 
 	@Override
 	public int learningIntensity() {
-		// TODO Some better more general way of measuring this...
-		return learningResource;
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	
-	
+
 	@Override
 	public ArrayList<Integer> getGenotype() {
 		return chromosome;
 	}
 	
-	@Override//TODO this should just choose a color
+	@Override
 	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
 		
 		Color c;

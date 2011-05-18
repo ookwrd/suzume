@@ -23,6 +23,9 @@ public class AgentFactory {
 			
 		case FixedProbabilityAgent:
 			return new FixedProbabilityAgent();
+			
+		case ProbabilityAgent:
+			return new ProbabalityAgent();
 		
 		case ConfigurablePopulation:
 			return new OriginalPopulationModel();

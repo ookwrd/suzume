@@ -4,7 +4,7 @@ import AutoConfiguration.BasicConfiguration;
 
 public class NodeConfiguration extends BasicConfiguration {
 
-	public enum NodeType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent, ConfigurablePopulation }
+	public enum NodeType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
 
 	public static final NodeType DEFAULT_AGENT_TYPE = NodeType.YamauchiHashimoto2010;
 	
