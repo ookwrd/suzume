@@ -13,7 +13,7 @@ import PopulationModel.PopulationNode;
 
 public class ProbabalityAgent extends AbstractAgent implements Agent {
 
-	protected static String[] visualizationTypes = {"numberNulls"};
+	protected static String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
 	
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
@@ -179,27 +179,40 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.parameters.get("Visualization Type").getString().equals("singleWord")) {
+		} else if (config.parameters.get("Visualization Type").getString().equals("singleWord") || config.parameters.get("Visualization Type").getString().equals("singleGene")) {
 		
-			if(grammar.get(0) == 0){
+			int value;
+			if(config.parameters.get("Visualization Type").getString().equals("singleWord")){
+				value = grammar.get(0);
+			}else{
+				value = chromosome.get(0);
+			}
+			
+			if(value == 0){
 				c = Color.WHITE;
-			} else if (grammar.get(0) == 1){
+			} else if (value == 1){
 				c = Color.BLACK;
-			} else{
+			} else if (value == 2){
+				c = Color.BLUE;
+			}else if (value == 3){
+				c = Color.GREEN;
+			}else if (value == 4){
+				c = Color.YELLOW;
+			}else if (value == 5){
+				c = Color.ORANGE;
+			}else if (value == 6){
+				c = Color.CYAN;
+			}else if (value == 7){
+				c = Color.DARK_GRAY;
+			}else if (value == 8){
+				c = Color.GRAY;
+			}else if (value == 9){
+				c = Color.MAGENTA;
+			}else{
 				c = Color.RED;
 			}
 			
-		}	 else if (config.parameters.get("Visualization Type").getString().equals("singleGene")) {
-		
-			if(chromosome.get(0) == 0){
-				c = Color.WHITE;
-			} else if (chromosome.get(0) == 1){
-				c = Color.BLACK;
-			} else{
-				c = Color.RED;
-			}
-			
-		}			else {
+		} else {
 			System.out.println("Unrecognized visualization type");
 			return;
 		}
