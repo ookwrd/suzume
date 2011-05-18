@@ -32,12 +32,13 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		put("Mutation Rate", new ConfigurationParameter(0.00025));
 		put("Invention Probability", new ConfigurationParameter(0.01));
 		put("Visualization Type", new ConfigurationParameter(visualizationTypes));
+		//put("Meaning space size", new ConfigurationParameter(12));
 	}};
 	
 	public YamauchiHashimoto2010(){
 	}
 	
-	@Override
+	@Override//TODO 
 	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
 		return defaultParameters;
 	}
@@ -165,6 +166,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 			
 			grammar.set(u.meaning, u.signal);
 			learningResource -= matchingLearningCost;
+			
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
 			if(learningResource < nonMatchingLearningCost){
@@ -174,6 +176,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 			
 			grammar.set(u.meaning, u.signal);
 			learningResource -= nonMatchingLearningCost;
+			
 		}
 		
 	}
@@ -238,7 +241,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.parameters.get("Visualization Type").getString().equals("singleGene")) {
+		} else if (config.parameters.get("Visualization Type").getString().equals("singleWord")) {
 		
 			if(grammar.get(0) == 0){
 				c = Color.WHITE;
@@ -248,7 +251,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 				c = Color.RED;
 			}
 			
-		}	 else if (config.parameters.get("Visualization Type").getString().equals("singleWord")) {
+		}	 else if (config.parameters.get("Visualization Type").getString().equals("singleGene")) {
 		
 			if(chromosome.get(0) == 0){
 				c = Color.WHITE;
