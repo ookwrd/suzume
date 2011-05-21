@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import runTimeVisualization.Visualizable.VisualizationType;
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationNode;
@@ -27,7 +26,11 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		//put("Meaning space size", new ConfigurationParameter(12));
 	}};
 	
+	
+	
 	protected ArrayList<Integer> chromosome;
+	
+	private int grammarAdjustmentCount = 0;
 	
 	@Override//TODO add abstract agent parameters
 	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
@@ -123,11 +126,13 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 
 			if(randomGenerator.random() < config.get("Learning probability match").getDouble()){
 				grammar.set(u.meaning, u.signal);
+				grammarAdjustmentCount++;
 			}
 		}else{//Doesn't match this agents UG
 
 			if(randomGenerator.random() < config.get("Learning probability mismatch").getDouble()){
 				grammar.set(u.meaning, u.signal);
+				grammarAdjustmentCount++;
 			}
 		}
 		
@@ -150,8 +155,8 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 
 	@Override
 	public int learningIntensity() {
-		// TODO Auto-generated method stub
-		return 0;
+		//System.out.println(grammarAdjustmentCount + " " + numberOfNulls());
+		return grammarAdjustmentCount;
 	}
 
 	@Override

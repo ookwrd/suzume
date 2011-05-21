@@ -279,7 +279,7 @@ public class ModelController implements Runnable {
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 
-		double learningIntensity = (config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
+		double learningIntensity = antiLearningIntensity; //(config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
 
 		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.populationSize));
 		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.populationSize));

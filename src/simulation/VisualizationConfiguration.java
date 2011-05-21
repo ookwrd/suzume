@@ -9,7 +9,7 @@ public class VisualizationConfiguration {
 	
 	public static final boolean DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION = false;
 	public static final int DEFAULT_VISUALIZATION_INTERVAL = 1;
-	public static final int DEFAULT_VISUALIZATION_PAUSE = 500;
+	public static final int DEFAULT_VISUALIZATION_PAUSE = 1;
 	
 	public boolean printGenerations;
 	public int printGenerationsEachX;
