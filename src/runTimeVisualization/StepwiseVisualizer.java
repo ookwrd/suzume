@@ -62,7 +62,7 @@ public class StepwiseVisualizer extends JPanel {
 	
 	//private VisualizationType visualizationType = VisualizationType.vertical;
 	
-	public StepwiseVisualizer(String title, PopulationModel model, VisualizationConfiguration config){
+	public StepwiseVisualizer(String title, int generationCount, PopulationModel model, VisualizationConfiguration config){
 		
 		this.model = model;
 		this.config = config;
@@ -70,6 +70,8 @@ public class StepwiseVisualizer extends JPanel {
 		frame = new JFrame();
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
+		
+		System.out.println("GenCount" + generationCount);
 		
 		//Layout visualization
 		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationType.layout);
@@ -83,7 +85,7 @@ public class StepwiseVisualizer extends JPanel {
 		
 		//Vertical visualization
 		drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		verticalImage = new BufferedImage(drawSize.width*1000 /*TODO*/, drawSize.height, BufferedImage.TYPE_INT_RGB);
+		verticalImage = new BufferedImage(drawSize.width*generationCount, drawSize.height, BufferedImage.TYPE_INT_RGB);
 		verticalGraphics = verticalImage.getGraphics();
 		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
 		

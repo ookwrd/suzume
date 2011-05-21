@@ -27,6 +27,8 @@ import PopulationModel.GraphConfiguration.GraphType;
  */
 public class OriginalPopulationModel extends AbstractNode implements PopulationModel {
 
+		
+	
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
 		put("Population Size", new ConfigurationParameter(200));
@@ -107,7 +109,7 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 	@Override
 	public ArrayList<PopulationNode> getPossibleTeachers(PopulationNode agent) {
 
-		int distance = config.get("Learn from agents to distance:").getInteger();
+		int distance = 2; //TODO config.get("Learn from agents to distance:").getInteger();
 		
 		int location = currentGeneration.indexOf(agent);
 
