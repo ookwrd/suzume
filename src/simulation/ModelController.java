@@ -55,7 +55,7 @@ public class ModelController implements Runnable {
 		resetStatistics();
 
 		if(visualConfig.enableContinuousVisualization){
-			this.visualizer = new StepwiseVisualizer(getTitleString(),population, visualizationConfiguration);
+			this.visualizer = new StepwiseVisualizer(getTitleString(),config.generationCount, population, visualizationConfiguration);
 		}
 		
 	}
