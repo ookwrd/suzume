@@ -34,6 +34,7 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 		put("Communication Graph", new ConfigurationParameter(GraphType.CyclicGraph));
 		put("Reproduction Graph", new ConfigurationParameter(GraphType.CyclicGraph));
 		put("Sub node", new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
+		put("Learn from agents to distance:", new ConfigurationParameter(2));
 	}};
 	
 	private Graph learningGraph;
@@ -106,7 +107,7 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 	@Override
 	public ArrayList<PopulationNode> getPossibleTeachers(PopulationNode agent) {
 
-		int distance = 2;
+		int distance = config.get("Learn from agents to distance:").getInteger();
 		
 		int location = currentGeneration.indexOf(agent);
 
