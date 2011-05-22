@@ -3,14 +3,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationNode;
 
 import simulation.RandomGenerator;
-
 
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 
@@ -23,18 +20,16 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	private static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
 	private static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
 	
-	@SuppressWarnings("serial")
-	private static LinkedHashMap<String, ConfigurationParameter> defaultParameters = new LinkedHashMap<String, ConfigurationParameter>(){{
-		put(LEARNING_RESOURCE, new ConfigurationParameter(24));
-		put(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
-		put(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
-		put(MUTATION_RATE, new ConfigurationParameter(0.00025));
-		put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
-		//put("Meaning space size", new ConfigurationParameter(12));
-	}};
-	
-	
+	{
+		defaultParameters.put(LEARNING_RESOURCE, new ConfigurationParameter(24));
+		defaultParameters.put(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
+		defaultParameters.put(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
+		defaultParameters.put(MUTATION_RATE, new ConfigurationParameter(0.00025));
+		defaultParameters.put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		defaultParameters.put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		//defaultParameters.put("Meaning space size", new ConfigurationParameter(12));
+	}
+
 	protected ArrayList<Integer> chromosome;
 	
 	protected int learningResource;
@@ -44,14 +39,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	protected double mutationRate;
 	protected double inventionProbability;
 
-
-	
 	public YamauchiHashimoto2010(){
-	}
-	
-	@Override//TODO addabstract agent parameters
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		return defaultParameters;
 	}
 	
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
