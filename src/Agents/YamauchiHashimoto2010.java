@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationNode;
@@ -12,8 +13,27 @@ import simulation.RandomGenerator;
 
 
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
+
+	protected static final String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
 	
-	protected static String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
+	private static final String VISUALIZATION_TYPE = "Visualization Type";
+	private static final String INVENTION_PROBABILITY = "Invention Probability";
+	private static final String MUTATION_RATE = "Mutation Rate";
+	private static final String LEARNING_RESOURCE = "Learning Resource";
+	private static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
+	private static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
+	
+	@SuppressWarnings("serial")
+	private static LinkedHashMap<String, ConfigurationParameter> defaultParameters = new LinkedHashMap<String, ConfigurationParameter>(){{
+		put(LEARNING_RESOURCE, new ConfigurationParameter(24));
+		put(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
+		put(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
+		put(MUTATION_RATE, new ConfigurationParameter(0.00025));
+		put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		//put("Meaning space size", new ConfigurationParameter(12));
+	}};
+	
 	
 	protected ArrayList<Integer> chromosome;
 	
@@ -24,16 +44,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	protected double mutationRate;
 	protected double inventionProbability;
 
-	@SuppressWarnings("serial")
-	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Learning Resource", new ConfigurationParameter(24));
-		put("Learning Resource on Match", new ConfigurationParameter(1));
-		put("Learning Resource on MisMatch", new ConfigurationParameter(4));
-		put("Mutation Rate", new ConfigurationParameter(0.00025));
-		put("Invention Probability", new ConfigurationParameter(0.01));
-		put("Visualization Type", new ConfigurationParameter(visualizationTypes));
-		//put("Meaning space size", new ConfigurationParameter(12));
-	}};
+
 	
 	public YamauchiHashimoto2010(){
 	}
@@ -56,12 +67,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	
 	private void initializeParameters(NodeConfiguration config){//TODO remove
 
-		learningResource = config.parameters.get("Learning Resource").getInteger();
-		matchingLearningCost = config.parameters.get("Learning Resource on Match").getInteger();
-		nonMatchingLearningCost = config.parameters.get("Learning Resource on MisMatch").getInteger();
+		learningResource = config.parameters.get(LEARNING_RESOURCE).getInteger();
+		matchingLearningCost = config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
+		nonMatchingLearningCost = config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
 		
-		mutationRate = config.parameters.get("Mutation Rate").getDouble();
-		inventionProbability = config.parameters.get("Invention Probability").getDouble();
+		mutationRate = config.parameters.get(MUTATION_RATE).getDouble();
+		inventionProbability = config.parameters.get(INVENTION_PROBABILITY).getDouble();
 		
 	}
 	
@@ -226,22 +237,22 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		Color c;
 		
-		if(config.parameters.get("Visualization Type").getString().equals("numberNulls")){
+		if(config.parameters.get(VISUALIZATION_TYPE).getString().equals("numberNulls")){
 			int numberOfNulls = numberOfNulls();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		}else if (config.parameters.get("Visualization Type").getString().equals("genotype")){
+		}else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (config.parameters.get("Visualization Type").getString().equals("phenotype")){
+		}else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("phenotype")){
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.parameters.get("Visualization Type").getString().equals("singleWord")) {
+		} else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleWord")) {
 		
 			if(grammar.get(0) == 0){
 				c = Color.WHITE;
@@ -251,7 +262,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 				c = Color.RED;
 			}
 			
-		}	 else if (config.parameters.get("Visualization Type").getString().equals("singleGene")) {
+		}	 else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleGene")) {
 		
 			if(chromosome.get(0) == 0){
 				c = Color.WHITE;

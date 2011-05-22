@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,8 +20,6 @@ import javax.swing.JTextField;
 import runTimeVisualization.Visualizable.VisualizationType;
 import simulation.PopulationModel;
 import simulation.VisualizationConfiguration;
-
-
 
 @SuppressWarnings("serial")
 public class StepwiseVisualizer extends JPanel {
@@ -40,9 +39,11 @@ public class StepwiseVisualizer extends JPanel {
 	private Graphics layoutGraphics;
 	private JLabel layoutImageLabel;
 	
+	//Timeseries Visualization
+	private JPanel timeSeriesPanel;
+	
 	private BufferedImage verticalImage;
 	private Graphics verticalGraphics;
-	private Graphics verticalGraphicsTemp;
 	private JLabel verticalImageLabel;
 	
 	//Top bar
@@ -57,8 +58,9 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private boolean pauseStatus;
 	private int steps;
+	private int generationCount;
 	
-	private int runAtLastUpdate = -1;
+	private int runAtLastUpdate = 0;
 	
 	//private VisualizationType visualizationType = VisualizationType.vertical;
 	
@@ -71,7 +73,7 @@ public class StepwiseVisualizer extends JPanel {
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
 		
-		System.out.println("GenCount" + generationCount);
+		this.generationCount = generationCount;
 		
 		//Layout visualization
 		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationType.layout);
@@ -83,16 +85,11 @@ public class StepwiseVisualizer extends JPanel {
 		layoutImageLabel = new JLabel(icon);
 		add(layoutImageLabel);
 		
-		//Vertical visualization
-		drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		verticalImage = new BufferedImage(drawSize.width*generationCount, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		verticalGraphics = verticalImage.getGraphics();
-		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
-		
-		icon = new ImageIcon(verticalImage);
-		verticalImageLabel = new JLabel(icon);
-		add(verticalImageLabel);
-		
+		//TimeSeries visualization
+		timeSeriesPanel = new JPanel();
+		timeSeriesPanel.setLayout(new BoxLayout(timeSeriesPanel, BoxLayout.Y_AXIS));
+		configureNewTimeseries();
+		add(timeSeriesPanel);
 		
 		JScrollPane scrollPane = new JScrollPane(this);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -190,6 +187,19 @@ public class StepwiseVisualizer extends JPanel {
 		frame.add(counterPanel, BorderLayout.SOUTH);
 	}
 	
+	private void configureNewTimeseries(){
+
+		Dimension drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
+		verticalImage = new BufferedImage(drawSize.width*generationCount, drawSize.height, BufferedImage.TYPE_INT_RGB);
+		verticalGraphics = verticalImage.getGraphics();
+		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
+		
+		ImageIcon icon = new ImageIcon(verticalImage);
+		verticalImageLabel = new JLabel(icon);
+		timeSeriesPanel.add(verticalImageLabel);
+		
+	}
+	
 	/**
 	 * Update the model that we are producing visualizations of.
 	 * 
@@ -243,23 +253,20 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private void updateImage(int run){
 		
+		//Current Status visualization
 		model.draw(layoutBaseDimension, VisualizationType.layout, layoutGraphics.create());
 		layoutImageLabel.repaint();
 		
 		//Do we reset the visualization?
 		if(this.runAtLastUpdate < run){
-			verticalGraphicsTemp = verticalGraphics.create();
-		
-			//verticalGraphicsTemp = verticalImageLabel.getGraphics();
+			configureNewTimeseries();
 			runAtLastUpdate = run;
-			//TODO Fill the old one.
 		}
 		
-		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphicsTemp.create());
-		verticalGraphicsTemp.translate(1, 0);
-		//verticalImageLabel.setPreferredSize(new Dimension(verticalImageLabel.getPreferredSize().width+1,verticalImageLabel.getPreferredSize().height));
+		//Timeseries visualization
+		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphics.create());
+		verticalGraphics.translate(verticalBaseDimension.height, 0);
 		verticalImageLabel.repaint();
-		//revalidate();
 		
 	}
 
