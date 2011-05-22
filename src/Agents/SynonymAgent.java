@@ -21,7 +21,7 @@ public class SynonymAgent extends AbstractAgent {
 	public SynonymAgent(NodeConfiguration config, int id, int memorySize){
 		//super(config, id);//TODO
 		memory = new Utterance[memorySize];
-		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
+		wordsPerMeaning = new ArrayList[config.get(NUMBER_OF_MEANINGS).getInteger()];
 		for(int i = 0; i < wordsPerMeaning.length; i++){
 			wordsPerMeaning[i] = new ArrayList<Utterance>();
 		}
@@ -43,7 +43,7 @@ public class SynonymAgent extends AbstractAgent {
 		}
 		
 		memory = new Utterance[memorySize];
-		wordsPerMeaning = new ArrayList[NUMBER_OF_MEANINGS];
+		wordsPerMeaning = new ArrayList[config.get(NUMBER_OF_MEANINGS).getInteger()];
 		for(int i = 0; i < wordsPerMeaning.length; i++){
 			wordsPerMeaning[i] = new ArrayList<Utterance>();
 		}
@@ -157,11 +157,11 @@ public class SynonymAgent extends AbstractAgent {
 		double rand = Math.random();
 		
 		if(selectionMethod == MeaningDistribution.SQUARED){
-			return getUtteranceForMeaning((int) (rand*rand*NUMBER_OF_MEANINGS));
+			return getUtteranceForMeaning((int) (rand*rand*config.get(NUMBER_OF_MEANINGS).getInteger()));
 		}else if (selectionMethod == MeaningDistribution.LINEAR){
-			return getUtteranceForMeaning((int) (rand*NUMBER_OF_MEANINGS));
+			return getUtteranceForMeaning((int) (rand*config.get(NUMBER_OF_MEANINGS).getInteger()));
 		}else if (selectionMethod == MeaningDistribution.LOG){
-			return getUtteranceForMeaning((int) Math.log(rand)*NUMBER_OF_MEANINGS);	
+			return getUtteranceForMeaning((int) Math.log(rand)*config.get(NUMBER_OF_MEANINGS).getInteger());	
 		}else{
 			System.out.println("Unhandled MeaningDistribution");
 			return null;//this is a failure case

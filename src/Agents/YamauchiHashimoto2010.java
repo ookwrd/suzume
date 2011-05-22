@@ -27,7 +27,6 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		defaultParameters.put(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		defaultParameters.put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		defaultParameters.put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
-		//defaultParameters.put("Meaning space size", new ConfigurationParameter(12));
 	}
 
 	protected ArrayList<Integer> chromosome;
@@ -45,8 +44,8 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		
-		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
-		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
+		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
+		for (int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
 		
@@ -71,24 +70,24 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
 		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
-		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
+		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
 
 		initializeParameters(config);
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
+		int crossoverPoint = randomGenerator.randomInt(config.get(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < NUMBER_OF_MEANINGS){
+		while(i < config.get(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){
+		for(int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){
 			if(randomGenerator.random() < mutationRate){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
@@ -199,7 +198,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
+		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
