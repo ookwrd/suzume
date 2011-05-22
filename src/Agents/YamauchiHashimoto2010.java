@@ -37,12 +37,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		
-		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
-		for (int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
+		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
 
-		learningResource = config.get(LEARNING_RESOURCE).getInteger();
+		learningResource = config.getParameter(LEARNING_RESOURCE).getInteger();
 	}
 	
 	@Override
@@ -52,26 +52,26 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
 		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
-		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 
 
-		learningResource = config.get(LEARNING_RESOURCE).getInteger();
+		learningResource = config.getParameter(LEARNING_RESOURCE).getInteger();
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(config.get(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.randomInt(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < config.get(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < config.getParameter(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < config.get(MUTATION_RATE).getDouble()){
+		for(int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
+			if(randomGenerator.random() < config.getParameter(MUTATION_RATE).getDouble()){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
 		}
@@ -104,7 +104,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
-			if(randomGenerator.random() < config.get(INVENTION_PROBABILITY).getDouble()){
+			if(randomGenerator.random() < config.getParameter(INVENTION_PROBABILITY).getDouble()){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -140,23 +140,23 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < config.get(LEARNING_COST_ON_MATCH).getInteger()){
+			if(learningResource < config.getParameter(LEARNING_COST_ON_MATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= config.get(LEARNING_COST_ON_MATCH).getInteger();
+			learningResource -= config.getParameter(LEARNING_COST_ON_MATCH).getInteger();
 			
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
-			if(learningResource < config.get(LEARNING_COST_ON_MISMATCH).getInteger()){
+			if(learningResource < config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= config.get(LEARNING_COST_ON_MISMATCH).getInteger();
+			learningResource -= config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
 			
 		}
 		
@@ -181,7 +181,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
@@ -207,22 +207,22 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		Color c;
 		
-		if(config.get(VISUALIZATION_TYPE).getString().equals("numberNulls")){
+		if(config.getParameter(VISUALIZATION_TYPE).getString().equals("numberNulls")){
 			int numberOfNulls = numberOfNulls();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		}else if (config.get(VISUALIZATION_TYPE).getString().equals("genotype")){
+		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (config.get(VISUALIZATION_TYPE).getString().equals("phenotype")){
+		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("phenotype")){
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.get(VISUALIZATION_TYPE).getString().equals("singleWord")) {
+		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord")) {
 		
 			if(grammar.get(0) == 0){
 				c = Color.WHITE;
@@ -232,7 +232,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 				c = Color.RED;
 			}
 			
-		}	 else if (config.get(VISUALIZATION_TYPE).getString().equals("singleGene")) {
+		}	 else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleGene")) {
 		
 			if(chromosome.get(0) == 0){
 				c = Color.WHITE;

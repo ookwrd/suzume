@@ -116,11 +116,11 @@ public class StepwiseVisualizer extends JPanel {
 		
 		//Pause Field
 		JLabel pauseLabel = new JLabel("Pause duration:");
-		pauseField = new JTextField(""+config.get(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger(), 6);
+		pauseField = new JTextField(""+config.getParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger(), 6);
 		pauseField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				config.put(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION, new ConfigurationParameter(Integer.parseInt(pauseField.getText().trim())));;
+				config.setParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION, new ConfigurationParameter(Integer.parseInt(pauseField.getText().trim())));;
 			}
 		});
 		buttonPanel.add(pauseLabel);
@@ -128,11 +128,11 @@ public class StepwiseVisualizer extends JPanel {
 		
 		//Interval Field
 		JLabel intervalLabel = new JLabel("Display every ");
-		intervalField = new JTextField(""+config.get(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger(), 6);
+		intervalField = new JTextField(""+config.getParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger(), 6);
 		intervalField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				config.put(VisualizationConfiguration.VISUALIZATION_INTERVAL,new ConfigurationParameter(Integer.parseInt(intervalField.getText().trim())));	
+				config.setParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL,new ConfigurationParameter(Integer.parseInt(intervalField.getText().trim())));	
 			}
 		});
 		JLabel intervalUnit = new JLabel(" generations");
@@ -230,7 +230,7 @@ public class StepwiseVisualizer extends JPanel {
 			
 		}
 		
-		if( generation % config.get(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger() != 0){
+		if( generation % config.getParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger() != 0){
 			return;
 		}
 		
@@ -238,9 +238,9 @@ public class StepwiseVisualizer extends JPanel {
 		
 		updateImage(run);
 				
-		if(config.get(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger() > 0){
+		if(config.getParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger() > 0){
 			try {
-				Thread.sleep(config.get(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger());
+				Thread.sleep(config.getParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

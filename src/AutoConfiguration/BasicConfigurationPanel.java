@@ -98,7 +98,7 @@ public class BasicConfigurationPanel extends JPanel {
 	}
 	
 
-	public AbstractConfigurable getConfiguration(){
+	public BasicConfigurable getConfiguration(){
 		
 		HashMap<String, ConfigurationParameter> retParameters = new HashMap<String, ConfigurationParameter>();
 		
@@ -145,7 +145,7 @@ public class BasicConfigurationPanel extends JPanel {
 		
 		}
 		
-		return new AbstractConfigurable(retParameters);
+		return new BasicConfigurable(retParameters);
 	}
 	
 }

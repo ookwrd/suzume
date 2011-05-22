@@ -5,10 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import simulation.RandomGenerator;
-import AutoConfiguration.AbstractConfigurable;
+import AutoConfiguration.BasicConfigurable;
 import PopulationModel.PopulationNode;
 
-public abstract class AbstractNode extends AbstractConfigurable implements PopulationNode{
+public abstract class AbstractNode extends BasicConfigurable implements PopulationNode{
 	
 	private int id;
 	protected RandomGenerator randomGenerator;

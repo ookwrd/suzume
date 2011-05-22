@@ -18,11 +18,11 @@ public class CyclicGraph extends AbstractGraph {
 
 		ArrayList<PopulationNode> retValAgents = new ArrayList<PopulationNode>();
 		
-		int distance = config.get("Max link distance").getInteger();
+		int distance = config.getParameter("Max link distance").getInteger();
 		
 		int location = populations.indexOf(node);
 
-		if(config.get("Include Self Links").getBoolean()){
+		if(config.getParameter("Include Self Links").getBoolean()){
 			retValAgents.add(populations.get(location));
 		}
 

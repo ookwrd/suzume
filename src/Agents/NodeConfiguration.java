@@ -1,8 +1,8 @@
 package Agents;
 
-import AutoConfiguration.AbstractConfigurable;
+import AutoConfiguration.BasicConfigurable;
 
-public class NodeConfiguration extends AbstractConfigurable {
+public class NodeConfiguration extends BasicConfigurable {
 
 	public enum NodeType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
 
@@ -15,7 +15,7 @@ public class NodeConfiguration extends AbstractConfigurable {
 		//TODO maybe I need to get rid of this method?
 	}
 	
-	public NodeConfiguration(NodeType type, AbstractConfigurable baseConfig){
+	public NodeConfiguration(NodeType type, BasicConfigurable baseConfig){
 		super(baseConfig);
 		this.type = type;
 	}

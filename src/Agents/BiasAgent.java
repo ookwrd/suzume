@@ -36,7 +36,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		this.randomGenerator = randomGenerator;
 		
 		chromosome = new ArrayList<double[]>();
-		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			
 			double[] biases = new double[dimensions];
 			
@@ -69,24 +69,24 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		super.initializeAgent(parent1.getConfiguration(), id, randomGenerator);
 		initializeParameters(config);
 		
-		chromosome = new ArrayList<double[]>(config.get(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<double[]>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 		
 		this.randomGenerator = randomGenerator;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(config.get(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.randomInt(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < config.get(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < config.getParameter(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
+		for(int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
 			if(randomGenerator.random() < mutationRate){
 				double[] gene = chromosome.get(j).clone();
 				
@@ -128,9 +128,9 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	}
 	
 	private void initializeParameters(NodeConfiguration config){
-		dimensions = config.get("Dimensions").getInteger();
-		mutationRate = config.get("Mutation rate").getDouble();
-		inventionProbability= config.get("Invention Probability").getDouble();
+		dimensions = config.getParameter("Dimensions").getInteger();
+		mutationRate = config.getParameter("Mutation rate").getDouble();
+		inventionProbability= config.getParameter("Invention Probability").getDouble();
 	}
 	
 	@Override
@@ -199,13 +199,13 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		System.out.println("Agent " + getId() + ":");
 		for(int j = 0; j < dimensions; j++){
 			System.out.print("Dimension " + j + ":\t");
-			for (int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++) {
+			for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) {
 				System.out.print(chromosome.get(i)[j] + "\t");
 			}
 			System.out.println();
 		}
 		System.out.print("Grammar:\t");
-		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			System.out.print(grammar.get(i) + "\t\t\t");
 		}
 		
@@ -222,7 +222,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 		
 		double antiCount = 0;
 		
-		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
 				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];

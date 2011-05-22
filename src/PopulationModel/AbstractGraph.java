@@ -2,9 +2,9 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import AutoConfiguration.AbstractConfigurable;
+import AutoConfiguration.BasicConfigurable;
 
-public abstract class AbstractGraph extends AbstractConfigurable implements Graph {
+public abstract class AbstractGraph extends BasicConfigurable implements Graph {
 
 	protected ArrayList<PopulationNode> populations;
 	protected GraphConfiguration config;
