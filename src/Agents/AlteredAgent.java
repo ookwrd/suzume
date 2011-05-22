@@ -22,13 +22,13 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
 	@Override
 	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(parentA, parentB, id, randomGenerator);
-		resourceMultiplier = ((ConfigurationParameter)config.parameters.get("Leftover Resource Multiplier")).getDouble();
+		resourceMultiplier = ((ConfigurationParameter)config.get("Leftover Resource Multiplier")).getDouble();
 	}
 	
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
-		resourceMultiplier = ((ConfigurationParameter)config.parameters.get("Leftover Resource Multiplier")).getDouble();
+		resourceMultiplier = ((ConfigurationParameter)config.get("Leftover Resource Multiplier")).getDouble();
 	}
 	
 	@Override

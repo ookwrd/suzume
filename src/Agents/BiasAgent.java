@@ -128,9 +128,9 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	}
 	
 	private void initializeParameters(NodeConfiguration config){
-		dimensions = config.parameters.get("Dimensions").getInteger();
-		mutationRate = config.parameters.get("Mutation rate").getDouble();
-		inventionProbability= config.parameters.get("Invention Probability").getDouble();
+		dimensions = config.get("Dimensions").getInteger();
+		mutationRate = config.get("Mutation rate").getDouble();
+		inventionProbability= config.get("Invention Probability").getDouble();
 	}
 	
 	@Override

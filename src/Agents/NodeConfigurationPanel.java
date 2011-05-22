@@ -1,7 +1,6 @@
 package Agents;
 
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
 import Agents.NodeConfiguration.NodeType;
 import AutoConfiguration.BasicConfigurationPanel;

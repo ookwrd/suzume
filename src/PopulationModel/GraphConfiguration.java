@@ -1,8 +1,8 @@
 package PopulationModel;
 
-import AutoConfiguration.BasicConfiguration;
+import AutoConfiguration.AbstractConfigurable;
 
-public class GraphConfiguration extends BasicConfiguration {
+public class GraphConfiguration extends AbstractConfigurable {
 
 	public enum GraphType {FullyConnected, CyclicGraph}
 	
@@ -12,8 +12,8 @@ public class GraphConfiguration extends BasicConfiguration {
 	
 	public GraphConfiguration(){}
 	
-	public GraphConfiguration(GraphType type, BasicConfiguration baseConfig){
-		super(baseConfig.parameters);
+	public GraphConfiguration(GraphType type, AbstractConfigurable baseConfig){
+		super(baseConfig);
 		this.type = type;
 	}
 	

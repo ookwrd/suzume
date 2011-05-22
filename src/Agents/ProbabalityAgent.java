@@ -168,25 +168,25 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		
 		Color c;
 		
-		if(config.parameters.get(VISUALIZATION_TYPE).getString().equals("numberNulls")){
+		if(config.get(VISUALIZATION_TYPE).getString().equals("numberNulls")){
 			int numberOfNulls = numberOfNulls();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		}else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("genotype")){
+		}else if (config.get(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("phenotype")){
+		}else if (config.get(VISUALIZATION_TYPE).getString().equals("phenotype")){
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleWord") || config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleGene")) {
+		} else if (config.get(VISUALIZATION_TYPE).getString().equals("singleWord") || config.get(VISUALIZATION_TYPE).getString().equals("singleGene")) {
 		
 			int value;
-			if(config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleWord")){
+			if(config.get(VISUALIZATION_TYPE).getString().equals("singleWord")){
 				value = grammar.get(0);
 			}else{
 				value = chromosome.get(0);
