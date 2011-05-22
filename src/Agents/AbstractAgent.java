@@ -28,8 +28,8 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 
 		fitness = 0;
 		
-		grammar = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
-		for (int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){
+		grammar = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		for (int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
 	}
@@ -43,7 +43,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}
