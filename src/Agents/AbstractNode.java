@@ -9,7 +9,7 @@ import AutoConfiguration.AbstractConfigurable;
 import PopulationModel.PopulationNode;
 
 public abstract class AbstractNode extends AbstractConfigurable implements PopulationNode{
-
+	
 	private int id;
 	protected RandomGenerator randomGenerator;
 	protected NodeConfiguration config;

@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
@@ -23,26 +21,20 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 	private static final String INVENTION_CHANCES = "Invention Chances";
 	private static final String VISUALIZATION_TYPE = "Visualization Type";
 
-	@SuppressWarnings("serial")
-	private static LinkedHashMap<String, ConfigurationParameter> defaultParameters = new LinkedHashMap<String, ConfigurationParameter>(){{
-		put(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
-		put(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
-		put(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
-		put(MUTATION_RATE, new ConfigurationParameter(0.00025));
-		put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		put(INVENTION_CHANCES, new ConfigurationParameter(5));
-		put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+	{
+		defaultParameters.put(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
+		defaultParameters.put(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
+		defaultParameters.put(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
+		defaultParameters.put(MUTATION_RATE, new ConfigurationParameter(0.00025));
+		defaultParameters.put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		defaultParameters.put(INVENTION_CHANCES, new ConfigurationParameter(5));
+		defaultParameters.put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
 		//put("Meaning space size", new ConfigurationParameter(12));
-	}};
+	}
 	
 	protected ArrayList<Integer> chromosome;
 	
 	private int grammarAdjustmentCount = 0;
-	
-	@Override//TODO add abstract agent parameters
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		return defaultParameters;
-	}
 	
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
