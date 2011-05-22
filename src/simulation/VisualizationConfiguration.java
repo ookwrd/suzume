@@ -1,50 +1,27 @@
 package simulation;
 
-import java.util.StringTokenizer;
+import AutoConfiguration.BasicConfiguration;
+import AutoConfiguration.ConfigurationParameter;
 
-public class VisualizationConfiguration {
+public class VisualizationConfiguration extends BasicConfiguration {
 	
-	public static final boolean DEFAULT_PRINT_GENERATIONS = true;
-	public static final int DEFAULT_PRINT_GENERATIONS_EACH_X = 1000;
+	public static final String PRINT_GENERATION_COUNT = "Print generation count?";
+	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
+	public static final String PAUSE_AFTER_VISUALIZATION = "Pause after visualization";
+	public static final String ENABLE_TIMESERIES_VISUALIAZATION = "Enable continuous visualiazation?";
+	public static final String VISUALIZATION_INTERVAL = "Visualization interval";
 	
-	public static final boolean DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION = false;
-	public static final int DEFAULT_VISUALIZATION_INTERVAL = 1;
-	public static final int DEFAULT_VISUALIZATION_PAUSE = 1;
-	
-	public boolean printGenerations;
-	public int printGenerationsEachX;
-	
-	public boolean enableContinuousVisualization;
-	public int visualizationInterval;
-	public int visualizationPause;
-	
-	public VisualizationConfiguration(){
-		this.printGenerations = DEFAULT_PRINT_GENERATIONS;
-		this.printGenerationsEachX = DEFAULT_PRINT_GENERATIONS_EACH_X;
-		this.enableContinuousVisualization = DEFAULT_ENABLE_CONTINUOUS_VISUALIZATION;
-		this.visualizationInterval = DEFAULT_VISUALIZATION_INTERVAL;
-		this.visualizationPause = DEFAULT_VISUALIZATION_PAUSE;
-	}
-	
-	public VisualizationConfiguration (
-			boolean printGenerations, 
-			int printGenerationsEachX, 
-			boolean enableContinuousVisualization, 
-			int visualizationInterval, 
-			int visualizationPause)
 	{
-		this.printGenerations = printGenerations;
-		this.printGenerationsEachX = printGenerationsEachX;
-		this.enableContinuousVisualization = enableContinuousVisualization;
-		this.visualizationInterval = visualizationInterval;
-		this.visualizationPause = visualizationPause;
+		defaultParameters.put(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
+		defaultParameters.put(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
+		defaultParameters.put(ENABLE_TIMESERIES_VISUALIAZATION, new ConfigurationParameter(false));
+		defaultParameters.put(VISUALIZATION_INTERVAL, new ConfigurationParameter(1));
+		defaultParameters.put(PAUSE_AFTER_VISUALIZATION, new ConfigurationParameter(1));
 	}
 	
-	public VisualizationConfiguration(StringTokenizer tokenizer){
-		//TODO
-	}
+	public VisualizationConfiguration(){}
 	
-	public String saveString(){
-		return null; //TODO
+	public VisualizationConfiguration(BasicConfiguration baseConfig){
+		super(baseConfig.parameters);
 	}
 }

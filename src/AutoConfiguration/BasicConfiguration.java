@@ -2,9 +2,9 @@ package AutoConfiguration;
 
 import java.util.HashMap;
 
-public class BasicConfiguration {
+public class BasicConfiguration extends AbstractConfigurable {
 
-	public HashMap<String, ConfigurationParameter> parameters = new HashMap<String, ConfigurationParameter>();
+	public HashMap<String, ConfigurationParameter> parameters = new HashMap<String, ConfigurationParameter>();//TODO change visibility
 
 	public BasicConfiguration(){}
 	
@@ -16,4 +16,7 @@ public class BasicConfiguration {
 		return parameters.get(key);
 	}
 
+	public void put(String key, ConfigurationParameter parameter){
+		parameters.put(key, parameter);
+	}
 }
