@@ -13,12 +13,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 
 	protected static final String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
 	
-	private static final String VISUALIZATION_TYPE = "Visualization Type";
-	private static final String INVENTION_PROBABILITY = "Invention Probability";
-	private static final String MUTATION_RATE = "Mutation Rate";
-	private static final String LEARNING_RESOURCE = "Learning Resource";
-	private static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
-	private static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
+	protected static final String VISUALIZATION_TYPE = "Visualization Type";
+	protected static final String INVENTION_PROBABILITY = "Invention Probability";
+	protected static final String MUTATION_RATE = "Mutation Rate";
+	protected static final String LEARNING_RESOURCE = "Learning Resource";
+	protected static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
+	protected static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
 	
 	{
 		defaultParameters.put(LEARNING_RESOURCE, new ConfigurationParameter(24));
@@ -32,11 +32,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	protected ArrayList<Integer> chromosome;
 	
 	protected int learningResource;
-	protected int matchingLearningCost;
-	protected int nonMatchingLearningCost;
+	//protected int matchingLearningCost;
+	//protected int nonMatchingLearningCost;
 	
-	protected double mutationRate;
-	protected double inventionProbability;
+	//protected double mutationRate;
+	//protected double inventionProbability;
 
 	public YamauchiHashimoto2010(){
 	}
@@ -49,18 +49,9 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
 		
-		initializeParameters(config);
-	}
-	
-	private void initializeParameters(NodeConfiguration config){//TODO remove
 
 		learningResource = config.parameters.get(LEARNING_RESOURCE).getInteger();
-		matchingLearningCost = config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
-		nonMatchingLearningCost = config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
-		
-		mutationRate = config.parameters.get(MUTATION_RATE).getDouble();
-		inventionProbability = config.parameters.get(INVENTION_PROBABILITY).getDouble();
-		
+	
 	}
 	
 	@Override
@@ -72,7 +63,8 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
 		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
 
-		initializeParameters(config);
+
+		learningResource = config.parameters.get(LEARNING_RESOURCE).getInteger();
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(config.get(NUMBER_OF_MEANINGS).getInteger());
@@ -88,7 +80,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		
 		//Mutation
 		for(int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < mutationRate){
+			if(randomGenerator.random() < config.parameters.get(MUTATION_RATE).getDouble()){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
 		}
@@ -121,7 +113,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
-			if(randomGenerator.random() < inventionProbability){
+			if(randomGenerator.random() < config.parameters.get(INVENTION_PROBABILITY).getDouble()){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -157,23 +149,23 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < matchingLearningCost){
+			if(learningResource < config.parameters.get(LEARNING_COST_ON_MATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= matchingLearningCost;
+			learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
 			
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
-			if(learningResource < nonMatchingLearningCost){
+			if(learningResource < config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= nonMatchingLearningCost;
+			learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
 			
 		}
 		

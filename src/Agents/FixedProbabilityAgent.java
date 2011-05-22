@@ -54,28 +54,28 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < matchingLearningCost){
+			if(learningResource < config.parameters.get(LEARNING_COST_ON_MATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			if(randomGenerator.random() < matchingLearnProbability){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= matchingLearningCost;
+				learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
 			}else if (deductOnAttempt){//still subtract
-				learningResource -= matchingLearningCost;
+				learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
 			}
 		}else{//Doesn't match this agents UG
-			if(learningResource < nonMatchingLearningCost){
+			if(learningResource < config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			if(randomGenerator.random() < nonMatchingLearnProbability){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= nonMatchingLearningCost;
+				learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
 			}else if (deductOnAttempt){
-				learningResource -= nonMatchingLearningCost;
+				learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
 			}
 		}
 		
