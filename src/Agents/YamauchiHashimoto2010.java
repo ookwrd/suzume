@@ -32,15 +32,8 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	protected ArrayList<Integer> chromosome;
 	
 	protected int learningResource;
-	//protected int matchingLearningCost;
-	//protected int nonMatchingLearningCost;
 	
-	//protected double mutationRate;
-	//protected double inventionProbability;
-
-	public YamauchiHashimoto2010(){
-	}
-	
+	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		
@@ -48,10 +41,8 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		for (int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
-		
 
 		learningResource = config.parameters.get(LEARNING_RESOURCE).getInteger();
-	
 	}
 	
 	@Override

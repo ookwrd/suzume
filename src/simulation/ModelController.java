@@ -54,7 +54,7 @@ public class ModelController implements Runnable {
 
 		resetStatistics();
 
-		if(visualConfig.enableContinuousVisualization){
+		if(visualConfig.get(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
 			this.visualizer = new StepwiseVisualizer(getTitleString(),config.generationCount, population, visualizationConfiguration);
 		}
 		
@@ -136,12 +136,12 @@ public class ModelController implements Runnable {
 				iterateGeneration();
 	
 				//Print progress information
-				if(visualConfig.printGenerations && currentGeneration % visualConfig.printGenerationsEachX == 0){
+				if(visualConfig.get(VisualizationConfiguration.PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % visualConfig.get(VisualizationConfiguration.PRINT_EACH_X_GENERATIONS).getInteger() == 0){
 					System.out.println("Run " + currentRun + "/" +config.runCount +"\tGeneration " + currentGeneration + "/"+config.generationCount+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
-				if(visualConfig.enableContinuousVisualization){
+				if(visualConfig.get(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
 					visualizer.update(currentRun, currentGeneration);
 				}
 	

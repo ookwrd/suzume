@@ -13,4 +13,5 @@ public abstract class AbstractConfigurable implements Configurable {
 		return defaultParameters;
 	}
 	
+	//TODO how is this related to Basic Configuration?
 }
