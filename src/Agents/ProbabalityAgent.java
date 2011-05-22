@@ -39,8 +39,8 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 
-		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
-		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
+		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
+		for (int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomInt(config.get(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 		}
 	}
@@ -53,22 +53,22 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
 		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;
 		
-		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
+		chromosome = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(NUMBER_OF_MEANINGS);
+		int crossoverPoint = randomGenerator.randomInt(config.get(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < NUMBER_OF_MEANINGS){
+		while(i < config.get(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){
+		for(int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){
 			if(randomGenerator.random() < config.get(MUTATION_RATE).getDouble()){
 				chromosome.set(j, randomGenerator.randomInt(config.get(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
@@ -143,7 +143,7 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
+		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}

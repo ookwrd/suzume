@@ -2,14 +2,19 @@ package Agents;
 
 import java.util.ArrayList;
 
+import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationNode;
 
 import simulation.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
-	protected static final int NUMBER_OF_MEANINGS = 12;
+	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 
+	{
+		defaultParameters.put(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
+	}
+	
 	private int fitness;
 	
 	protected ArrayList<Integer> grammar;
@@ -23,8 +28,8 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 
 		fitness = 0;
 		
-		grammar = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
-		for (int j = 0; j < NUMBER_OF_MEANINGS; j++){
+		grammar = new ArrayList<Integer>(config.get(NUMBER_OF_MEANINGS).getInteger());
+		for (int j = 0; j < config.get(NUMBER_OF_MEANINGS).getInteger(); j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
 	}
@@ -38,7 +43,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		
 		int count = 0;
 		
-		for(int i = 0; i < NUMBER_OF_MEANINGS; i++){
+		for(int i = 0; i < config.get(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}
