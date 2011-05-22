@@ -20,28 +20,28 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < config.parameters.get(LEARNING_COST_ON_MATCH).getInteger()){
+			if(learningResource < config.get(LEARNING_COST_ON_MATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
-			if(randomGenerator.random() < config.parameters.get("Matching Learn Probability").getDouble()){
+			if(randomGenerator.random() < config.get("Matching Learn Probability").getDouble()){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
-			}else if (config.parameters.get("Deduct Cost on attempt").getBoolean()){//still subtract
-				learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
+				learningResource -= config.get(LEARNING_COST_ON_MATCH).getInteger();
+			}else if (config.get("Deduct Cost on attempt").getBoolean()){//still subtract
+				learningResource -= config.get(LEARNING_COST_ON_MATCH).getInteger();
 			}
 		}else{//Doesn't match this agents UG
-			if(learningResource < config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger()){
+			if(learningResource < config.get(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
-			if(randomGenerator.random() < config.parameters.get("NonMatching Learn Probability").getDouble()){
+			if(randomGenerator.random() < config.get("NonMatching Learn Probability").getDouble()){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
-			}else if (config.parameters.get("Deduct Cost on attempt").getBoolean()){
-				learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
+				learningResource -= config.get(LEARNING_COST_ON_MISMATCH).getInteger();
+			}else if (config.get("Deduct Cost on attempt").getBoolean()){
+				learningResource -= config.get(LEARNING_COST_ON_MISMATCH).getInteger();
 			}
 		}
 		

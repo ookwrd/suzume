@@ -21,17 +21,7 @@ public class VisualizationConfigurationPanel extends JPanel {
 	}
 	
 	public VisualizationConfiguration getConfiguration(){
-		
-		return new VisualizationConfiguration(panel.getConfiguration());
-		
-		/*return new VisualizationConfiguration(
-				printGenerationsBox.isSelected(),
-				Integer.parseInt(printGenerationsEachXField.getText().trim()),
-				enableStepwiseVisualizationBox.isSelected(),
-				Integer.parseInt(stepwiseVisualizationIntervalField.getText().trim()),
-				Integer.parseInt(stepwiseVisualizationPauseField.getText().trim())
-				);*/
-		
+		return new VisualizationConfiguration(panel.getConfiguration());		
 	}
 
 }

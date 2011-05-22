@@ -1,9 +1,9 @@
 package simulation;
 
-import AutoConfiguration.BasicConfiguration;
+import AutoConfiguration.AbstractConfigurable;
 import AutoConfiguration.ConfigurationParameter;
 
-public class VisualizationConfiguration extends BasicConfiguration {
+public class VisualizationConfiguration extends AbstractConfigurable {
 	
 	public static final String PRINT_GENERATION_COUNT = "Print generation count?";
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
@@ -21,7 +21,7 @@ public class VisualizationConfiguration extends BasicConfiguration {
 	
 	public VisualizationConfiguration(){}
 	
-	public VisualizationConfiguration(BasicConfiguration baseConfig){
-		super(baseConfig.parameters);
+	public VisualizationConfiguration(AbstractConfigurable baseConfig){
+		super(baseConfig);
 	}
 }
