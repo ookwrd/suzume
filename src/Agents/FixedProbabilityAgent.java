@@ -1,49 +1,15 @@
 package Agents;
 
-import java.util.HashMap;
-
-import simulation.RandomGenerator;
-
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.PopulationNode;
 
 
 public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 
-	@SuppressWarnings("serial")
-	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Matching Learn Probability", new ConfigurationParameter(0.7));
-		put("NonMatching Learn Probability", new ConfigurationParameter(0.3));
-		put("Deduct Cost on attempt", new ConfigurationParameter(true));	
-	}}; 
-	
-	private double matchingLearnProbability;
-	private double nonMatchingLearnProbability;
-	private boolean deductOnAttempt;
-	
-	@Override
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		defaultParameters.putAll(super.getDefaultParameters());
-		return defaultParameters;
-	}
-	
-	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
-		super.initializeAgent(config, id, randomGenerator);
-		initializeParameters(config);
-	}
-	
-	@Override
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
-		super.initializeAgent(parentA, parentB, id, randomGenerator);
-		initializeParameters(parentA.getConfiguration());	
-		}
-	
-	private void initializeParameters(NodeConfiguration config){
-		matchingLearnProbability = config.parameters.get("Matching Learn Probability").getDouble();
-		nonMatchingLearnProbability = config.parameters.get("NonMatching Learn Probability").getDouble();
-		deductOnAttempt = config.parameters.get("Deduct Cost on attempt").getBoolean();
-	}
+	{
+		defaultParameters.put("Matching Learn Probability", new ConfigurationParameter(0.7));
+		defaultParameters.put("NonMatching Learn Probability", new ConfigurationParameter(0.3));
+		defaultParameters.put("Deduct Cost on attempt", new ConfigurationParameter(true));	
+	} 
 	
 	@Override
 	public void learnUtterance(Utterance u) {
@@ -59,10 +25,10 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 				return;
 			}
 			
-			if(randomGenerator.random() < matchingLearnProbability){
+			if(randomGenerator.random() < config.parameters.get("Matching Learn Probability").getDouble()){
 				grammar.set(u.meaning, u.signal);
 				learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
-			}else if (deductOnAttempt){//still subtract
+			}else if (config.parameters.get("Deduct Cost on attempt").getBoolean()){//still subtract
 				learningResource -= config.parameters.get(LEARNING_COST_ON_MATCH).getInteger();
 			}
 		}else{//Doesn't match this agents UG
@@ -71,10 +37,10 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 				return;
 			}
 			
-			if(randomGenerator.random() < nonMatchingLearnProbability){
+			if(randomGenerator.random() < config.parameters.get("NonMatching Learn Probability").getDouble()){
 				grammar.set(u.meaning, u.signal);
 				learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
-			}else if (deductOnAttempt){
+			}else if (config.parameters.get("Deduct Cost on attempt").getBoolean()){
 				learningResource -= config.parameters.get(LEARNING_COST_ON_MISMATCH).getInteger();
 			}
 		}
