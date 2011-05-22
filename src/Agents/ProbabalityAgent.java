@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
@@ -12,21 +13,27 @@ import PopulationModel.PopulationNode;
 
 public class ProbabalityAgent extends AbstractAgent implements Agent {
 
-	protected static String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
+	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
 	
+	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
+	private static final String LEARNING_PROBABILITY_ON_MISMATCH = "Learning probability mismatch";
+	private static final String SYNTACTIC_STATE_SPACE_SIZE = "Number of syntactic tokens";
+	private static final String MUTATION_RATE = "Mutation Rate";
+	private static final String INVENTION_PROBABILITY = "Invention Probability";
+	private static final String INVENTION_CHANCES = "Invention Chances";
+	private static final String VISUALIZATION_TYPE = "Visualization Type";
+
 	@SuppressWarnings("serial")
-	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Learning probability match", new ConfigurationParameter(0.7));
-		put("Learning probability mismatch", new ConfigurationParameter(0.5));
-		put("Number of syntactic tokens", new ConfigurationParameter(2));
-		put("Mutation Rate", new ConfigurationParameter(0.00025));
-		put("Invention Probability", new ConfigurationParameter(0.01));
-		put("Invention Chances", new ConfigurationParameter(5));
-		put("Visualization Type", new ConfigurationParameter(visualizationTypes));
+	private static LinkedHashMap<String, ConfigurationParameter> defaultParameters = new LinkedHashMap<String, ConfigurationParameter>(){{
+		put(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
+		put(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
+		put(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
+		put(MUTATION_RATE, new ConfigurationParameter(0.00025));
+		put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		put(INVENTION_CHANCES, new ConfigurationParameter(5));
+		put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
 		//put("Meaning space size", new ConfigurationParameter(12));
 	}};
-	
-	
 	
 	protected ArrayList<Integer> chromosome;
 	
@@ -42,7 +49,7 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 
 		chromosome = new ArrayList<Integer>(NUMBER_OF_MEANINGS);
 		for (int i = 0; i < NUMBER_OF_MEANINGS; i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomInt(config.get("Number of syntactic tokens").getInteger()));
+			chromosome.add(randomGenerator.randomInt(config.get(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 		}
 	}
 	
@@ -70,8 +77,8 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		
 		//Mutation
 		for(int j = 0; j < NUMBER_OF_MEANINGS; j++){
-			if(randomGenerator.random() < config.get("Mutation Rate").getDouble()){
-				chromosome.set(j, randomGenerator.randomInt(config.get("Number of syntactic tokens").getInteger()));
+			if(randomGenerator.random() < config.get(MUTATION_RATE).getDouble()){
+				chromosome.set(j, randomGenerator.randomInt(config.get(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
@@ -91,10 +98,10 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 	@Override
 	public void invent() {
 		
-		int chances = config.get("Invention Chances").getInteger();
+		int chances = config.get(INVENTION_CHANCES).getInteger();
 		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
-			if(randomGenerator.random() < config.get("Invention Probability").getDouble()){
+			if(randomGenerator.random() < config.get(INVENTION_PROBABILITY).getDouble()){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -109,7 +116,7 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomInt(config.get("Number of syntactic tokens").getInteger()));
+				grammar.set(index, randomGenerator.randomInt(config.get(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
@@ -124,13 +131,13 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
 
-			if(randomGenerator.random() < config.get("Learning probability match").getDouble()){
+			if(randomGenerator.random() < config.get(LEARNING_PROBABILITY_ON_MATCH).getDouble()){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
 		}else{//Doesn't match this agents UG
 
-			if(randomGenerator.random() < config.get("Learning probability mismatch").getDouble()){
+			if(randomGenerator.random() < config.get(LEARNING_PROBABILITY_ON_MISMATCH).getDouble()){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
@@ -169,25 +176,25 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		
 		Color c;
 		
-		if(config.parameters.get("Visualization Type").getString().equals("numberNulls")){
+		if(config.parameters.get(VISUALIZATION_TYPE).getString().equals("numberNulls")){
 			int numberOfNulls = numberOfNulls();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		}else if (config.parameters.get("Visualization Type").getString().equals("genotype")){
+		}else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (config.parameters.get("Visualization Type").getString().equals("phenotype")){
+		}else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("phenotype")){
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.parameters.get("Visualization Type").getString().equals("singleWord") || config.parameters.get("Visualization Type").getString().equals("singleGene")) {
+		} else if (config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleWord") || config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleGene")) {
 		
 			int value;
-			if(config.parameters.get("Visualization Type").getString().equals("singleWord")){
+			if(config.parameters.get(VISUALIZATION_TYPE).getString().equals("singleWord")){
 				value = grammar.get(0);
 			}else{
 				value = chromosome.get(0);
