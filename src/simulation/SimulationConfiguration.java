@@ -20,6 +20,8 @@ public class SimulationConfiguration extends BasicConfigurable {
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
 	public static final String CRITICAL_PERIOD = "Critical Period:";
 	
+	public static final String LEARN_TO_DISTANCE = "Learn from agents upto max distance:";//TODO remove this it should be recursive
+	
 	{
 		defaultParameters.put(GENERATION_COUNT, new ConfigurationParameter(5000));
 		defaultParameters.put(RUN_COUNT, new ConfigurationParameter(10));
@@ -27,6 +29,7 @@ public class SimulationConfiguration extends BasicConfigurable {
 		defaultParameters.put(BASE_FITNESS, new ConfigurationParameter(1));
 		defaultParameters.put(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		defaultParameters.put(CRITICAL_PERIOD, new ConfigurationParameter(200));
+		defaultParameters.put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 	}
 	
 	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelection;
