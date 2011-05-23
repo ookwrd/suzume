@@ -20,12 +20,19 @@ public class BasicConfigurable implements Configurable {
 		this.parameters = parameters;
 	}
 	
+	@Override
 	public ConfigurationParameter getParameter(String key){//TODO put in interface
 		return parameters.get(key);
 	}
-
+	
+	@Override
 	public void setParameter(String key, ConfigurationParameter parameter){
 		parameters.put(key, parameter);
+	}
+	
+	@Override
+	public HashMap<String, ConfigurationParameter> getParameters(){
+		return parameters;
 	}
 	
 	@Override
