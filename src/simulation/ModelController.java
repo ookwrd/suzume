@@ -65,7 +65,9 @@ public class ModelController implements Runnable {
 		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
 		
 		//TODO temp hack for setting learning distance
-		population.setParameter(OriginalPopulationModel.LEARN_FROM_AGENTS_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
+		population.setParameter(OriginalPopulationModel.LEARN_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
+		population.setParameter(OriginalPopulationModel.COMMUNICATE_TO_DISTANCE, config.getParameter(SimulationConfiguration.COMMUNICATE_TO_DISTANCE));
+		
 		
 		if(visualizer!=null){
 			visualizer.updateModel(population);
