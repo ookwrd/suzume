@@ -55,7 +55,7 @@ public class ModelController implements Runnable {
 		resetStatistics();
 
 		if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
-			this.visualizer = new StepwiseVisualizer(getTitleString(),config.generationCount, population, visualizationConfiguration);
+			this.visualizer = new StepwiseVisualizer(getTitleString(),config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
 		}
 		
 	}
@@ -83,8 +83,8 @@ public class ModelController implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
-		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.runCount];
-		for(int i = 0;i < config.runCount; i++){
+		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
+		for(int i = 0;i < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
 		}
 		return arrayLists;
@@ -98,7 +98,7 @@ public class ModelController implements Runnable {
 	private ArrayList<PopulationNode> createIntialAgents(){
 
 		ArrayList<PopulationNode> agents = new ArrayList<PopulationNode>();
-		for (int i = 1; i <= config.populationSize; i++) {
+		for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
 			agents.add(AgentFactory.constructPopulationNode(config.agentConfig, randomGenerator));
 		}
 
@@ -128,16 +128,16 @@ public class ModelController implements Runnable {
 	public void runSimulation(){
 
 		//Runs
-		while(currentRun < config.runCount){
+		while(currentRun < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()){
 		
 			//Generations
-			while(currentGeneration < config.generationCount){
+			while(currentGeneration < config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger()){
 	
 				iterateGeneration();
 	
 				//Print progress information
 				if(visualConfig.getParameter(VisualizationConfiguration.PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % visualConfig.getParameter(VisualizationConfiguration.PRINT_EACH_X_GENERATIONS).getInteger() == 0){
-					System.out.println("Run " + currentRun + "/" +config.runCount +"\tGeneration " + currentGeneration + "/"+config.generationCount+ "\tElapsed time: " + longTimeToString(elapsedTime()));
+					System.out.println("Run " + currentRun + "/" + config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
@@ -184,7 +184,7 @@ public class ModelController implements Runnable {
 			//get its ancestors (teachers)
 			ArrayList<PopulationNode> teachers = population.getPossibleTeachers(learner);
 
-			for(int i = 0; i < config.criticalPeriod; i++){
+			for(int i = 0; i < config.getParameter(SimulationConfiguration.CRITICAL_PERIOD).getInteger(); i++){
 
 				//Get random teacher
 				PopulationNode teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
@@ -212,11 +212,11 @@ public class ModelController implements Runnable {
 			ArrayList<PopulationNode> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Set the agents fitness to the default base level 
-			agent.setFitness(config.baseFitness);
+			agent.setFitness(config.getParameter(SimulationConfiguration.BASE_FITNESS).getInteger());
 
 			//Communicate with all neighbours
 			for(PopulationNode neighbour : neighbouringAgents){      
-				for(int i = 0; i < config.communicationsPerNeighbour; i++){
+				for(int i = 0; i < config.getParameter(SimulationConfiguration.COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
 					agent.communicate(neighbour);
 				}
 			}
@@ -234,11 +234,11 @@ public class ModelController implements Runnable {
 		
 		//TODO make selection dependent on the GetPossibleParents from the populationModel
 		
-		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.populationSize*2);
+		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()*2);
 
 		ArrayList<PopulationNode> newGenerationAgents = new ArrayList<PopulationNode>();
 		int i = 0;
-		while(newGenerationAgents.size() < config.populationSize){
+		while(newGenerationAgents.size() < config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 
@@ -281,10 +281,10 @@ public class ModelController implements Runnable {
 
 		double learningIntensity = antiLearningIntensity; //(config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
 
-		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.populationSize));
-		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.populationSize));
-		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.populationSize));
-		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.populationSize));
+		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
+		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
+		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
+		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
 		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
 		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
 

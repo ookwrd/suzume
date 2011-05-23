@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import AutoConfiguration.BasicConfigurationPanel;
+
 import simulation.SimulationConfiguration;
 import simulation.SelectionModel.SelectionModels;
 
@@ -16,17 +18,9 @@ public class SimulationConfigurationPanel extends JPanel {
 	
 	private JPanel innerPanel;
 	
+	private BasicConfigurationPanel panel;
+	
 	private JComboBox selectionModelTypeBox;
-	
-	private JTextField generationCountField;
-	private JTextField populationSizeField;
-	
-	private JTextField baseFitnessField;
-	private JTextField communicationPerNeighbourField;
-	
-	private JTextField criticalPeriodField;
-
-	private JTextField runCountField;
 	
 	public SimulationConfigurationPanel(){
 		
@@ -42,14 +36,11 @@ public class SimulationConfigurationPanel extends JPanel {
 		ConfigurationPanelTools.configurePanel(innerPanel);
 		
 		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
-		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+SimulationConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
-		runCountField = ConfigurationPanelTools.addField("Number of Runs", ""+SimulationConfiguration.DEFAULT_RUN_COUNT,innerPanel);
-		populationSizeField = ConfigurationPanelTools.addField("Population Size:", ""+SimulationConfiguration.DEFAULT_POPULATION_SIZE, innerPanel); 
-		baseFitnessField= ConfigurationPanelTools.addField("Base fitness value:", ""+SimulationConfiguration.DEFAULT_BASE_FITNESS, innerPanel);
-		communicationPerNeighbourField = ConfigurationPanelTools.addField("CommunicationsPerNeighbour:", ""+SimulationConfiguration.DEFAULT_COMMUNICATIONS_PER_NEIGHBOUR, innerPanel);
-		criticalPeriodField = ConfigurationPanelTools.addField("Critical Period:", ""+SimulationConfiguration.DEFAULT_CRITICAL_PERIOD, innerPanel);
 		
 		ConfigurationPanelTools.makeGrid(innerPanel);
+		
+		panel = new BasicConfigurationPanel(new SimulationConfiguration());
+		add(panel);
 	}
 	
 	public SimulationConfiguration getConfiguration(){
@@ -57,12 +48,7 @@ public class SimulationConfigurationPanel extends JPanel {
 		return new SimulationConfiguration(
 				agentConfigurationPanel.getConfiguration(),
 				(SelectionModels)selectionModelTypeBox.getSelectedItem(),
-				Integer.parseInt(generationCountField.getText().trim()),
-				Integer.parseInt(populationSizeField.getText().trim()),
-				Integer.parseInt(baseFitnessField.getText().trim()),
-				Integer.parseInt(communicationPerNeighbourField.getText().trim()),
-				Integer.parseInt(criticalPeriodField.getText().trim()),
-				Integer.parseInt(runCountField.getText().trim()));
+				panel.getConfiguration());
 	}
 	
 }
