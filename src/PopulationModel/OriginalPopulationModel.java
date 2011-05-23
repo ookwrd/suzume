@@ -29,8 +29,9 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 
 		
 	
-	public static final String LEARN_FROM_AGENTS_TO_DISTANCE = "Learn from agents to distance:";
-
+	public static final String LEARN_TO_DISTANCE = "Learn from agents to distance:";
+	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
+	
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
 		put("Population Size", new ConfigurationParameter(200));
@@ -38,7 +39,8 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 		put("Communication Graph", new ConfigurationParameter(GraphType.CyclicGraph));
 		put("Reproduction Graph", new ConfigurationParameter(GraphType.CyclicGraph));
 		put("Sub node", new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
-		put(LEARN_FROM_AGENTS_TO_DISTANCE, new ConfigurationParameter(2));
+		put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
+		put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 	}};
 	
 	private Graph learningGraph;
@@ -78,7 +80,7 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 	@Override
 	public ArrayList<PopulationNode> getPossibleCommunicators(PopulationNode agent) {
 
-		int distance = 1;
+		int distance = getParameter(COMMUNICATE_TO_DISTANCE).getInteger();
 		
 		int location = currentGeneration.indexOf(agent);
 
@@ -111,7 +113,7 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 	@Override
 	public ArrayList<PopulationNode> getPossibleTeachers(PopulationNode agent) {
 
-		int distance = getParameter(LEARN_FROM_AGENTS_TO_DISTANCE).getInteger();
+		int distance = getParameter(LEARN_TO_DISTANCE).getInteger();
 		
 		int location = currentGeneration.indexOf(agent);
 

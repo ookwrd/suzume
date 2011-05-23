@@ -12,7 +12,7 @@ public abstract class AbstractNode extends BasicConfigurable implements Populati
 	
 	private int id;
 	protected RandomGenerator randomGenerator;
-	protected NodeConfiguration config;
+	protected NodeConfiguration config;//TODO i think this is now redundent as abstract node extends basic configurable
 	
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
