@@ -21,7 +21,7 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public ConfigurationParameter getParameter(String key){//TODO put in interface
+	public ConfigurationParameter getParameter(String key){
 		return parameters.get(key);
 	}
 	

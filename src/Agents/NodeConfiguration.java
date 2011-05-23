@@ -11,7 +11,6 @@ public class NodeConfiguration extends BasicConfigurable {
 	public NodeType type = DEFAULT_AGENT_TYPE;
 
 	public NodeConfiguration(){
-		//*#*
 		//TODO maybe I need to get rid of this method?
 	}
 	
