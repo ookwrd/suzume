@@ -9,7 +9,7 @@ import tools.Pair;
 import Agents.Agent;
 import Agents.AgentFactory;
 import Launcher.Launcher;
-import PopulationModel.OriginalPopulationModel;
+import PopulationModel.CompositePopulationModel;
 import PopulationModel.PopulationNode;
 
 public class ModelController implements Runnable {
@@ -62,11 +62,11 @@ public class ModelController implements Runnable {
 
 	private void resetModel(){
 		
-		population = new OriginalPopulationModel(createIntialAgents(), createIntialAgents());
+		population = new CompositePopulationModel(createIntialAgents(), createIntialAgents());
 		
 		//TODO temp hack for setting learning distance
-		population.setParameter(OriginalPopulationModel.LEARN_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
-		population.setParameter(OriginalPopulationModel.COMMUNICATE_TO_DISTANCE, config.getParameter(SimulationConfiguration.COMMUNICATE_TO_DISTANCE));
+		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
+		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, config.getParameter(SimulationConfiguration.COMMUNICATE_TO_DISTANCE));
 		
 		
 		if(visualizer!=null){

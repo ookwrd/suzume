@@ -2,7 +2,7 @@ package Agents;
 
 import simulation.RandomGenerator;
 import Agents.NodeConfiguration.NodeType;
-import PopulationModel.OriginalPopulationModel;
+import PopulationModel.CompositePopulationModel;
 import PopulationModel.PopulationNode;
 
 public class AgentFactory {
@@ -28,7 +28,7 @@ public class AgentFactory {
 			return new ProbabalityAgent();
 		
 		case ConfigurablePopulation:
-			return new OriginalPopulationModel();
+			return new CompositePopulationModel();
 			
 	//	case SynonymAgent:
 	//		return new SynonymAgent();

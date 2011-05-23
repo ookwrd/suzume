@@ -25,20 +25,25 @@ import PopulationModel.GraphConfiguration.GraphType;
  * @author Luke McCrohon
  *
  */
-public class OriginalPopulationModel extends AbstractNode implements PopulationModel {
+public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
 		
 	
+	public static final String SUB_NODE = "Sub node";
+	public static final String REPRODUCTION_GRAPH = "Reproduction Graph";
+	public static final String COMMUNICATION_GRAPH = "Communication Graph";
+	public static final String LEARNING_GRAPH = "Learning Graph";
+	public static final String POPULATION_SIZE = "Population Size";
 	public static final String LEARN_TO_DISTANCE = "Learn from agents to distance:";
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
 	
 	@SuppressWarnings("serial")
 	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Population Size", new ConfigurationParameter(200));
-		put("Learning Graph", new ConfigurationParameter(GraphType.FullyConnected));
-		put("Communication Graph", new ConfigurationParameter(GraphType.CyclicGraph));
-		put("Reproduction Graph", new ConfigurationParameter(GraphType.CyclicGraph));
-		put("Sub node", new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
+		put(POPULATION_SIZE, new ConfigurationParameter(200));
+		put(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
+		put(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		put(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		put(SUB_NODE, new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
 		put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 	}};
@@ -50,9 +55,9 @@ public class OriginalPopulationModel extends AbstractNode implements PopulationM
 	private ArrayList<PopulationNode> previousGeneration = new ArrayList<PopulationNode>();
 	private ArrayList<PopulationNode> currentGeneration = new ArrayList<PopulationNode>();
 	
-	public OriginalPopulationModel(){}//TODO kill this
+	public CompositePopulationModel(){}//TODO kill this
 	
-	public OriginalPopulationModel(//TODO use initialization pattern
+	public CompositePopulationModel(//TODO use initialization pattern
 			ArrayList<PopulationNode> currentGeneration, 
 			ArrayList<PopulationNode> previousGeneration 
 			//ModelConfiguration config
