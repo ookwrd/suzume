@@ -7,7 +7,6 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import simulation.SimulationConfiguration;
-import simulation.SimulationConfiguration.PopulationModelType;
 import simulation.SelectionModel.SelectionModels;
 
 @SuppressWarnings("serial")
@@ -17,7 +16,6 @@ public class SimulationConfigurationPanel extends JPanel {
 	
 	private JPanel innerPanel;
 	
-	private JComboBox populationModelTypeBox;
 	private JComboBox selectionModelTypeBox;
 	
 	private JTextField generationCountField;
@@ -43,7 +41,6 @@ public class SimulationConfigurationPanel extends JPanel {
 		
 		ConfigurationPanelTools.configurePanel(innerPanel);
 		
-		populationModelTypeBox = ConfigurationPanelTools.addComboBox("Population Model:", PopulationModelType.values(), innerPanel);
 		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
 		generationCountField = ConfigurationPanelTools.addField("Number of Generations:", ""+SimulationConfiguration.DEFAULT_GENERATION_COUNT, innerPanel);
 		runCountField = ConfigurationPanelTools.addField("Number of Runs", ""+SimulationConfiguration.DEFAULT_RUN_COUNT,innerPanel);
@@ -59,7 +56,6 @@ public class SimulationConfigurationPanel extends JPanel {
 		
 		return new SimulationConfiguration(
 				agentConfigurationPanel.getConfiguration(),
-				(PopulationModelType)populationModelTypeBox.getSelectedItem(),
 				(SelectionModels)selectionModelTypeBox.getSelectedItem(),
 				Integer.parseInt(generationCountField.getText().trim()),
 				Integer.parseInt(populationSizeField.getText().trim()),

@@ -2,20 +2,37 @@ package simulation;
 
 import java.util.StringTokenizer;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 import simulation.SelectionModel.SelectionModels;
 
 
 import Agents.NodeConfiguration;
+import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.ConfigurationParameter;
 
 /**
  * Class for storing Model Configuration parameters.
  * 
  * @author Luke McCrohon
  */
-public class SimulationConfiguration {
+public class SimulationConfiguration extends BasicConfigurable {
 
-	public enum PopulationModelType {CyclicBagModel}
-	public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.CyclicBagModel;
+
+	public static final String GENERATION_COUNT = "Number of Generations:";
+	public static final String RUN_COUNT = "Number of Runs";
+	public static final String POPULATION_SIZE = "Population Size:";
+	public static final String CRITICAL_PERIOD = "Critical Period:";
+	
+	{
+		defaultParameters.put(GENERATION_COUNT, new ConfigurationParameter(5000));
+		defaultParameters.put(RUN_COUNT, new ConfigurationParameter(10));
+		defaultParameters.put(POPULATION_SIZE, new ConfigurationParameter(200));
+		defaultParameters.put(CRITICAL_PERIOD, new ConfigurationParameter(200));
+	}
+	
+	//public enum PopulationModelType {CyclicBagModel}
+	//public static final PopulationModelType DEFAULT_POPULATION_MODEL = PopulationModelType.CyclicBagModel;
 	
 	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelection;
 	
@@ -35,7 +52,6 @@ public class SimulationConfiguration {
 	
 	protected NodeConfiguration agentConfig;
 	
-	protected PopulationModelType populationModelType;
 	protected SelectionModels selectionModelType;
 	
 	protected int generationCount;
@@ -54,7 +70,6 @@ public class SimulationConfiguration {
 	 */
 	public SimulationConfiguration(){
 		this.agentConfig = new NodeConfiguration();//TODO make this top level node config
-		this.populationModelType = DEFAULT_POPULATION_MODEL;
 		this.selectionModelType = DEFAULT_SELECTION_MODEL;
 		
 		this.generationCount = DEFAULT_GENERATION_COUNT;
@@ -80,7 +95,6 @@ public class SimulationConfiguration {
 	 * @param criticalPeriod
 	 */
 	public SimulationConfiguration(NodeConfiguration agentConfig, 
-			PopulationModelType populationModelType, 
 			SelectionModels selectionModelType,
 			int generationCount, 
 			int populationSize, 
@@ -89,7 +103,6 @@ public class SimulationConfiguration {
 			int criticalPeriod, 
 			int numberRuns){
 		this.agentConfig = agentConfig;
-		this.populationModelType = populationModelType;
 		this.selectionModelType = selectionModelType;
 		this.generationCount = generationCount;
 		this.populationSize = populationSize;
@@ -108,7 +121,6 @@ public class SimulationConfiguration {
 		StringTokenizer tokenizer = new StringTokenizer(inputString);
 		
 		//this.agentConfig = new AgentConfiguration(tokenizer);
-		this.populationModelType = PopulationModelType.valueOf(tokenizer.nextToken());
 		this.selectionModelType = SelectionModels.valueOf(tokenizer.nextToken());
 		
 		this.generationCount = Integer.parseInt(tokenizer.nextToken());
@@ -129,7 +141,6 @@ public class SimulationConfiguration {
 	 */
 	public String saveString(){
 		return "" //+ agentConfig.saveString() //TODO Make this work.
-		+ " " + populationModelType 
 		+ " " + selectionModelType
 		+ " " + generationCount 
 		+ " " + populationSize 
