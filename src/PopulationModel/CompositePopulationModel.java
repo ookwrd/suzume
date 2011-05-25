@@ -9,7 +9,6 @@ import java.util.HashMap;
 import simulation.PopulationModel;
 import simulation.RandomGenerator;
 
-
 import Agents.AbstractNode;
 import Agents.Agent;
 import Agents.NodeConfiguration.NodeType;
@@ -27,8 +26,6 @@ import PopulationModel.GraphConfiguration.GraphType;
  */
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
-		
-	
 	public static final String SUB_NODE = "Sub node";
 	public static final String REPRODUCTION_GRAPH = "Reproduction Graph";
 	public static final String COMMUNICATION_GRAPH = "Communication Graph";
@@ -37,29 +34,28 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public static final String LEARN_TO_DISTANCE = "Learn from agents to distance:";
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
 	
-	@SuppressWarnings("serial")
-	private static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put(POPULATION_SIZE, new ConfigurationParameter(200));
-		put(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
-		put(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		put(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		put(SUB_NODE, new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
-		put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
-		put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
-	}};
+	{
+		defaultParameters.put(POPULATION_SIZE, new ConfigurationParameter(200));
+		defaultParameters.put(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
+		defaultParameters.put(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		defaultParameters.put(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		defaultParameters.put(SUB_NODE, new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
+		defaultParameters.put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
+		defaultParameters.put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+	}
 	
 	private Graph learningGraph;
 	private Graph communicationGraph;
 	private Graph reproductionGraph;
 	
-	private ArrayList<PopulationNode> previousGeneration = new ArrayList<PopulationNode>();
-	private ArrayList<PopulationNode> currentGeneration = new ArrayList<PopulationNode>();
+	private ArrayList<Node> previousGeneration = new ArrayList<Node>();
+	private ArrayList<Node> currentGeneration = new ArrayList<Node>();
 	
 	public CompositePopulationModel(){}//TODO kill this
 	
 	public CompositePopulationModel(//TODO use initialization pattern
-			ArrayList<PopulationNode> currentGeneration, 
-			ArrayList<PopulationNode> previousGeneration 
+			ArrayList<Node> currentGeneration, 
+			ArrayList<Node> previousGeneration 
 			//ModelConfiguration config
 			//GraphConfiguration learning, 
 			//GraphConfiguration communication, 
@@ -72,7 +68,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 
 	@Override
-	public void switchGenerations(ArrayList<PopulationNode> newGeneration) {
+	public void switchGenerations(ArrayList<Node> newGeneration) {
 		previousGeneration = currentGeneration;
 		currentGeneration = newGeneration;
 	}
@@ -83,13 +79,13 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	 * 
 	 */
 	@Override
-	public ArrayList<PopulationNode> getPossibleCommunicators(PopulationNode agent) {
+	public ArrayList<Node> getPossibleCommunicators(Node agent) {
 
 		int distance = getParameter(COMMUNICATE_TO_DISTANCE).getInteger();
 		
 		int location = currentGeneration.indexOf(agent);
 
-		ArrayList<PopulationNode> retValAgents = new ArrayList<PopulationNode>();
+		ArrayList<Node> retValAgents = new ArrayList<Node>();
 
 		for (int i = 1; i <= distance; i++) {
 			//Add pair of agents distance i from the central agent
@@ -116,13 +112,13 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	 * size of return = agents*2 + 1
 	 */
 	@Override
-	public ArrayList<PopulationNode> getPossibleTeachers(PopulationNode agent) {
+	public ArrayList<Node> getPossibleTeachers(Node agent) {
 
 		int distance = getParameter(LEARN_TO_DISTANCE).getInteger();
 		
 		int location = currentGeneration.indexOf(agent);
 
-		ArrayList<PopulationNode> retValAgents = new ArrayList<PopulationNode>();
+		ArrayList<Node> retValAgents = new ArrayList<Node>();
 
 		//add the ancestor at the same point as the specified agent
 		retValAgents.add(previousGeneration.get(location));
@@ -153,7 +149,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public ArrayList<Agent> getAncestorGeneration() {
 		
 		ArrayList<Agent> retAgents = new ArrayList<Agent>();
-		for(PopulationNode node :previousGeneration){
+		for(Node node :previousGeneration){
 			retAgents.addAll(node.getBaseAgents());
 		}
 		return retAgents;
@@ -163,7 +159,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public ArrayList<Agent> getCurrentGeneration() {
 		
 		ArrayList<Agent> retAgents = new ArrayList<Agent>();
-		for(PopulationNode node :currentGeneration){
+		for(Node node :currentGeneration){
 			retAgents.addAll(node.getBaseAgents());
 		}
 		return retAgents;
@@ -280,19 +276,19 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	@Override
 	public void print(){
 		System.out.println("Printing Previous Generation");	
-		for(PopulationNode agent : getAncestorGeneration()){  
+		for(Node agent : getAncestorGeneration()){  
 			agent.print();
 			System.out.println();
 		}
 	}
 
 	@Override
-	public ArrayList<PopulationNode> getPossibleParents(PopulationNode agent) {
+	public ArrayList<Node> getPossibleParents(Node agent) {
 		return previousGeneration;
 	}//TODO w´switch out for a graphbased implemenation
 
 	@Override
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB,
+	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {
 		
 		System.out.println("In population mode this should never be called.");
@@ -307,7 +303,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 	//TODO extract these to an interface
 	@Override
-	public void teach(PopulationNode agent) {
+	public void teach(Node agent) {
 
 		System.out.println("Shouldnt be here");
 	}
@@ -344,7 +340,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 
 	@Override
-	public void communicate(PopulationNode partner) {
+	public void communicate(Node partner) {
 		System.out.println("Shouldnt be here");
 	}
 

@@ -13,7 +13,7 @@ import javax.swing.border.EtchedBorder;
 import Agents.NodeConfiguration;
 import Agents.NodeConfiguration.NodeType;
 import Agents.NodeConfigurationPanel;
-import Agents.AgentFactory;
+import Agents.NodeFactory;
 
 
 @SuppressWarnings("serial")
@@ -53,7 +53,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 			remove(subPanel);
 		}
 		
-		subPanel = AgentFactory.getConfigurationPanel((NodeType)agentTypesBox.getSelectedItem());
+		subPanel = NodeFactory.getConfigurationPanel((NodeType)agentTypesBox.getSelectedItem());
 			
 		add(subPanel);
 		

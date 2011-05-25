@@ -6,9 +6,9 @@ import java.awt.Graphics;
 
 import simulation.RandomGenerator;
 import AutoConfiguration.BasicConfigurable;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
-public abstract class AbstractNode extends BasicConfigurable implements PopulationNode{
+public abstract class AbstractNode extends BasicConfigurable implements Node{
 	
 	private int id;
 	protected RandomGenerator randomGenerator;

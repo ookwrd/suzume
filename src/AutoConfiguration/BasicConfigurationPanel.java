@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 import simulation.RandomGenerator;
 
-import Agents.AgentFactory;
+import Agents.NodeFactory;
 import Agents.NodeConfigurationPanel;
 import Launcher.ConfigurationPanelTools;
 import Launcher.GraphTypeConfigurationPanel;
@@ -132,11 +132,11 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case Graph:
-				retParameters.put(key, new ConfigurationParameter(((GraphTypeConfigurationPanel)comp).getConfiguration()));
+				//retParameters.put(key, new ConfigurationParameter(((GraphTypeConfigurationPanel)comp).getConfiguration()));
 				break;
 				
 			case Node:
-				retParameters.put(key, new ConfigurationParameter(((NodeTypeConfigurationPanel)comp).getConfiguration()));
+				retParameters.put(key, new ConfigurationParameter(NodeFactory.constructPopulationNode(((NodeTypeConfigurationPanel)comp).getConfiguration(),null)));
 				break;
 				
 			default:
