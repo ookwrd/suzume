@@ -2,10 +2,10 @@ package Agents;
 
 import java.util.ArrayList;
 
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 
-public interface Agent extends PopulationNode {
+public interface Agent extends Node {
 	
 	
 	

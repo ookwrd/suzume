@@ -6,17 +6,17 @@ import AutoConfiguration.BasicConfigurable;
 
 public abstract class AbstractGraph extends BasicConfigurable implements Graph {
 
-	protected ArrayList<PopulationNode> populations;
+	protected ArrayList<Node> populations;
 	protected GraphConfiguration config;
 	
 	@Override
-	public void init(ArrayList<PopulationNode> populations, GraphConfiguration config){
+	public void init(ArrayList<Node> populations, GraphConfiguration config){
 		this.config = config;
 		this.populations = populations; 
 	}
 	
 	@Override
-	public ArrayList<PopulationNode> getNodeSet(){
+	public ArrayList<Node> getNodeSet(){
 		return populations;
 	}
 	
@@ -24,7 +24,7 @@ public abstract class AbstractGraph extends BasicConfigurable implements Graph {
 	 * Override this implementation to create a directed graph.
 	 */
 	@Override
-	public ArrayList<PopulationNode> getOutNodes(PopulationNode node){
+	public ArrayList<Node> getOutNodes(Node node){
 		return getInNodes(node);
 	}
 	

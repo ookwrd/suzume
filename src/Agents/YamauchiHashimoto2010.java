@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 import simulation.RandomGenerator;
 
@@ -46,7 +46,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
 		
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;

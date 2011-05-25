@@ -3,7 +3,7 @@ package Agents;
 import java.util.ArrayList;
 
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 import simulation.RandomGenerator;
 
@@ -72,12 +72,12 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public void teach(PopulationNode learner) {
+	public void teach(Node learner) {
 		learner.learnUtterance(getRandomUtterance());
 	}
 	
 	@Override
-	public void communicate(PopulationNode partner){
+	public void communicate(Node partner){
 		
 		Utterance utterance = partner.getRandomUtterance();
 

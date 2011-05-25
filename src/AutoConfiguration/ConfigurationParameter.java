@@ -1,11 +1,9 @@
 package AutoConfiguration;
 
-import Agents.NodeConfiguration;
 import Agents.NodeConfiguration.NodeType;
 import PopulationModel.Graph;
-import PopulationModel.GraphConfiguration;
 import PopulationModel.GraphConfiguration.GraphType;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 public class ConfigurationParameter {
 
@@ -45,7 +43,7 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
-	public ConfigurationParameter(NodeConfiguration value){
+	public ConfigurationParameter(Node value){
 		type = ConfigurationParameterType.Node;
 		this.value = value;
 	}
@@ -55,7 +53,7 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
-	public ConfigurationParameter(GraphConfiguration value){
+	public ConfigurationParameter(Graph value){
 		type = ConfigurationParameterType.Graph;
 		this.value = value;
 	}
@@ -80,19 +78,19 @@ public class ConfigurationParameter {
 		return (Boolean)value;
 	}
 	
-	public NodeType getNodeType(){
+	public NodeType getNodeType(){//TODO remove
 		return (NodeType)value;
 	}
 	
-	public NodeConfiguration getNode(){
-		return (NodeConfiguration)value;
+	public Node getNode(){
+		return (Node)value;
 	}
 	
-	public GraphType getGraphType(){
+	public GraphType getGraphType(){//TODO remove
 		return (GraphType)value;
 	}
 	
-	public GraphConfiguration getGraph(){
-		return (GraphConfiguration)value;
+	public Graph getGraph(){
+		return (Graph)value;
 	}
 }

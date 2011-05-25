@@ -9,11 +9,11 @@ import Agents.NodeConfiguration;
 import Agents.Utterance;
 import AutoConfiguration.Configurable;
 
-public interface PopulationNode extends Visualizable, Configurable {
+public interface Node extends Visualizable, Configurable {
 
 	//Initialization
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator);
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator);
+	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator);
 	
 	//General Properties
 	public String getName();
@@ -22,7 +22,7 @@ public interface PopulationNode extends Visualizable, Configurable {
 	public int getId();
 	
 	//Language Learning
-	public void teach(PopulationNode agent);
+	public void teach(Node agent);
 	public void learnUtterance(Utterance utterance);
 	public boolean canStillLearn();
 	public Utterance getRandomUtterance();//TODO is this needed externally?
@@ -31,7 +31,7 @@ public interface PopulationNode extends Visualizable, Configurable {
 	public void invent();
 	
 
-	public void communicate(PopulationNode partner);
+	public void communicate(Node partner);
 	
 	public ArrayList<Agent> getBaseAgents();
 	

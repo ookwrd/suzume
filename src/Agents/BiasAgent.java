@@ -5,7 +5,7 @@ import java.util.HashMap;
 import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 
 
@@ -63,7 +63,7 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	 * @param id
 	 */
 	@Override
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
 		BiasAgent parent1 = (BiasAgent)parentA;
 		BiasAgent parent2 = (BiasAgent)parentB;
 		super.initializeAgent(parent1.getConfiguration(), id, randomGenerator);

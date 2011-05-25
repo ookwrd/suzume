@@ -3,13 +3,13 @@ package Agents;
 import simulation.RandomGenerator;
 import Agents.NodeConfiguration.NodeType;
 import PopulationModel.CompositePopulationModel;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
-public class AgentFactory {
+public class NodeFactory {
 
-	private static int nextNodeID = 0; // keeps count of all the next agents from this world
+	private static int nextNodeID = 0; // keeps count of all the next nodes from this world
 	
-	public static PopulationNode constructUninitializedNode(NodeType type){
+	public static Node constructUninitializedNode(NodeType type){
 		
 		switch (type) {
 		case YamauchiHashimoto2010:
@@ -40,9 +40,9 @@ public class AgentFactory {
 		
 	}
 	
-	public static PopulationNode constructPopulationNode(NodeConfiguration nodeConfig, RandomGenerator randomGenerator){
+	public static Node constructPopulationNode(NodeConfiguration nodeConfig, RandomGenerator randomGenerator){
 		
-		PopulationNode node = constructUninitializedNode(nodeConfig.type);
+		Node node = constructUninitializedNode(nodeConfig.type);
 		
 		node.initializeAgent(nodeConfig, nextNodeID++, randomGenerator);
 		
@@ -50,7 +50,7 @@ public class AgentFactory {
 		
 	}
 	
-	public static PopulationNode constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
+	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
 		NodeType agentType = parentA.getConfiguration().type; 
 		
@@ -59,7 +59,7 @@ public class AgentFactory {
 			return null;
 		}	
 		
-		PopulationNode returnVal = constructUninitializedNode(agentType);
+		Node returnVal = constructUninitializedNode(agentType);
 		
 		returnVal.initializeAgent(parentA, parentB, nextNodeID++, randomGenerator);
 		return returnVal;

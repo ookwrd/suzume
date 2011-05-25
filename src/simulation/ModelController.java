@@ -7,10 +7,10 @@ import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
 import Agents.Agent;
-import Agents.AgentFactory;
+import Agents.NodeFactory;
 import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 public class ModelController implements Runnable {
 
@@ -100,11 +100,11 @@ public class ModelController implements Runnable {
 	 * 
 	 * @return
 	 */
-	private ArrayList<PopulationNode> createIntialAgents(){
+	private ArrayList<Node> createIntialAgents(){
 
-		ArrayList<PopulationNode> agents = new ArrayList<PopulationNode>();
+		ArrayList<Node> agents = new ArrayList<Node>();
 		for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
-			agents.add(AgentFactory.constructPopulationNode(config.agentConfig, randomGenerator));
+			agents.add(NodeFactory.constructPopulationNode(config.agentConfig, randomGenerator));
 		}
 
 		return agents;
@@ -184,15 +184,15 @@ public class ModelController implements Runnable {
 	private void training(){
 
 		//for each agent
-		for(PopulationNode learner : population.getCurrentGeneration()){
+		for(Node learner : population.getCurrentGeneration()){
 
 			//get its ancestors (teachers)
-			ArrayList<PopulationNode> teachers = population.getPossibleTeachers(learner);
+			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
 			for(int i = 0; i < config.getParameter(SimulationConfiguration.CRITICAL_PERIOD).getInteger(); i++){
 
 				//Get random teacher
-				PopulationNode teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
+				Node teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
 
 				teacher.teach(learner);
 
@@ -214,13 +214,13 @@ public class ModelController implements Runnable {
 
 		for(Agent agent : population.getCurrentGeneration()){
 
-			ArrayList<PopulationNode> neighbouringAgents = population.getPossibleCommunicators(agent);
+			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Set the agents fitness to the default base level 
 			agent.setFitness(config.getParameter(SimulationConfiguration.BASE_FITNESS).getInteger());
 
 			//Communicate with all neighbours
-			for(PopulationNode neighbour : neighbouringAgents){      
+			for(Node neighbour : neighbouringAgents){      
 				for(int i = 0; i < config.getParameter(SimulationConfiguration.COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
 					agent.communicate(neighbour);
 				}
@@ -235,19 +235,19 @@ public class ModelController implements Runnable {
 	 * 
 	 * @return
 	 */
-	private ArrayList<PopulationNode> selection(){
+	private ArrayList<Node> selection(){
 		
 		//TODO make selection dependent on the GetPossibleParents from the populationModel
 		
 		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()*2);
 
-		ArrayList<PopulationNode> newGenerationAgents = new ArrayList<PopulationNode>();
+		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
 		int i = 0;
 		while(newGenerationAgents.size() < config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 
-			newGenerationAgents.add(AgentFactory.constructPopulationNode(parent1, parent2, randomGenerator));
+			newGenerationAgents.add(NodeFactory.constructPopulationNode(parent1, parent2, randomGenerator));
 		}
 
 		return newGenerationAgents;
@@ -317,7 +317,7 @@ public class ModelController implements Runnable {
 	}
 	
 	private String getTitleString(){
-		return "[Seed: " + randomGenerator.getSeed() + "   " + config + "]";
+		return "[Seed: " + randomGenerator.getSeed() + "   " + config.printName() + "]";
 	}
     
 	private void startTimer(){

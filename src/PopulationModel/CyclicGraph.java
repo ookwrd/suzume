@@ -14,9 +14,9 @@ public class CyclicGraph extends AbstractGraph {
 	}};
 
 	@Override
-	public ArrayList<PopulationNode> getInNodes(PopulationNode node) {
+	public ArrayList<Node> getInNodes(Node node) {
 
-		ArrayList<PopulationNode> retValAgents = new ArrayList<PopulationNode>();
+		ArrayList<Node> retValAgents = new ArrayList<Node>();
 		
 		int distance = config.getParameter("Max link distance").getInteger();
 		

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.PopulationNode;
+import PopulationModel.Node;
 
 public class ProbabalityAgent extends AbstractAgent implements Agent {
 
@@ -46,7 +46,7 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 	}
 	
 	@Override
-	public void initializeAgent(PopulationNode parentA, PopulationNode parentB,
+	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(parentA.getConfiguration(), id, randomGenerator);
 		

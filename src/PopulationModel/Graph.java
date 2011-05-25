@@ -6,12 +6,12 @@ import AutoConfiguration.Configurable;
 
 public interface Graph extends Configurable {
 
-	public void init(ArrayList<PopulationNode> populations, GraphConfiguration config);
+	public void init(ArrayList<Node> populations, GraphConfiguration config);
 	
-	public ArrayList<PopulationNode> getNodeSet();
+	public ArrayList<Node> getNodeSet();
 	
-	public ArrayList<PopulationNode> getInNodes(PopulationNode node);
+	public ArrayList<Node> getInNodes(Node node);
 	
-	public ArrayList<PopulationNode> getOutNodes(PopulationNode node);
+	public ArrayList<Node> getOutNodes(Node node);
 	
 }
