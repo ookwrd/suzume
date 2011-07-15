@@ -11,10 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import simulation.RandomGenerator;
-
 import Agents.NodeFactory;
-import Agents.NodeConfigurationPanel;
 import Launcher.ConfigurationPanelTools;
 import Launcher.GraphTypeConfigurationPanel;
 import Launcher.NodeTypeConfigurationPanel;
@@ -136,7 +133,7 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case Node:
-				retParameters.put(key, new ConfigurationParameter(NodeFactory.constructPopulationNode(((NodeTypeConfigurationPanel)comp).getConfiguration(),null)));
+				retParameters.put(key, new ConfigurationParameter(NodeFactory.constructPopulationNode(((NodeTypeConfigurationPanel)comp).getConfiguration(),null/*TODO how can I pass this in?*/)));
 				break;
 				
 			default:
