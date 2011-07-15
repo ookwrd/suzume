@@ -65,7 +65,7 @@ public class ModelController implements Runnable {
 
 	private void resetModel(){
 		
-		population = initializePopulation();
+		initializePopulation();
 		
 		//TODO temp hack for setting learning distance
 		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
@@ -98,13 +98,13 @@ public class ModelController implements Runnable {
 		return arrayLists;
 	}
 
-	private PopulationModel initializePopulation(){
+	private void initializePopulation(){
 		
 		if(config.agentConfig.type == NodeConfiguration.NodeType.ConfigurablePopulation){
 			
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(config.agentConfig);
 			node.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
-			return node;
+			population = node;
 			
 		} else {
 		
@@ -117,7 +117,7 @@ public class ModelController implements Runnable {
 				nodes.add(node);
 			}
 		
-			 return new CompositePopulationModel(nodes, nodes);
+			 population = new CompositePopulationModel(nodes, nodes);
 		}
 		
 	}
