@@ -134,7 +134,9 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case Node:
-				retParameters.put(key, new ConfigurationParameter(NodeFactory.constructPopulationNode(((NodeTypeConfigurationPanel)comp).getConfiguration(),null/*TODO how can I pass this in?*/)));
+				retParameters.put(key, new ConfigurationParameter(
+						((NodeTypeConfigurationPanel)comp).getConfiguration())
+						);
 				break;
 				
 			default:

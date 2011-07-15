@@ -7,10 +7,12 @@ import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
 import Agents.Agent;
+import Agents.NodeConfiguration;
 import Agents.NodeFactory;
 import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
+import PopulationModel.PopulationModel;
 
 public class ModelController implements Runnable {
 
@@ -48,6 +50,7 @@ public class ModelController implements Runnable {
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
 		
+		
 		this.selectionModel = SelectionModel.constructSelectionModel(config.selectionModelType, randomGenerator);
 		
 		resetModel();
@@ -62,7 +65,7 @@ public class ModelController implements Runnable {
 
 	private void resetModel(){
 		
-		population = new CompositePopulationModel(createIntialAgents(), createIntialAgents());
+		population = initializePopulation();
 		
 		//TODO temp hack for setting learning distance
 		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
@@ -95,22 +98,28 @@ public class ModelController implements Runnable {
 		return arrayLists;
 	}
 
-	/**
-	 * Initialize an initial population of agents.
-	 * 
-	 * @return
-	 */
-	private ArrayList<Node> createIntialAgents(){
-
-		ArrayList<Node> agents = new ArrayList<Node>();
-		for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
+	private PopulationModel initializePopulation(){
+		
+		if(config.agentConfig.type == NodeConfiguration.NodeType.ConfigurablePopulation){
 			
-			Node agent = NodeFactory.constructPopulationNode(config.agentConfig, randomGenerator);
-			//agent.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
-			agents.add(agent);
+			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(config.agentConfig);
+			node.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
+			return node;
+			
+		} else {
+		
+			//THis case needs to be gotten rid of.
+			ArrayList<Node> nodes = new ArrayList<Node>();
+			for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
+				
+				Node node = NodeFactory.constructPopulationNode(config.agentConfig);
+				node.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
+				nodes.add(node);
+			}
+		
+			 return new CompositePopulationModel(nodes, nodes);
 		}
-
-		return agents;
+		
 	}
 
 

@@ -18,9 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import AutoConfiguration.ConfigurationParameter;
+import PopulationModel.PopulationModel;
 
 import runTimeVisualization.Visualizable.VisualizationType;
-import simulation.PopulationModel;
 import simulation.VisualizationConfiguration;
 
 @SuppressWarnings("serial")
