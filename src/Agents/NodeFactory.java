@@ -40,11 +40,11 @@ public class NodeFactory {
 		
 	}
 	
-	public static Node constructPopulationNode(NodeConfiguration nodeConfig, RandomGenerator randomGenerator){
+	public static Node constructPopulationNode(NodeConfiguration nodeConfig){
 		
 		Node node = constructUninitializedNode(nodeConfig.type);
 		
-		node.initializeAgent(nodeConfig, nextNodeID++, randomGenerator);
+		//node.initializeAgent(nodeConfig, nextNodeID++, randomGenerator);
 		
 		return node;
 		

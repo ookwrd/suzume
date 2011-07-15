@@ -6,24 +6,16 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import simulation.PopulationModel;
 import simulation.RandomGenerator;
 
 import Agents.AbstractNode;
 import Agents.Agent;
+import Agents.NodeConfiguration;
 import Agents.NodeConfiguration.NodeType;
 import Agents.Utterance;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.GraphConfiguration.GraphType;
 
-/**
- * Population model corresponding to a cyclical distribution of agents as seen in:
- * Relaxation of selection, Niche Construction, and the Baldwin Eï¬€ect in Language 
- * Evolution - Hajime Yamauchi & Takashi Hashimoto
- * 
- * @author Luke McCrohon
- *
- */
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
 	public static final String SUB_NODE = "Sub node";
@@ -51,7 +43,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	private ArrayList<Node> previousGeneration = new ArrayList<Node>();
 	private ArrayList<Node> currentGeneration = new ArrayList<Node>();
 	
-	public CompositePopulationModel(){}//TODO kill this
+	public CompositePopulationModel(){}
 	
 	public CompositePopulationModel(//TODO use initialization pattern
 			ArrayList<Node> currentGeneration, 
@@ -61,7 +53,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			//GraphConfiguration communication, 
 			//GraphConfiguration reproduction
 			) 
-	{
+	{//TODO kill this
 		this.currentGeneration = currentGeneration;
 		this.previousGeneration = previousGeneration;
 	}
@@ -287,6 +279,17 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		return previousGeneration;
 	}//TODO w´switch out for a graphbased implemenation
 
+	@Override
+	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+		super.initializeAgent(config, id, randomGenerator);
+	
+		System.out.println("Here");
+		System.out.println(currentGeneration.size());
+		
+		System.out.println(config.getParameter(SUB_NODE).getNodeConfiguration());
+		
+	}
+	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {

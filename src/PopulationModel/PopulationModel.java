@@ -1,11 +1,10 @@
-package simulation;
+package PopulationModel;
 
 import java.util.ArrayList;
 
 import runTimeVisualization.Visualizable;
 
 import Agents.Agent;
-import PopulationModel.Node;
 
 /**
  * Interface capturing the common elements of population structure. Makes the assumption of discrete generations.
