@@ -3,7 +3,6 @@ package Launcher;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import AutoConfiguration.BasicConfigurationPanel;
@@ -33,11 +32,11 @@ public class SimulationConfigurationPanel extends JPanel {
 		innerPanel = new JPanel();
 		add(innerPanel);
 		
-		ConfigurationPanelTools.configurePanel(innerPanel);
+		ConfigurationDisplayTools.configurePanel(innerPanel);
 		
-		selectionModelTypeBox= ConfigurationPanelTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
+		selectionModelTypeBox= ConfigurationDisplayTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
 		
-		ConfigurationPanelTools.makeGrid(innerPanel);
+		ConfigurationDisplayTools.makeGrid(innerPanel);
 		
 		panel = new BasicConfigurationPanel(new SimulationConfiguration());
 		add(panel);

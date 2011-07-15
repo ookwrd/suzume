@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Agents.NodeFactory;
-import Launcher.ConfigurationPanelTools;
+import Launcher.ConfigurationDisplayTools;
 import Launcher.GraphTypeConfigurationPanel;
 import Launcher.NodeTypeConfigurationPanel;
 
@@ -31,7 +31,7 @@ public class BasicConfigurationPanel extends JPanel {
 		components = new HashMap<String, Component>();
 		
 		JPanel autoPanel = new JPanel();
-		ConfigurationPanelTools.configurePanel(autoPanel);
+		ConfigurationDisplayTools.configurePanel(autoPanel);
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
@@ -41,37 +41,37 @@ public class BasicConfigurationPanel extends JPanel {
 			
 			switch (parameter.type) {
 			case Integer:
-				JTextField field = ConfigurationPanelTools.addField(key, parameter.value.toString(), autoPanel);
+				JTextField field = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
 				components.put(key, field);
 				break;
 				
 			case Double:
-				JTextField field1 = ConfigurationPanelTools.addField(key, parameter.value.toString(), autoPanel);
+				JTextField field1 = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
 				components.put(key, field1);
 				break;
 				
 			case Boolean:
-				JCheckBox box = ConfigurationPanelTools.addCheckBox(key, parameter.getBoolean(), autoPanel);
+				JCheckBox box = ConfigurationDisplayTools.addCheckBox(key, parameter.getBoolean(), autoPanel);
 				components.put(key, box);
 				break;
 				
 			case String:
-				JTextField field2 = ConfigurationPanelTools.addField(key, parameter.getString(), autoPanel);
+				JTextField field2 = ConfigurationDisplayTools.addField(key, parameter.getString(), autoPanel);
 				components.put(key, field2);
 				break;
 				
 			case List:
-				JComboBox listBox = ConfigurationPanelTools.addComboBox(key, parameter.getList(), autoPanel);
+				JComboBox listBox = ConfigurationDisplayTools.addComboBox(key, parameter.getList(), autoPanel);
 				components.put(key, listBox);
 				break;
 				
 			case Graph:
-				GraphTypeConfigurationPanel panel = ConfigurationPanelTools.addGraphSelector(key, parameter.getGraphType(), autoPanel);
+				GraphTypeConfigurationPanel panel = ConfigurationDisplayTools.addGraphSelector(key, parameter.getGraphType(), autoPanel);
 				components.put(key, panel);
 				break;
 				
 			case Node:
-				NodeTypeConfigurationPanel panel1 = ConfigurationPanelTools.addNodeSelector(key, parameter.getNodeType(), autoPanel);
+				NodeTypeConfigurationPanel panel1 = ConfigurationDisplayTools.addNodeSelector(key, parameter.getNodeType(), autoPanel);
 				components.put(key, panel1);
 				break;
 				
@@ -82,7 +82,7 @@ public class BasicConfigurationPanel extends JPanel {
 			
 		}
 		
-		ConfigurationPanelTools.makeGrid(autoPanel);
+		ConfigurationDisplayTools.makeGrid(autoPanel);
 		
 		add(autoPanel);
 		
@@ -130,6 +130,7 @@ public class BasicConfigurationPanel extends JPanel {
 				
 			case Graph:
 				//retParameters.put(key, new ConfigurationParameter(((GraphTypeConfigurationPanel)comp).getConfiguration()));
+				//TODO
 				break;
 				
 			case Node:

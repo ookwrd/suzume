@@ -104,7 +104,10 @@ public class ModelController implements Runnable {
 
 		ArrayList<Node> agents = new ArrayList<Node>();
 		for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
-			agents.add(NodeFactory.constructPopulationNode(config.agentConfig, randomGenerator));
+			
+			Node agent = NodeFactory.constructPopulationNode(config.agentConfig, randomGenerator);
+			//agent.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
+			agents.add(agent);
 		}
 
 		return agents;
