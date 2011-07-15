@@ -17,9 +17,9 @@ public class RandomConfigurationPanel extends JPanel {
 	private JTextField randomSeedField;
 	
 	public RandomConfigurationPanel(){
-		ConfigurationPanelTools.configurePanel("Random Number Generator Configuration", this);
+		ConfigurationDisplayTools.configurePanel("Random Number Generator Configuration", this);
 		
-		useRandomSeedBox = ConfigurationPanelTools.addCheckBox("Use current time as seed:", true, this);
+		useRandomSeedBox = ConfigurationDisplayTools.addCheckBox("Use current time as seed:", true, this);
 		useRandomSeedBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -27,10 +27,10 @@ public class RandomConfigurationPanel extends JPanel {
 			}
 		});
 		
-		randomSeedField = ConfigurationPanelTools.addField("Seed:", ""+1, this);
+		randomSeedField = ConfigurationDisplayTools.addField("Seed:", ""+1, this);
 		randomSeedField.setEnabled(false);
 		
-		ConfigurationPanelTools.makeGrid(this);
+		ConfigurationDisplayTools.makeGrid(this);
 	}
 
 	public RandomGenerator getGenerator(){

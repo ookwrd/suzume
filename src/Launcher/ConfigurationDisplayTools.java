@@ -1,7 +1,5 @@
 package Launcher;
 
-import java.awt.Checkbox;
-
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,19 +12,29 @@ import Agents.NodeConfiguration.NodeType;
 import PopulationModel.GraphConfiguration.GraphType;
 
 
-public class ConfigurationPanelTools {
+public class ConfigurationDisplayTools {
 
 	/**
 	 * Disallow construction of this class.
 	 */
-	private ConfigurationPanelTools() {
+	private ConfigurationDisplayTools() {
 	}
 	
-	
+	/**
+	 * Setup a panel without a title
+	 * 
+	 * @param target
+	 */
 	public static void configurePanel(JPanel target){
 		target.setLayout(new SpringLayout());
 	}
 	
+	/**
+	 * Setup a panel with a title
+	 * 
+	 * @param title
+	 * @param target
+	 */
 	public static void configurePanel(String title, JPanel target) {
 		target.setLayout(new SpringLayout());
 		target.setBorder(new TitledBorder(title));

@@ -7,7 +7,7 @@ import PopulationModel.Node;
 
 public class NodeFactory {
 
-	private static int nextNodeID = 0; // keeps count of all the next nodes from this world
+	public static int nextNodeID = 0; // keeps count of all the next nodes from this world
 	
 	public static Node constructUninitializedNode(NodeType type){
 		

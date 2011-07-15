@@ -30,8 +30,8 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		setBorder(new EtchedBorder());
 		
 		JPanel topPanel = new JPanel();
-		ConfigurationPanelTools.configurePanel(topPanel);
-		agentTypesBox = ConfigurationPanelTools.addComboBox("", NodeConfiguration.NodeType.values(),topPanel);
+		ConfigurationDisplayTools.configurePanel(topPanel);
+		agentTypesBox = ConfigurationDisplayTools.addComboBox("", NodeConfiguration.NodeType.values(),topPanel);
 		agentTypesBox.addActionListener(new ActionListener() {
 			
 			@Override
@@ -39,7 +39,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 				reconfigureSubPanel();
 			}
 		});
-		ConfigurationPanelTools.makeGrid(topPanel);
+		ConfigurationDisplayTools.makeGrid(topPanel);
 		
 		add(topPanel);
 		

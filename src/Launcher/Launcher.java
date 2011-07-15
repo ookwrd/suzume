@@ -14,7 +14,6 @@ import simulation.RandomGenerator;
 import simulation.SimulationConfiguration;
 import simulation.VisualizationConfiguration;
 
-
 @SuppressWarnings("serial")
 public class Launcher extends JPanel {
 
@@ -66,25 +65,21 @@ public class Launcher extends JPanel {
 		window.setVisible(true);
 	}
 	
+	/**
+	 * Creates a simulation instance based on the current parameter settings and sets it running in a new thread.
+	 */
 	private void createSimulation(){
-		
 		SimulationConfiguration configuration = modelOptions.getConfiguration();
-		
 		VisualizationConfiguration visualizationConfiguration = visualOptions.getConfiguration();
-		
 		RandomGenerator random = randomOptions.getGenerator();
 	
 		ModelController controller = new ModelController(configuration, visualizationConfiguration, random);
 		
 		Thread thread = new Thread(controller);
-		
 		thread.start();
-		
 	}
 	
 	public static void main(String[] args){
-		
 		new Launcher();
-		
 	}
 }
