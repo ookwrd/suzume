@@ -1,4 +1,4 @@
-package Agents;
+package populationNodes;
 
 import java.awt.Color;
 import java.awt.Dimension;

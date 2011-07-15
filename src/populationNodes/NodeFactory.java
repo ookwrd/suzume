@@ -1,7 +1,7 @@
-package Agents;
+package populationNodes;
 
+import populationNodes.NodeConfiguration.NodeType;
 import simulation.RandomGenerator;
-import Agents.NodeConfiguration.NodeType;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
 

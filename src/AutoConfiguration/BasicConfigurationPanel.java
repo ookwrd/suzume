@@ -11,10 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import Agents.NodeFactory;
+import populationNodes.NodeFactory;
+import populationNodes.NodeTypeConfigurationPanel;
+
 import Launcher.ConfigurationDisplayTools;
 import Launcher.GraphTypeConfigurationPanel;
-import Launcher.NodeTypeConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class BasicConfigurationPanel extends JPanel {

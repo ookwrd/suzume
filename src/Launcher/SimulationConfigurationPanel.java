@@ -5,6 +5,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import populationNodes.NodeTypeConfigurationPanel;
 import AutoConfiguration.BasicConfigurationPanel;
 
 import simulation.SimulationConfiguration;

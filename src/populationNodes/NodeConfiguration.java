@@ -1,4 +1,4 @@
-package Agents;
+package populationNodes;
 
 import AutoConfiguration.BasicConfigurable;
 

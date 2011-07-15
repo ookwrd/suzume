@@ -1,61 +1,59 @@
-package Agents;
+package populationNodes;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 
-import simulation.RandomGenerator;
+public class ProbabalityAgent extends AbstractAgent implements Agent {
 
-public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
+	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
+	
+	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
+	private static final String LEARNING_PROBABILITY_ON_MISMATCH = "Learning probability mismatch";
+	private static final String SYNTACTIC_STATE_SPACE_SIZE = "Number of syntactic tokens";
+	private static final String MUTATION_RATE = "Mutation Rate";
+	private static final String INVENTION_PROBABILITY = "Invention Probability";
+	private static final String INVENTION_CHANCES = "Invention Chances";
+	private static final String VISUALIZATION_TYPE = "Visualization Type";
 
-	protected static final String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
-	
-	protected static final String VISUALIZATION_TYPE = "Visualization Type";
-	protected static final String INVENTION_PROBABILITY = "Invention Probability";
-	protected static final String MUTATION_RATE = "Mutation Rate";
-	protected static final String LEARNING_RESOURCE = "Learning Resource";
-	protected static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
-	protected static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
-	
 	{
-		defaultParameters.put(LEARNING_RESOURCE, new ConfigurationParameter(24));
-		defaultParameters.put(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
-		defaultParameters.put(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
+		defaultParameters.put(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
+		defaultParameters.put(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
+		defaultParameters.put(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
 		defaultParameters.put(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		defaultParameters.put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		defaultParameters.put(INVENTION_CHANCES, new ConfigurationParameter(5));
 		defaultParameters.put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		//put("Meaning space size", new ConfigurationParameter(12));
 	}
-
+	
 	protected ArrayList<Integer> chromosome;
 	
-	protected int learningResource;
+	private int grammarAdjustmentCount = 0;
 	
-	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
-		
+
 		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomBoolean()?0:1);
+			chromosome.add(randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 		}
-
-		learningResource = config.getParameter(LEARNING_RESOURCE).getInteger();
 	}
 	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(Node parentA, Node parentB,
+			int id, RandomGenerator randomGenerator) {
+		super.initializeAgent(parentA.getConfiguration(), id, randomGenerator);
 		
-		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
-		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
+		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
+		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;
 		
-		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
 		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
-
-
-		learningResource = config.getParameter(LEARNING_RESOURCE).getInteger();
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
@@ -72,21 +70,16 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		//Mutation
 		for(int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
 			if(randomGenerator.random() < config.getParameter(MUTATION_RATE).getDouble()){
-				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
+				chromosome.set(j, randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
 	
 	@Override
 	public String getName(){
-		return "Yamauchi & Hashimoto 2010 Agent";
+		return "Probability Agent";
 	}
 	
-	/**
-	 * Returns a random utterance from this agents grammar.
-	 * 
-	 * @return
-	 */
 	@Override
 	public Utterance getRandomUtterance() {
 		int index = randomGenerator.randomInt(chromosome.size());
@@ -94,16 +87,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		return new Utterance(index, value);
 	}
 	
-	/**
-	 * Use the remainder of the learning resource to potentially invent parts of the grammar.
-	 * The agent has a probability of 0.01 to turn an empty value to a 0 or a 1   
-	 */
 	@Override
 	public void invent() {
 		
-		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
+		int chances = config.getParameter(INVENTION_CHANCES).getInteger();
+		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
-			learningResource--;
 			if(randomGenerator.random() < config.getParameter(INVENTION_PROBABILITY).getDouble()){
 				
 				//Collect indexes of all null elements
@@ -119,18 +108,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomBoolean()?0:1);
+				grammar.set(index, randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
-	
-	/**
-	 * The agent learns an utterance 
-	 * The learning resource is updated
-	 * 
-	 * @param teacher the agent teaching
-	 * @param utterance the utterance taught
-	 */
+
 	@Override
 	public void learnUtterance(Utterance u) {
 		
@@ -140,44 +122,24 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < config.getParameter(LEARNING_COST_ON_MATCH).getInteger()){
-				learningResource = 0;
-				return;
+
+			if(randomGenerator.random() < config.getParameter(LEARNING_PROBABILITY_ON_MATCH).getDouble()){
+				grammar.set(u.meaning, u.signal);
+				grammarAdjustmentCount++;
 			}
-			
-			grammar.set(u.meaning, u.signal);
-			learningResource -= config.getParameter(LEARNING_COST_ON_MATCH).getInteger();
-			
 		}else{//Doesn't match this agents UG
-			//TODO what do we do if we can't afford this anymore? Check with jimmy
-			if(learningResource < config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
-				learningResource = 0;
-				return;
+
+			if(randomGenerator.random() < config.getParameter(LEARNING_PROBABILITY_ON_MISMATCH).getDouble()){
+				grammar.set(u.meaning, u.signal);
+				grammarAdjustmentCount++;
 			}
-			
-			grammar.set(u.meaning, u.signal);
-			learningResource -= config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
-			
 		}
 		
-	}
-	
-	@Override
-	public void print(){
-		
-		System.out.println("Agent " + getId() + " has fitness of " + getFitness() + " has learning resource of " + learningResource + " fitness of  " + getFitness() +" match " + geneGrammarMatch());
-		System.out.println("P" + grammar);
-		System.out.println("G" + chromosome);
-		
+
 	}
 
 	@Override
-	public boolean canStillLearn() {
-		return learningResource > 0;
-	}
-	
-	@Override
-	public double geneGrammarMatch(){
+	public double geneGrammarMatch() {
 		
 		int count = 0;
 		
@@ -192,17 +154,16 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 
 	@Override
 	public int learningIntensity() {
-		// TODO Some better more general way of measuring this...
-		return learningResource;
+		//System.out.println(grammarAdjustmentCount + " " + numberOfNulls());
+		return grammarAdjustmentCount;
 	}
-	
-	
+
 	@Override
 	public ArrayList<Integer> getGenotype() {
 		return chromosome;
 	}
 	
-	@Override//TODO this should just choose a color
+	@Override
 	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
 		
 		Color c;
@@ -222,27 +183,40 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord")) {
+		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord") || config.getParameter(VISUALIZATION_TYPE).getString().equals("singleGene")) {
 		
-			if(grammar.get(0) == 0){
+			int value;
+			if(config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord")){
+				value = grammar.get(0);
+			}else{
+				value = chromosome.get(0);
+			}
+			
+			if(value == 0){
 				c = Color.WHITE;
-			} else if (grammar.get(0) == 1){
+			} else if (value == 1){
 				c = Color.BLACK;
-			} else{
+			} else if (value == 2){
+				c = Color.BLUE;
+			}else if (value == 3){
+				c = Color.GREEN;
+			}else if (value == 4){
+				c = Color.YELLOW;
+			}else if (value == 5){
+				c = Color.ORANGE;
+			}else if (value == 6){
+				c = Color.CYAN;
+			}else if (value == 7){
+				c = Color.DARK_GRAY;
+			}else if (value == 8){
+				c = Color.GRAY;
+			}else if (value == 9){
+				c = Color.MAGENTA;
+			}else{
 				c = Color.RED;
 			}
 			
-		}	 else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleGene")) {
-		
-			if(chromosome.get(0) == 0){
-				c = Color.WHITE;
-			} else if (chromosome.get(0) == 1){
-				c = Color.BLACK;
-			} else{
-				c = Color.RED;
-			}
-			
-		}			else {
+		} else {
 			System.out.println("Unrecognized visualization type");
 			return;
 		}

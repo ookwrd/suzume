@@ -1,8 +1,9 @@
-package Agents;
+package populationNodes;
 
 import javax.swing.JPanel;
 
-import Agents.NodeConfiguration.NodeType;
+import populationNodes.NodeConfiguration.NodeType;
+
 import AutoConfiguration.BasicConfigurationPanel;
 
 @SuppressWarnings("serial")
