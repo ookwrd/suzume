@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import simulation.RandomGenerator;
+import simulation.SimulationConfiguration;
 
 import Agents.AbstractNode;
 import Agents.Agent;
 import Agents.NodeConfiguration;
+import Agents.NodeFactory;
 import Agents.NodeConfiguration.NodeType;
 import Agents.Utterance;
 import AutoConfiguration.ConfigurationParameter;
@@ -31,7 +33,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		defaultParameters.put(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
 		defaultParameters.put(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
 		defaultParameters.put(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		defaultParameters.put(SUB_NODE, new ConfigurationParameter(NodeType.YamauchiHashimoto2010));
+		defaultParameters.put(SUB_NODE, new ConfigurationParameter(NodeType.YamauchiHashimoto2010));//SHouldnt just be a type, TODO
 		defaultParameters.put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		defaultParameters.put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 	}
@@ -286,7 +288,27 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		System.out.println("Here");
 		System.out.println(currentGeneration.size());
 		
-		System.out.println(config.getParameter(SUB_NODE).getNodeConfiguration());
+		NodeConfiguration sub = config.getParameter(SUB_NODE).getNodeConfiguration();
+			
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
+			
+			Node node = NodeFactory.constructPopulationNode(sub);
+			node.initializeAgent(sub, NodeFactory.nextNodeID++, randomGenerator);
+			nodes.add(node);
+			
+		}
+		currentGeneration = nodes;
+		
+		nodes = new ArrayList<Node>();
+		for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
+			
+			Node node = NodeFactory.constructPopulationNode(sub);
+			node.initializeAgent(sub, NodeFactory.nextNodeID++, randomGenerator);
+			nodes.add(node);
+			
+		}
+		previousGeneration = nodes;
 		
 	}
 	
