@@ -6,15 +6,16 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import populationNodes.AbstractNode;
+import populationNodes.Agent;
+import populationNodes.NodeConfiguration;
+import populationNodes.NodeFactory;
+import populationNodes.Utterance;
+import populationNodes.NodeConfiguration.NodeType;
+
 import simulation.RandomGenerator;
 import simulation.SimulationConfiguration;
 
-import Agents.AbstractNode;
-import Agents.Agent;
-import Agents.NodeConfiguration;
-import Agents.NodeFactory;
-import Agents.NodeConfiguration.NodeType;
-import Agents.Utterance;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.GraphConfiguration.GraphType;
 
@@ -285,8 +286,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(config, id, randomGenerator);
 	
-		System.out.println("Here");
-		System.out.println(currentGeneration.size());
 		
 		NodeConfiguration sub = config.getParameter(SUB_NODE).getNodeConfiguration();
 			
@@ -309,7 +308,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			
 		}
 		previousGeneration = nodes;
-		
+	
 	}
 	
 	@Override

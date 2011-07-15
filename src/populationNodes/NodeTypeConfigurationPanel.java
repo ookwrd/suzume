@@ -1,4 +1,4 @@
-package Launcher;
+package populationNodes;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,10 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
-import Agents.NodeConfiguration;
-import Agents.NodeConfiguration.NodeType;
-import Agents.NodeConfigurationPanel;
-import Agents.NodeFactory;
+import populationNodes.NodeConfiguration.NodeType;
+
+import Launcher.ConfigurationDisplayTools;
 
 
 @SuppressWarnings("serial")

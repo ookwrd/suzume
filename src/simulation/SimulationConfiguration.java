@@ -2,7 +2,7 @@ package simulation;
 
 import simulation.SelectionModel.SelectionModels;
 
-import Agents.NodeConfiguration;
+import populationNodes.NodeConfiguration;
 import AutoConfiguration.BasicConfigurable;
 import AutoConfiguration.ConfigurationParameter;
 

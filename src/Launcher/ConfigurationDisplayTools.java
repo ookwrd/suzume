@@ -8,7 +8,9 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
-import Agents.NodeConfiguration.NodeType;
+import populationNodes.NodeTypeConfigurationPanel;
+import populationNodes.NodeConfiguration.NodeType;
+
 import PopulationModel.GraphConfiguration.GraphType;
 
 

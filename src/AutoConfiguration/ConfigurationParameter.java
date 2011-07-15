@@ -1,10 +1,9 @@
 package AutoConfiguration;
 
-import Agents.NodeConfiguration;
-import Agents.NodeConfiguration.NodeType;
+import populationNodes.NodeConfiguration;
+import populationNodes.NodeConfiguration.NodeType;
 import PopulationModel.Graph;
 import PopulationModel.GraphConfiguration.GraphType;
-import PopulationModel.Node;
 
 public class ConfigurationParameter {
 

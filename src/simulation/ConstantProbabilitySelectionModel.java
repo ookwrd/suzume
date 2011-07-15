@@ -2,7 +2,8 @@ package simulation;
 
 import java.util.ArrayList;
 
-import Agents.Agent;
+import populationNodes.Agent;
+
 
 public class ConstantProbabilitySelectionModel extends SelectionModel {
 

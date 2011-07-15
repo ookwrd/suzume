@@ -2,13 +2,14 @@ package simulation;
 
 import java.util.ArrayList;
 
+import populationNodes.Agent;
+import populationNodes.NodeConfiguration;
+import populationNodes.NodeFactory;
+
 import runTimeVisualization.StepwiseVisualizer;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
-import Agents.Agent;
-import Agents.NodeConfiguration;
-import Agents.NodeFactory;
 import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;

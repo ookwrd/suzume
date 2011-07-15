@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import runTimeVisualization.Visualizable;
 
-import Agents.Agent;
+import populationNodes.Agent;
 
 /**
  * Interface capturing the common elements of population structure. Makes the assumption of discrete generations.
