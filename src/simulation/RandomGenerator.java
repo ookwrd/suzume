@@ -2,7 +2,10 @@ package simulation;
 
 import java.util.Random;
 
+import javax.swing.border.TitledBorder;
+
 import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.BasicConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 
 
@@ -44,5 +47,12 @@ public class RandomGenerator extends BasicConfigurable {
 	
 	public long getSeed(){
 		return randomSeed;
+	}
+	
+	@Override
+	public BasicConfigurationPanel getConfigurationPanel(){
+		BasicConfigurationPanel ret = super.getConfigurationPanel();
+		ret.setBorder(new TitledBorder("Random Number Generator"));
+		return ret;
 	}
 }

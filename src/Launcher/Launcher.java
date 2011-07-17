@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import AutoConfiguration.BasicConfigurationPanel;
+
 import simulation.ModelController;
 import simulation.RandomGenerator;
 import simulation.SimulationConfiguration;
@@ -19,7 +21,7 @@ public class Launcher extends JPanel {
 
 	private JFrame window;
 	
-	private RandomConfigurationPanel randomOptions;
+	private BasicConfigurationPanel randomOptions;
 	private SimulationConfigurationPanel modelOptions;
 	private VisualizationConfigurationPanel visualOptions;
 	
@@ -33,7 +35,7 @@ public class Launcher extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		randomOptions = new RandomConfigurationPanel();
+		randomOptions = new RandomGenerator().getConfigurationPanel();
 		add(randomOptions);
 		
 		modelOptions = new SimulationConfigurationPanel();
@@ -71,7 +73,7 @@ public class Launcher extends JPanel {
 	private void createSimulation(){
 		SimulationConfiguration configuration = modelOptions.getConfiguration();
 		VisualizationConfiguration visualizationConfiguration = visualOptions.getConfiguration();
-		RandomGenerator random = randomOptions.getGenerator();
+		RandomGenerator random = new RandomGenerator(randomOptions.getConfiguration());
 	
 		ModelController controller = new ModelController(configuration, visualizationConfiguration, random);
 		
