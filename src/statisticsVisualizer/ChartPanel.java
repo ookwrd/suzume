@@ -11,9 +11,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.OverlayLayout;
 
 
@@ -53,9 +56,16 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private JFreeChart chart;
 	private ZoomPanel chartImagePanel;
 	private JPanel buttonPanel;
+	public JPanel editPanel;
 	
 	private DataPanel parent;
 	private ChartConfiguration config;
+	
+	private boolean editing;
+	private JTextArea editableTitle;
+	private JButton confirmEdit;
+	private ActionListener stopEditListener;
+	
 	
 	public ChartPanel(
 			ChartConfiguration config,
@@ -66,10 +76,13 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 		this.config = config;
 		this.parent = parent;
+		this.editing = false;
 		
 		createChart();
 
 		setLayout(new OverlayLayout(this));
+		
+		setupEditPanel();
 		
 		setupButtonPanel();
 		
@@ -80,6 +93,59 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 	}
 	
+	private void setupEditPanel() {
+		
+		//Setup panel
+		editPanel = new JPanel();
+		editPanel.setOpaque(false);
+		editPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,0,0));
+		add(editPanel);
+		
+		//Setup edit controls
+		
+		//Title
+		editableTitle = new JTextArea(config.getTitle());
+		editableTitle.setBackground(Color.WHITE);
+		//editableTitle.setLineWrap(true);
+		//editableTitle.setWrapStyleWord(true);
+		editableTitle.setEditable(true);
+		editableTitle.setVisible(false);
+		editPanel.add(editableTitle);
+		
+		//Axis
+		/*editableAxis = new JTextArea(config.getTitle());
+		editableAxis.setBackground(Color.WHITE);
+		editableAxis.setEditable(true);
+		editableAxis.setVisible(false);
+		editPanel.add(editableAxis);*/
+		
+		//Confirm
+		confirmEdit = new JButton("OK");
+		confirmEdit.setActionCommand("Stop editing");
+		stopEditListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setEditMode(false);
+			}
+		};
+		confirmEdit.addActionListener(stopEditListener);
+		confirmEdit.setVisible(false);
+		editPanel.add(confirmEdit);
+		
+	}
+	
+	private void setEditMode(boolean edit) {
+		
+		//Set edit visible
+		editableTitle.setVisible(edit);
+		confirmEdit.setVisible(edit);
+		
+		//Update once done editing
+		if(!edit)
+			config.setTitle(editableTitle.getText());
+	}
+
 	private void setupButtonPanel(){
 		
 		//Setup the Panel
@@ -93,8 +159,8 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		configureChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				config.setTitle("THis is the new title");
-				System.out.println("Configure");//TODO
+				setEditMode(true);
+				//System.out.println("editing");
 			}
 		});
 		buttonPanel.add(configureChartButton);
@@ -104,6 +170,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("print");//TODO
+				
 			}
 		});
 		buttonPanel.add(printChartButton);
