@@ -18,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -197,8 +198,10 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		printChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("print");//ok so it does nothing right now. TODO 
-				printToFile(MEDIUM_DIMENSION, "/suzume-charts");
+				//System.out.println("print");//ok so this did nothing until right now.
+				String location = saveDialog().getAbsolutePath();
+				System.out.println("Save path: "+location);
+				printToFile(MEDIUM_DIMENSION, location);
 			}
 		});
 		buttonPanel.add(printChartButton);
@@ -214,6 +217,22 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 	}
 	
+	protected File saveDialog() {
+		//Launch save dialog
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int returnVal = fc.showSaveDialog(this);
+		File file = new File("/suzume-charts");
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = fc.getSelectedFile();
+            //This is where a real application would save the file.
+            //System.out.println("Saving: " + file.getName() + ".");
+        } else {
+            //System.out.println("Save command cancelled by user.");
+        }
+        return file;
+	}
+
 	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
 		
 		JFreeChart chart;
