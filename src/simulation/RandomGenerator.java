@@ -2,23 +2,35 @@ package simulation;
 
 import java.util.Random;
 
-/**
- * Singleton wrapper for Random. //TODO no longer singleton, is this needed?
- * 
- * @author Luke McCrohon
- */
-public class RandomGenerator {
+import javax.swing.border.TitledBorder;
+
+import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.BasicConfigurationPanel;
+import AutoConfiguration.ConfigurationParameter;
+
+
+public class RandomGenerator extends BasicConfigurable {
+	
+	private static final String KEY_SET = "Use Current time as seed";
+	private static final String SEED = "Seed";
+	
+	{
+		setDefaultParameter(KEY_SET, new ConfigurationParameter(true));
+		setDefaultParameter(SEED, new ConfigurationParameter(new Long(0)));
+	}
 	
 	private Random random;
 	private long randomSeed;
 	
-	public RandomGenerator(){
-		this(System.currentTimeMillis());
-	}
+	public RandomGenerator(){};
 	
-	public RandomGenerator(long seed){
-		random = new Random(seed);
-		randomSeed = seed;
+	public RandomGenerator(BasicConfigurable config){
+		if(!config.getParameter(KEY_SET).getBoolean()){
+			randomSeed = config.getParameter(SEED).getLong();
+		} else {
+			randomSeed = System.currentTimeMillis();
+		}
+		random = new Random(randomSeed);
 	}
 	
 	public double random(){
@@ -35,5 +47,12 @@ public class RandomGenerator {
 	
 	public long getSeed(){
 		return randomSeed;
+	}
+	
+	@Override
+	public BasicConfigurationPanel getConfigurationPanel(){
+		BasicConfigurationPanel ret = super.getConfigurationPanel();
+		ret.setBorder(new TitledBorder("Random Number Generator"));
+		return ret;
 	}
 }
