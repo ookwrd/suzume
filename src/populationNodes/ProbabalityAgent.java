@@ -22,14 +22,13 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 	private static final String VISUALIZATION_TYPE = "Visualization Type";
 
 	{
-		defaultParameters.put(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
-		defaultParameters.put(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
-		defaultParameters.put(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
-		defaultParameters.put(MUTATION_RATE, new ConfigurationParameter(0.00025));
-		defaultParameters.put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		defaultParameters.put(INVENTION_CHANCES, new ConfigurationParameter(5));
-		defaultParameters.put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
-		//put("Meaning space size", new ConfigurationParameter(12));
+		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
+		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
+		setDefaultParameter(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
+		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
+		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
 	}
 	
 	protected ArrayList<Integer> chromosome;

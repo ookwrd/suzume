@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
+import populationNodes.NodeConfiguration;
 import populationNodes.NodeTypeConfigurationPanel;
 import populationNodes.NodeConfiguration.NodeType;
 
@@ -82,7 +83,9 @@ public class ConfigurationDisplayTools {
 		return checkBox;
 	}
 	
-	public static NodeTypeConfigurationPanel addNodeSelector(String label, NodeType initialValue, JPanel target){
+	public static NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue, JPanel target){
+		
+		System.out.println("Is it null " + (initialValue == null));
 		
 		JLabel jLabel = new JLabel(label);
 		jLabel.setHorizontalAlignment(JLabel.TRAILING);

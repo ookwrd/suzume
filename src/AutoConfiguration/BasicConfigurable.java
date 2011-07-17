@@ -6,9 +6,7 @@ import java.util.LinkedHashMap;
 
 public class BasicConfigurable implements Configurable {
 
-	protected LinkedHashMap<String, ConfigurationParameter> defaultParameters = new LinkedHashMap<String, ConfigurationParameter>();
-
-	protected HashMap<String, ConfigurationParameter> parameters = new HashMap<String, ConfigurationParameter>();
+	private LinkedHashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();
 		
 	public BasicConfigurable(){}
 
@@ -16,7 +14,7 @@ public class BasicConfigurable implements Configurable {
 		this.parameters = source.parameters;
 	}
 	
-	public BasicConfigurable(HashMap<String, ConfigurationParameter> parameters) {
+	public BasicConfigurable(LinkedHashMap<String, ConfigurationParameter> parameters) {
 		this.parameters = parameters;
 	}
 	
@@ -31,13 +29,15 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public HashMap<String, ConfigurationParameter> getParameters(){
-		return parameters;
+	public void setDefaultParameter(String key, ConfigurationParameter parameter){
+		if(!parameters.containsKey(key)){
+			parameters.put(key, parameter);
+		}
 	}
 	
 	@Override
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		return defaultParameters;
+	public HashMap<String, ConfigurationParameter> getParameters(){
+		return parameters;
 	}
 	
 	@Override

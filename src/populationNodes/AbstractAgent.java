@@ -12,7 +12,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 
 	{
-		defaultParameters.put(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
+		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 	}
 	
 	private int fitness;

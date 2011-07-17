@@ -134,11 +134,6 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	}
 	
 	@Override
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		return defaultParameters;
-	}
-	
-	@Override
 	public Utterance getRandomUtterance() {
 		int index = randomGenerator.randomInt(chromosome.size());
 		Integer value = grammar.get(index);

@@ -1,13 +1,12 @@
 package AutoConfiguration;
 
 import populationNodes.NodeConfiguration;
-import populationNodes.NodeConfiguration.NodeType;
 import PopulationModel.Graph;
 import PopulationModel.GraphConfiguration.GraphType;
 
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {String, Integer, Double, Long, Boolean, List, Graph, Node}
+	public enum ConfigurationParameterType {String, Integer, Double, Long, Boolean, List, Node, Graph}
 	
 	public ConfigurationParameterType type;
 	
@@ -43,10 +42,10 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
-	public ConfigurationParameter(NodeType value){//TODO remove
+	/*public ConfigurationParameter(NodeType value){//TODO remove
 		type = ConfigurationParameterType.Node;
 		this.value = value;
-	}
+	}*/
 	
 	public ConfigurationParameter(NodeConfiguration value){
 		type = ConfigurationParameterType.Node;
@@ -87,9 +86,9 @@ public class ConfigurationParameter {
 		return (Boolean)value;
 	}
 	
-	public NodeType getNodeType(){//TODO remove
+	/*public NodeType getNodeType(){//TODO remove
 		return (NodeType)value;
-	}
+	}*/
 	
 	public NodeConfiguration getNodeConfiguration(){
 		return (NodeConfiguration)value;
@@ -101,5 +100,10 @@ public class ConfigurationParameter {
 	
 	public Graph getGraph(){
 		return (Graph)value;
+	}
+	
+	@Override
+	public String toString(){
+		return value.toString();
 	}
 }
