@@ -3,7 +3,6 @@
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-
 public class BasicConfigurable implements Configurable {
 
 	private LinkedHashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();

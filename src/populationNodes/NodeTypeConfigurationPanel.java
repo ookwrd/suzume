@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
-import populationNodes.NodeConfiguration.NodeType;
+import populationNodes.AbstractNode.NodeType;
 
 import Launcher.ConfigurationDisplayTools;
 
@@ -30,7 +30,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		
 		JPanel topPanel = new JPanel();
 		ConfigurationDisplayTools.configurePanel(topPanel);
-		agentTypesBox = ConfigurationDisplayTools.addComboBox("", NodeConfiguration.NodeType.values(),topPanel);
+		agentTypesBox = ConfigurationDisplayTools.addComboBox("", AbstractNode.NodeType.values(),topPanel);
 		agentTypesBox.addActionListener(new ActionListener() {
 			
 			@Override

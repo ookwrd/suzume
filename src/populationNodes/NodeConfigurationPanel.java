@@ -2,7 +2,7 @@ package populationNodes;
 
 import javax.swing.JPanel;
 
-import populationNodes.NodeConfiguration.NodeType;
+import populationNodes.AbstractNode.NodeType;
 
 import AutoConfiguration.BasicConfigurationPanel;
 

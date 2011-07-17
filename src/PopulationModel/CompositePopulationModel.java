@@ -4,18 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import populationNodes.AbstractNode;
 import populationNodes.Agent;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.Utterance;
-import populationNodes.NodeConfiguration.NodeType;
 import populationNodes.YamauchiHashimoto2010;
 
 import simulation.RandomGenerator;
-import simulation.SimulationConfiguration;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.GraphConfiguration.GraphType;

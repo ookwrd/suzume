@@ -10,6 +10,8 @@ import PopulationModel.Node;
 
 public abstract class AbstractNode extends BasicConfigurable implements Node{
 	
+	public enum NodeType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
+	
 	private int id;
 	protected RandomGenerator randomGenerator;
 	protected NodeConfiguration config;//TODO i think this is now redundent as abstract node extends basic configurable

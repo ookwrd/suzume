@@ -1,10 +1,9 @@
 package populationNodes;
 
+import populationNodes.AbstractNode.NodeType;
 import AutoConfiguration.BasicConfigurable;
 
 public class NodeConfiguration extends BasicConfigurable {
-
-	public enum NodeType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
 
 	public static final NodeType DEFAULT_AGENT_TYPE = NodeType.YamauchiHashimoto2010;
 	

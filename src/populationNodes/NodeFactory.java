@@ -1,6 +1,6 @@
 package populationNodes;
 
-import populationNodes.NodeConfiguration.NodeType;
+import populationNodes.AbstractNode.NodeType;
 import simulation.RandomGenerator;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;

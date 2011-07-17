@@ -10,7 +10,6 @@ import javax.swing.border.TitledBorder;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeTypeConfigurationPanel;
-import populationNodes.NodeConfiguration.NodeType;
 
 import PopulationModel.GraphConfiguration.GraphType;
 

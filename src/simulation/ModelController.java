@@ -14,6 +14,7 @@ import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
 import PopulationModel.PopulationModel;
+import populationNodes.AbstractNode.NodeType;
 
 public class ModelController implements Runnable {
 
@@ -101,7 +102,7 @@ public class ModelController implements Runnable {
 
 	private void initializePopulation(){
 		
-		if(config.agentConfig.type == NodeConfiguration.NodeType.ConfigurablePopulation){
+		if(config.agentConfig.type == NodeType.ConfigurablePopulation){
 			
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(config.agentConfig);
 			node.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
