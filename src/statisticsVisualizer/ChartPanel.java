@@ -1,8 +1,11 @@
 package statisticsVisualizer;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -15,9 +18,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.OverlayLayout;
+import javax.swing.SpringLayout;
 
 
 import org.jfree.chart.ChartFactory;
@@ -62,9 +67,11 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private ChartConfiguration config;
 	
 	private boolean editing;
-	private JTextArea editableTitle;
+	private JTextArea editTitle;
 	private JButton confirmEdit;
 	private ActionListener stopEditListener;
+	private JTextArea editXaxis;
+	private JTextArea editYaxis;
 	
 	
 	public ChartPanel(
@@ -97,27 +104,45 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 		//Setup panel
 		editPanel = new JPanel();
-		editPanel.setOpaque(false);
-		editPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,0,0));
+		editPanel.setOpaque(true);
+		
+		editPanel.setLayout(new GridLayout(0, 2));
+		
+		editPanel.setVisible(false);
 		add(editPanel);
 		
 		//Setup edit controls
 		
 		//Title
-		editableTitle = new JTextArea(config.getTitle());
-		editableTitle.setBackground(Color.WHITE);
-		//editableTitle.setLineWrap(true);
-		//editableTitle.setWrapStyleWord(true);
-		editableTitle.setEditable(true);
-		editableTitle.setVisible(false);
-		editPanel.add(editableTitle);
+		editTitle = new JTextArea(config.getTitle());
+		editTitle.setBackground(Color.WHITE);
+		//editTitle.setLineWrap(true);
+		//editTitle.setWrapStyleWord(true);
+		editTitle.setEditable(true);
+		editTitle.setVisible(true);
+		JLabel labelTitle = new JLabel("Title: ", JLabel.TRAILING);
+		editPanel.add(labelTitle);
+		editPanel.add(editTitle);
 		
-		//Axis
-		/*editableAxis = new JTextArea(config.getTitle());
-		editableAxis.setBackground(Color.WHITE);
-		editableAxis.setEditable(true);
-		editableAxis.setVisible(false);
-		editPanel.add(editableAxis);*/
+		//X axis
+		editXaxis = new JTextArea(config.getxLabel());
+		editXaxis.setBackground(Color.WHITE);
+		editXaxis.setEditable(true);
+		editXaxis.setVisible(true);
+		
+		JLabel labelX = new JLabel("X axis: ", JLabel.TRAILING);
+		editPanel.add(labelX);
+		editPanel.add(editXaxis);
+		
+		//Y axis
+		editYaxis = new JTextArea(config.getyLabel());
+		editYaxis.setBackground(Color.WHITE);
+		editYaxis.setEditable(true);
+		editYaxis.setVisible(true);
+		
+		JLabel labelY = new JLabel("Y axis: ", JLabel.TRAILING);
+		editPanel.add(labelY);
+		editPanel.add(editYaxis);
 		
 		//Confirm
 		confirmEdit = new JButton("OK");
@@ -130,20 +155,23 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 			}
 		};
 		confirmEdit.addActionListener(stopEditListener);
-		confirmEdit.setVisible(false);
+		confirmEdit.setVisible(true);
 		editPanel.add(confirmEdit);
 		
 	}
 	
 	private void setEditMode(boolean edit) {
+		editing = edit;
 		
 		//Set edit visible
-		editableTitle.setVisible(edit);
-		confirmEdit.setVisible(edit);
+		editPanel.setVisible(edit);
 		
 		//Update once done editing
-		if(!edit)
-			config.setTitle(editableTitle.getText());
+		if(!edit) {
+			config.setTitle(editTitle.getText());
+			config.setxLabel(editXaxis.getText());
+			config.setyLabel(editYaxis.getText());
+		}
 	}
 
 	private void setupButtonPanel(){
@@ -159,7 +187,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		configureChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setEditMode(true);
+				setEditMode(!editing);
 				//System.out.println("editing");
 			}
 		});
