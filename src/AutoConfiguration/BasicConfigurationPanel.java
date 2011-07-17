@@ -2,6 +2,7 @@ package AutoConfiguration;
 
 import java.awt.Component;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
@@ -25,7 +26,7 @@ public class BasicConfigurationPanel extends JPanel {
 	public BasicConfigurationPanel(Configurable toConfigure){
 		
 		//Get default parameter map for this agent type
-		parameters = toConfigure.getDefaultParameters();
+		parameters = toConfigure.getParameters();
 		components = new HashMap<String, Component>();
 		
 		JPanel autoPanel = new JPanel();
@@ -74,7 +75,7 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case Node:
-				NodeTypeConfigurationPanel panel1 = ConfigurationDisplayTools.addNodeSelector(key, parameter.getNodeType(), autoPanel);
+				NodeTypeConfigurationPanel panel1 = ConfigurationDisplayTools.addNodeSelector(key, parameter.getNodeConfiguration(), autoPanel);
 				components.put(key, panel1);
 				break;
 				
@@ -100,7 +101,7 @@ public class BasicConfigurationPanel extends JPanel {
 
 	public BasicConfigurable getConfiguration(){
 		
-		HashMap<String, ConfigurationParameter> retParameters = new HashMap<String, ConfigurationParameter>();
+		LinkedHashMap<String, ConfigurationParameter> retParameters = new LinkedHashMap<String, ConfigurationParameter>();
 		
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
 			

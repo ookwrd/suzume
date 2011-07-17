@@ -35,12 +35,6 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent {
 	public String getName(){
 		return "Altered Agent";
 	}
-	
-	@Override
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		defaultParameters.putAll(super.getDefaultParameters());
-		return defaultParameters;
-	}
 
 	public void adjustCosts() {
 		if (learningResource>0) {

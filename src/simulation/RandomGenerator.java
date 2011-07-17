@@ -15,8 +15,8 @@ public class RandomGenerator extends BasicConfigurable {
 	private static final String SEED = "Seed";
 	
 	{
-		defaultParameters.put(KEY_SET, new ConfigurationParameter(true));
-		defaultParameters.put(SEED, new ConfigurationParameter(new Long(0)));
+		setDefaultParameter(KEY_SET, new ConfigurationParameter(true));
+		setDefaultParameter(SEED, new ConfigurationParameter(new Long(0)));
 	}
 	
 	private Random random;

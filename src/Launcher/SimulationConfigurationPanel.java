@@ -43,8 +43,7 @@ public class SimulationConfigurationPanel extends JPanel {
 		add(panel);
 	}
 	
-	public SimulationConfiguration getConfiguration(){
-		
+	public SimulationConfiguration getConfiguration(){	
 		return new SimulationConfiguration(
 				agentConfigurationPanel.getConfiguration(),
 				(SelectionModels)selectionModelTypeBox.getSelectedItem(),

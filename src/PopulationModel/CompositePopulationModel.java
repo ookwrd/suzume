@@ -12,6 +12,7 @@ import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.Utterance;
 import populationNodes.NodeConfiguration.NodeType;
+import populationNodes.YamauchiHashimoto2010;
 
 import simulation.RandomGenerator;
 import simulation.SimulationConfiguration;
@@ -30,13 +31,13 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
 	
 	{
-		defaultParameters.put(POPULATION_SIZE, new ConfigurationParameter(200));
-		defaultParameters.put(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
-		defaultParameters.put(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		defaultParameters.put(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		defaultParameters.put(SUB_NODE, new ConfigurationParameter(NodeType.YamauchiHashimoto2010));//SHouldnt just be a type, TODO
-		defaultParameters.put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
-		defaultParameters.put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
+		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
+		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		setDefaultParameter(SUB_NODE, new ConfigurationParameter(new YamauchiHashimoto2010().getConfiguration()));
+		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
+		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 	}
 	
 	private Graph learningGraph;
@@ -317,11 +318,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		
 		System.out.println("In population mode this should never be called.");
 		
-	}
-	
-	@Override
-	public HashMap<String, ConfigurationParameter> getDefaultParameters(){
-		return defaultParameters;
 	}
 
 	

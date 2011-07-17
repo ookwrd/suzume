@@ -6,9 +6,9 @@ import AutoConfiguration.ConfigurationParameter;
 public class FixedProbabilityAgent extends YamauchiHashimoto2010 {
 
 	{
-		defaultParameters.put("Matching Learn Probability", new ConfigurationParameter(0.7));
-		defaultParameters.put("NonMatching Learn Probability", new ConfigurationParameter(0.3));
-		defaultParameters.put("Deduct Cost on attempt", new ConfigurationParameter(true));	
+		setDefaultParameter("Matching Learn Probability", new ConfigurationParameter(0.7));
+		setDefaultParameter("NonMatching Learn Probability", new ConfigurationParameter(0.3));
+		setDefaultParameter("Deduct Cost on attempt", new ConfigurationParameter(true));	
 	} 
 	
 	@Override
