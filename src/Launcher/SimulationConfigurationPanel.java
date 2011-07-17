@@ -39,7 +39,7 @@ public class SimulationConfigurationPanel extends JPanel {
 		
 		ConfigurationDisplayTools.makeGrid(innerPanel);
 		
-		panel = new BasicConfigurationPanel(new SimulationConfiguration());
+		panel = new SimulationConfiguration().getConfigurationPanel();
 		add(panel);
 	}
 	

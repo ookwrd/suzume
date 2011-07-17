@@ -67,12 +67,8 @@ public class NodeFactory {
 	
 	public static NodeConfigurationPanel getConfigurationPanel(NodeType type){
 	
-		switch (type) {
+		return new NodeConfigurationPanel(type);
 
-		default:
-			return new NodeConfigurationPanel(type);
-		}
-		
 	}
 	
 	/*

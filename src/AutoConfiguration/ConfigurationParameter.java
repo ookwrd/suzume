@@ -7,7 +7,7 @@ import PopulationModel.GraphConfiguration.GraphType;
 
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {String, Integer, Double, Boolean, List, Graph, Node}
+	public enum ConfigurationParameterType {String, Integer, Double, Long, Boolean, List, Graph, Node}
 	
 	public ConfigurationParameterType type;
 	
@@ -30,6 +30,11 @@ public class ConfigurationParameter {
 	
 	public ConfigurationParameter(Double value){
 		type = ConfigurationParameterType.Double;
+		this.value = value;
+	}
+	
+	public ConfigurationParameter(Long value){
+		type = ConfigurationParameterType.Long;
 		this.value = value;
 	}
 	
@@ -72,6 +77,10 @@ public class ConfigurationParameter {
 	
 	public Double getDouble(){
 		return (Double)value;
+	}
+	
+	public Long getLong(){
+		return (Long)value;
 	}
 	
 	public Boolean getBoolean(){
