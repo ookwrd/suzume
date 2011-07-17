@@ -197,8 +197,8 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		printChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("print");//TODO
-				
+				System.out.println("print");//ok so it does nothing right now. TODO 
+				printToFile(MEDIUM_DIMENSION, "/suzume-charts");
 			}
 		});
 		buttonPanel.add(printChartButton);
