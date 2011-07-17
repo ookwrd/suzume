@@ -13,4 +13,6 @@ public interface Configurable {
 
 	public void setParameter(String key, ConfigurationParameter parameter);
 	
+	public BasicConfigurationPanel getConfigurationPanel();
+	
 }

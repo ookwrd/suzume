@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
 
 import Launcher.ConfigurationDisplayTools;
@@ -19,8 +18,6 @@ import Launcher.GraphTypeConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class BasicConfigurationPanel extends JPanel {
-	
-	protected JPanel innerPanel; //TODO is this needed?
 	
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components;
@@ -49,6 +46,11 @@ public class BasicConfigurationPanel extends JPanel {
 			case Double:
 				JTextField field1 = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
 				components.put(key, field1);
+				break;
+				
+			case Long:
+				JTextField field3 = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
+				components.put(key, field3);
 				break;
 				
 			case Boolean:
@@ -88,7 +90,7 @@ public class BasicConfigurationPanel extends JPanel {
 		add(autoPanel);
 		
 		if(parameters.size()==0){
-			innerPanel = new JPanel();
+			JPanel innerPanel = new JPanel();
 			innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 			innerPanel.add(new JLabel("No configuration required.")); 
 			add(innerPanel);
@@ -110,11 +112,15 @@ public class BasicConfigurationPanel extends JPanel {
 			switch (parameter.type) {
 			
 			case Integer:
-				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText().trim())) );
+				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText().trim())));
 				break;
 			
 			case Double:
-				retParameters.put(key, new ConfigurationParameter(Double.parseDouble(((JTextField)comp).getText().trim())) );
+				retParameters.put(key, new ConfigurationParameter(Double.parseDouble(((JTextField)comp).getText().trim())));
+				break;
+				
+			case Long:
+				retParameters.put(key, new ConfigurationParameter(Long.parseLong(((JTextField)comp).getText().trim())));
 				break;
 			
 			case String:

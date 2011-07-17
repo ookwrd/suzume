@@ -40,4 +40,9 @@ public class BasicConfigurable implements Configurable {
 		return defaultParameters;
 	}
 	
+	@Override
+	public BasicConfigurationPanel getConfigurationPanel(){
+		return new BasicConfigurationPanel(this);
+	}
+	
 }

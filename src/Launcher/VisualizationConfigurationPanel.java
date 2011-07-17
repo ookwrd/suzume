@@ -16,7 +16,7 @@ public class VisualizationConfigurationPanel extends JPanel {
 		
 		setBorder(new TitledBorder("Visualization"));
 		
-		panel = new BasicConfigurationPanel(new VisualizationConfiguration());
+		panel = new VisualizationConfiguration().getConfigurationPanel();
 		add(panel);
 	}
 	

@@ -16,7 +16,7 @@ public class NodeConfigurationPanel extends JPanel {
 	public NodeConfigurationPanel(NodeType type){
 		
 		this.type = type;
-		this.basicPanel = new BasicConfigurationPanel(NodeFactory.constructUninitializedNode(type));
+		this.basicPanel = NodeFactory.constructUninitializedNode(type).getConfigurationPanel();
 
 		this.add(basicPanel);
 	}
