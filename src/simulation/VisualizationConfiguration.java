@@ -1,6 +1,9 @@
 package simulation;
 
+import javax.swing.border.TitledBorder;
+
 import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.BasicConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 
 public class VisualizationConfiguration extends BasicConfigurable {
@@ -23,5 +26,12 @@ public class VisualizationConfiguration extends BasicConfigurable {
 	
 	public VisualizationConfiguration(BasicConfigurable baseConfig){
 		super(baseConfig);
+	}
+	
+	@Override
+	public BasicConfigurationPanel getConfigurationPanel(){
+		BasicConfigurationPanel ret = super.getConfigurationPanel();
+		ret.setBorder(new TitledBorder("Visualization"));
+		return ret;
 	}
 }

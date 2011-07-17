@@ -23,7 +23,7 @@ public class Launcher extends JPanel {
 	
 	private BasicConfigurationPanel randomOptions;
 	private SimulationConfigurationPanel modelOptions;
-	private VisualizationConfigurationPanel visualOptions;
+	private BasicConfigurationPanel visualOptions;
 	
 	private JPanel menuBar;
 	private JButton createButton;
@@ -41,7 +41,7 @@ public class Launcher extends JPanel {
 		modelOptions = new SimulationConfigurationPanel();
 		add(modelOptions);
 		
-		visualOptions = new VisualizationConfigurationPanel();
+		visualOptions = new VisualizationConfiguration().getConfigurationPanel();
 		add(visualOptions);
 			
 		menuBar = new JPanel();
@@ -72,7 +72,7 @@ public class Launcher extends JPanel {
 	 */
 	private void createSimulation(){
 		SimulationConfiguration configuration = modelOptions.getConfiguration();
-		VisualizationConfiguration visualizationConfiguration = visualOptions.getConfiguration();
+		VisualizationConfiguration visualizationConfiguration = new VisualizationConfiguration(visualOptions.getConfiguration());
 		RandomGenerator random = new RandomGenerator(randomOptions.getConfiguration());
 	
 		ModelController controller = new ModelController(configuration, visualizationConfiguration, random);
