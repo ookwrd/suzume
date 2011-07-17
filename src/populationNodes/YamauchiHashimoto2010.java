@@ -21,12 +21,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 	protected static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
 	
 	{
-		defaultParameters.put(LEARNING_RESOURCE, new ConfigurationParameter(24));
-		defaultParameters.put(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
-		defaultParameters.put(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
-		defaultParameters.put(MUTATION_RATE, new ConfigurationParameter(0.00025));
-		defaultParameters.put(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		defaultParameters.put(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		setDefaultParameter(LEARNING_RESOURCE, new ConfigurationParameter(24));
+		setDefaultParameter(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
+		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
+		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
+		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
 	}
 
 	protected ArrayList<Integer> chromosome;

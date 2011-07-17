@@ -1,6 +1,9 @@
 package simulation;
 
+import javax.swing.border.TitledBorder;
+
 import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.BasicConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 
 public class VisualizationConfiguration extends BasicConfigurable {
@@ -12,16 +15,24 @@ public class VisualizationConfiguration extends BasicConfigurable {
 	public static final String VISUALIZATION_INTERVAL = "Visualization interval";
 	
 	{
-		defaultParameters.put(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
-		defaultParameters.put(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
-		defaultParameters.put(ENABLE_TIMESERIES_VISUALIAZATION, new ConfigurationParameter(false));
-		defaultParameters.put(VISUALIZATION_INTERVAL, new ConfigurationParameter(1));
-		defaultParameters.put(PAUSE_AFTER_VISUALIZATION, new ConfigurationParameter(1));
+		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
+		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
+		setDefaultParameter(ENABLE_TIMESERIES_VISUALIAZATION, new ConfigurationParameter(false));
+		setDefaultParameter(VISUALIZATION_INTERVAL, new ConfigurationParameter(1));
+		setDefaultParameter(PAUSE_AFTER_VISUALIZATION, new ConfigurationParameter(1));
 	}
 	
-	public VisualizationConfiguration(){}
+	public VisualizationConfiguration(){
+	}
 	
 	public VisualizationConfiguration(BasicConfigurable baseConfig){
-		super(baseConfig);
+		super(baseConfig);	
+	}
+	
+	@Override
+	public BasicConfigurationPanel getConfigurationPanel(){
+		BasicConfigurationPanel ret = super.getConfigurationPanel();
+		ret.setBorder(new TitledBorder("Visualization"));
+		return ret;
 	}
 }

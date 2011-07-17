@@ -25,14 +25,14 @@ public class SimulationConfiguration extends BasicConfigurable {
 	
 	
 	{
-		defaultParameters.put(GENERATION_COUNT, new ConfigurationParameter(5000));
-		defaultParameters.put(RUN_COUNT, new ConfigurationParameter(10));
-		defaultParameters.put(POPULATION_SIZE, new ConfigurationParameter(200));
-		defaultParameters.put(BASE_FITNESS, new ConfigurationParameter(1));
-		defaultParameters.put(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
-		defaultParameters.put(CRITICAL_PERIOD, new ConfigurationParameter(200));
-		defaultParameters.put(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
-		defaultParameters.put(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
+		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
+		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
+		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
+		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
+		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
+		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
+		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 	}
 	
 	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelection;
