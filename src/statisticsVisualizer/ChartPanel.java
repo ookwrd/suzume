@@ -106,8 +106,8 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		//Setup panel
 		editPanel = new JPanel();
 		editPanel.setOpaque(true);
-		
-		editPanel.setLayout(new GridLayout(0, 2));
+		SpringLayout layout = new SpringLayout();
+		editPanel.setLayout(layout);
 		
 		editPanel.setVisible(false);
 		add(editPanel);
@@ -158,6 +158,54 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		confirmEdit.addActionListener(stopEditListener);
 		confirmEdit.setVisible(true);
 		editPanel.add(confirmEdit);
+		
+		//Specify constraints on location
+		layout.putConstraint(SpringLayout.WEST, labelTitle,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, labelTitle,
+                20,
+                SpringLayout.NORTH, editPanel);
+		layout.putConstraint(SpringLayout.WEST, editTitle,
+				80,
+		        SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, editTitle,
+		        20,
+		        SpringLayout.NORTH, editPanel);
+		
+		layout.putConstraint(SpringLayout.WEST, labelX,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, labelX,
+                40,
+                SpringLayout.NORTH, editPanel);
+		layout.putConstraint(SpringLayout.WEST, editXaxis,
+                80,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, editXaxis,
+                40,
+                SpringLayout.NORTH, editPanel);
+				
+		layout.putConstraint(SpringLayout.WEST, labelY,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, labelY,
+                60,
+                SpringLayout.NORTH, editPanel);
+		layout.putConstraint(SpringLayout.WEST, editYaxis,
+                80,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, editYaxis,
+                60,
+                SpringLayout.NORTH, editPanel);
+		
+		layout.putConstraint(SpringLayout.WEST, confirmEdit,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, confirmEdit,
+                80,
+                SpringLayout.NORTH, editPanel);
+		
 		
 	}
 	
