@@ -22,6 +22,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
 import javax.swing.SpringLayout;
 
@@ -68,11 +69,11 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private ChartConfiguration config;
 	
 	private boolean editing;
-	private JTextArea editTitle;
+	private JTextField editTitle;
 	private JButton confirmEdit;
 	private ActionListener stopEditListener;
-	private JTextArea editXaxis;
-	private JTextArea editYaxis;
+	private JTextField editXaxis;
+	private JTextField editYaxis;
 	
 	
 	public ChartPanel(
@@ -115,10 +116,10 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		//Setup edit controls
 		
 		//Title
-		editTitle = new JTextArea(config.getTitle());
+		editTitle = new JTextField(config.getTitle());
 		editTitle.setBackground(Color.WHITE);
-		//editTitle.setLineWrap(true);
-		//editTitle.setWrapStyleWord(true);
+		//editTitle.setLineWrap(false);
+		//editTitle.setWrapStyleWord(false);
 		editTitle.setEditable(true);
 		editTitle.setVisible(true);
 		JLabel labelTitle = new JLabel("Title: ", JLabel.TRAILING);
@@ -126,7 +127,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		editPanel.add(editTitle);
 		
 		//X axis
-		editXaxis = new JTextArea(config.getxLabel());
+		editXaxis = new JTextField(config.getxLabel());
 		editXaxis.setBackground(Color.WHITE);
 		editXaxis.setEditable(true);
 		editXaxis.setVisible(true);
@@ -136,7 +137,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		editPanel.add(editXaxis);
 		
 		//Y axis
-		editYaxis = new JTextArea(config.getyLabel());
+		editYaxis = new JTextField(config.getyLabel());
 		editYaxis.setBackground(Color.WHITE);
 		editYaxis.setEditable(true);
 		editYaxis.setVisible(true);
