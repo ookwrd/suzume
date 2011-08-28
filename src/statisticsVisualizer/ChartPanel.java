@@ -1,8 +1,11 @@
 package statisticsVisualizer;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -11,10 +14,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
+import javax.swing.SpringLayout;
 
 
 import org.jfree.chart.ChartFactory;
@@ -52,9 +62,18 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private JFreeChart chart;
 	private ZoomPanel chartImagePanel;
 	private JPanel buttonPanel;
+	public JPanel editPanel;
 	
 	private DataPanel parent;
 	private ChartConfiguration config;
+	
+	private boolean editing;
+	private JTextField editTitle;
+	private JButton confirmEdit;
+	private ActionListener stopEditListener;
+	private JTextField editXaxis;
+	private JTextField editYaxis;
+	
 	
 	public ChartPanel(
 			ChartConfiguration config,
@@ -65,10 +84,13 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 		this.config = config;
 		this.parent = parent;
+		this.editing = false;
 		
 		createChart();
 
 		setLayout(new OverlayLayout(this));
+		
+		setupEditPanel();
 		
 		setupButtonPanel();
 		
@@ -79,6 +101,128 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 	}
 	
+	private void setupEditPanel() {
+		
+		//Setup panel
+		editPanel = new JPanel();
+		editPanel.setOpaque(true);
+		SpringLayout layout = new SpringLayout();
+		editPanel.setLayout(layout);
+		
+		editPanel.setVisible(false);
+		add(editPanel);
+		
+		//Setup edit controls
+		
+		//Title
+		editTitle = new JTextField(config.getTitle());
+		editTitle.setBackground(Color.WHITE);
+		//editTitle.setLineWrap(false);
+		//editTitle.setWrapStyleWord(false);
+		editTitle.setEditable(true);
+		editTitle.setVisible(true);
+		JLabel labelTitle = new JLabel("Title: ", JLabel.TRAILING);
+		editPanel.add(labelTitle);
+		editPanel.add(editTitle);
+		
+		//X axis
+		editXaxis = new JTextField(config.getxLabel());
+		editXaxis.setBackground(Color.WHITE);
+		editXaxis.setEditable(true);
+		editXaxis.setVisible(true);
+		
+		JLabel labelX = new JLabel("X axis: ", JLabel.TRAILING);
+		editPanel.add(labelX);
+		editPanel.add(editXaxis);
+		
+		//Y axis
+		editYaxis = new JTextField(config.getyLabel());
+		editYaxis.setBackground(Color.WHITE);
+		editYaxis.setEditable(true);
+		editYaxis.setVisible(true);
+		
+		JLabel labelY = new JLabel("Y axis: ", JLabel.TRAILING);
+		editPanel.add(labelY);
+		editPanel.add(editYaxis);
+		
+		//Confirm
+		confirmEdit = new JButton("OK");
+		confirmEdit.setActionCommand("Stop editing");
+		stopEditListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setEditMode(false);
+			}
+		};
+		confirmEdit.addActionListener(stopEditListener);
+		confirmEdit.setVisible(true);
+		editPanel.add(confirmEdit);
+		
+		//Specify constraints on location
+		layout.putConstraint(SpringLayout.WEST, labelTitle,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, labelTitle,
+                20,
+                SpringLayout.NORTH, editPanel);
+		layout.putConstraint(SpringLayout.WEST, editTitle,
+				80,
+		        SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, editTitle,
+		        20,
+		        SpringLayout.NORTH, editPanel);
+		
+		layout.putConstraint(SpringLayout.WEST, labelX,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, labelX,
+                40,
+                SpringLayout.NORTH, editPanel);
+		layout.putConstraint(SpringLayout.WEST, editXaxis,
+                80,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, editXaxis,
+                40,
+                SpringLayout.NORTH, editPanel);
+				
+		layout.putConstraint(SpringLayout.WEST, labelY,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, labelY,
+                60,
+                SpringLayout.NORTH, editPanel);
+		layout.putConstraint(SpringLayout.WEST, editYaxis,
+                80,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, editYaxis,
+                60,
+                SpringLayout.NORTH, editPanel);
+		
+		layout.putConstraint(SpringLayout.WEST, confirmEdit,
+                10,
+                SpringLayout.WEST, editPanel);
+		layout.putConstraint(SpringLayout.NORTH, confirmEdit,
+                80,
+                SpringLayout.NORTH, editPanel);
+		
+		
+	}
+	
+	private void setEditMode(boolean edit) {
+		editing = edit;
+		
+		//Set edit visible
+		editPanel.setVisible(edit);
+		
+		//Update once done editing
+		if(!edit) {
+			config.setTitle(editTitle.getText());
+			config.setxLabel(editXaxis.getText());
+			config.setyLabel(editYaxis.getText());
+		}
+	}
+
 	private void setupButtonPanel(){
 		
 		//Setup the Panel
@@ -92,8 +236,8 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		configureChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				config.setTitle("THis is the new title");
-				System.out.println("Configure");//TODO
+				setEditMode(!editing);
+				//System.out.println("editing");
 			}
 		});
 		buttonPanel.add(configureChartButton);
@@ -102,7 +246,10 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		printChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("print");//TODO
+				//System.out.println("print");//ok so this did nothing until right now.
+				String location = saveDialog().getAbsolutePath();
+				System.out.println("Save path: "+location);
+				printToFile(MEDIUM_DIMENSION, location);
 			}
 		});
 		buttonPanel.add(printChartButton);
@@ -118,6 +265,23 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		
 	}
 	
+	protected File saveDialog() {
+		//Launch save dialog
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogTitle("Save to directory");
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+		int returnVal = fc.showSaveDialog(this);
+		File file = new File("/suzume-charts");
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = fc.getSelectedFile();
+            //System.out.println("Saving: " + file.getName() + ".");
+        } else {
+            //System.out.println("Save command cancelled by user.");
+        }
+        return file;
+	}
+
 	private JFreeChart createChart(ArrayList<Pair<Double, Double>>[] series, ChartType type){
 		
 		JFreeChart chart;
