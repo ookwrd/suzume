@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -11,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -20,43 +22,49 @@ import PopulationModel.PopulationModel;
 
 import runTimeVisualization.Visualizable.VisualizationType;
 
+@SuppressWarnings("serial")
 public class TimeSeries extends JPanel {
 
 	private Dimension verticalBaseDimension = new Dimension(1,1);
 	
 	private PopulationModel model;
 	
-	private BufferedImage verticalImage;
-	private Graphics verticalGraphics;
-	private JLabel verticalImageLabel;
+	private DrawingLabel label;
 	
-	public TimeSeries(PopulationModel model, int generationCount){
-		
-		setLayout(new BorderLayout());
-		
+	private boolean isSelected = false;
+	
+	public TimeSeries(PopulationModel model, int generationCount, final JButton printButton){
 		this.model = model;
 
+		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(5, 0, 5, 0));
 		
-		Dimension drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		verticalImage = new BufferedImage(drawSize.width*generationCount, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		verticalGraphics = verticalImage.getGraphics();
-		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
+		Dimension singleSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
+		Dimension panelSize = new Dimension(singleSize.width*generationCount, singleSize.height);
+		label = new DrawingLabel(panelSize);
 		
-		ImageIcon icon = new ImageIcon(verticalImage);
-		verticalImageLabel = new JLabel(icon);
-		
-		add(verticalImageLabel, BorderLayout.CENTER);
+		add(label, BorderLayout.NORTH);
 		
 		setFocusable(true);
-		setFocused(false);
+		setSelected(false);
 		
 		addFocusListener(new FocusListener() {
 			@Override public void focusLost(FocusEvent arg0) {
-				setFocused(false);
+				if(arg0.getOppositeComponent() != printButton){
+					setSelected(false);
+				}
 			}
 			@Override public void focusGained(FocusEvent arg0) {
-				setFocused(true);
+				setSelected(true);
+			}
+		});
+		
+		printButton.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(e.getOppositeComponent() != TimeSeries.this){
+					setSelected(false);
+				}
 			}
 		});
 		
@@ -68,21 +76,28 @@ public class TimeSeries extends JPanel {
 		});
 	}
 	
-	private void setFocused(boolean focused){
+	private void setSelected(boolean focused){
 		if(focused){
-			verticalImageLabel.setBorder(new LineBorder(Color.orange, 2));
+			label.setBorder(new LineBorder(Color.orange, 2));
+			isSelected = true;
 		}else{
-			verticalImageLabel.setBorder(new EmptyBorder(2, 2, 2, 2));
+			label.setBorder(new EmptyBorder(2, 2, 2, 2));
+			isSelected = false;
 		}
 	}
 	
+	public boolean isSelected(){
+		return isSelected;
+	}
+	
 	public void updateImage(){
+		model.draw(verticalBaseDimension, VisualizationType.vertical, label.getGraphics().create());
+		label.getGraphics().translate(verticalBaseDimension.height, 0);
+		label.repaint();
+	}
 
-		//Timeseries visualization
-		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphics.create());
-		verticalGraphics.translate(verticalBaseDimension.height, 0);
-		verticalImageLabel.repaint();
-		
+	public BufferedImage getImage() {
+		return label.getImage();
 	}
 	
 }

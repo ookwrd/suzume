@@ -4,14 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -28,32 +28,40 @@ public class SingleStepVisualization extends JPanel {
 	
 	private PopulationModel model;
 	
-	private Graphics layoutGraphics;
-	private JLabel iconLabel;
+	private DrawingLabel iconLabel;
+	
+	private boolean isSelected = false;
 
-	public SingleStepVisualization(PopulationModel model){
+	public SingleStepVisualization(PopulationModel model, final JButton printButton){
 		
 		this.model = model;
 		setLayout(new BorderLayout());
 		
 		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationType.layout);
-		BufferedImage layoutImage = new BufferedImage(drawSize.width, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		layoutGraphics = layoutImage.getGraphics();
-		model.draw(layoutBaseDimension,VisualizationType.layout,layoutImage.getGraphics());
+		iconLabel = new DrawingLabel(drawSize);
 		
-		ImageIcon icon = new ImageIcon(layoutImage);
-		iconLabel = new JLabel(icon);
 		add(iconLabel, BorderLayout.CENTER);
 		
 		setFocusable(true);
-		setFocused(false);
+		setSelected(false);
 		
 		addFocusListener(new FocusListener() {
 			@Override public void focusLost(FocusEvent arg0) {
-				setFocused(false);
+				if(arg0.getOppositeComponent() != printButton){
+					setSelected(false);
+				}	
 			}
 			@Override public void focusGained(FocusEvent arg0) {
-				setFocused(true);
+				setSelected(true);
+			}
+		});
+		
+		printButton.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(e.getOppositeComponent() != SingleStepVisualization.this){
+					setSelected(false);
+				}
 			}
 		});
 		
@@ -65,21 +73,34 @@ public class SingleStepVisualization extends JPanel {
 		});
 	}
 	
-	private void setFocused(boolean focused){
-		if(focused){
+	private void setSelected(boolean selected){
+		if(selected){
 			iconLabel.setBorder(new LineBorder(Color.orange, 2));
+			isSelected = true;
 		}else{
 			iconLabel.setBorder(new EmptyBorder(2, 2, 2, 2));
+			isSelected = false;
 		}
 	}
 	
+	public boolean isSelected(){
+		return isSelected;
+	}
+	
 	public void updateImage(){
-		model.draw(layoutBaseDimension, VisualizationType.layout, layoutGraphics.create());
+		model.draw(layoutBaseDimension, VisualizationType.layout, iconLabel.getGraphics().create());
 		repaint();
 	}
 
 	public void updateModel(PopulationModel model) {
 		this.model = model;
+	}
+	
+	public BufferedImage getSelected(){
+		if(isSelected){
+			return iconLabel.getImage();
+		}
+		return null;
 	}
 	
 }

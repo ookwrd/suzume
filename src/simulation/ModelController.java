@@ -6,7 +6,7 @@ import populationNodes.Agent;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
-import runTimeVisualization.StepwiseVisualizer;
+import runTimeVisualization.RuntimeVisualizer;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
@@ -36,7 +36,7 @@ public class ModelController implements Runnable {
 	private SelectionModel selectionModel;
 	
 	//Visualization
-	private StepwiseVisualizer visualizer;
+	private RuntimeVisualizer visualizer;
 	private StatisticsVisualizer statisticsWindow;
 
 	//Progress counters
@@ -60,7 +60,7 @@ public class ModelController implements Runnable {
 		resetStatistics();
 
 		if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
-			this.visualizer = new StepwiseVisualizer(getTitleString(),config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
+			this.visualizer = new RuntimeVisualizer(getTitleString(),config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
 		}
 		
 	}
