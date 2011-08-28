@@ -1,13 +1,20 @@
 package runTimeVisualization;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import PopulationModel.PopulationModel;
 
@@ -22,6 +29,7 @@ public class SingleStepVisualization extends JPanel {
 	private PopulationModel model;
 	
 	private Graphics layoutGraphics;
+	private JLabel iconLabel;
 
 	public SingleStepVisualization(PopulationModel model){
 		
@@ -34,7 +42,35 @@ public class SingleStepVisualization extends JPanel {
 		model.draw(layoutBaseDimension,VisualizationType.layout,layoutImage.getGraphics());
 		
 		ImageIcon icon = new ImageIcon(layoutImage);
-		add(new JLabel(icon), BorderLayout.CENTER);
+		iconLabel = new JLabel(icon);
+		add(iconLabel, BorderLayout.CENTER);
+		
+		setFocusable(true);
+		setFocused(false);
+		
+		addFocusListener(new FocusListener() {
+			@Override public void focusLost(FocusEvent arg0) {
+				setFocused(false);
+			}
+			@Override public void focusGained(FocusEvent arg0) {
+				setFocused(true);
+			}
+		});
+		
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e){
+				requestFocusInWindow();
+			}
+		});
+	}
+	
+	private void setFocused(boolean focused){
+		if(focused){
+			iconLabel.setBorder(new LineBorder(Color.orange, 2));
+		}else{
+			iconLabel.setBorder(new EmptyBorder(2, 2, 2, 2));
+		}
 	}
 	
 	public void updateImage(){
