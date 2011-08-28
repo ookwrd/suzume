@@ -1,4 +1,4 @@
-package runTimeVisualization;
+package statisticsVisualizer;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
