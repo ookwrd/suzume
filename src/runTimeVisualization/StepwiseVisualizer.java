@@ -1,27 +1,19 @@
 package runTimeVisualization;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationModel;
 
-import runTimeVisualization.Visualizable.VisualizationType;
 import simulation.VisualizationConfiguration;
 
 @SuppressWarnings("serial")
@@ -32,23 +24,15 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private VisualizationConfiguration config;
 	private PopulationModel model;	
-	
-	private Dimension layoutBaseDimension = new Dimension(5,5);
-	private Dimension verticalBaseDimension = new Dimension(1,1);
-	
+		
 	private JFrame frame;
 	
-	//Main Visualization
-	private Graphics layoutGraphics;
-	private JLabel layoutImageLabel;
+	//Layout Visualization
+	private SingleStepVisualization singleStepPanel;
 	
 	//Timeseries Visualization
-	private JPanel timeSeriesPanel;
-	
-	private BufferedImage verticalImage;
-	private Graphics verticalGraphics;
-	private JLabel verticalImageLabel;
-	
+	private TimeSeriesVisualization timeSeriesPanel;
+		
 	//Top bar
 	private JTextField pauseField;
 	private JTextField intervalField;
@@ -61,50 +45,30 @@ public class StepwiseVisualizer extends JPanel {
 	
 	private boolean pauseStatus;
 	private int steps;
-	private int generationCount;
-	
-	private int runAtLastUpdate = 0;
-	
-	//private VisualizationType visualizationType = VisualizationType.vertical;
 	
 	public StepwiseVisualizer(String title, int generationCount, PopulationModel model, VisualizationConfiguration config){
 		
 		this.model = model;
 		this.config = config;
 		
+		setLayout(new BorderLayout());
+		
+		//Layout visualization
+		singleStepPanel = new SingleStepVisualization(model);
+		add(singleStepPanel, BorderLayout.WEST);
+		
+		//TimeSeries visualization
+		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount);
+		add(timeSeriesPanel, BorderLayout.CENTER);
+		
 		frame = new JFrame();
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
 		
-		this.generationCount = generationCount;
-		
-		//Layout visualization
-		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationType.layout);
-		BufferedImage layoutImage = new BufferedImage(drawSize.width, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		layoutGraphics = layoutImage.getGraphics();
-		model.draw(layoutBaseDimension,VisualizationType.layout,layoutImage.getGraphics());
-		
-		ImageIcon icon = new ImageIcon(layoutImage);
-		layoutImageLabel = new JLabel(icon);
-		add(layoutImageLabel);
-		
-		//TimeSeries visualization
-		timeSeriesPanel = new JPanel();
-		timeSeriesPanel.setLayout(new BoxLayout(timeSeriesPanel, BoxLayout.Y_AXIS));
-		configureNewTimeseries();
-		add(timeSeriesPanel);
-		
-		JScrollPane scrollPane = new JScrollPane(this);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		
 		configureTopBar();
-		
 		configureBottomBar();
 		
-		frame.add(scrollPane, BorderLayout.CENTER);
+		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
 		
@@ -190,20 +154,6 @@ public class StepwiseVisualizer extends JPanel {
 		frame.add(counterPanel, BorderLayout.SOUTH);
 	}
 	
-	private void configureNewTimeseries(){
-
-		Dimension drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		verticalImage = new BufferedImage(drawSize.width*generationCount, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		verticalGraphics = verticalImage.getGraphics();
-		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
-		
-		ImageIcon icon = new ImageIcon(verticalImage);
-		verticalImageLabel = new JLabel(icon);
-		verticalImageLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		timeSeriesPanel.add(verticalImageLabel);
-		
-	}
-	
 	/**
 	 * Update the model that we are producing visualizations of.
 	 * 
@@ -211,6 +161,8 @@ public class StepwiseVisualizer extends JPanel {
 	 */
 	public void updateModel(PopulationModel model){
 		this.model = model;
+		singleStepPanel.updateModel(model);
+		timeSeriesPanel.updateModel(model);
 	}
 	
 	public void update(int run,int generation){
@@ -256,22 +208,9 @@ public class StepwiseVisualizer extends JPanel {
 	}
 	
 	private void updateImage(int run){
-		
 		//Current Status visualization
-		model.draw(layoutBaseDimension, VisualizationType.layout, layoutGraphics.create());
-		layoutImageLabel.repaint();
-		
-		//Do we reset the visualization?
-		if(this.runAtLastUpdate < run){
-			configureNewTimeseries();
-			runAtLastUpdate = run;
-		}
-		
-		//Timeseries visualization
-		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphics.create());
-		verticalGraphics.translate(verticalBaseDimension.height, 0);
-		verticalImageLabel.repaint();
-		
+		singleStepPanel.updateImage();
+		timeSeriesPanel.updateImage(run);
 	}
 
 }

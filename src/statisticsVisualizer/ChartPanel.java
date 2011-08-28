@@ -28,7 +28,6 @@ import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import runTimeVisualization.ZoomPanel;
 import statisticsVisualizer.ChartConfiguration.ChartType;
 import tools.Pair;
 import tools.Statistics;
