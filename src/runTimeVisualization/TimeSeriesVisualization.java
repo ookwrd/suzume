@@ -1,33 +1,23 @@
 package runTimeVisualization;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 import PopulationModel.PopulationModel;
 
-import runTimeVisualization.Visualizable.VisualizationType;
 
 @SuppressWarnings("serial")
 public class TimeSeriesVisualization extends JScrollPane {
 
-	private Dimension verticalBaseDimension = new Dimension(1,1);
+	private ArrayList<TimeSeries> series = new ArrayList<TimeSeries>();
 	
 	private PopulationModel model;
 	private int generationCount;
 	
-	private BufferedImage verticalImage;
-	private Graphics verticalGraphics;
-	private JLabel verticalImageLabel;
 	
 	private JPanel inner;
 	
@@ -52,15 +42,9 @@ public class TimeSeriesVisualization extends JScrollPane {
 	
 	public void configureNewTimeseries(){
 		
-		Dimension drawSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		verticalImage = new BufferedImage(drawSize.width*generationCount, drawSize.height, BufferedImage.TYPE_INT_RGB);
-		verticalGraphics = verticalImage.getGraphics();
-		model.draw(verticalBaseDimension, VisualizationType.vertical,verticalImage.getGraphics());
-		
-		ImageIcon icon = new ImageIcon(verticalImage);
-		verticalImageLabel = new JLabel(icon);
-		verticalImageLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
-		inner.add(verticalImageLabel);
+		TimeSeries timeSeries = new TimeSeries(model, generationCount);
+		series.add(timeSeries);
+		inner.add(timeSeries);
 		
 		//Scroll to the new panel at the bottom
 		inner.revalidate();
@@ -77,14 +61,10 @@ public class TimeSeriesVisualization extends JScrollPane {
 			runAtLastUpdate = run;
 		}
 		
-		//Timeseries visualization
-		model.draw(verticalBaseDimension, VisualizationType.vertical, verticalGraphics.create());
-		verticalGraphics.translate(verticalBaseDimension.height, 0);
-		verticalImageLabel.repaint();
-		
+		series.get(series.size()-1).updateImage();
 	}
 
-	public void updateModel(PopulationModel model) {
+	public void updateModel(PopulationModel model) {//TODO is this needed
 		this.model = model;
 	}
 	
