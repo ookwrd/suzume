@@ -116,13 +116,13 @@ public class DataPanel extends JPanel {
 			}
 		});
 		
-		JButton printButton = new JButton("Print");
+		/*JButton printButton = new JButton("Print"); // deprecated
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			//	printToFile(size, )TODO
 			}
-		});
+		});*/
 		
 		JButton removeButton = new JButton("Remove");
 		removeButton.addActionListener(new ActionListener() {
@@ -138,7 +138,7 @@ public class DataPanel extends JPanel {
 		buttonPanel.add(trimEndField);
 		buttonPanel.add(averageCheckBox);
 		buttonPanel.add(createButton);
-		buttonPanel.add(printButton);
+		//buttonPanel.add(printButton); //deprecated
 		buttonPanel.add(removeButton);
 		
 		add(buttonPanel, BorderLayout.NORTH);

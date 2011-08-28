@@ -2,6 +2,8 @@ package statisticsVisualizer;
 
 import java.util.ArrayList;
 
+import javax.swing.JTextArea;
+
 public class ChartConfiguration {
 
 	public static enum ChartType {LINE_CHART, HISTOGRAM, SCATTER_PLOT, AREA_CHART};
