@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationModel;
@@ -198,6 +199,7 @@ public class StepwiseVisualizer extends JPanel {
 		
 		ImageIcon icon = new ImageIcon(verticalImage);
 		verticalImageLabel = new JLabel(icon);
+		verticalImageLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		timeSeriesPanel.add(verticalImageLabel);
 		
 	}
