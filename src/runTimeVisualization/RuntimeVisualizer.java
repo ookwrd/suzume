@@ -5,8 +5,12 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -174,6 +178,25 @@ public class RuntimeVisualizer extends JPanel {
 		if(image == null){
 			System.out.println("No chart selected");
 			return;
+		}
+		
+		final JFileChooser fc = new JFileChooser();
+		
+		int ret = fc.showSaveDialog(this);
+		
+		switch(ret){
+		case JFileChooser.APPROVE_OPTION:
+			
+			File file = fc.getSelectedFile();
+		    try {
+				ImageIO.write(image, "png", file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		    
+		    return;
+		    
+		default:
 		}
 		
 		System.out.println("Is it null? "+ image);
