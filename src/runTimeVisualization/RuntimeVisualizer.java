@@ -40,7 +40,6 @@ public class RuntimeVisualizer extends JPanel {
 		
 	//Top bar
 	private JTextField pauseField;
-	private JTextField intervalField;
 	private JButton pausePlayButton;
 	private JButton stepButton;
 	
@@ -71,7 +70,7 @@ public class RuntimeVisualizer extends JPanel {
 		add(singleStepPanel, BorderLayout.WEST);
 		
 		//TimeSeries visualization
-		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount, printSelectedButton);
+		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount, printSelectedButton, config);
 		add(timeSeriesPanel, BorderLayout.CENTER);
 		
 		
@@ -97,20 +96,6 @@ public class RuntimeVisualizer extends JPanel {
 		});
 		buttonPanel.add(pauseLabel);
 		buttonPanel.add(pauseField);
-		
-		//Interval Field
-		JLabel intervalLabel = new JLabel("Display every ");
-		intervalField = new JTextField(""+config.getParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger(), 6);
-		intervalField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				config.setParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL,new ConfigurationParameter(Integer.parseInt(intervalField.getText().trim())));	
-			}
-		});
-		JLabel intervalUnit = new JLabel(" generations");
-		buttonPanel.add(intervalLabel);
-		buttonPanel.add(intervalField);
-		buttonPanel.add(intervalUnit);
 		
 		//Pause/Play button
 		pausePlayButton = new JButton("Pause");
@@ -147,6 +132,12 @@ public class RuntimeVisualizer extends JPanel {
 	
 	private void configureBottomBar(){
 		
+		JPanel bottomBar = new JPanel();
+		bottomBar.setLayout(new BorderLayout());
+		
+		JPanel printPanel = new JPanel();
+		printPanel.setLayout(new FlowLayout());
+		
 		JPanel counterPanel = new JPanel();
 		counterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
@@ -157,7 +148,9 @@ public class RuntimeVisualizer extends JPanel {
 				saveSelected();
 			}
 		});
-		counterPanel.add(printSelectedButton);
+		
+		printPanel.add(printSelectedButton);
+		bottomBar.add(printPanel, BorderLayout.CENTER);
 
 		runCounter = new JLabel(RUN_COUNTER_PREFIX + "0");
 		counterPanel.add(runCounter);
@@ -165,7 +158,9 @@ public class RuntimeVisualizer extends JPanel {
 		generationCounter = new JLabel(GENERATION_COUNTER_PREFIX + "0");
 		counterPanel.add(generationCounter);
 		
-		frame.add(counterPanel, BorderLayout.SOUTH);
+		bottomBar.add(counterPanel, BorderLayout.EAST);
+		
+		frame.add(bottomBar, BorderLayout.SOUTH);
 	}
 	
 	private void saveSelected(){
@@ -220,7 +215,7 @@ public class RuntimeVisualizer extends JPanel {
 			if(steps > 0){
 				steps--;
 				break;
-			} else if ( !pauseStatus){
+			} else if (!pauseStatus){
 				break;
 			}
 			
