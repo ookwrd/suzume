@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +18,7 @@ import PopulationModel.PopulationModel;
 import simulation.VisualizationConfiguration;
 
 @SuppressWarnings("serial")
-public class StepwiseVisualizer extends JPanel {
+public class RuntimeVisualizer extends JPanel {
 	
 	private static final String RUN_COUNTER_PREFIX = "Run : ";
 	private static final String GENERATION_COUNTER_PREFIX = "Generation : ";
@@ -42,24 +43,17 @@ public class StepwiseVisualizer extends JPanel {
 	//Bottom bar
 	private JLabel generationCounter;
 	private JLabel runCounter;
+	JButton printSelectedButton;
 	
 	private boolean pauseStatus;
 	private int steps;
 	
-	public StepwiseVisualizer(String title, int generationCount, PopulationModel model, VisualizationConfiguration config){
+	public RuntimeVisualizer(String title, int generationCount, PopulationModel model, VisualizationConfiguration config){
 		
 		this.model = model;
 		this.config = config;
 		
 		setLayout(new BorderLayout());
-		
-		//Layout visualization
-		singleStepPanel = new SingleStepVisualization(model);
-		add(singleStepPanel, BorderLayout.WEST);
-		
-		//TimeSeries visualization
-		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount);
-		add(timeSeriesPanel, BorderLayout.CENTER);
 		
 		frame = new JFrame();
 		frame.setTitle(title);
@@ -67,6 +61,15 @@ public class StepwiseVisualizer extends JPanel {
 		
 		configureTopBar();
 		configureBottomBar();
+		
+		//Layout visualization
+		singleStepPanel = new SingleStepVisualization(model, printSelectedButton);
+		add(singleStepPanel, BorderLayout.WEST);
+		
+		//TimeSeries visualization
+		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount, printSelectedButton);
+		add(timeSeriesPanel, BorderLayout.CENTER);
+		
 		
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
@@ -110,7 +113,13 @@ public class StepwiseVisualizer extends JPanel {
 		pausePlayButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				pausePlayButton.setText(pauseStatus?"Pause":"Play");
+				if(pauseStatus){
+					pausePlayButton.setText("Pause");
+					stepButton.setEnabled(false);
+				}else{
+					pausePlayButton.setText("Play");
+					stepButton.setEnabled(true);
+				}
 				pauseStatus = !pauseStatus;
 				steps = 0;
 				
@@ -119,7 +128,7 @@ public class StepwiseVisualizer extends JPanel {
 		buttonPanel.add(pausePlayButton);
 		
 		//Step
-		stepButton = new JButton(">>");
+		stepButton = new JButton("Step");
 		stepButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -127,6 +136,7 @@ public class StepwiseVisualizer extends JPanel {
 			}
 		});
 		buttonPanel.add(stepButton);
+		stepButton.setEnabled(false);
 		
 		frame.add(buttonPanel, BorderLayout.NORTH);
 	}
@@ -136,14 +146,14 @@ public class StepwiseVisualizer extends JPanel {
 		JPanel counterPanel = new JPanel();
 		counterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
-		JButton printCurrentGenerationButton = new JButton("Print current generation");
-		printCurrentGenerationButton.addActionListener(new ActionListener() {
+		printSelectedButton = new JButton("Export Selected Chart");
+		printSelectedButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				model.print();
+				saveSelected();
 			}
 		});
-		counterPanel.add(printCurrentGenerationButton);
+		counterPanel.add(printSelectedButton);
 
 		runCounter = new JLabel(RUN_COUNTER_PREFIX + "0");
 		counterPanel.add(runCounter);
@@ -152,6 +162,21 @@ public class StepwiseVisualizer extends JPanel {
 		counterPanel.add(generationCounter);
 		
 		frame.add(counterPanel, BorderLayout.SOUTH);
+	}
+	
+	private void saveSelected(){
+		BufferedImage image = singleStepPanel.getSelected();
+		
+		if(image == null){
+			image = timeSeriesPanel.getSelected();
+		}
+		
+		if(image == null){
+			System.out.println("No chart selected");
+			return;
+		}
+		
+		System.out.println("Is it null? "+ image);
 	}
 	
 	/**
