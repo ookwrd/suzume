@@ -33,14 +33,14 @@ public class TimeSeries extends JPanel {
 	
 	private boolean isSelected = false;
 	
-	public TimeSeries(PopulationModel model, int generationCount, final JButton printButton){
+	public TimeSeries(PopulationModel model, int generationCount, final JButton printButton, int interval){
 		this.model = model;
 
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(5, 0, 5, 0));
 		
 		Dimension singleSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		Dimension panelSize = new Dimension(singleSize.width*generationCount, singleSize.height);
+		Dimension panelSize = new Dimension(singleSize.width*generationCount/interval, singleSize.height);
 		label = new DrawingLabel(panelSize);
 		
 		add(label, BorderLayout.NORTH);
