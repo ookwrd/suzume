@@ -31,11 +31,8 @@ public interface Node extends Visualizable, Configurable {
 	//Invention Phase
 	public void invent();
 	
-
 	public void communicate(Node partner);
 	
 	public ArrayList<Agent> getBaseAgents();
-	
-	
 }
 

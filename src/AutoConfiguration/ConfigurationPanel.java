@@ -1,9 +1,7 @@
-package Launcher;
+package AutoConfiguration;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -12,11 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
-import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
-import populationNodes.AbstractNode.NodeType;
 
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {

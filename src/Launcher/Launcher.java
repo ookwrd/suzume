@@ -35,11 +35,11 @@ public class Launcher extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		randomOptions = new RandomGenerator().getConfigurationPanel();
-		add(randomOptions);
-		
 		modelOptions = new SimulationConfiguration().getConfigurationPanel();
 		add(modelOptions);
+
+		randomOptions = new RandomGenerator().getConfigurationPanel();
+		add(randomOptions);
 		
 		visualOptions = new VisualizationConfiguration().getConfigurationPanel();
 		add(visualOptions);

@@ -2,7 +2,7 @@ package simulation;
 
 import javax.swing.border.TitledBorder;
 
-import simulation.SelectionModel.SelectionModels;
+import simulation.selectionModels.SelectionModel.SelectionModels;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeTypeConfigurationPanel;
@@ -54,7 +54,7 @@ public class SimulationConfiguration extends BasicConfigurable {
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().type + " " + "gen_" + getParameter(GENERATION_COUNT).getInteger() + "run_" + getParameter(RUN_COUNT).getInteger() + "pop_" + getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger() + "crit_" + getParameter(SimulationConfiguration.CRITICAL_PERIOD).getInteger();
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString() + " " + "gen_" + getParameter(GENERATION_COUNT).getInteger() + "run_" + getParameter(RUN_COUNT).getInteger() + "pop_" + getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger() + "crit_" + getParameter(SimulationConfiguration.CRITICAL_PERIOD).getInteger();
 	}
 	
 	@Override

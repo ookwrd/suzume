@@ -1,4 +1,4 @@
-package simulation;
+package simulation.selectionModels;
 
 import java.util.ArrayList;
 

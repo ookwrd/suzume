@@ -7,8 +7,6 @@ import PopulationModel.Node;
 
 public interface Agent extends Node {
 	
-	
-	
 	//Fitness Calculation
 	public void setFitness(int fitness);
 	public int getFitness();

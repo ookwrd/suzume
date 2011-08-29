@@ -42,7 +42,7 @@ public class NodeFactory {
 	
 	public static Node constructPopulationNode(NodeConfiguration nodeConfig){
 		
-		Node node = constructUninitializedNode(nodeConfig.type);
+		Node node = constructUninitializedNode(NodeType.valueOf(nodeConfig.getParameter(NodeConfiguration.NODE_TYPE).getString()));
 		
 		//node.initializeAgent(nodeConfig, nextNodeID++, randomGenerator);
 		
@@ -52,9 +52,9 @@ public class NodeFactory {
 	
 	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
-		NodeType agentType = parentA.getConfiguration().type; 
+		NodeType agentType = NodeType.valueOf(parentA.getConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString()); 
 		
-		if(agentType != parentB.getConfiguration().type){
+		if(agentType != NodeType.valueOf(parentB.getConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString())){
 			System.out.println("Agent type of parents do not match in AgentFactory. Sexual reproduction not possible.");
 			return null;
 		}	
