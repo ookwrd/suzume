@@ -65,12 +65,6 @@ public class NodeFactory {
 		return returnVal;
 	}
 	
-	public static NodeConfigurationPanel getConfigurationPanel(NodeType type){
-	
-		return new NodeConfigurationPanel(type);
-
-	}
-	
 	/*
 	
 	public static void main(String[] args){

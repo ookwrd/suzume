@@ -18,7 +18,7 @@ import AutoConfiguration.ConfigurationParameter;
  */
 public class SimulationConfiguration extends BasicConfigurable {
 
-	public static final String AGENT_TYPE = "Agent";
+	public static final String AGENT_TYPE = "Agent1";
 	
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";

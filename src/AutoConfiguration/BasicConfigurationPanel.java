@@ -17,19 +17,17 @@ import populationNodes.NodeTypeConfigurationPanel;
 import Launcher.ConfigurationPanel;
 
 @SuppressWarnings("serial")
-public class BasicConfigurationPanel extends JPanel {
+public class BasicConfigurationPanel extends ConfigurationPanel {
 	
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components;
 	
 	public BasicConfigurationPanel(Configurable toConfigure){
+		super();
 		
 		//Get default parameter map for this agent type
 		parameters = toConfigure.getParameters();
 		components = new HashMap<String, Component>();
-		
-		ConfigurationPanel autoPanel = new ConfigurationPanel();
-		autoPanel.configurePanel();
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
@@ -39,37 +37,37 @@ public class BasicConfigurationPanel extends JPanel {
 			
 			switch (parameter.type) {
 			case INTEGER:
-				JTextField field = autoPanel.addField(key, parameter.getInteger().toString());
+				JTextField field = addField(key, parameter.getInteger().toString());
 				components.put(key, field);
 				break;
 				
 			case DOUBLE:
-				JTextField field1 = autoPanel.addField(key, parameter.getDouble().toString());
+				JTextField field1 = addField(key, parameter.getDouble().toString());
 				components.put(key, field1);
 				break;
 				
 			case LONG:
-				JTextField field3 = autoPanel.addField(key, parameter.getLong().toString());
+				JTextField field3 = addField(key, parameter.getLong().toString());
 				components.put(key, field3);
 				break;
 				
 			case BOOLEAN:
-				JCheckBox box = autoPanel.addCheckBox(key, parameter.getBoolean());
+				JCheckBox box = addCheckBox(key, parameter.getBoolean());
 				components.put(key, box);
 				break;
 				
 			case STRING:
-				JTextField field2 = autoPanel.addField(key, parameter.getString());
+				JTextField field2 = addField(key, parameter.getString());
 				components.put(key, field2);
 				break;
 				
 			case LIST:
-				JComboBox listBox = autoPanel.addComboBox(key, parameter.getList());
+				JComboBox listBox = addComboBox(key, parameter.getList());
 				components.put(key, listBox);
 				break;
 				
 			case NODE:
-				NodeTypeConfigurationPanel panel1 = autoPanel.addNodeSelector(key, parameter.getNodeConfiguration());
+				NodeTypeConfigurationPanel panel1 = addNodeSelector(key, parameter.getNodeConfiguration());
 				components.put(key, panel1);
 				break;
 				
@@ -78,8 +76,6 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 			}	
 		}
-		
-		add(autoPanel);
 		
 		if(parameters.size()==0){
 			JPanel innerPanel = new JPanel();
@@ -128,9 +124,7 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case NODE:
-				retParameters.put(key, new ConfigurationParameter(
-						((NodeTypeConfigurationPanel)comp).getConfiguration())
-						);
+				retParameters.put(key, new ConfigurationParameter(((NodeTypeConfigurationPanel)comp).getConfiguration()));
 				break;
 				
 			default:

@@ -40,6 +40,7 @@ public class ConfigurationParameter {
 	}
 
 	public ConfigurationParameter(NodeConfiguration value){
+		System.out.println("Node config" + value);
 		type = ConfigurationParameterType.NODE;
 		this.value = value;
 	}

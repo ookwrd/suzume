@@ -1,18 +1,17 @@
 package populationNodes;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
-import populationNodes.AbstractNode.NodeType;
+import AutoConfiguration.BasicConfigurationPanel;
 
-import Launcher.ConfigurationPanel;
+import populationNodes.AbstractNode.NodeType;
 
 
 @SuppressWarnings("serial")
@@ -20,29 +19,25 @@ public class NodeTypeConfigurationPanel extends JPanel {
 
 	private JComboBox agentTypesBox;
 	
-	private NodeConfigurationPanel subPanel;
+	private BasicConfigurationPanel subPanel;
 	
-	public NodeTypeConfigurationPanel(){
+	public NodeTypeConfigurationPanel(NodeConfiguration initialValue){
+		//TODO initial value
 		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
+		setLayout(new BorderLayout());
 		setBorder(new EtchedBorder());
 		
-		ConfigurationPanel topPanel = new ConfigurationPanel();
-		topPanel.configurePanel();
-		agentTypesBox = topPanel.addComboBox("", AbstractNode.NodeType.values());
-		agentTypesBox.addActionListener(new ActionListener() {
-			
+		agentTypesBox = new JComboBox(AbstractNode.NodeType.values());
+		agentTypesBox.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				reconfigureSubPanel();
 			}
 		});
 		
-		add(topPanel);
+		add(agentTypesBox,BorderLayout.NORTH);
 		
 		reconfigureSubPanel();
-		
 	}
 	
 	private JPanel reconfigureSubPanel(){
@@ -51,9 +46,9 @@ public class NodeTypeConfigurationPanel extends JPanel {
 			remove(subPanel);
 		}
 		
-		subPanel = NodeFactory.getConfigurationPanel((NodeType)agentTypesBox.getSelectedItem());
+		subPanel = NodeFactory.constructUninitializedNode((NodeType)agentTypesBox.getSelectedItem()).getConfigurationPanel();//new NodeConfigurationPanel((NodeType)agentTypesBox.getSelectedItem());
 			
-		add(subPanel);
+		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();
 		
@@ -67,7 +62,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	}
 	
 	public NodeConfiguration getConfiguration(){
-		return subPanel.getConfiguration();
+		return new NodeConfiguration((NodeType)agentTypesBox.getSelectedItem(), subPanel.getConfiguration());
 	}
 	
 }
