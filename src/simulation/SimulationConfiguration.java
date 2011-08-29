@@ -22,7 +22,7 @@ public class SimulationConfiguration extends BasicConfigurable {
 	
 	public static final String LEARN_TO_DISTANCE = "Learn from agents upto max distance:";//TODO remove these should be recursive
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
-	
+	public static final String SELECTION_MODEL = "Selection model:";
 	
 	{
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
@@ -33,6 +33,7 @@ public class SimulationConfiguration extends BasicConfigurable {
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 	}
 	
 	public static final SelectionModels DEFAULT_SELECTION_MODEL = SelectionModels.RouletteWheelSelection;
@@ -42,15 +43,14 @@ public class SimulationConfiguration extends BasicConfigurable {
 	
 	
 	public SimulationConfiguration(){
-		this.agentConfig = new NodeConfiguration();//TODO make this top level node config
+		this.agentConfig = new NodeConfiguration();
 	}
 	
 	public SimulationConfiguration(NodeConfiguration agentConfig, 
-			SelectionModels selectionModelType,
 			BasicConfigurable baseConfig){
 		super(baseConfig);
 		this.agentConfig = agentConfig;
-		this.selectionModelType = selectionModelType;
+		this.selectionModelType = SelectionModels.valueOf(getParameter(SELECTION_MODEL).getString());
 	}
 	
 	public String printName(){

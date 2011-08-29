@@ -14,7 +14,7 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
-	public ConfigurationParameter(String[] values){
+	public ConfigurationParameter(Object[] values){
 		type = ConfigurationParameterType.LIST;
 		this.value = values;
 	}
@@ -49,9 +49,13 @@ public class ConfigurationParameter {
 		return (String)value;
 	}
 	
-	public String[] getList(){
+	public Object[] getList(){
 		assert(type == ConfigurationParameterType.LIST);
-		return (String[])value;
+		return (Object[])value;
+	}
+	
+	public Object getObject(){
+		return value;
 	}
 	
 	public Integer getInteger(){

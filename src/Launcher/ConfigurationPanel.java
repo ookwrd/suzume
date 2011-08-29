@@ -13,8 +13,6 @@ import javax.swing.border.TitledBorder;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeTypeConfigurationPanel;
 
-
-
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {
 	
