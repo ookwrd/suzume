@@ -22,7 +22,7 @@ public class Launcher extends JPanel {
 	private JFrame window;
 	
 	private BasicConfigurationPanel randomOptions;
-	private SimulationConfigurationPanel modelOptions;
+	private BasicConfigurationPanel modelOptions;
 	private BasicConfigurationPanel visualOptions;
 	
 	private JPanel menuBar;
@@ -38,7 +38,7 @@ public class Launcher extends JPanel {
 		randomOptions = new RandomGenerator().getConfigurationPanel();
 		add(randomOptions);
 		
-		modelOptions = new SimulationConfigurationPanel();
+		modelOptions = new SimulationConfiguration().getConfigurationPanel();
 		add(modelOptions);
 		
 		visualOptions = new VisualizationConfiguration().getConfigurationPanel();
@@ -71,7 +71,7 @@ public class Launcher extends JPanel {
 	 * Creates a simulation instance based on the current parameter settings and sets it running in a new thread.
 	 */
 	private void createSimulation(){
-		SimulationConfiguration configuration = modelOptions.getConfiguration();
+		SimulationConfiguration configuration = new SimulationConfiguration(modelOptions.getConfiguration());
 		VisualizationConfiguration visualizationConfiguration = new VisualizationConfiguration(visualOptions.getConfiguration());
 		RandomGenerator random = new RandomGenerator(randomOptions.getConfiguration());
 	

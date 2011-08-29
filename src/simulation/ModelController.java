@@ -7,6 +7,7 @@ import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
 import runTimeVisualization.RuntimeVisualizer;
+import simulation.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
@@ -52,8 +53,7 @@ public class ModelController implements Runnable {
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
 		
-		
-		this.selectionModel = SelectionModel.constructSelectionModel(config.selectionModelType, randomGenerator);
+		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(config.getParameter(SimulationConfiguration.SELECTION_MODEL).getString()), randomGenerator);
 		
 		resetModel();
 
@@ -102,10 +102,12 @@ public class ModelController implements Runnable {
 
 	private void initializePopulation(){
 		
-		if(config.agentConfig.type == NodeType.ConfigurablePopulation){
+		NodeConfiguration nodeConfiguration = config.getParameter(SimulationConfiguration.AGENT_TYPE).getNodeConfiguration();
+		
+		if(nodeConfiguration.type == NodeType.ConfigurablePopulation){
 			
-			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(config.agentConfig);
-			node.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
+			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(nodeConfiguration);
+			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 			population = node;
 			
 		} else {
@@ -114,8 +116,8 @@ public class ModelController implements Runnable {
 			ArrayList<Node> nodes = new ArrayList<Node>();
 			for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
 				
-				Node node = NodeFactory.constructPopulationNode(config.agentConfig);
-				node.initializeAgent(config.agentConfig, NodeFactory.nextNodeID++, randomGenerator);
+				Node node = NodeFactory.constructPopulationNode(nodeConfiguration);
+				node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 				nodes.add(node);
 			}
 		

@@ -111,19 +111,4 @@ public class ConfigurationPanel extends JPanel {
 		return nodeConfigPanel;
 		
 	}
-	
-	/*public GraphTypeConfigurationPanel addGraphSelector(String label, GraphType initialValue){
-		
-		JLabel jLabel = new JLabel(label);
-		jLabel.setHorizontalAlignment(JLabel.TRAILING);
-		add(jLabel);
-		
-		GraphTypeConfigurationPanel graphConfigPanel = new GraphTypeConfigurationPanel();
-		
-		add(graphConfigPanel);
-		jLabel.setLabelFor(graphConfigPanel);
-		
-		return graphConfigPanel;
-		
-	}*/
 }
