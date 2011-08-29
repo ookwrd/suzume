@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 
 import populationNodes.NodeTypeConfigurationPanel;
 
-import Launcher.ConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class BasicConfigurationPanel extends ConfigurationPanel {

@@ -62,7 +62,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	}
 	
 	public NodeConfiguration getConfiguration(){
-		return new NodeConfiguration((NodeType)agentTypesBox.getSelectedItem(), subPanel.getConfiguration());
+		return new NodeConfiguration(subPanel.getConfiguration());
 	}
 	
 }

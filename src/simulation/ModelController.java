@@ -7,7 +7,8 @@ import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
 import runTimeVisualization.RuntimeVisualizer;
-import simulation.SelectionModel.SelectionModels;
+import simulation.selectionModels.SelectionModel;
+import simulation.selectionModels.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
@@ -104,7 +105,7 @@ public class ModelController implements Runnable {
 		
 		NodeConfiguration nodeConfiguration = config.getParameter(SimulationConfiguration.AGENT_TYPE).getNodeConfiguration();
 		
-		if(nodeConfiguration.type == NodeType.ConfigurablePopulation){
+		if(NodeType.valueOf(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getString()) == NodeType.ConfigurablePopulation){
 			
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(nodeConfiguration);
 			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);

@@ -5,10 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import simulation.RandomGenerator;
-import AutoConfiguration.BasicConfigurable;
 import PopulationModel.Node;
 
-public abstract class AbstractNode extends BasicConfigurable implements Node{
+public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	public enum NodeType { YamauchiHashimoto2010, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
 	
@@ -30,7 +29,7 @@ public abstract class AbstractNode extends BasicConfigurable implements Node{
 	
 	@Override
 	public String getName(){
-		return config.type.toString();
+		return config.getParameter(NodeConfiguration.NODE_TYPE).toString();
 	}
 	
 	@Override

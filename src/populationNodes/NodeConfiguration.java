@@ -2,20 +2,25 @@ package populationNodes;
 
 import populationNodes.AbstractNode.NodeType;
 import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.ConfigurationParameter;
 
 public class NodeConfiguration extends BasicConfigurable {
 
-	public static final NodeType DEFAULT_AGENT_TYPE = NodeType.YamauchiHashimoto2010;
+	public static final String NODE_TYPE = "Node type";
 	
-	public NodeType type = DEFAULT_AGENT_TYPE;
+	{
+		setDefaultParameter(NODE_TYPE, new ConfigurationParameter(NodeType.values()));
+	}
 	
-	public NodeConfiguration(NodeType type, BasicConfigurable baseConfig){
+	public NodeConfiguration(){	
+	}
+	
+	public NodeConfiguration(BasicConfigurable baseConfig){
 		super(baseConfig);
-		this.type = type;
 	}
 
 	public String toString(){
-		return "Agent Type: " + type;
+		return "Agent Type: " + getParameter(NODE_TYPE).getString();
 	}
 
 }

@@ -40,7 +40,6 @@ public class ConfigurationParameter {
 	}
 
 	public ConfigurationParameter(NodeConfiguration value){
-		System.out.println("Node config" + value);
 		type = ConfigurationParameterType.NODE;
 		this.value = value;
 	}
@@ -53,10 +52,6 @@ public class ConfigurationParameter {
 	public Object[] getList(){
 		assert(type == ConfigurationParameterType.LIST);
 		return (Object[])value;
-	}
-	
-	public Object getObject(){
-		return value;
 	}
 	
 	public Integer getInteger(){
