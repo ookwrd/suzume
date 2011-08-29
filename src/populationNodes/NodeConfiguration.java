@@ -8,10 +8,6 @@ public class NodeConfiguration extends BasicConfigurable {
 	public static final NodeType DEFAULT_AGENT_TYPE = NodeType.YamauchiHashimoto2010;
 	
 	public NodeType type = DEFAULT_AGENT_TYPE;
-
-	public NodeConfiguration(){
-		//TODO maybe I need to get rid of this method?
-	}
 	
 	public NodeConfiguration(NodeType type, BasicConfigurable baseConfig){
 		super(baseConfig);
