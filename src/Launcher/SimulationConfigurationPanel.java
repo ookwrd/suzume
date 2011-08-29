@@ -16,7 +16,7 @@ public class SimulationConfigurationPanel extends JPanel {
 
 	private NodeTypeConfigurationPanel agentConfigurationPanel;
 	
-	private JPanel innerPanel;
+	private ConfigurationPanel innerPanel;
 	
 	private BasicConfigurationPanel panel;
 	
@@ -30,14 +30,12 @@ public class SimulationConfigurationPanel extends JPanel {
 		agentConfigurationPanel = new NodeTypeConfigurationPanel();
 		add(agentConfigurationPanel);
 		
-		innerPanel = new JPanel();
+		innerPanel = new ConfigurationPanel();
 		add(innerPanel);
 		
-		ConfigurationDisplayTools.configurePanel(innerPanel);
+		innerPanel.configurePanel();
 		
-		selectionModelTypeBox= ConfigurationDisplayTools.addComboBox("Selection Model:", SelectionModels.values(), innerPanel);
-		
-		ConfigurationDisplayTools.makeGrid(innerPanel);
+		selectionModelTypeBox= innerPanel.addComboBox("Selection Model:", SelectionModels.values());
 		
 		panel = new SimulationConfiguration().getConfigurationPanel();
 		add(panel);

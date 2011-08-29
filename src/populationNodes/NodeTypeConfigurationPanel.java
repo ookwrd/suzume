@@ -12,7 +12,7 @@ import javax.swing.border.EtchedBorder;
 
 import populationNodes.AbstractNode.NodeType;
 
-import Launcher.ConfigurationDisplayTools;
+import Launcher.ConfigurationPanel;
 
 
 @SuppressWarnings("serial")
@@ -28,9 +28,9 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		
 		setBorder(new EtchedBorder());
 		
-		JPanel topPanel = new JPanel();
-		ConfigurationDisplayTools.configurePanel(topPanel);
-		agentTypesBox = ConfigurationDisplayTools.addComboBox("", AbstractNode.NodeType.values(),topPanel);
+		ConfigurationPanel topPanel = new ConfigurationPanel();
+		topPanel.configurePanel();
+		agentTypesBox = topPanel.addComboBox("", AbstractNode.NodeType.values());
 		agentTypesBox.addActionListener(new ActionListener() {
 			
 			@Override
@@ -38,7 +38,6 @@ public class NodeTypeConfigurationPanel extends JPanel {
 				reconfigureSubPanel();
 			}
 		});
-		ConfigurationDisplayTools.makeGrid(topPanel);
 		
 		add(topPanel);
 		

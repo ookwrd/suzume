@@ -29,9 +29,9 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 	{
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
-		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
-		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		//setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
+		//setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
+		//setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
 		setDefaultParameter(SUB_NODE, new ConfigurationParameter(new YamauchiHashimoto2010().getConfiguration()));
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
