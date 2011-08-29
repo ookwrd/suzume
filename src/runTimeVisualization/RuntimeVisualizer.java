@@ -28,7 +28,6 @@ public class RuntimeVisualizer extends JPanel {
 	private static final String GENERATION_COUNTER_PREFIX = "Generation : ";
 	
 	private VisualizationConfiguration config;
-	private PopulationModel model;	
 		
 	private JFrame frame;
 	
@@ -53,7 +52,6 @@ public class RuntimeVisualizer extends JPanel {
 	
 	public RuntimeVisualizer(String title, int generationCount, PopulationModel model, VisualizationConfiguration config){
 		
-		this.model = model;
 		this.config = config;
 		
 		setLayout(new BorderLayout());
@@ -194,7 +192,6 @@ public class RuntimeVisualizer extends JPanel {
 		default:
 		}
 		
-		System.out.println("Is it null? "+ image);
 	}
 	
 	/**
@@ -203,7 +200,6 @@ public class RuntimeVisualizer extends JPanel {
 	 * @param model
 	 */
 	public void updateModel(PopulationModel model){
-		this.model = model;
 		singleStepPanel.updateModel(model);
 		timeSeriesPanel.updateModel(model);
 	}

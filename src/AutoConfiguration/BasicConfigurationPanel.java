@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 import populationNodes.NodeTypeConfigurationPanel;
 
-import Launcher.ConfigurationDisplayTools;
+import Launcher.ConfigurationPanel;
 import Launcher.GraphTypeConfigurationPanel;
 
 @SuppressWarnings("serial")
@@ -29,8 +29,8 @@ public class BasicConfigurationPanel extends JPanel {
 		parameters = toConfigure.getParameters();
 		components = new HashMap<String, Component>();
 		
-		JPanel autoPanel = new JPanel();
-		ConfigurationDisplayTools.configurePanel(autoPanel);
+		ConfigurationPanel autoPanel = new ConfigurationPanel();
+		autoPanel.configurePanel();
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
@@ -39,43 +39,38 @@ public class BasicConfigurationPanel extends JPanel {
 			ConfigurationParameter parameter = entry.getValue();
 			
 			switch (parameter.type) {
-			case Integer:
-				JTextField field = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
+			case INTEGER:
+				JTextField field = autoPanel.addField(key, parameter.getInteger().toString());
 				components.put(key, field);
 				break;
 				
-			case Double:
-				JTextField field1 = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
+			case DOUBLE:
+				JTextField field1 = autoPanel.addField(key, parameter.getDouble().toString());
 				components.put(key, field1);
 				break;
 				
-			case Long:
-				JTextField field3 = ConfigurationDisplayTools.addField(key, parameter.value.toString(), autoPanel);
+			case LONG:
+				JTextField field3 = autoPanel.addField(key, parameter.getLong().toString());
 				components.put(key, field3);
 				break;
 				
-			case Boolean:
-				JCheckBox box = ConfigurationDisplayTools.addCheckBox(key, parameter.getBoolean(), autoPanel);
+			case BOOLEAN:
+				JCheckBox box = autoPanel.addCheckBox(key, parameter.getBoolean());
 				components.put(key, box);
 				break;
 				
-			case String:
-				JTextField field2 = ConfigurationDisplayTools.addField(key, parameter.getString(), autoPanel);
+			case STRING:
+				JTextField field2 = autoPanel.addField(key, parameter.getString());
 				components.put(key, field2);
 				break;
 				
-			case List:
-				JComboBox listBox = ConfigurationDisplayTools.addComboBox(key, parameter.getList(), autoPanel);
+			case LIST:
+				JComboBox listBox = autoPanel.addComboBox(key, parameter.getList());
 				components.put(key, listBox);
 				break;
 				
-			case Graph:
-				GraphTypeConfigurationPanel panel = ConfigurationDisplayTools.addGraphSelector(key, parameter.getGraphType(), autoPanel);
-				components.put(key, panel);
-				break;
-				
-			case Node:
-				NodeTypeConfigurationPanel panel1 = ConfigurationDisplayTools.addNodeSelector(key, parameter.getNodeConfiguration(), autoPanel);
+			case NODE:
+				NodeTypeConfigurationPanel panel1 = autoPanel.addNodeSelector(key, parameter.getNodeConfiguration());
 				components.put(key, panel1);
 				break;
 				
@@ -85,8 +80,6 @@ public class BasicConfigurationPanel extends JPanel {
 			}
 			
 		}
-		
-		ConfigurationDisplayTools.makeGrid(autoPanel);
 		
 		add(autoPanel);
 		
@@ -112,36 +105,31 @@ public class BasicConfigurationPanel extends JPanel {
 			
 			switch (parameter.type) {
 			
-			case Integer:
+			case INTEGER:
 				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText().trim())));
 				break;
 			
-			case Double:
+			case DOUBLE:
 				retParameters.put(key, new ConfigurationParameter(Double.parseDouble(((JTextField)comp).getText().trim())));
 				break;
 				
-			case Long:
+			case LONG:
 				retParameters.put(key, new ConfigurationParameter(Long.parseLong(((JTextField)comp).getText().trim())));
 				break;
 			
-			case String:
+			case STRING:
 				retParameters.put(key, new ConfigurationParameter(((JTextField)comp).getText()) );
 				break;				
 				
-			case Boolean:
+			case BOOLEAN:
 				retParameters.put(key, new ConfigurationParameter(((JCheckBox)comp).isSelected()));
 				break;
 				
-			case List:
+			case LIST:
 				retParameters.put(key, new ConfigurationParameter((String)((JComboBox)comp).getSelectedItem()));
 				break;
 				
-			case Graph:
-				//retParameters.put(key, new ConfigurationParameter(((GraphTypeConfigurationPanel)comp).getConfiguration()));
-				//TODO
-				break;
-				
-			case Node:
+			case NODE:
 				retParameters.put(key, new ConfigurationParameter(
 						((NodeTypeConfigurationPanel)comp).getConfiguration())
 						);
