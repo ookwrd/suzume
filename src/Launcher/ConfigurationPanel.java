@@ -2,6 +2,8 @@ package Launcher;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -10,8 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
+import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
+import populationNodes.AbstractNode.NodeType;
 
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {
@@ -19,26 +24,15 @@ public class ConfigurationPanel extends JPanel {
 	private GridBagConstraints constraints;
 	private int row;
 	
-	/**
-	 * Setup a panel without a title
-	 * 
-	 * @param target
-	 */
-	public void configurePanel(){
+	public ConfigurationPanel(){
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		row = 0;
 	}
-	
-	/**
-	 * Setup a panel with a title
-	 * 
-	 * @param title
-	 * @param target
-	 */
-	public void configurePanel(String title) {
-		configurePanel();
+
+	public ConfigurationPanel(String title){
+		this();
 		setBorder(new TitledBorder(title));
 	}
 	
@@ -98,15 +92,17 @@ public class ConfigurationPanel extends JPanel {
 	
 	public NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
 
-		addLabel(label);
-		
-		constraints.gridx=1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx=0;
+		constraints.gridwidth = 2;
 		constraints.gridy=row++;
 		constraints.weightx = 1;
 		
-		NodeTypeConfigurationPanel nodeConfigPanel = new NodeTypeConfigurationPanel();
-		//TODO initial value
+		NodeTypeConfigurationPanel nodeConfigPanel = new NodeTypeConfigurationPanel(initialValue);
+		nodeConfigPanel.setBorder(new TitledBorder(label));
 		add(nodeConfigPanel, constraints);
+		
+		constraints.gridwidth =1;
 		
 		return nodeConfigPanel;
 		

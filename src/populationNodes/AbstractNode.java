@@ -10,7 +10,7 @@ import PopulationModel.Node;
 
 public abstract class AbstractNode extends BasicConfigurable implements Node{
 	
-	public enum NodeType { YamauchiHashimoto2010, BiasAgent/*, SynonymAgent*/, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
+	public enum NodeType { YamauchiHashimoto2010, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation }
 	
 	private int id;
 	protected RandomGenerator randomGenerator;
