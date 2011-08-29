@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 import populationNodes.NodeTypeConfigurationPanel;
 
 import Launcher.ConfigurationPanel;
-import Launcher.GraphTypeConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class BasicConfigurationPanel extends JPanel {
@@ -77,8 +76,7 @@ public class BasicConfigurationPanel extends JPanel {
 			default:
 				System.out.println("Unsupported Configuration Parameter type.");
 				break;
-			}
-			
+			}	
 		}
 		
 		add(autoPanel);
@@ -126,7 +124,7 @@ public class BasicConfigurationPanel extends JPanel {
 				break;
 				
 			case LIST:
-				retParameters.put(key, new ConfigurationParameter((String)((JComboBox)comp).getSelectedItem()));
+				retParameters.put(key, new ConfigurationParameter(((JComboBox)comp).getSelectedItem().toString()));
 				break;
 				
 			case NODE:
