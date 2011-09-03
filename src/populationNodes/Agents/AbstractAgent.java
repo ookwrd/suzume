@@ -1,6 +1,10 @@
-package populationNodes;
+package populationNodes.Agents;
 
 import java.util.ArrayList;
+
+import populationNodes.AbstractNode;
+import populationNodes.NodeConfiguration;
+import populationNodes.Utterance;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;

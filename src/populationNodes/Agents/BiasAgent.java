@@ -1,22 +1,22 @@
-package populationNodes;
+package populationNodes.Agents;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import populationNodes.NodeConfiguration;
+import populationNodes.Utterance;
 
 import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
+import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 
-
-
-public class BiasAgent extends AbstractAgent implements Agent{
+public class BiasAgent extends AbstractAgent implements Describable{
 	
-	@SuppressWarnings("serial")
-	public static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Dimensions", new ConfigurationParameter(2));
-		put("Mutation rate", new ConfigurationParameter(0.01));
-		put("Invention Probability", new ConfigurationParameter(0.1));
-	}};
+	{
+		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
+		setDefaultParameter("Mutation rate", new ConfigurationParameter(0.01));
+		setDefaultParameter("Invention Probability", new ConfigurationParameter(0.1));
+	}
 	
 	private int dimensions;
 	private double mutationRate;
@@ -223,12 +223,8 @@ public class BiasAgent extends AbstractAgent implements Agent{
 				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];
 			}
 		}
-		
-		//System.out.println("count "+ count);
 
-		//System.out.println("anticount "+ antiCount);
-		return count;
-		
+		return count;		
 	}
 
 	@Override
@@ -241,5 +237,10 @@ public class BiasAgent extends AbstractAgent implements Agent{
 	@Override
 	public ArrayList getGenotype() {
 		return chromosome;
+	}
+
+	@Override
+	public String getDescription() {
+		return "Unfinished agent that isn't biased in a binary fashion, but proportionally in a number of generations, with learning probability based on the degree";
 	}
 }

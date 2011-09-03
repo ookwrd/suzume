@@ -1,5 +1,6 @@
-package populationNodes;
+package populationNodes.Agents;
 
+import populationNodes.NodeConfiguration;
 import simulation.RandomGenerator;
 import AutoConfiguration.Configurable.Describable;
 import AutoConfiguration.ConfigurationParameter;

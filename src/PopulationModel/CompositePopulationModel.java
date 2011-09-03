@@ -6,11 +6,11 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import populationNodes.AbstractNode;
-import populationNodes.Agent;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.Utterance;
-import populationNodes.YamauchiHashimoto2010;
+import populationNodes.Agents.Agent;
+import populationNodes.Agents.YamauchiHashimoto2010;
 
 import simulation.RandomGenerator;
 

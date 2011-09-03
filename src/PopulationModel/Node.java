@@ -2,9 +2,9 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import populationNodes.Agent;
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
+import populationNodes.Agents.Agent;
 
 import runTimeVisualization.Visualizable;
 import simulation.RandomGenerator;
