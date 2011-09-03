@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import AutoConfiguration.Configurable.Describable;
+
 import populationNodes.NodeTypeConfigurationPanel;
 
 
@@ -23,6 +25,10 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 	
 	public BasicConfigurationPanel(Configurable toConfigure){
 		super();
+		
+		if(toConfigure instanceof Describable){
+			addTextField(((Describable)toConfigure).getDescription());
+		}
 		
 		//Get default parameter map for this agent type
 		parameters = toConfigure.getParameters();

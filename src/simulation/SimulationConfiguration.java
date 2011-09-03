@@ -27,11 +27,13 @@ public class SimulationConfiguration extends BasicConfigurable {
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
 	public static final String CRITICAL_PERIOD = "Critical Period:";
 	
-	public static final String LEARN_TO_DISTANCE = "Learn from agents upto max distance:";//TODO remove these should be recursive
-	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
+	public static final String LEARN_TO_DISTANCE = "Max learning distance:";//TODO remove these should be recursive
+	public static final String COMMUNICATE_TO_DISTANCE = "Max Communication distance:";
 	public static final String SELECTION_MODEL = "Selection model:";
 	
 	{
+		System.out.println("SimulationConfig" + new YamauchiHashimoto2010().getConfiguration());
+		
 		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new YamauchiHashimoto2010().getConfiguration()));
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
@@ -42,8 +44,6 @@ public class SimulationConfiguration extends BasicConfigurable {
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
-		
-		
 	}
 	
 	public SimulationConfiguration(){

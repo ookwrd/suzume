@@ -29,9 +29,6 @@ public class NodeFactory {
 		
 		case ConfigurablePopulation:
 			return new CompositePopulationModel();
-			
-	//	case SynonymAgent:
-	//		return new SynonymAgent();
 
 		default:
 			System.out.println("Unrecognized agent type in AgentFactory.");
@@ -42,9 +39,8 @@ public class NodeFactory {
 	
 	public static Node constructPopulationNode(NodeConfiguration nodeConfig){
 		
-		Node node = constructUninitializedNode(NodeType.valueOf(nodeConfig.getParameter(NodeConfiguration.NODE_TYPE).getString()));
-		
-		//node.initializeAgent(nodeConfig, nextNodeID++, randomGenerator);
+		Node node = constructUninitializedNode(
+				 NodeType.valueOf(nodeConfig.getParameter(NodeConfiguration.NODE_TYPE).getString()));
 		
 		return node;
 		
@@ -52,14 +48,14 @@ public class NodeFactory {
 	
 	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
-		NodeType agentType = NodeType.valueOf(parentA.getConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString()); 
+		NodeType type = NodeType.valueOf(parentA.getConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString());
 		
-		if(agentType != NodeType.valueOf(parentB.getConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString())){
+		if(type != NodeType.valueOf(parentB.getConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString())){
 			System.out.println("Agent type of parents do not match in AgentFactory. Sexual reproduction not possible.");
 			return null;
 		}	
 		
-		Node returnVal = constructUninitializedNode(agentType);
+		Node returnVal = constructUninitializedNode(type);
 		
 		returnVal.initializeAgent(parentA, parentB, nextNodeID++, randomGenerator);
 		return returnVal;

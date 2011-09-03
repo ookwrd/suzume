@@ -15,4 +15,9 @@ public interface Configurable {
 	
 	public BasicConfigurationPanel getConfigurationPanel();
 	
+	//Special Subclass of Configurable objects
+	public interface Describable{
+		public String getDescription();
+	}
+	
 }

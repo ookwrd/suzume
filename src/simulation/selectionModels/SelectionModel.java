@@ -7,7 +7,7 @@ import simulation.RandomGenerator;
 
 public abstract class SelectionModel {
 
-	public enum SelectionModels {RouletteWheelSelection, ConstantProbabilitySelection, RandomProbabilitySelection}
+	public enum SelectionModels {RouletteWheelSelection, ConstantProbability, RandomProbability}
 	
 	protected RandomGenerator randomGenerator;
 	
@@ -26,12 +26,12 @@ public abstract class SelectionModel {
 			retVal = new RouletteWheelSelectionModel();
 			break;
 			
-		case RandomProbabilitySelection:
+		case RandomProbability:
 			
 			retVal = new RandomProbabilitySelectionModel();
 			break;
 			
-		case ConstantProbabilitySelection:
+		case ConstantProbability:
 		default:
 			
 			retVal = new ConstantProbabilitySelectionModel();
