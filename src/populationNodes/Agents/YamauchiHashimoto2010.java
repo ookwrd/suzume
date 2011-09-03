@@ -1,15 +1,20 @@
-package populationNodes;
+package populationNodes.Agents;
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import populationNodes.NodeConfiguration;
+import populationNodes.Utterance;
+
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
+import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
-public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
+public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Describable {
 
 	protected static final String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
 	
@@ -250,6 +255,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent {
 		g.setColor(c);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 		
+	}
+
+	@Override
+	public String getDescription() {
+		return "Agent from Yamauchi and Hashimoto 2010 designed to study the interaction of .... See also McCrohon and Witkowski 2011.";
 	}
 
 }

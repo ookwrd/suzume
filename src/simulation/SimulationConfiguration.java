@@ -6,7 +6,7 @@ import simulation.selectionModels.SelectionModel.SelectionModels;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeTypeConfigurationPanel;
-import populationNodes.YamauchiHashimoto2010;
+import populationNodes.Agents.YamauchiHashimoto2010;
 import AutoConfiguration.BasicConfigurable;
 import AutoConfiguration.BasicConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;

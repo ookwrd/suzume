@@ -1,4 +1,4 @@
-package populationNodes;
+package populationNodes.Agents;
 
 import java.util.ArrayList;
 

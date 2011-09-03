@@ -2,7 +2,6 @@ package simulation;
 
 import java.util.ArrayList;
 
-import populationNodes.Agent;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
@@ -17,6 +16,7 @@ import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
 import PopulationModel.PopulationModel;
 import populationNodes.AbstractNode.NodeType;
+import populationNodes.Agents.Agent;
 
 public class ModelController implements Runnable {
 

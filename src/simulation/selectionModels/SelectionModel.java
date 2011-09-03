@@ -2,7 +2,7 @@ package simulation.selectionModels;
 
 import java.util.ArrayList;
 
-import populationNodes.Agent;
+import populationNodes.Agents.Agent;
 import simulation.RandomGenerator;
 
 public abstract class SelectionModel {

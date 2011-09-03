@@ -1,6 +1,12 @@
 package populationNodes;
 
 import populationNodes.AbstractNode.NodeType;
+import populationNodes.Agents.Agent;
+import populationNodes.Agents.AlteredAgent;
+import populationNodes.Agents.BiasAgent;
+import populationNodes.Agents.FixedProbabilityAgent;
+import populationNodes.Agents.ProbabalityAgent;
+import populationNodes.Agents.YamauchiHashimoto2010;
 import simulation.RandomGenerator;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;

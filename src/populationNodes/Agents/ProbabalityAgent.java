@@ -1,15 +1,19 @@
-package populationNodes;
+package populationNodes.Agents;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import populationNodes.NodeConfiguration;
+import populationNodes.Utterance;
+
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
+import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 
-public class ProbabalityAgent extends AbstractAgent implements Agent {
+public class ProbabalityAgent extends AbstractAgent implements Describable {
 
 	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
 	
@@ -24,7 +28,7 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 	{
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
-		setDefaultParameter(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(2));
+		setDefaultParameter(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(8));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
@@ -139,7 +143,6 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 
 	@Override
 	public double geneGrammarMatch() {
-		
 		int count = 0;
 		
 		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
@@ -147,13 +150,11 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 				count++;
 			}
 		}
-		
 		return count;
 	}
 
 	@Override
 	public int learningIntensity() {
-		//System.out.println(grammarAdjustmentCount + " " + numberOfNulls());
 		return grammarAdjustmentCount;
 	}
 
@@ -223,6 +224,11 @@ public class ProbabalityAgent extends AbstractAgent implements Agent {
 		g.setColor(c);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 		
+	}
+
+	@Override
+	public String getDescription() {
+		return "Agent I cant be bothered to describe that can take more than just 2 different types of values for each bias";
 	}
 
 }
