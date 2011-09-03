@@ -243,7 +243,7 @@ public class ModelController implements Runnable {
 				}
 			}
 
-			agent.adjustCosts();
+			agent.adjustFinalFitnessValue();
 		}
 	}
 
@@ -275,8 +275,8 @@ public class ModelController implements Runnable {
 	 */
 	private void gatherStatistics(){
 
-		ArrayList genotypes = new ArrayList();
-		ArrayList phenotypes = new ArrayList();
+		ArrayList<Object> genotypes = new ArrayList<Object>();
+		ArrayList<Object> phenotypes = new ArrayList<Object>();
 		double antiLearningIntensity = 0;
 		double totalFitness = 0;
 		double genomeGrammarMatch = 0;
@@ -284,12 +284,12 @@ public class ModelController implements Runnable {
 
 		for(Agent agent : population.getCurrentGeneration()){
 
-			ArrayList<Integer> chromosome = agent.getGenotype();
+			Object chromosome = agent.getGenotype();
 			if (!genotypes.contains(chromosome)){
 				genotypes.add(chromosome);
 			}
 
-			ArrayList<Integer> phenotype = agent.getPhenotype();
+			Object phenotype = agent.getPhenotype();
 			if(!phenotypes.contains(phenotype)){
 				phenotypes.add(phenotype);
 			}
@@ -301,8 +301,8 @@ public class ModelController implements Runnable {
 			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 
-		double learningIntensity = antiLearningIntensity; //(config.populationSize*2*config.communicationsPerNeighbour - antiLearningIntensity) / config.populationSize / 2 / config.communicationsPerNeighbour;
-
+		double learningIntensity = antiLearningIntensity; 
+		
 		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
 		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
 		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));

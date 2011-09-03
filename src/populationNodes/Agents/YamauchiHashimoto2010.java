@@ -36,7 +36,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 
 	protected ArrayList<Integer> chromosome;
 	
-	protected int learningResource;
+	protected double learningResource;
 	
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
@@ -182,9 +182,9 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 	}
 	
 	@Override
-	public double geneGrammarMatch(){
+	public Double geneGrammarMatch(){
 		
-		int count = 0;
+		double count = 0;
 		
 		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
@@ -196,7 +196,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 	}
 
 	@Override
-	public int learningIntensity() {
+	public Double learningIntensity() {
 		// TODO Some better more general way of measuring this...
 		return learningResource;
 	}
@@ -213,7 +213,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		Color c;
 		
 		if(config.getParameter(VISUALIZATION_TYPE).getString().equals("numberNulls")){
-			int numberOfNulls = numberOfNulls();
+			int numberOfNulls = new Double(numberOfNulls()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
 		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(

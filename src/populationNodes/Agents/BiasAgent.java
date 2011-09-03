@@ -211,7 +211,7 @@ public class BiasAgent extends AbstractAgent implements Describable{
 	 * Sum of the probabilites of the grammar having the values that they do. 
 	 */
 	@Override
-	public double geneGrammarMatch() {
+	public Double geneGrammarMatch() {
 
 		double count = 0;
 		
@@ -228,9 +228,9 @@ public class BiasAgent extends AbstractAgent implements Describable{
 	}
 
 	@Override
-	public int learningIntensity() {
+	public Double learningIntensity() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 0.0;
 	}
 
 	
