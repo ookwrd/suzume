@@ -1,12 +1,15 @@
 package AutoConfiguration;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
@@ -23,6 +26,7 @@ public class ConfigurationPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
+	//	constraints.ipadx = 10;
 		row = 0;
 	}
 
@@ -30,6 +34,28 @@ public class ConfigurationPanel extends JPanel {
 		this();
 		setBorder(new TitledBorder(title));
 	}
+	
+	protected JTextArea addTextField(String message){
+		
+		GridBagConstraints constraints = (GridBagConstraints)this.constraints.clone();
+		constraints.gridx=0;
+		constraints.gridwidth = 2;
+		constraints.gridy=row++;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		
+		JTextArea field = new JTextArea();
+		field.setWrapStyleWord(true);
+		field.setLineWrap(true);
+		field.setBackground(getBackground());
+		field.setColumns(20);
+		field.setText(message);
+		
+		add(field, constraints);
+		
+		return field;
+	} 
 	
 	private void addLabel(String label){
 		
@@ -42,7 +68,7 @@ public class ConfigurationPanel extends JPanel {
 		add(jLabel, constraints);
 	}
 	
-	public JComboBox addComboBox(String label, Object[] values) {
+	protected JComboBox addComboBox(String label, Object[] values) {
 		
 		addLabel(label);
 		
@@ -87,7 +113,6 @@ public class ConfigurationPanel extends JPanel {
 	
 	public NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
 
-		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.gridy=row++;

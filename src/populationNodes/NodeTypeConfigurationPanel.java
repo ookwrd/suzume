@@ -4,9 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
 import AutoConfiguration.BasicConfigurationPanel;
@@ -23,6 +21,8 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	
 	public NodeTypeConfigurationPanel(NodeConfiguration initialValue){
 		//TODO initial value
+		
+		System.out.println("NodeTypeConfigurationPanel" + initialValue);
 		
 		setLayout(new BorderLayout());
 		setBorder(new EtchedBorder());
@@ -46,17 +46,10 @@ public class NodeTypeConfigurationPanel extends JPanel {
 			remove(subPanel);
 		}
 		
-		subPanel = NodeFactory.constructUninitializedNode((NodeType)agentTypesBox.getSelectedItem()).getConfigurationPanel();//new NodeConfigurationPanel((NodeType)agentTypesBox.getSelectedItem());
-			
+		subPanel = NodeFactory.constructUninitializedNode((NodeType)agentTypesBox.getSelectedItem()).getConfigurationPanel();	
 		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();
-		
-		//I really hate swing, revalidate won't update window size, so do it manually.
-		JFrame frame = (JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, this);
-		if(frame != null) {
-			frame.pack();
-		}
 		
 		return subPanel;
 	}

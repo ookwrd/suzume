@@ -33,11 +33,6 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	}
 	
 	@Override
-	public String getDescription(){
-		return "Undescribed";
-	}
-	
-	@Override
 	public NodeConfiguration getConfiguration(){
 		return config;
 	}
