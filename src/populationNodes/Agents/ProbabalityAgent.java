@@ -37,7 +37,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	
 	protected ArrayList<Integer> chromosome;
 	
-	private int grammarAdjustmentCount = 0;
+	private double grammarAdjustmentCount = 0;
 	
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
@@ -142,8 +142,8 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	}
 
 	@Override
-	public double geneGrammarMatch() {
-		int count = 0;
+	public Double geneGrammarMatch() {
+		double count = 0;
 		
 		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
@@ -154,7 +154,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	}
 
 	@Override
-	public int learningIntensity() {
+	public Double learningIntensity() {
 		return grammarAdjustmentCount;
 	}
 
@@ -169,7 +169,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		Color c;
 		
 		if(config.getParameter(VISUALIZATION_TYPE).getString().equals("numberNulls")){
-			int numberOfNulls = numberOfNulls();
+			int numberOfNulls = new Double(numberOfNulls()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
 		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(

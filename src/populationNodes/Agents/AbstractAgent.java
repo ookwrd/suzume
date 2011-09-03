@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
+import populationNodes.Agents.Agent.StatisticsType;
+import populationNodes.Agents.Agent.StatisticsType.ValueType;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
@@ -43,9 +45,9 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public int numberOfNulls() {
+	public Double numberOfNulls() {
 		
-		int count = 0;
+		double count = 0;
 		
 		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
@@ -92,7 +94,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public void adjustCosts(){
+	public void adjustFinalFitnessValue(){
 		//Do nothing.
 	}
 	
@@ -106,6 +108,18 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		ArrayList<Agent> retAgents = new ArrayList<Agent>();
 		retAgents.add(this);
 		return retAgents;
+	}
+	
+	@Override
+	public ArrayList<StatisticsType> getSupportedStatisticsTypes(){
+		ArrayList<StatisticsType> retVal = new ArrayList<Agent.StatisticsType>();
+		retVal.add(new StatisticsType("Fitness","The agents final fitness value", ValueType.DOUBLE));
+		return retVal;
+	}
+	
+	@Override
+	public Object getStatisticsValue(StatisticsType type){
+		return null;//TODO
 	}
 
 }

@@ -40,7 +40,7 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent,
 		return "Altered Agent";
 	}
 
-	public void adjustCosts() {
+	public void adjustFinalFitnessValue() {
 		if (learningResource > 0) {
 			setFitness(getFitness()
 					+ (int) (learningResource * resourceMultiplier));
