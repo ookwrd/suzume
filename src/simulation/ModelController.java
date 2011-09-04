@@ -2,6 +2,8 @@ package simulation;
 
 import java.util.ArrayList;
 
+import org.apache.commons.collections15.map.HashedMap;
+
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
@@ -17,6 +19,7 @@ import PopulationModel.Node;
 import PopulationModel.PopulationModel;
 import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
+import populationNodes.Agents.Agent.StatisticsType;
 
 public class ModelController implements Runnable {
 
@@ -275,6 +278,11 @@ public class ModelController implements Runnable {
 	 */
 	private void gatherStatistics(){
 
+		ArrayList<Agent> agents = population.getCurrentGeneration();
+		ArrayList<StatisticsType> types = agents.get(0).getSupportedStatisticsTypes();
+		
+		//TODO how would I store these?
+		
 		ArrayList<Object> genotypes = new ArrayList<Object>();
 		ArrayList<Object> phenotypes = new ArrayList<Object>();
 		double antiLearningIntensity = 0;
@@ -282,7 +290,11 @@ public class ModelController implements Runnable {
 		double genomeGrammarMatch = 0;
 		double numberNull = 0;
 
-		for(Agent agent : population.getCurrentGeneration()){
+		for(Agent agent : agents){
+			
+			for(StatisticsType type : types){
+				
+			}
 
 			Object chromosome = agent.getGenotype();
 			if (!genotypes.contains(chromosome)){
