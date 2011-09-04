@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
-import populationNodes.Agents.Agent.StatisticsType;
 import populationNodes.Agents.Agent.StatisticsType.ValueType;
 
 import AutoConfiguration.ConfigurationParameter;
@@ -15,13 +14,15 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
+	public static final String FITNESS_STATISTICS = "Fitness";
+	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 
 	{
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 	}
 	
-	private int fitness;
+	private double fitness;
 	
 	protected ArrayList<Integer> grammar;
 	
@@ -59,12 +60,12 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public int getFitness() {
+	public double getFitness() {
 		return fitness;
 	}
 	
 	@Override
-	public void setFitness(int fitness){
+	public void setFitness(double fitness){
 		this.fitness = fitness;
 	}
 	
@@ -113,12 +114,17 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	@Override
 	public ArrayList<StatisticsType> getSupportedStatisticsTypes(){
 		ArrayList<StatisticsType> retVal = new ArrayList<Agent.StatisticsType>();
-		retVal.add(new StatisticsType("Fitness","The agents final fitness value", ValueType.DOUBLE));
+		retVal.add(new StatisticsType(FITNESS_STATISTICS,"The agents final fitness value", ValueType.DOUBLE));
 		return retVal;
 	}
 	
 	@Override
 	public Object getStatisticsValue(StatisticsType type){
+		
+		if(type.ID.equals(FITNESS_STATISTICS)){
+			return getFitness();
+		}
+		
 		return null;//TODO
 	}
 
