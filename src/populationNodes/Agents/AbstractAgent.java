@@ -10,7 +10,6 @@ import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 
 import simulation.RandomGenerator;
-import simulation.SimulationConfiguration;
 import tools.Pair;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
