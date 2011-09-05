@@ -2,6 +2,8 @@ package simulation;
 
 import java.util.ArrayList;
 
+import javax.swing.border.TitledBorder;
+
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
@@ -11,6 +13,9 @@ import simulation.selectionModels.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
+import AutoConfiguration.BasicConfigurable;
+import AutoConfiguration.BasicConfigurationPanel;
+import AutoConfiguration.ConfigurationParameter;
 import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
@@ -18,13 +23,38 @@ import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.PopulationModel;
 import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
+import populationNodes.Agents.YamauchiHashimoto2010;
 
-import static simulation.SimulationConfiguration.*;
+public class ModelController extends BasicConfigurable implements Runnable {
 
-public class ModelController implements Runnable {
-
+	public static final String AGENT_TYPE = "Agent1";
+	public static final String GENERATION_COUNT = "Number of Generations:";
+	public static final String RUN_COUNT = "Number of Runs";
+	public static final String POPULATION_SIZE = "Population Size:";
+	public static final String BASE_FITNESS = "Base fitness value:";//TODO remove to abstract agent
+	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
+	public static final String CRITICAL_PERIOD = "Critical Period:";
+	
+	public static final String LEARN_TO_DISTANCE = "Max learning distance:";//TODO remove these should be recursive
+	public static final String COMMUNICATE_TO_DISTANCE = "Max Communication distance:";
+	public static final String SELECTION_MODEL = "Selection model:";
+	
+	{
+		System.out.println("SimulationConfig" + new YamauchiHashimoto2010().getConfiguration());
+		
+		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new YamauchiHashimoto2010().getConfiguration()));
+		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
+		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
+		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
+		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
+		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
+		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
+		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
+		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
+	}
+	
 	//Configuration Settings
-	private SimulationConfiguration config;
 	private VisualizationConfiguration visualConfig;
 	private RandomGenerator randomGenerator;
 
@@ -51,22 +81,25 @@ public class ModelController implements Runnable {
 	private int currentRun = 0;
 	private long simulationStart;
 
-	public ModelController(SimulationConfiguration configuration, 
+	public ModelController(){}
+	
+	public ModelController(BasicConfigurable baseConfig, 
 			VisualizationConfiguration visualizationConfiguration, 
 			RandomGenerator randomGenerator){
+		super(baseConfig);
 		
-		this.config = configuration;
+		//this.config = configuration;
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
 		
-		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(config.getParameter(SELECTION_MODEL).getString()), randomGenerator);
+		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(getParameter(SELECTION_MODEL).getString()), randomGenerator);
 		
 		resetModel();
 		
 		resetStatistics();
 
 		if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),config.getParameter(GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
+			this.visualizer = new RuntimeVisualizer(getTitleString(),getParameter(GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
 		}
 		
 	}
@@ -76,8 +109,8 @@ public class ModelController implements Runnable {
 		initializePopulation();
 		
 		//TODO temp hack for setting learning distance
-		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, config.getParameter(LEARN_TO_DISTANCE));
-		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, config.getParameter(COMMUNICATE_TO_DISTANCE));
+		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, getParameter(LEARN_TO_DISTANCE));
+		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, getParameter(COMMUNICATE_TO_DISTANCE));
 		
 		
 		if(visualizer!=null){
@@ -100,8 +133,8 @@ public class ModelController implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
-		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.getParameter(RUN_COUNT).getInteger()];
-		for(int i = 0;i < config.getParameter(RUN_COUNT).getInteger(); i++){
+		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[getParameter(RUN_COUNT).getInteger()];
+		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
 		}
 		return arrayLists;
@@ -109,8 +142,8 @@ public class ModelController implements Runnable {
 	
 	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
 		@SuppressWarnings("unchecked")
-		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[config.getParameter(RUN_COUNT).getInteger()];
-		for(int i = 0;i < config.getParameter(RUN_COUNT).getInteger(); i++){
+		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getParameter(RUN_COUNT).getInteger()];
+		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
 			arrayLists[i].addAll(population.getStatisticsAggregators());
 		}
@@ -119,7 +152,7 @@ public class ModelController implements Runnable {
 
 	private void initializePopulation(){
 		
-		NodeConfiguration nodeConfiguration = config.getParameter(AGENT_TYPE).getNodeConfiguration();
+		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
 		if(NodeType.valueOf(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getString()) == NodeType.ConfigurablePopulation){
 			
@@ -132,7 +165,7 @@ public class ModelController implements Runnable {
 		
 			//THis case needs to be gotten rid of.
 			ArrayList<Node> nodes = new ArrayList<Node>();
-			for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
+			for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
 				
 				Node node = NodeFactory.constructPopulationNode(nodeConfiguration);
 				node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
@@ -167,16 +200,16 @@ public class ModelController implements Runnable {
 	public void runSimulation(){
 
 		//Runs
-		while(currentRun < config.getParameter(RUN_COUNT).getInteger()){
+		while(currentRun < getParameter(RUN_COUNT).getInteger()){
 		
 			//Generations
-			while(currentGeneration < config.getParameter(GENERATION_COUNT).getInteger()){
+			while(currentGeneration < getParameter(GENERATION_COUNT).getInteger()){
 	
 				iterateGeneration();
 	
 				//Print progress information
 				if(visualConfig.getParameter(VisualizationConfiguration.PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % visualConfig.getParameter(VisualizationConfiguration.PRINT_EACH_X_GENERATIONS).getInteger() == 0){
-					System.out.println("Run " + currentRun + "/" + config.getParameter(RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+config.getParameter(GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
+					System.out.println("Run " + currentRun + "/" + getParameter(RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+getParameter(GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
@@ -227,7 +260,7 @@ public class ModelController implements Runnable {
 			//get its ancestors (teachers)
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
-			for(int i = 0; i < config.getParameter(CRITICAL_PERIOD).getInteger(); i++){
+			for(int i = 0; i < getParameter(CRITICAL_PERIOD).getInteger(); i++){
 
 				//Get random teacher
 				Node teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
@@ -255,11 +288,11 @@ public class ModelController implements Runnable {
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Set the agents fitness to the default base level 
-			agent.setFitness(config.getParameter(BASE_FITNESS).getInteger());
+			agent.setFitness(getParameter(BASE_FITNESS).getInteger());
 
 			//Communicate with all neighbours
 			for(Node neighbour : neighbouringAgents){      
-				for(int i = 0; i < config.getParameter(COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
+				for(int i = 0; i < getParameter(COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
 					agent.communicate(neighbour);
 				}
 			}
@@ -277,11 +310,11 @@ public class ModelController implements Runnable {
 		
 		//TODO make selection dependent on the GetPossibleParents from the populationModel
 		
-		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.getParameter(POPULATION_SIZE).getInteger()*2);
+		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), getParameter(POPULATION_SIZE).getInteger()*2);
 
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
 		int i = 0;
-		while(newGenerationAgents.size() < config.getParameter(POPULATION_SIZE).getInteger()){
+		while(newGenerationAgents.size() < getParameter(POPULATION_SIZE).getInteger()){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 
@@ -330,10 +363,10 @@ public class ModelController implements Runnable {
 
 		double learningIntensity = antiLearningIntensity; 
 		
-		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.getParameter(POPULATION_SIZE).getInteger()));
-		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.getParameter(POPULATION_SIZE).getInteger()));
-		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.getParameter(POPULATION_SIZE).getInteger()));
-		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.getParameter(POPULATION_SIZE).getInteger()));
+		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/getParameter(POPULATION_SIZE).getInteger()));
+		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/getParameter(POPULATION_SIZE).getInteger()));
+		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/getParameter(POPULATION_SIZE).getInteger()));
+		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/getParameter(POPULATION_SIZE).getInteger()));
 		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
 		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
 
@@ -345,7 +378,7 @@ public class ModelController implements Runnable {
 	private void plotStatistics() {
 		
 		statisticsWindow = new StatisticsVisualizer(getTitleString());
-		String configName = (config.printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String configName = (printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, false);
 		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, true);
@@ -359,7 +392,7 @@ public class ModelController implements Runnable {
 
 		System.out.println("Size" + statsAggregators[0].size());
 		for(int i = 0; i < statsAggregators[0].size(); i++){
-			ArrayList[] array = new ArrayList[config.getParameter(RUN_COUNT).getInteger()];
+			ArrayList[] array = new ArrayList[getParameter(RUN_COUNT).getInteger()];
 			for(int run = 0; run < statsAggregators.length; run++){
 				StatisticsAggregator aggregator = statsAggregators[run].get(i);
 				array[run] = aggregator.getStatistics();
@@ -372,7 +405,7 @@ public class ModelController implements Runnable {
 	}
 	
 	private String getTitleString(){
-		return "[Seed: " + randomGenerator.getSeed() + "   " + config.printName() + "]";
+		return "[Seed: " + randomGenerator.getSeed() + "   " + printName() + "]";
 	}
     
 	private void startTimer(){
@@ -416,6 +449,16 @@ public class ModelController implements Runnable {
 		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
 	}
 	
+	public String printName(){
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString() + " " + "gen_" + getParameter(GENERATION_COUNT).getInteger() + "run_" + getParameter(RUN_COUNT).getInteger() + "pop_" + getParameter(POPULATION_SIZE).getInteger() + "crit_" + getParameter(CRITICAL_PERIOD).getInteger();
+	}
+	
+	@Override
+	public BasicConfigurationPanel getConfigurationPanel(){
+		BasicConfigurationPanel ret = super.getConfigurationPanel();
+		ret.setBorder(new TitledBorder("Simulation Configuration"));
+		return ret;
+	}
 	
    	public static void main(String[] args) {
 	    new Launcher();
