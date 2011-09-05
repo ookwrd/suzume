@@ -57,11 +57,7 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	private RandomGenerator randomGenerator;
 
 	//Statistics
-	private ArrayList<Pair<Double,Double>>[] totalNumberGenotypes;
-	private ArrayList<Pair<Double,Double>>[] totalNumberPhenotypes;
-	
 	private ArrayList<StatisticsAggregator>[] statsAggregators;
-	
 	
 	//Model
 	private PopulationModel population;
@@ -115,20 +111,7 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	}
 
 	private void resetStatistics(){
-		
-		totalNumberGenotypes = getInitializedStatisticsArraylist();
-		totalNumberPhenotypes = getInitializedStatisticsArraylist();
-		
 		statsAggregators = getInitializedStatisticsAggregators();		 
-	}
-
-	@SuppressWarnings("unchecked")
-	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
-		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[getParameter(RUN_COUNT).getInteger()];
-		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
-			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
-		}
-		return arrayLists;
 	}
 	
 	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
@@ -318,30 +301,13 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	private void gatherStatistics(){
 
 		ArrayList<Agent> agents = population.getCurrentGeneration();
-	
-		ArrayList<Object> genotypes = new ArrayList<Object>();
-		ArrayList<Object> phenotypes = new ArrayList<Object>();
 
 		for(Agent agent : agents){
-			
 			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
 				aggregator.collectStatistics(agent);
 			}
-
-			Object chromosome = agent.getGenotype();
-			if (!genotypes.contains(chromosome)){
-				genotypes.add(chromosome);
-			}
-
-			Object phenotype = agent.getPhenotype();
-			if(!phenotypes.contains(phenotype)){
-				phenotypes.add(phenotype);
-			}
 		}
-
-		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
-		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
-	}
+}
 	
 	/**
 	 * 
@@ -360,9 +326,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 			statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, false);
 		}
 		
-		statisticsWindow.addDataSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  configName, false);
-		statisticsWindow.addDataSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  configName, false);
-
 		statisticsWindow.display();
 	}
 	

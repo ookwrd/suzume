@@ -140,6 +140,20 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 				addToCount(((Agent)agent).getFitness());
 			}
 		});
+		
+		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Genotypes") {
+			@Override
+			protected void checkUniqueness(Node agent) {
+				addItem(((Agent)agent).getGenotype());
+			}
+		});
+		
+		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Phenotypes") {
+			@Override
+			protected void checkUniqueness(Node agent) {
+				addItem(((Agent)agent).getPhenotype());
+			}
+		});
 
 		return retVal;
 	}
