@@ -19,6 +19,8 @@ import PopulationModel.PopulationModel;
 import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
 
+import static simulation.SimulationConfiguration.*;
+
 public class ModelController implements Runnable {
 
 	//Configuration Settings
@@ -57,14 +59,14 @@ public class ModelController implements Runnable {
 		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
 		
-		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(config.getParameter(SimulationConfiguration.SELECTION_MODEL).getString()), randomGenerator);
+		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(config.getParameter(SELECTION_MODEL).getString()), randomGenerator);
 		
 		resetModel();
 		
 		resetStatistics();
 
 		if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
+			this.visualizer = new RuntimeVisualizer(getTitleString(),config.getParameter(GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
 		}
 		
 	}
@@ -74,8 +76,8 @@ public class ModelController implements Runnable {
 		initializePopulation();
 		
 		//TODO temp hack for setting learning distance
-		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, config.getParameter(SimulationConfiguration.LEARN_TO_DISTANCE));
-		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, config.getParameter(SimulationConfiguration.COMMUNICATE_TO_DISTANCE));
+		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, config.getParameter(LEARN_TO_DISTANCE));
+		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, config.getParameter(COMMUNICATE_TO_DISTANCE));
 		
 		
 		if(visualizer!=null){
@@ -98,8 +100,8 @@ public class ModelController implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Pair<Double,Double>>[] getInitializedStatisticsArraylist(){
-		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
-		for(int i = 0;i < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger(); i++){
+		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.getParameter(RUN_COUNT).getInteger()];
+		for(int i = 0;i < config.getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
 		}
 		return arrayLists;
@@ -107,8 +109,8 @@ public class ModelController implements Runnable {
 	
 	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
 		@SuppressWarnings("unchecked")
-		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
-		for(int i = 0;i < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger(); i++){
+		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[config.getParameter(RUN_COUNT).getInteger()];
+		for(int i = 0;i < config.getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
 			arrayLists[i].addAll(population.getStatisticsAggregators());
 		}
@@ -117,7 +119,7 @@ public class ModelController implements Runnable {
 
 	private void initializePopulation(){
 		
-		NodeConfiguration nodeConfiguration = config.getParameter(SimulationConfiguration.AGENT_TYPE).getNodeConfiguration();
+		NodeConfiguration nodeConfiguration = config.getParameter(AGENT_TYPE).getNodeConfiguration();
 		
 		if(NodeType.valueOf(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getString()) == NodeType.ConfigurablePopulation){
 			
@@ -130,7 +132,7 @@ public class ModelController implements Runnable {
 		
 			//THis case needs to be gotten rid of.
 			ArrayList<Node> nodes = new ArrayList<Node>();
-			for (int i = 1; i <= config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger(); i++) {
+			for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
 				
 				Node node = NodeFactory.constructPopulationNode(nodeConfiguration);
 				node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
@@ -165,16 +167,16 @@ public class ModelController implements Runnable {
 	public void runSimulation(){
 
 		//Runs
-		while(currentRun < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()){
+		while(currentRun < config.getParameter(RUN_COUNT).getInteger()){
 		
 			//Generations
-			while(currentGeneration < config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger()){
+			while(currentGeneration < config.getParameter(GENERATION_COUNT).getInteger()){
 	
 				iterateGeneration();
 	
 				//Print progress information
 				if(visualConfig.getParameter(VisualizationConfiguration.PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % visualConfig.getParameter(VisualizationConfiguration.PRINT_EACH_X_GENERATIONS).getInteger() == 0){
-					System.out.println("Run " + currentRun + "/" + config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+config.getParameter(SimulationConfiguration.GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
+					System.out.println("Run " + currentRun + "/" + config.getParameter(RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+config.getParameter(GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
@@ -225,7 +227,7 @@ public class ModelController implements Runnable {
 			//get its ancestors (teachers)
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
-			for(int i = 0; i < config.getParameter(SimulationConfiguration.CRITICAL_PERIOD).getInteger(); i++){
+			for(int i = 0; i < config.getParameter(CRITICAL_PERIOD).getInteger(); i++){
 
 				//Get random teacher
 				Node teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
@@ -253,11 +255,11 @@ public class ModelController implements Runnable {
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Set the agents fitness to the default base level 
-			agent.setFitness(config.getParameter(SimulationConfiguration.BASE_FITNESS).getInteger());
+			agent.setFitness(config.getParameter(BASE_FITNESS).getInteger());
 
 			//Communicate with all neighbours
 			for(Node neighbour : neighbouringAgents){      
-				for(int i = 0; i < config.getParameter(SimulationConfiguration.COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
+				for(int i = 0; i < config.getParameter(COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
 					agent.communicate(neighbour);
 				}
 			}
@@ -275,11 +277,11 @@ public class ModelController implements Runnable {
 		
 		//TODO make selection dependent on the GetPossibleParents from the populationModel
 		
-		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()*2);
+		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), config.getParameter(POPULATION_SIZE).getInteger()*2);
 
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
 		int i = 0;
-		while(newGenerationAgents.size() < config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()){
+		while(newGenerationAgents.size() < config.getParameter(POPULATION_SIZE).getInteger()){
 			Agent parent1 = selected.get(i++);
 			Agent parent2 = selected.get(i++);
 
@@ -328,10 +330,10 @@ public class ModelController implements Runnable {
 
 		double learningIntensity = antiLearningIntensity; 
 		
-		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
-		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
-		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
-		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.getParameter(SimulationConfiguration.POPULATION_SIZE).getInteger()));
+		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/config.getParameter(POPULATION_SIZE).getInteger()));
+		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/config.getParameter(POPULATION_SIZE).getInteger()));
+		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/config.getParameter(POPULATION_SIZE).getInteger()));
+		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/config.getParameter(POPULATION_SIZE).getInteger()));
 		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
 		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
 
@@ -357,7 +359,7 @@ public class ModelController implements Runnable {
 
 		System.out.println("Size" + statsAggregators[0].size());
 		for(int i = 0; i < statsAggregators[0].size(); i++){
-			ArrayList[] array = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
+			ArrayList[] array = new ArrayList[config.getParameter(RUN_COUNT).getInteger()];
 			for(int run = 0; run < statsAggregators.length; run++){
 				StatisticsAggregator aggregator = statsAggregators[run].get(i);
 				array[run] = aggregator.getStatistics();
