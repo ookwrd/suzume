@@ -43,6 +43,7 @@ public interface Node extends Visualizable, Configurable {
 		public void endGeneration(Integer generation);
 		
 		public ArrayList<Pair<Double,Double>> getStatistics();
+		public String getTitle();
 	}
 	
 }

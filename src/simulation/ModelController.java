@@ -59,10 +59,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	//Statistics
 	private ArrayList<Pair<Double,Double>>[] totalNumberGenotypes;
 	private ArrayList<Pair<Double,Double>>[] totalNumberPhenotypes;
-	private ArrayList<Pair<Double,Double>>[] totalFitnesses;
-	private ArrayList<Pair<Double,Double>>[] learningIntensities;
-	private ArrayList<Pair<Double,Double>>[] geneGrammarMatches;
-	private ArrayList<Pair<Double,Double>>[] numberNulls;
 	
 	private ArrayList<StatisticsAggregator>[] statsAggregators;
 	
@@ -122,10 +118,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		
 		totalNumberGenotypes = getInitializedStatisticsArraylist();
 		totalNumberPhenotypes = getInitializedStatisticsArraylist();
-		totalFitnesses = getInitializedStatisticsArraylist();
-		learningIntensities = getInitializedStatisticsArraylist();
-		geneGrammarMatches = getInitializedStatisticsArraylist();
-		numberNulls = getInitializedStatisticsArraylist(); 
 		
 		statsAggregators = getInitializedStatisticsAggregators();		 
 	}
@@ -329,10 +321,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	
 		ArrayList<Object> genotypes = new ArrayList<Object>();
 		ArrayList<Object> phenotypes = new ArrayList<Object>();
-		double antiLearningIntensity = 0;
-		double totalFitness = 0;
-		double genomeGrammarMatch = 0;
-		double numberNull = 0;
 
 		for(Agent agent : agents){
 			
@@ -349,23 +337,10 @@ public class ModelController extends BasicConfigurable implements Runnable {
 			if(!phenotypes.contains(phenotype)){
 				phenotypes.add(phenotype);
 			}
-
-			totalFitness += agent.getFitness();
-			antiLearningIntensity += agent.learningIntensity();
-
-			numberNull += agent.numberOfNulls();
-			genomeGrammarMatch += agent.geneGrammarMatch();
 		}
 
-		double learningIntensity = antiLearningIntensity; 
-		
-		totalFitnesses[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),totalFitness/getParameter(POPULATION_SIZE).getInteger()));
-		learningIntensities[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),learningIntensity/getParameter(POPULATION_SIZE).getInteger()));
-		geneGrammarMatches[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),genomeGrammarMatch/getParameter(POPULATION_SIZE).getInteger()));
-		numberNulls[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),numberNull/getParameter(POPULATION_SIZE).getInteger()));
 		totalNumberGenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)genotypes.size()));
 		totalNumberPhenotypes[currentRun].add(new Pair<Double,Double>(currentGeneration.doubleValue(),(double)phenotypes.size()));
-
 	}
 	
 	/**
@@ -376,28 +351,19 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		statisticsWindow = new StatisticsVisualizer(getTitleString());
 		String configName = (printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
-		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, false);
-		statisticsWindow.addDataSeries(geneGrammarMatches, "Gene Grammar Match", "Gene Grammar Match", configName, true);
-		
-		statisticsWindow.addDataSeries(learningIntensities, "Learning Intensity", "Learning Intensity", configName, false);
-		statisticsWindow.addDataSeries(numberNulls, "Number of Nulls", "Number of Nulls",  configName, false);
-		statisticsWindow.addDataSeries(totalFitnesses, "Fitness", "Fitness",  configName, false);
-		statisticsWindow.addDataSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  configName, false);
-		statisticsWindow.addDataSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  configName, false);
-		
-
-		System.out.println("Size" + statsAggregators[0].size());
 		for(int i = 0; i < statsAggregators[0].size(); i++){
 			ArrayList[] array = new ArrayList[getParameter(RUN_COUNT).getInteger()];
 			for(int run = 0; run < statsAggregators.length; run++){
 				StatisticsAggregator aggregator = statsAggregators[run].get(i);
 				array[run] = aggregator.getStatistics();
 			}
-			statisticsWindow.addDataSeries(array, "Test", "A", "B", false);
+			statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, false);
 		}
 		
+		statisticsWindow.addDataSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  configName, false);
+		statisticsWindow.addDataSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  configName, false);
+
 		statisticsWindow.display();
-		
 	}
 	
 	private String getTitleString(){
