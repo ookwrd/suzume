@@ -13,7 +13,6 @@ import AutoConfiguration.BasicConfigurationPanel;
 
 import simulation.ModelController;
 import simulation.RandomGenerator;
-import simulation.SimulationConfiguration;
 import simulation.VisualizationConfiguration;
 
 @SuppressWarnings("serial")
@@ -35,7 +34,7 @@ public class Launcher extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		modelOptions = new SimulationConfiguration().getConfigurationPanel();
+		modelOptions = new ModelController().getConfigurationPanel();
 		add(modelOptions);
 
 		randomOptions = new RandomGenerator().getConfigurationPanel();
@@ -72,11 +71,10 @@ public class Launcher extends JPanel {
 	 * Creates a simulation instance based on the current parameter settings and sets it running in a new thread.
 	 */
 	private void createSimulation(){
-		SimulationConfiguration configuration = new SimulationConfiguration(modelOptions.getConfiguration());
 		VisualizationConfiguration visualizationConfiguration = new VisualizationConfiguration(visualOptions.getConfiguration());
 		RandomGenerator random = new RandomGenerator(randomOptions.getConfiguration());
 	
-		ModelController controller = new ModelController(configuration, visualizationConfiguration, random);
+		ModelController controller = new ModelController(modelOptions.getConfiguration(), visualizationConfiguration, random);
 		
 		Thread thread = new Thread(controller);
 		thread.start();
