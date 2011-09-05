@@ -47,7 +47,6 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		return grammar;
 	}
 	
-	@Override
 	public Double numberOfNulls() {
 		double count = 0;
 		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
@@ -113,12 +112,35 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	@Override
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = new ArrayList<StatisticsAggregator>();
-		retVal.add(new AbstractCountingAggregator() {
+		
+		retVal.add(new AbstractCountingAggregator("Gene Grammar Match") {
+			@Override
+			protected void updateCount(Node agent) {
+				addToCount(((Agent)agent).geneGrammarMatch());
+			}
+		});
+		
+		retVal.add(new AbstractCountingAggregator("Learning Intensity") {
+			@Override
+			protected void updateCount(Node agent) {
+				addToCount(((Agent)agent).learningIntensity());
+			}
+		});
+		
+		retVal.add(new AbstractCountingAggregator("Number of Nulls") {	
+			@Override
+			protected void updateCount(Node agent) {
+				addToCount(((Agent)agent).numberOfNulls());
+			}
+		});
+		
+		retVal.add(new AbstractCountingAggregator("Fitness") {
 			@Override
 			public void updateCount(Node agent) {	
 				addToCount(((Agent)agent).getFitness());
 			}
 		});
+
 		return retVal;
 	}
 }

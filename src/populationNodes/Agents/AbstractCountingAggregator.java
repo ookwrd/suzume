@@ -12,6 +12,12 @@ public abstract class AbstractCountingAggregator implements StatisticsAggregator
 		private double count = 0;
 		private int agentCount = 0;
 		
+		private String name;
+		
+		public AbstractCountingAggregator(String name){
+			this.name = name;
+		}
+		
 		@Override
 		public final void collectStatistics(Node agent) {
 			agentCount++;
@@ -30,6 +36,11 @@ public abstract class AbstractCountingAggregator implements StatisticsAggregator
 		@Override
 		public final ArrayList<Pair<Double, Double>> getStatistics() {
 			return stats;
+		}
+		
+		@Override
+		public String getTitle(){
+			return name;
 		}
 		
 		protected final void setCount(double count){
