@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
-import populationNodes.Agents.Agent.StatisticsType.ValueType;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 
 import simulation.RandomGenerator;
+import simulation.SimulationConfiguration;
+import tools.Pair;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
@@ -112,20 +113,39 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public ArrayList<StatisticsType> getSupportedStatisticsTypes(){
-		ArrayList<StatisticsType> retVal = new ArrayList<Agent.StatisticsType>();
-		retVal.add(new StatisticsType(FITNESS_STATISTICS,"The agents final fitness value", ValueType.DOUBLE));
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
+		ArrayList<StatisticsAggregator> retVal = new ArrayList<StatisticsAggregator>();
+		
+		retVal.add(new FitnessAggregator());
+		
 		return retVal;
 	}
 	
-	@Override
-	public Object getStatisticsValue(StatisticsType type){
+	public class FitnessAggregator implements StatisticsAggregator {
+
+		private ArrayList<Pair<Double, Double>> stats = new ArrayList<Pair<Double,Double>>();
+		private double fitnessCount = 0;
+		private int agentCount = 0;
 		
-		if(type.ID.equals(FITNESS_STATISTICS)){
-			return getFitness();
+		@Override
+		public void collectStatistics(Node agent) {
+			
+			fitnessCount += ((Agent)agent).getFitness();
+			agentCount++;
 		}
 		
-		return null;//TODO
-	}
+		@Override
+		public void endGeneration(Integer generation){
+			stats.add(new Pair<Double,Double>(generation.doubleValue(),fitnessCount/agentCount));
+			
+			fitnessCount = 0;
+			agentCount = 0;
+		}
 
+		@Override
+		public ArrayList<Pair<Double, Double>> getStatistics() {
+			return stats;
+		}
+		
+	}
 }

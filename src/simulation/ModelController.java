@@ -2,8 +2,6 @@ package simulation;
 
 import java.util.ArrayList;
 
-import org.apache.commons.collections15.map.HashedMap;
-
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
@@ -16,10 +14,10 @@ import tools.Pair;
 import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
+import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.PopulationModel;
 import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
-import populationNodes.Agents.Agent.StatisticsType;
 
 public class ModelController implements Runnable {
 
@@ -35,7 +33,9 @@ public class ModelController implements Runnable {
 	private ArrayList<Pair<Double,Double>>[] learningIntensities;
 	private ArrayList<Pair<Double,Double>>[] geneGrammarMatches;
 	private ArrayList<Pair<Double,Double>>[] numberNulls;
-
+	private ArrayList<StatisticsAggregator>[] statsAggregators;
+	
+	
 	//Model
 	private PopulationModel population;
 	private SelectionModel selectionModel;
@@ -60,7 +60,7 @@ public class ModelController implements Runnable {
 		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(config.getParameter(SimulationConfiguration.SELECTION_MODEL).getString()), randomGenerator);
 		
 		resetModel();
-
+		
 		resetStatistics();
 
 		if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
@@ -93,6 +93,7 @@ public class ModelController implements Runnable {
 		geneGrammarMatches = getInitializedStatisticsArraylist();
 		numberNulls = getInitializedStatisticsArraylist(); 
 		
+		statsAggregators = getInitializedStatisticsAggregators();		 
 	}
 
 	@SuppressWarnings("unchecked")
@@ -100,6 +101,16 @@ public class ModelController implements Runnable {
 		ArrayList<Pair<Double,Double>>[] arrayLists = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
 		for(int i = 0;i < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<Pair<Double,Double>>();
+		}
+		return arrayLists;
+	}
+	
+	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
+		@SuppressWarnings("unchecked")
+		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
+		for(int i = 0;i < config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger(); i++){
+			arrayLists[i] = new ArrayList<StatisticsAggregator>();
+			arrayLists[i].addAll(population.getStatisticsAggregators());
 		}
 		return arrayLists;
 	}
@@ -113,6 +124,7 @@ public class ModelController implements Runnable {
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(nodeConfiguration);
 			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 			population = node;
+			
 			
 		} else {
 		
@@ -168,6 +180,10 @@ public class ModelController implements Runnable {
 				//Update stepwise visualization
 				if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
 					visualizer.update(currentRun, currentGeneration);
+				}
+				
+				for(StatisticsAggregator agg: statsAggregators[currentRun]){
+					agg.endGeneration(currentGeneration);
 				}
 	
 				currentGeneration++;
@@ -279,10 +295,7 @@ public class ModelController implements Runnable {
 	private void gatherStatistics(){
 
 		ArrayList<Agent> agents = population.getCurrentGeneration();
-		ArrayList<StatisticsType> types = agents.get(0).getSupportedStatisticsTypes();
-		
-		//TODO how would I store these?
-		
+	
 		ArrayList<Object> genotypes = new ArrayList<Object>();
 		ArrayList<Object> phenotypes = new ArrayList<Object>();
 		double antiLearningIntensity = 0;
@@ -292,8 +305,8 @@ public class ModelController implements Runnable {
 
 		for(Agent agent : agents){
 			
-			for(StatisticsType type : types){
-				
+			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
+				aggregator.collectStatistics(agent);
 			}
 
 			Object chromosome = agent.getGenotype();
@@ -340,6 +353,17 @@ public class ModelController implements Runnable {
 		statisticsWindow.addDataSeries(totalFitnesses, "Fitness", "Fitness",  configName, false);
 		statisticsWindow.addDataSeries(totalNumberGenotypes, "Number of Genotypes","Number of Genotypes",  configName, false);
 		statisticsWindow.addDataSeries(totalNumberPhenotypes, "Number of Phenotypes", "Number of Phenotypes",  configName, false);
+		
+
+		System.out.println("Size" + statsAggregators[0].size());
+		for(int i = 0; i < statsAggregators[0].size(); i++){
+			ArrayList[] array = new ArrayList[config.getParameter(SimulationConfiguration.RUN_COUNT).getInteger()];
+			for(int run = 0; run < statsAggregators.length; run++){
+				StatisticsAggregator aggregator = statsAggregators[run].get(i);
+				array[run] = aggregator.getStatistics();
+			}
+			statisticsWindow.addDataSeries(array, "Test", "A", "B", false);
+		}
 		
 		statisticsWindow.display();
 		

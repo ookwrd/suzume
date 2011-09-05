@@ -8,6 +8,7 @@ import populationNodes.Agents.Agent;
 
 import runTimeVisualization.Visualizable;
 import simulation.RandomGenerator;
+import tools.Pair;
 import AutoConfiguration.Configurable;
 
 public interface Node extends Visualizable, Configurable {
@@ -33,5 +34,16 @@ public interface Node extends Visualizable, Configurable {
 	public void communicate(Node partner);
 	
 	public ArrayList<Agent> getBaseAgents();
+	
+	//Statistics
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators();
+	public interface StatisticsAggregator{
+		//TODO multiple collection points
+		public void collectStatistics(Node agent);
+		public void endGeneration(Integer generation);
+		
+		public ArrayList<Pair<Double,Double>> getStatistics();
+	}
+	
 }
 
