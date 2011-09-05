@@ -15,11 +15,13 @@ import tools.Pair;
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	public static final String FITNESS_STATISTICS = "Fitness";
+	public static final String BASE_FITNESS = "Base fitness value:";
 	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 
 	{
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
+		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
 	}
 	
 	private double fitness;
@@ -33,7 +35,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(config, id, randomGenerator);
 
-		fitness = 0;
+		setFitness(getParameter(BASE_FITNESS).getInteger());;
 		
 		grammar = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 		for (int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){

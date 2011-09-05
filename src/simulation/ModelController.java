@@ -31,7 +31,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
 	public static final String POPULATION_SIZE = "Population Size:";
-	public static final String BASE_FITNESS = "Base fitness value:";//TODO remove to abstract agent
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
 	public static final String CRITICAL_PERIOD = "Critical Period:";
 	
@@ -46,7 +45,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
-		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
@@ -65,6 +63,7 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	private ArrayList<Pair<Double,Double>>[] learningIntensities;
 	private ArrayList<Pair<Double,Double>>[] geneGrammarMatches;
 	private ArrayList<Pair<Double,Double>>[] numberNulls;
+	
 	private ArrayList<StatisticsAggregator>[] statsAggregators;
 	
 	
@@ -286,9 +285,6 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		for(Agent agent : population.getCurrentGeneration()){
 
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
-
-			//Set the agents fitness to the default base level 
-			agent.setFitness(getParameter(BASE_FITNESS).getInteger());
 
 			//Communicate with all neighbours
 			for(Node neighbour : neighbouringAgents){      
