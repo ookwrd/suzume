@@ -49,15 +49,12 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	@Override
 	public Double numberOfNulls() {
-		
 		double count = 0;
-		
 		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}
 		}
-		
 		return count;
 	}
 	
@@ -116,37 +113,12 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	@Override
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = new ArrayList<StatisticsAggregator>();
-		
-		retVal.add(new FitnessAggregator());
-		
+		retVal.add(new AbstractCountingAggregator() {
+			@Override
+			public void updateCount(Node agent) {	
+				addToCount(((Agent)agent).getFitness());
+			}
+		});
 		return retVal;
-	}
-	
-	public class FitnessAggregator implements StatisticsAggregator {
-
-		private ArrayList<Pair<Double, Double>> stats = new ArrayList<Pair<Double,Double>>();
-		private double fitnessCount = 0;
-		private int agentCount = 0;
-		
-		@Override
-		public void collectStatistics(Node agent) {
-			
-			fitnessCount += ((Agent)agent).getFitness();
-			agentCount++;
-		}
-		
-		@Override
-		public void endGeneration(Integer generation){
-			stats.add(new Pair<Double,Double>(generation.doubleValue(),fitnessCount/agentCount));
-			
-			fitnessCount = 0;
-			agentCount = 0;
-		}
-
-		@Override
-		public ArrayList<Pair<Double, Double>> getStatistics() {
-			return stats;
-		}
-		
 	}
 }
