@@ -16,6 +16,7 @@ import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.GraphConfiguration.GraphType;
+import PopulationModel.Node.StatisticsAggregator;
 
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
@@ -262,23 +263,11 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			g.translate(0, agentDimension.height);
 		}
 	}
-	
-	/**
-	 * Print a generations worth of agents. 
-	 */
-	@Override
-	public void print(){
-		System.out.println("Printing Previous Generation");	
-		for(Node agent : getAncestorGeneration()){  
-			agent.print();
-			System.out.println();
-		}
-	}
 
 	@Override
 	public ArrayList<Node> getPossibleParents(Node agent) {
 		return previousGeneration;
-	}//TODO w´switch out for a graphbased implemenation
+	}//TODO switch out for a graphbased implemenation
 
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
@@ -361,4 +350,9 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		System.out.println("Shouldnt be here");
 	}
 
+	@Override
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
+		System.out.println("In the composite" + currentGeneration.get(0).getStatisticsAggregators().size());
+		return currentGeneration.get(0).getStatisticsAggregators();
+	}
 }

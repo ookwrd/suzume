@@ -3,6 +3,7 @@ package populationNodes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import simulation.RandomGenerator;
 import PopulationModel.Node;
@@ -47,10 +48,10 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 		g.setColor(Color.green);
 		g.drawRect(0, 0, baseDimension.width, baseDimension.height);
 	}
-		
+	
 	@Override
-	public void print(){
-		System.out.println(this.toString());
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
+		return new ArrayList<Node.StatisticsAggregator>();
 	}
 	
 }

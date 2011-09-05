@@ -166,15 +166,6 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		}
 		
 	}
-	
-	@Override
-	public void print(){
-		
-		System.out.println("Agent " + getId() + " has fitness of " + getFitness() + " has learning resource of " + learningResource + " fitness of  " + getFitness() +" match " + geneGrammarMatch());
-		System.out.println("P" + grammar);
-		System.out.println("G" + chromosome);
-		
-	}
 
 	@Override
 	public boolean canStillLearn() {
