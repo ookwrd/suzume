@@ -60,6 +60,7 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private static boolean iconsLoaded = false; 
 	
 	private JFreeChart chart;
+	private JPanel interPanel;
 	private ZoomPanel chartImagePanel;
 	private JPanel buttonPanel;
 	public JPanel editPanel;
@@ -104,6 +105,8 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private void setupEditPanel() {
 		
 		//Setup panel
+		
+		
 		editPanel = new JPanel();
 		editPanel.setOpaque(true);
 		SpringLayout layout = new SpringLayout();
@@ -262,6 +265,13 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 			}
 		});
 		buttonPanel.add(removeChartButton);
+		
+		JPanel hspaceFiller = new JPanel();
+		hspaceFiller.setPreferredSize(new Dimension(30, 30));
+		//invisible.setSize(20, 20);
+		//hspaceFiller.setVisible(true);
+		hspaceFiller.setOpaque(false);
+		buttonPanel.add(hspaceFiller);
 		
 	}
 	
