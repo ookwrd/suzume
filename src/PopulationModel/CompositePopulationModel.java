@@ -352,7 +352,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 
 	@Override
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		System.out.println("In the composite" + currentGeneration.get(0).getStatisticsAggregators().size());
 		return currentGeneration.get(0).getStatisticsAggregators();
 	}
 }

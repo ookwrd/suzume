@@ -37,6 +37,7 @@ public interface Node extends Visualizable, Configurable {
 	
 	//Statistics
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators();
+	
 	public interface StatisticsAggregator{
 		//TODO multiple collection points
 		public void collectStatistics(Node agent);
