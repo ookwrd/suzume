@@ -97,7 +97,7 @@ public class DataPanel extends JPanel {
 		//fLO.setAlignment(FlowLayout.LEADING);
 		
 		BorderLayout bl = new BorderLayout();
-		//bl.setVgap(10);
+		bl.setVgap(10);
 		this.setLayout(bl);
 		this.setBorder(new EtchedBorder());
 		
