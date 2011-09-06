@@ -59,7 +59,9 @@ public class StatisticsVisualizer extends JPanel {
 		frame = new JFrame();
 		frame.setTitle(title);
 		
-		setLayout(new FlowLayout(FlowLayout.RIGHT));
+		FlowLayout fLO = new FlowLayout(FlowLayout.RIGHT);
+		//fLO.setAlignment(FlowLayout.LEADING);
+		setLayout(fLO);
 		
 		scrollPane = new JScrollPane(this);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
