@@ -97,7 +97,6 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		//Do nothing.
 	}
 	
-	@Override
 	public ArrayList getPhenotype(){
 		return grammar;
 	}
@@ -116,21 +115,21 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		retVal.add(new AbstractCountingAggregator("Gene Grammar Match") {
 			@Override
 			protected void updateCount(Node agent) {
-				addToCount(((Agent)agent).geneGrammarMatch());
+				addToCount(((AbstractAgent)agent).geneGrammarMatch());
 			}
 		});
 		
 		retVal.add(new AbstractCountingAggregator("Learning Intensity") {
 			@Override
 			protected void updateCount(Node agent) {
-				addToCount(((Agent)agent).learningIntensity());
+				addToCount(((AbstractAgent)agent).learningIntensity());
 			}
 		});
 		
 		retVal.add(new AbstractCountingAggregator("Number of Nulls") {	
 			@Override
 			protected void updateCount(Node agent) {
-				addToCount(((Agent)agent).numberOfNulls());
+				addToCount(((AbstractAgent)agent).numberOfNulls());
 			}
 		});
 		
@@ -144,17 +143,23 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Genotypes") {
 			@Override
 			protected void checkUniqueness(Node agent) {
-				addItem(((Agent)agent).getGenotype());
+				addItem(((AbstractAgent)agent).getGenotype());
 			}
 		});
 		
 		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Phenotypes") {
 			@Override
 			protected void checkUniqueness(Node agent) {
-				addItem(((Agent)agent).getPhenotype());
+				addItem(((AbstractAgent)agent).getPhenotype());
 			}
 		});
-
+	
 		return retVal;
 	}
+	
+	//Statistics
+	public abstract Double geneGrammarMatch();
+	public abstract  Double learningIntensity(); //TODO how do i make this more general??
+	public abstract Object getGenotype();//TODO get rid of this
+
 }
