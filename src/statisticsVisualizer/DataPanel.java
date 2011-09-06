@@ -34,6 +34,8 @@ public class DataPanel extends JPanel {
 	private JPanel chartPanel;
 	
 	private ArrayList<DataSetChangedListener> dataSetChangedListeners = new ArrayList<DataSetChangedListener>();
+
+	private JPanel interPanel;
 	
 	
 	/**
@@ -90,7 +92,13 @@ public class DataPanel extends JPanel {
 		
 		super();
 		
-		this.setLayout(new BorderLayout());
+		//interPanel = new JPanel();
+		//interPanel.setLayout(FlowLayout);
+		//fLO.setAlignment(FlowLayout.LEADING);
+		
+		BorderLayout bl = new BorderLayout();
+		bl.setVgap(10);
+		this.setLayout(bl);
 		this.setBorder(new EtchedBorder());
 		
 		this.data = data;
@@ -145,7 +153,8 @@ public class DataPanel extends JPanel {
 		
 
 		chartPanel = new JPanel();
-		chartPanel.setLayout(new BoxLayout(chartPanel, BoxLayout.Y_AXIS));
+		BoxLayout bl2 = new BoxLayout(chartPanel, BoxLayout.Y_AXIS);
+		chartPanel.setLayout(bl2);
 		
 		addChart(0, Integer.MAX_VALUE, false);
 		
