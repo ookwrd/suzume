@@ -39,12 +39,13 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	}
 	
 	@Override
-	public Dimension getDimension(Dimension baseDimension, VisualizationType type){
+	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type){
 		return baseDimension;
 	}
 	
 	@Override
-	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
+		System.out.println("Abstract Node: This method shouldnt be reached.");
 		g.setColor(Color.green);
 		g.drawRect(0, 0, baseDimension.width, baseDimension.height);
 	}

@@ -8,6 +8,7 @@ import java.awt.Insets;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -68,7 +69,7 @@ public class ConfigurationPanel extends JPanel {
 		add(jLabel, constraints);
 	}
 	
-	protected JComboBox addComboBox(String label, Object[] values) {
+	public JComboBox addComboBox(String label, Object[] values) {
 		
 		addLabel(label);
 		
@@ -81,6 +82,22 @@ public class ConfigurationPanel extends JPanel {
 		
 		return comboBox;
 	}
+	
+	public JList addList(String label, Object[] values){
+		
+		addLabel(label);
+		
+		constraints.gridx=1;
+		constraints.gridy=row++;
+		constraints.weightx = 1;
+		
+		JList list = new JList(values);
+		list.setSelectedIndex(0);
+		add(list, constraints);
+		
+		return list;
+		
+	} 
 	
 	public JTextField addField(String label, String initialValue){
 		

@@ -2,12 +2,15 @@ package runTimeVisualization;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public interface Visualizable {
 
-	public enum VisualizationType {layout, vertical}
+	public enum VisualizationStyle {layout, vertical}
 	
-	public Dimension getDimension(Dimension baseDimension, VisualizationType type);
-	public void draw(Dimension baseDimension, VisualizationType type, Graphics g);
+	public ArrayList<Object> getVisualizationKeys();
+	
+	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type);
+	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g);
 	
 }

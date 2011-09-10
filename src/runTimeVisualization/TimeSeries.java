@@ -17,7 +17,7 @@ import javax.swing.border.LineBorder;
 
 import PopulationModel.PopulationModel;
 
-import runTimeVisualization.Visualizable.VisualizationType;
+import runTimeVisualization.Visualizable.VisualizationStyle;
 
 @SuppressWarnings("serial")
 public class TimeSeries extends JPanel {
@@ -30,14 +30,14 @@ public class TimeSeries extends JPanel {
 	
 	private boolean isSelected = false;
 	
-	public TimeSeries(PopulationModel model, int generationCount, final JButton printButton, int interval){
+	public TimeSeries(PopulationModel model, int generationCount, final JButton printButton){
 		this.model = model;
 
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(5, 0, 5, 0));
 		
-		Dimension singleSize = model.getDimension(verticalBaseDimension, VisualizationType.vertical);
-		Dimension panelSize = new Dimension(singleSize.width*generationCount/interval, singleSize.height);
+		Dimension singleSize = model.getDimension(verticalBaseDimension, VisualizationStyle.vertical);
+		Dimension panelSize = new Dimension(singleSize.width*generationCount, singleSize.height);
 		label = new DrawingLabel(panelSize);
 		
 		add(label, BorderLayout.NORTH);
@@ -88,7 +88,7 @@ public class TimeSeries extends JPanel {
 	}
 	
 	public void updateImage(){
-		model.draw(verticalBaseDimension, VisualizationType.vertical, label.getGraphics().create());
+		model.draw(verticalBaseDimension, VisualizationStyle.vertical, label.getGraphics().create());
 		label.getGraphics().translate(verticalBaseDimension.height, 0);
 		label.repaint();
 	}

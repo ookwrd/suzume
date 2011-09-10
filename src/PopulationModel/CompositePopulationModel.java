@@ -161,7 +161,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 	
 	@Override
-	public Dimension getDimension(Dimension baseDimension, VisualizationType type){
+	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type){
 		
 		if(currentGeneration.size() == 0){
 			System.out.print("Trying to get Dimension of empty population model");
@@ -182,7 +182,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 	}
 	
-	private Dimension getDimensionLayout(Dimension baseDimension, VisualizationType type){
+	private Dimension getDimensionLayout(Dimension baseDimension, VisualizationStyle type){
 		int size = currentGeneration.size();
 		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
 		
@@ -191,7 +191,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		return new Dimension(agentsPerEdge*agentDimension.width, agentsPerEdge*agentDimension.height);
 	}
 	
-	private Dimension getDimensionVertical(Dimension baseDimension, VisualizationType type){
+	private Dimension getDimensionVertical(Dimension baseDimension, VisualizationStyle type){
 		int size = currentGeneration.size();
 		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
 		
@@ -200,7 +200,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		
 	
 	@Override
-	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
 		switch(type){
 		case layout:
 			drawLayout(baseDimension, type, g);
@@ -216,7 +216,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		}
 	}
 	
-	private void drawLayout(Dimension baseDimension, VisualizationType type, Graphics g){
+	private void drawLayout(Dimension baseDimension, VisualizationStyle type, Graphics g){
 		int size = currentGeneration.size();
 		Dimension thisDimension = getDimension(baseDimension, type);
 		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
@@ -254,7 +254,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 	
 
-	private void drawVertical(Dimension baseDimension, VisualizationType type, Graphics g){
+	private void drawVertical(Dimension baseDimension, VisualizationStyle type, Graphics g){
 		int size = previousGeneration.size();
 		Dimension agentDimension = previousGeneration.get(0).getDimension(baseDimension, type);
 
@@ -353,5 +353,10 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	@Override
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		return currentGeneration.get(0).getStatisticsAggregators();
+	}
+
+	@Override
+	public ArrayList<Object> getVisualizationKeys() {
+		return currentGeneration.get(0).getVisualizationKeys();
 	}
 }

@@ -3,7 +3,9 @@ import java.awt.Color;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
@@ -14,11 +16,10 @@ import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
+
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Describable {
 
-	protected static final String[] visualizationTypes = {"numberNulls", "geneGrammarMatch", "learningIntensity","genotype", "phenotype", "singleGene", "singleWord"};
-	//TODO change to enum
-	
+	enum visualizationTypes1 {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
 	
 	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
@@ -33,7 +34,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes1.values(), true));
 	}
 
 	protected ArrayList<Integer> chromosome;
@@ -201,33 +202,55 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 	}
 	
 	@Override//TODO this should just choose a color
-	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
 		
 		Color c;
 		
-		if(config.getParameter(VISUALIZATION_TYPE).getString().equals("numberNulls")){
+		visualizationTypes1 typeString = (visualizationTypes1)config.getParameter(VISUALIZATION_TYPE).getList()[0];//TODO
+		
+		switch (typeString) {
+		case NUMBER_NULLS:
 			int numberOfNulls = new Double(numberOfNulls()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("geneGrammarMatch")){	
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+
+		case GENE_GRAMMAR_MATCH:
 			int geneGrammarMatch = new Double(geneGrammarMatch()).intValue();
 			c = new Color(255, 255-geneGrammarMatch*16, 255-geneGrammarMatch);
-		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("learningIntensity")){	
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+			
+		case LEARNING_INTENSITY:
 			int learningIntensity = new Double(learningIntensity()).intValue();
 			c = new Color(255, 255-learningIntensity*16, 255-learningIntensity);
-		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("genotype")){
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+			
+		case GENOTYPE:
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("phenotype")){
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+			
+		case PHENOTYPE:
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord")) {
-		
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+			
+		case SINGLE_WORD:
 			if(grammar.get(0) == 0){
 				c = Color.WHITE;
 			} else if (grammar.get(0) == 1){
@@ -235,9 +258,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 			} else{
 				c = Color.RED;
 			}
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
 			
-		}	 else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleGene")) {
-		
+		case SINGLE_GENE:
 			if(chromosome.get(0) == 0){
 				c = Color.WHITE;
 			} else if (chromosome.get(0) == 1){
@@ -245,20 +270,23 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 			} else{
 				c = Color.RED;
 			}
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
 			
-		}			else {
-			System.out.println("Unrecognized visualization type");
-			return;
+		default:
+			super.draw(baseDimension, type, g);
 		}
-
-		g.setColor(c);
-		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 		
 	}
+
+	@Override
+	public ArrayList<Object> getVisualizationKeys() {
+		return new ArrayList<Object>(Arrays.asList(config.getParameter(VISUALIZATION_TYPE).getList()));
+	}	
 
 	@Override
 	public String getDescription() {
 		return "Agent from Yamauchi and Hashimoto 2010 designed to study the interaction of .... See also McCrohon and Witkowski 2011.";
 	}
-
 }

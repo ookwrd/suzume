@@ -9,8 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import simulation.VisualizationConfiguration;
-
 import PopulationModel.PopulationModel;
 
 
@@ -24,13 +22,11 @@ public class TimeSeriesVisualization extends JScrollPane {
 	
 	private JButton printButton;
 	
-	VisualizationConfiguration config;
-	
 	private JPanel inner;
 	
 	private int runAtLastUpdate = 0;
 	
-	public TimeSeriesVisualization(PopulationModel model, int generationCount, JButton printButton, VisualizationConfiguration config){
+	public TimeSeriesVisualization(PopulationModel model, int generationCount, JButton printButton){
 		super();
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -40,7 +36,6 @@ public class TimeSeriesVisualization extends JScrollPane {
 		this.model = model;
 		this.generationCount = generationCount;
 		this.printButton = printButton;
-		this.config = config;
 		
 		inner = new JPanel();
 		inner.setLayout(new BoxLayout(inner, BoxLayout.Y_AXIS));
@@ -50,7 +45,7 @@ public class TimeSeriesVisualization extends JScrollPane {
 	}
 	
 	public void configureNewTimeseries(){
-		TimeSeries timeSeries = new TimeSeries(model, generationCount, printButton, config.getParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger());
+		TimeSeries timeSeries = new TimeSeries(model, generationCount, printButton);
 		series.add(timeSeries);
 		inner.add(timeSeries);
 		

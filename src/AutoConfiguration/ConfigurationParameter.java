@@ -8,6 +8,7 @@ public class ConfigurationParameter {
 	
 	public ConfigurationParameterType type;
 	private Object value;
+	boolean multiple;
 	
 	public ConfigurationParameter(String value){
 		type = ConfigurationParameterType.STRING;
@@ -17,6 +18,13 @@ public class ConfigurationParameter {
 	public ConfigurationParameter(Object[] values){
 		type = ConfigurationParameterType.LIST;
 		this.value = values;
+		this.multiple = false;
+	}
+	
+	public ConfigurationParameter(Object[] values, boolean multiple){
+		type = ConfigurationParameterType.LIST;
+		this.value = values;
+		this.multiple = multiple;
 	}
 	
 	public ConfigurationParameter(Integer value){
