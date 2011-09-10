@@ -16,7 +16,9 @@ import simulation.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Describable {
 
-	protected static final String[] visualizationTypes = {"numberNulls", "genotype", "phenotype", "singleGene", "singleWord"};
+	protected static final String[] visualizationTypes = {"numberNulls", "geneGrammarMatch", "learningIntensity","genotype", "phenotype", "singleGene", "singleWord"};
+	//TODO change to enum
+	
 	
 	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
@@ -206,6 +208,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		if(config.getParameter(VISUALIZATION_TYPE).getString().equals("numberNulls")){
 			int numberOfNulls = new Double(numberOfNulls()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
+		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("geneGrammarMatch")){	
+			int geneGrammarMatch = new Double(geneGrammarMatch()).intValue();
+			c = new Color(255, 255-geneGrammarMatch*16, 255-geneGrammarMatch);
+		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("learningIntensity")){	
+			int learningIntensity = new Double(learningIntensity()).intValue();
+			c = new Color(255, 255-learningIntensity*16, 255-learningIntensity);
 		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("genotype")){
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
