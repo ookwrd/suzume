@@ -14,20 +14,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.PopulationModel;
 
-import simulation.VisualizationConfiguration;
 
 @SuppressWarnings("serial")
 public class RuntimeVisualizer extends JPanel {
 	
 	private static final String RUN_COUNTER_PREFIX = "Run : ";
 	private static final String GENERATION_COUNTER_PREFIX = "Generation : ";
-	
-	private VisualizationConfiguration config;
 		
 	private JFrame frame;
 	
@@ -38,7 +32,6 @@ public class RuntimeVisualizer extends JPanel {
 	private TimeSeriesVisualization timeSeriesPanel;
 		
 	//Top bar
-	private JTextField pauseField;
 	private JButton pausePlayButton;
 	private JButton stepButton;
 	
@@ -50,9 +43,7 @@ public class RuntimeVisualizer extends JPanel {
 	private boolean pauseStatus;
 	private int steps;
 	
-	public RuntimeVisualizer(String title, int generationCount, PopulationModel model, VisualizationConfiguration config){
-		
-		this.config = config;
+	public RuntimeVisualizer(String title, int generationCount, PopulationModel model){
 		
 		setLayout(new BorderLayout());
 		
@@ -68,7 +59,7 @@ public class RuntimeVisualizer extends JPanel {
 		add(singleStepPanel, BorderLayout.WEST);
 		
 		//TimeSeries visualization
-		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount, printSelectedButton, config);
+		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount, printSelectedButton);
 		add(timeSeriesPanel, BorderLayout.CENTER);
 		
 		
@@ -82,18 +73,6 @@ public class RuntimeVisualizer extends JPanel {
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		
-		//Pause Field
-		JLabel pauseLabel = new JLabel("Pause duration:");
-		pauseField = new JTextField(""+config.getParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger(), 6);
-		pauseField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				config.setParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION, new ConfigurationParameter(Integer.parseInt(pauseField.getText().trim())));;
-			}
-		});
-		buttonPanel.add(pauseLabel);
-		buttonPanel.add(pauseField);
 		
 		//Pause/Play button
 		pausePlayButton = new JButton("Pause");
@@ -223,21 +202,9 @@ public class RuntimeVisualizer extends JPanel {
 			
 		}
 		
-		if( generation % config.getParameter(VisualizationConfiguration.VISUALIZATION_INTERVAL).getInteger() != 0){
-			return;
-		}
-		
 		updateCounter(run, generation);
 		
 		updateImage(run);
-				
-		if(config.getParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger() > 0){
-			try {
-				Thread.sleep(config.getParameter(VisualizationConfiguration.PAUSE_AFTER_VISUALIZATION).getInteger());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	

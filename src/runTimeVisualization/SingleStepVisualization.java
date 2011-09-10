@@ -17,7 +17,7 @@ import javax.swing.border.LineBorder;
 
 import PopulationModel.PopulationModel;
 
-import runTimeVisualization.Visualizable.VisualizationType;
+import runTimeVisualization.Visualizable.VisualizationStyle;
 
 
 @SuppressWarnings("serial")
@@ -36,7 +36,7 @@ public class SingleStepVisualization extends JPanel {
 		this.model = model;
 		setLayout(new BorderLayout());
 		
-		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationType.layout);
+		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationStyle.layout);
 		iconLabel = new DrawingLabel(drawSize);
 		
 		add(iconLabel, BorderLayout.CENTER);
@@ -87,7 +87,7 @@ public class SingleStepVisualization extends JPanel {
 	}
 	
 	public void updateImage(){
-		model.draw(layoutBaseDimension, VisualizationType.layout, iconLabel.getGraphics().create());
+		model.draw(layoutBaseDimension, VisualizationStyle.layout, iconLabel.getGraphics().create());
 		repaint();
 	}
 

@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -67,8 +68,13 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 				break;
 				
 			case LIST:
-				JComboBox listBox = addComboBox(key, parameter.getList());
-				components.put(key, listBox);
+				if(parameter.multiple){
+					JList list = addList(key, parameter.getList());
+					components.put(key, list);
+				}else{
+					JComboBox listBox = addComboBox(key, parameter.getList());
+					components.put(key, listBox);
+				}
 				break;
 				
 			case NODE:
@@ -125,7 +131,11 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 				break;
 				
 			case LIST:
-				retParameters.put(key, new ConfigurationParameter(((JComboBox)comp).getSelectedItem().toString()));
+				if(comp instanceof JComboBox){
+					retParameters.put(key, new ConfigurationParameter(((JComboBox)comp).getSelectedItem().toString()));
+				}else{
+					retParameters.put(key, new ConfigurationParameter(((JList)comp).getSelectedValues()));
+				}
 				break;
 				
 			case NODE:

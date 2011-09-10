@@ -38,6 +38,9 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	public static final String COMMUNICATE_TO_DISTANCE = "Max Communication distance:";
 	public static final String SELECTION_MODEL = "Selection model:";
 	
+	public static final String PRINT_GENERATION_COUNT = "Print generation count?";
+	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
+	
 	{
 		System.out.println("SimulationConfig" + new YamauchiHashimoto2010().getConfiguration());
 		
@@ -50,10 +53,12 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
+
+		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
+		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
 	}
 	
 	//Configuration Settings
-	private VisualizationConfiguration visualConfig;
 	private RandomGenerator randomGenerator;
 
 	//Statistics
@@ -75,12 +80,10 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	public ModelController(){}
 	
 	public ModelController(BasicConfigurable baseConfig, 
-			VisualizationConfiguration visualizationConfiguration, 
 			RandomGenerator randomGenerator){
 		super(baseConfig);
 		
 		//this.config = configuration;
-		this.visualConfig = visualizationConfiguration;
 		this.randomGenerator = randomGenerator;
 		
 		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(getParameter(SELECTION_MODEL).getString()), randomGenerator);
@@ -88,9 +91,9 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		resetModel();
 		
 		resetStatistics();
-
-		if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),getParameter(GENERATION_COUNT).getInteger(), population, visualizationConfiguration);
+	
+		if(population.getVisualizationKeys().size() != 0){
+			this.visualizer = new RuntimeVisualizer(getTitleString(),getParameter(GENERATION_COUNT).getInteger(), population);
 		}
 		
 	}
@@ -182,12 +185,12 @@ public class ModelController extends BasicConfigurable implements Runnable {
 				iterateGeneration();
 	
 				//Print progress information
-				if(visualConfig.getParameter(VisualizationConfiguration.PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % visualConfig.getParameter(VisualizationConfiguration.PRINT_EACH_X_GENERATIONS).getInteger() == 0){
+				if(getParameter(PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % getParameter(PRINT_EACH_X_GENERATIONS).getInteger() == 0){
 					System.out.println("Run " + currentRun + "/" + getParameter(RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+getParameter(GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
-				if(visualConfig.getParameter(VisualizationConfiguration.ENABLE_TIMESERIES_VISUALIAZATION).getBoolean()){
+				if(visualizer != null){
 					visualizer.update(currentRun, currentGeneration);
 				}
 				

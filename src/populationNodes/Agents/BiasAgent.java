@@ -1,5 +1,6 @@
 package populationNodes.Agents;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
@@ -242,5 +243,10 @@ public class BiasAgent extends AbstractAgent implements Describable{
 	@Override
 	public String getDescription() {
 		return "Unfinished agent that isn't biased in a binary fashion, but proportionally in a number of generations, with learning probability based on the degree";
+	}
+	
+	@Override
+	public ArrayList<Object> getVisualizationKeys() {
+		return null; //TODO
 	}
 }

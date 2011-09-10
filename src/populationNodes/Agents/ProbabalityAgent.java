@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
@@ -164,7 +165,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	}
 	
 	@Override
-	public void draw(Dimension baseDimension, VisualizationType type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
 		
 		Color c;
 		
@@ -226,6 +227,11 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		
 	}
 
+	@Override
+	public ArrayList<Object> getVisualizationKeys() {
+		return new ArrayList<Object>(Arrays.asList(config.getParameter(VISUALIZATION_TYPE).getList()));
+	}
+	
 	@Override
 	public String getDescription() {
 		return "Agent I cant be bothered to describe that can take more than just 2 different types of values for each bias";
