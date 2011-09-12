@@ -41,8 +41,9 @@ public class TimeSeriesVisualization extends JScrollPane {
 		
 		inner = new JPanel();
 		inner.setLayout(new BoxLayout(inner, BoxLayout.Y_AXIS));
-		getViewport().setView(inner);
+
 		configureNewSetTimeseries(0);
+		getViewport().setView(inner);
 		
 	}
 	
@@ -68,7 +69,7 @@ public class TimeSeriesVisualization extends JScrollPane {
 		runs.get(runs.size()-1).updateImage();
 	}
 
-	public void updateModel(PopulationModel model) {//TODO is this needed
+	public void updateModel(Visualizable model) {//TODO is this needed
 		this.model = model;
 	}
 	

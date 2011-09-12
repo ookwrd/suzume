@@ -18,19 +18,16 @@ import javax.swing.border.LineBorder;
 import runTimeVisualization.Visualizable.VisualizationStyle;
 
 @SuppressWarnings("serial")
-public class TimeSeries extends JPanel {
+public class TimeSeriesPanel extends JPanel {
 
 	private static final Dimension verticalBaseDimension = new Dimension(1,1);
 	
 	private final Object key;
-	
 	private Visualizable model;
-	
 	private DrawingLabel label;
-	
 	private boolean isSelected = false;
 	
-	public TimeSeries(Visualizable model, int generationCount, final JButton printButton, Object visualizationKey){
+	public TimeSeriesPanel(Visualizable model, int generationCount, final JButton printButton, Object visualizationKey){
 		this.model = model;
 		
 		key = visualizationKey;
@@ -61,7 +58,7 @@ public class TimeSeries extends JPanel {
 		printButton.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(e.getOppositeComponent() != TimeSeries.this){
+				if(e.getOppositeComponent() != TimeSeriesPanel.this){
 					setSelected(false);
 				}
 			}
