@@ -15,26 +15,28 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import PopulationModel.PopulationModel;
-
 import runTimeVisualization.Visualizable.VisualizationStyle;
 
 @SuppressWarnings("serial")
 public class TimeSeries extends JPanel {
 
-	private Dimension verticalBaseDimension = new Dimension(1,1);
+	private static final Dimension verticalBaseDimension = new Dimension(1,1);
 	
-	private PopulationModel model;
+	private final Object key;
+	
+	private Visualizable model;
 	
 	private DrawingLabel label;
 	
 	private boolean isSelected = false;
 	
-	public TimeSeries(PopulationModel model, int generationCount, final JButton printButton){
+	public TimeSeries(Visualizable model, int generationCount, final JButton printButton, Object visualizationKey){
 		this.model = model;
+		
+		key = visualizationKey;
 
 		setLayout(new BorderLayout());
-		setBorder(new EmptyBorder(5, 0, 5, 0));
+		setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		Dimension singleSize = model.getDimension(verticalBaseDimension, VisualizationStyle.vertical);
 		Dimension panelSize = new Dimension(singleSize.width*generationCount, singleSize.height);
@@ -88,7 +90,7 @@ public class TimeSeries extends JPanel {
 	}
 	
 	public void updateImage(){
-		model.draw(verticalBaseDimension, VisualizationStyle.vertical, label.getGraphics().create());
+		model.draw(verticalBaseDimension, VisualizationStyle.vertical, key, label.getGraphics().create());
 		label.getGraphics().translate(verticalBaseDimension.height, 0);
 		label.repaint();
 	}

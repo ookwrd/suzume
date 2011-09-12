@@ -9,6 +9,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -23,17 +24,22 @@ import runTimeVisualization.Visualizable.VisualizationStyle;
 @SuppressWarnings("serial")
 public class SingleStepVisualization extends JPanel {
 	
-	private static final Dimension layoutBaseDimension = new Dimension(5,5);
+	private static final Dimension layoutBaseDimension = new Dimension(4,4);
 	
-	private PopulationModel model;
+	private final ArrayList<Object> keys;
+	
+	private Visualizable model;
 	
 	private DrawingLabel iconLabel;
 	
 	private boolean isSelected = false;
 
-	public SingleStepVisualization(PopulationModel model, final JButton printButton){
+	public SingleStepVisualization(Visualizable model, final JButton printButton){
 		
 		this.model = model;
+		
+		keys = model.getVisualizationKeys();
+		
 		setLayout(new BorderLayout());
 		
 		Dimension drawSize = model.getDimension(layoutBaseDimension,VisualizationStyle.layout);
@@ -87,7 +93,7 @@ public class SingleStepVisualization extends JPanel {
 	}
 	
 	public void updateImage(){
-		model.draw(layoutBaseDimension, VisualizationStyle.layout, iconLabel.getGraphics().create());
+		model.draw(layoutBaseDimension, VisualizationStyle.layout, keys.get(0), iconLabel.getGraphics().create());
 		repaint();
 	}
 

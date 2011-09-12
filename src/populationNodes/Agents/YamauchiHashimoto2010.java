@@ -3,7 +3,6 @@ import java.awt.Color;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,10 +15,9 @@ import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
-
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Describable {
 
-	enum visualizationTypes1 {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
+	enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
 	
 	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
@@ -34,7 +32,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes1.values(), true));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), true));
 	}
 
 	protected ArrayList<Integer> chromosome;
@@ -202,13 +200,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 	}
 	
 	@Override//TODO this should just choose a color
-	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		
 		Color c;
 		
-		visualizationTypes1 typeString = (visualizationTypes1)config.getParameter(VISUALIZATION_TYPE).getList()[0];//TODO
-		
-		switch (typeString) {
+		switch ((VisualizationTypes)visualizationKey) {
 		case NUMBER_NULLS:
 			int numberOfNulls = new Double(numberOfNulls()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
@@ -275,7 +271,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 			break;
 			
 		default:
-			super.draw(baseDimension, type, g);
+			super.draw(baseDimension, type, visualizationKey, g);
 		}
 		
 	}

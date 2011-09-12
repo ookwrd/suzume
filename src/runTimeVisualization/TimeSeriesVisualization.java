@@ -15,9 +15,11 @@ import PopulationModel.PopulationModel;
 @SuppressWarnings("serial")
 public class TimeSeriesVisualization extends JScrollPane {
 
-	private ArrayList<TimeSeries> series = new ArrayList<TimeSeries>();
+	//private ArrayList<TimeSeries> series = new ArrayList<TimeSeries>();
 	
-	private PopulationModel model;
+	private ArrayList<TimeSeriesSet> runs = new ArrayList<TimeSeriesSet>();
+	
+	private Visualizable model;
 	private int generationCount;
 	
 	private JButton printButton;
@@ -26,7 +28,7 @@ public class TimeSeriesVisualization extends JScrollPane {
 	
 	private int runAtLastUpdate = 0;
 	
-	public TimeSeriesVisualization(PopulationModel model, int generationCount, JButton printButton){
+	public TimeSeriesVisualization(Visualizable model, int generationCount, JButton printButton){
 		super();
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -40,14 +42,14 @@ public class TimeSeriesVisualization extends JScrollPane {
 		inner = new JPanel();
 		inner.setLayout(new BoxLayout(inner, BoxLayout.Y_AXIS));
 		getViewport().setView(inner);
-		configureNewTimeseries();
+		configureNewSetTimeseries(0);
 		
 	}
 	
-	public void configureNewTimeseries(){
-		TimeSeries timeSeries = new TimeSeries(model, generationCount, printButton);
-		series.add(timeSeries);
-		inner.add(timeSeries);
+	public void configureNewSetTimeseries(int runNum){
+		TimeSeriesSet run = new TimeSeriesSet(model, generationCount, runNum, printButton);
+		runs.add(run);
+		inner.add(run);
 		
 		//Scroll to the new panel at the bottom
 		inner.revalidate();
@@ -59,11 +61,11 @@ public class TimeSeriesVisualization extends JScrollPane {
 	public void updateImage(int run){
 		//Is the update the start of a new run visualization?
 		if(this.runAtLastUpdate != run){
-			configureNewTimeseries();
+			configureNewSetTimeseries(run);
 			runAtLastUpdate = run;
 		}
 		
-		series.get(series.size()-1).updateImage();
+		runs.get(runs.size()-1).updateImage();
 	}
 
 	public void updateModel(PopulationModel model) {//TODO is this needed
@@ -71,9 +73,10 @@ public class TimeSeriesVisualization extends JScrollPane {
 	}
 	
 	public BufferedImage getSelected(){
-		for(TimeSeries ts : series){
-			if(ts.isSelected()){
-				return ts.getImage();
+		for(TimeSeriesSet tss : runs){
+			BufferedImage image = tss.getSelected();
+			if(image != null){
+				return image;
 			}
 		}
 		return null;
