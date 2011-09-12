@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +16,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import PopulationModel.PopulationModel;
+import javax.swing.WindowConstants;
 
+import runTimeVisualization.Visualizable.Stoppable;
 
 @SuppressWarnings("serial")
 public class RuntimeVisualizer extends JPanel {
@@ -25,17 +28,12 @@ public class RuntimeVisualizer extends JPanel {
 		
 	private JFrame frame;
 	
-	//Layout Visualization
 	private GeographicVisualization singleStepPanel;
-	
-	//Timeseries Visualization
 	private TimeSeriesVisualization timeSeriesPanel;
-		
-	//Top bar
-	private JButton pausePlayButton;
-	private JButton stepButton;
 	
 	//Bottom bar
+	private JButton pausePlayButton;
+	private JButton stepButton;
 	private JLabel generationCounter;
 	private JLabel runCounter;
 	JButton printSelectedButton;
@@ -43,13 +41,21 @@ public class RuntimeVisualizer extends JPanel {
 	private boolean pauseStatus;
 	private int steps;
 	
-	public RuntimeVisualizer(String title, int generationCount, Visualizable model){
-		
-		setLayout(new BorderLayout());
-		
+	public RuntimeVisualizer(String title, int generationCount, Visualizable model, final Stoppable stoppable){
+		setLayout(new BorderLayout());		
 		frame = new JFrame();
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
+		
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		if(stoppable != null){
+			frame.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e){
+					stoppable.stopRequest();
+				}
+			});
+		}
 		
 		configureBottomBar();
 		
@@ -64,10 +70,6 @@ public class RuntimeVisualizer extends JPanel {
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
-		
-		for(Object key : model.getVisualizationKeys()){
-			System.out.println("Key: " +key);
-		}
 	}
 	
 	private void configureBottomBar(){

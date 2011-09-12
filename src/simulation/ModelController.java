@@ -8,6 +8,7 @@ import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 
 import runTimeVisualization.RuntimeVisualizer;
+import runTimeVisualization.Visualizable.Stoppable;
 import simulation.selectionModels.SelectionModel;
 import simulation.selectionModels.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
@@ -25,7 +26,7 @@ import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
 import populationNodes.Agents.YamauchiHashimoto2010;
 
-public class ModelController extends BasicConfigurable implements Runnable {
+public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
 
 	public static final String AGENT_TYPE = "Agent1";
 	public static final String GENERATION_COUNT = "Number of Generations:";
@@ -77,6 +78,8 @@ public class ModelController extends BasicConfigurable implements Runnable {
 	private int currentRun = 0;
 	private long simulationStart;
 
+	private boolean continueSimulation = true;
+	
 	public ModelController(){}
 	
 	public ModelController(BasicConfigurable baseConfig, 
@@ -93,7 +96,7 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		resetStatistics();
 	
 		if(population.getVisualizationKeys().size() != 0){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),getParameter(GENERATION_COUNT).getInteger(), population);
+			this.visualizer = new RuntimeVisualizer(getTitleString(),getParameter(GENERATION_COUNT).getInteger(), population, this);
 		}
 		
 	}
@@ -180,7 +183,7 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		while(currentRun < getParameter(RUN_COUNT).getInteger()){
 		
 			//Generations
-			while(currentGeneration < getParameter(GENERATION_COUNT).getInteger()){
+			while(continueSimulation && currentGeneration < getParameter(GENERATION_COUNT).getInteger()){
 	
 				iterateGeneration();
 	
@@ -392,9 +395,10 @@ public class ModelController extends BasicConfigurable implements Runnable {
 		ret.setBorder(new TitledBorder("Simulation Configuration"));
 		return ret;
 	}
-	
-   	public static void main(String[] args) {
-	    new Launcher();
+
+	@Override
+	public void stopRequest() {
+		continueSimulation = false;
 	}
 
 }		

@@ -1,6 +1,5 @@
 package AutoConfiguration;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -27,7 +26,6 @@ public class ConfigurationPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-	//	constraints.ipadx = 10;
 		row = 0;
 	}
 
@@ -92,7 +90,6 @@ public class ConfigurationPanel extends JPanel {
 		constraints.weightx = 1;
 		
 		JList list = new JList(values);
-		list.setSelectedIndex(0);
 		add(list, constraints);
 		
 		return list;
