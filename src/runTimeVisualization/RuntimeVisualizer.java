@@ -26,7 +26,7 @@ public class RuntimeVisualizer extends JPanel {
 	private JFrame frame;
 	
 	//Layout Visualization
-	private SingleStepVisualization singleStepPanel;
+	private GeographicVisualization singleStepPanel;
 	
 	//Timeseries Visualization
 	private TimeSeriesVisualization timeSeriesPanel;
@@ -51,11 +51,10 @@ public class RuntimeVisualizer extends JPanel {
 		frame.setTitle(title);
 		frame.setLayout(new BorderLayout());
 		
-		configureTopBar();
 		configureBottomBar();
 		
 		//Geographic visualization
-		singleStepPanel = new SingleStepVisualization(model, printSelectedButton);
+		singleStepPanel = new GeographicVisualization(model, printSelectedButton);
 		add(singleStepPanel, BorderLayout.WEST);
 		
 		//TimeSeries visualization
@@ -71,12 +70,16 @@ public class RuntimeVisualizer extends JPanel {
 		}
 	}
 	
-	private void configureTopBar(){
+	private void configureBottomBar(){
 		
+
+		JPanel bottomBar = new JPanel();
+		bottomBar.setLayout(new BorderLayout());
+		
+		//Pause/Play button
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
-		//Pause/Play button
 		pausePlayButton = new JButton("Pause");
 		pausePlayButton.addActionListener(new ActionListener() {
 			@Override
@@ -89,8 +92,7 @@ public class RuntimeVisualizer extends JPanel {
 					stepButton.setEnabled(true);
 				}
 				pauseStatus = !pauseStatus;
-				steps = 0;
-				
+				steps = 0;	
 			}
 		});
 		buttonPanel.add(pausePlayButton);
@@ -106,13 +108,7 @@ public class RuntimeVisualizer extends JPanel {
 		buttonPanel.add(stepButton);
 		stepButton.setEnabled(false);
 		
-		frame.add(buttonPanel, BorderLayout.NORTH);
-	}
-	
-	private void configureBottomBar(){
-		
-		JPanel bottomBar = new JPanel();
-		bottomBar.setLayout(new BorderLayout());
+		bottomBar.add(buttonPanel,BorderLayout.WEST);
 		
 		JPanel printPanel = new JPanel();
 		printPanel.setLayout(new FlowLayout());
@@ -180,7 +176,7 @@ public class RuntimeVisualizer extends JPanel {
 	 * 
 	 * @param model
 	 */
-	public void updateModel(PopulationModel model){
+	public void updateModel(Visualizable model){
 		singleStepPanel.updateModel(model);
 		timeSeriesPanel.updateModel(model);
 	}

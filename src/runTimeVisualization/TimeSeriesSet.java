@@ -13,7 +13,7 @@ import javax.swing.border.TitledBorder;
 @SuppressWarnings("serial")
 public class TimeSeriesSet extends JPanel {
 
-	private ArrayList<TimeSeries> series = new ArrayList<TimeSeries>();
+	private ArrayList<TimeSeriesPanel> series = new ArrayList<TimeSeriesPanel>();
 	
 	public TimeSeriesSet(Visualizable model, int generationCount, int run, final JButton printButton){
 
@@ -26,20 +26,20 @@ public class TimeSeriesSet extends JPanel {
 			overlay.add(test);
 			add(overlay);
 			
-			TimeSeries ts = new TimeSeries(model, generationCount, printButton, key);
+			TimeSeriesPanel ts = new TimeSeriesPanel(model, generationCount, printButton, key);
 			series.add(ts);
 			add(ts);
 		}
 	}
 	
 	public void updateImage(){
-		for(TimeSeries ts : series){
+		for(TimeSeriesPanel ts : series){
 			ts.updateImage();
 		}
 	}
 	
 	public BufferedImage getSelected(){
-		for(TimeSeries tss : series){
+		for(TimeSeriesPanel tss : series){
 			if(tss.isSelected()){
 				return tss.getImage();
 			}
