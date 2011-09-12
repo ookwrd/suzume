@@ -2,6 +2,8 @@ package simulation.selectionModels;
 
 import java.util.ArrayList;
 
+import PopulationModel.Node;
+
 import populationNodes.Agents.Agent;
 
 public class RandomProbabilitySelectionModel extends
@@ -11,10 +13,10 @@ public class RandomProbabilitySelectionModel extends
 	public static final int upperFitness = 13;
 	
 
-	public ArrayList<Agent> selectAgents(ArrayList<Agent> agents, int number){
+	public ArrayList<Node> selectAgents(ArrayList<Node> agents, int number){
 		
-		for(Agent agent : agents){
-			agent.setFitness(lowerFitness + randomGenerator.randomInt(upperFitness-lowerFitness));
+		for(Node agent : agents){
+			((Agent)agent).setFitness(lowerFitness + randomGenerator.randomInt(upperFitness-lowerFitness));
 		}
 		
 		return super.selectAgents(agents, number);

@@ -78,6 +78,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private int currentRun = 0;
 	private long simulationStart;
 
+	//Stoppable
 	private boolean continueSimulation = true;
 	
 	public ModelController(){}
@@ -108,7 +109,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		//TODO temp hack for setting learning distance
 		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, getParameter(LEARN_TO_DISTANCE));
 		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, getParameter(COMMUNICATE_TO_DISTANCE));
-		
 		
 		if(visualizer!=null){
 			visualizer.updateModel(population);
@@ -166,10 +166,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		runSimulation();
 
 		plotStatistics();
-		
-		
-	//	clustering(geneGrammarMatches);//TODO add trimming to clustering.
-		
 		
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
 	}
@@ -285,17 +281,13 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 */
 	private ArrayList<Node> selection(){
 		
-		//TODO make selection dependent on the GetPossibleParents from the populationModel
-		
-		ArrayList<Agent> selected = selectionModel.selectAgents(population.getCurrentGeneration(), getParameter(POPULATION_SIZE).getInteger()*2);
-
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
-		int i = 0;
-		while(newGenerationAgents.size() < getParameter(POPULATION_SIZE).getInteger()){
-			Agent parent1 = selected.get(i++);
-			Agent parent2 = selected.get(i++);
-
-			newGenerationAgents.add(NodeFactory.constructPopulationNode(parent1, parent2, randomGenerator));
+		
+		for(Agent agent : population.getCurrentGeneration()){
+			ArrayList<Node> possibleParents = population.getPossibleParents(agent);
+			ArrayList<Node> parents = selectionModel.selectAgents(possibleParents, 2);
+			
+			newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
 		}
 
 		return newGenerationAgents;
@@ -313,7 +305,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				aggregator.collectStatistics(agent);
 			}
 		}
-}
+		
+	}
 	
 	/**
 	 * 

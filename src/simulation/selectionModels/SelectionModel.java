@@ -2,7 +2,8 @@ package simulation.selectionModels;
 
 import java.util.ArrayList;
 
-import populationNodes.Agents.Agent;
+import PopulationModel.Node;
+
 import simulation.RandomGenerator;
 
 public abstract class SelectionModel {
@@ -15,7 +16,7 @@ public abstract class SelectionModel {
 		this.randomGenerator = randomGenerator;
 	}
 	
-	public abstract ArrayList<Agent> selectAgents(ArrayList<Agent> agents, int number);
+	public abstract ArrayList<Node> selectAgents(ArrayList<Node> agents, int number);
 	
 	public static SelectionModel constructSelectionModel(SelectionModels type, RandomGenerator randomGenerator){
 		SelectionModel retVal;
