@@ -266,7 +266,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 
 	@Override
 	public ArrayList<Node> getPossibleParents(Node agent) {
-		return previousGeneration;
+		return currentGeneration;
 	}//TODO switch out for a graphbased implemenation
 
 	@Override
