@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -60,7 +58,6 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 	private static boolean iconsLoaded = false; 
 	
 	private JFreeChart chart;
-	private JPanel interPanel;
 	private ZoomPanel chartImagePanel;
 	private JPanel buttonPanel;
 	public JPanel editPanel;
