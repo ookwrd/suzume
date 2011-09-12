@@ -86,10 +86,4 @@ public class SimpleClustering extends Clustering {
 		}
 		return results;
 	}
-
-	public static void main(String[] args) {
-		//int r = 47 / 10;
-		//System.out.println("result=" + r);
-		ModelController.main(null);
-	}
 }
