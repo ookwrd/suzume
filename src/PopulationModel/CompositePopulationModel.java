@@ -200,14 +200,14 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		
 	
 	@Override
-	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		switch(type){
 		case layout:
-			drawLayout(baseDimension, type, g);
+			drawLayout(baseDimension, type, visualizationKey, g);
 			break;
 			
 		case vertical:
-			drawVertical(baseDimension, type, g);
+			drawVertical(baseDimension, type, visualizationKey, g);
 			break;
 			
 		default:
@@ -216,7 +216,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		}
 	}
 	
-	private void drawLayout(Dimension baseDimension, VisualizationStyle type, Graphics g){
+	private void drawLayout(Dimension baseDimension, VisualizationStyle type, Object key, Graphics g){
 		int size = currentGeneration.size();
 		Dimension thisDimension = getDimension(baseDimension, type);
 		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
@@ -229,37 +229,37 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		//Top edge
 		int i;
 		for(i = 0; i < agentsPerSection; i++){
-			previousGeneration.get(i).draw(baseDimension,type,g);
+			previousGeneration.get(i).draw(baseDimension,type,key,g);
 			g.translate(agentDimension.width, 0);
 		}
 		
 		//right edge
 		for(; i < 2*agentsPerSection; i++){
-			previousGeneration.get(i).draw(baseDimension,type,g);
+			previousGeneration.get(i).draw(baseDimension,type,key,g);
 			g.translate(0, agentDimension.height);
 		}
 		
 		//Bottom edge
 		for(; i < 3*agentsPerSection; i++){
-			previousGeneration.get(i).draw(baseDimension,type,g);
+			previousGeneration.get(i).draw(baseDimension,type,key,g);
 			g.translate(-agentDimension.width, 0);
 		}
 		
 		//Left edge
 		for(; i < size; i++){
 			//TODO reset the translate point.
-			previousGeneration.get(i).draw(baseDimension,type,g);
+			previousGeneration.get(i).draw(baseDimension,type,key,g);
 			g.translate(0, -agentDimension.height);
 		}
 	}
 	
 
-	private void drawVertical(Dimension baseDimension, VisualizationStyle type, Graphics g){
+	private void drawVertical(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		int size = previousGeneration.size();
 		Dimension agentDimension = previousGeneration.get(0).getDimension(baseDimension, type);
 
 		for(int i = 0; i < size; i++){
-			previousGeneration.get(i).draw(baseDimension, type, g);
+			previousGeneration.get(i).draw(baseDimension, type, visualizationKey, g);
 			g.translate(0, agentDimension.height);
 		}
 	}

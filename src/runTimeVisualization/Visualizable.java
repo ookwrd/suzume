@@ -11,6 +11,6 @@ public interface Visualizable {
 	public ArrayList<Object> getVisualizationKeys();
 	
 	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type);
-	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g);
+	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualiztionKey, Graphics g);
 	
 }

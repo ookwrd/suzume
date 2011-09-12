@@ -33,7 +33,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes, true));
 	}
 	
 	protected ArrayList<Integer> chromosome;
@@ -165,29 +165,29 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	}
 	
 	@Override
-	public void draw(Dimension baseDimension, VisualizationStyle type, Graphics g){
+	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		
 		Color c;
 		
-		if(config.getParameter(VISUALIZATION_TYPE).getString().equals("numberNulls")){
+		if(visualizationKey.equals("numberNulls")){
 			int numberOfNulls = new Double(numberOfNulls()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("genotype")){
+		}else if (visualizationKey.equals("genotype")){
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("phenotype")){
+		}else if (visualizationKey.equals("phenotype")){
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-		} else if (config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord") || config.getParameter(VISUALIZATION_TYPE).getString().equals("singleGene")) {
+		} else if (visualizationKey.equals("singleWord") || visualizationKey.equals("singleGene")) {
 		
 			int value;
-			if(config.getParameter(VISUALIZATION_TYPE).getString().equals("singleWord")){
+			if(visualizationKey.equals("singleWord")){
 				value = grammar.get(0);
 			}else{
 				value = chromosome.get(0);

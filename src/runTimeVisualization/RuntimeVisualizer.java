@@ -43,7 +43,7 @@ public class RuntimeVisualizer extends JPanel {
 	private boolean pauseStatus;
 	private int steps;
 	
-	public RuntimeVisualizer(String title, int generationCount, PopulationModel model){
+	public RuntimeVisualizer(String title, int generationCount, Visualizable model){
 		
 		setLayout(new BorderLayout());
 		
@@ -54,7 +54,7 @@ public class RuntimeVisualizer extends JPanel {
 		configureTopBar();
 		configureBottomBar();
 		
-		//Layout visualization
+		//Geographic visualization
 		singleStepPanel = new SingleStepVisualization(model, printSelectedButton);
 		add(singleStepPanel, BorderLayout.WEST);
 		
@@ -62,11 +62,13 @@ public class RuntimeVisualizer extends JPanel {
 		timeSeriesPanel = new TimeSeriesVisualization(model, generationCount, printSelectedButton);
 		add(timeSeriesPanel, BorderLayout.CENTER);
 		
-		
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
 		
+		for(Object key : model.getVisualizationKeys()){
+			System.out.println("Key: " +key);
+		}
 	}
 	
 	private void configureTopBar(){
