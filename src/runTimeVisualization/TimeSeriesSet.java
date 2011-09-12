@@ -1,5 +1,6 @@
 package runTimeVisualization;
 
+import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -20,6 +21,11 @@ public class TimeSeriesSet extends JPanel {
 		setBorder(new TitledBorder("Run " + run));
 		
 		for(Object key : model.getVisualizationKeys()){	
+			JPanel overlay = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));	
+			JLabel test = new JLabel(key + ":");
+			overlay.add(test);
+			add(overlay);
+			
 			TimeSeries ts = new TimeSeries(model, generationCount, printButton, key);
 			series.add(ts);
 			add(ts);
