@@ -14,11 +14,10 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	private int id;
 	protected RandomGenerator randomGenerator;
-	protected NodeConfiguration config;//TODO i think this is now redundent as abstract node extends basic configurable
-	
+
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
-		this.config = config;
+		initialize(config);
 		this.id = id;
 		this.randomGenerator = randomGenerator;
 	}
@@ -30,12 +29,7 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	@Override
 	public String getName(){
-		return config.getParameter(NodeConfiguration.NODE_TYPE).toString();
-	}
-	
-	@Override
-	public NodeConfiguration getConfiguration(){
-		return config;
+		return getParameter(NodeConfiguration.NODE_TYPE).toString();
 	}
 	
 	@Override

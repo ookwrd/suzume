@@ -20,7 +20,7 @@ public class NodeConfiguration extends BasicConfigurable {
 	}
 
 	public String toString(){
-		return "Agent Type: " + getParameter(NODE_TYPE).getString();
+		return "Agent Type: " + getParameter(NODE_TYPE);
 	}
 
 }

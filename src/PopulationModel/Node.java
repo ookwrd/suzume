@@ -19,7 +19,6 @@ public interface Node extends Visualizable, Configurable {
 	
 	//General Properties
 	public String getName();
-	public NodeConfiguration getConfiguration();
 	public int getId();
 	
 	//Language Learning
