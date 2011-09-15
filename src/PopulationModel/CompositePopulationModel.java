@@ -27,6 +27,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public static final String POPULATION_SIZE = "Population Size";
 	public static final String LEARN_TO_DISTANCE = "Learn from agents to distance:";
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
+	public static final String REPRODUCE_TO_DISTANCE = "Parents selected out to distance:";
 	
 	{
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
@@ -36,6 +37,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		setDefaultParameter(SUB_NODE, new ConfigurationParameter(new YamauchiHashimoto2010()));
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(1));
 	}
 	
 	private Graph learningGraph;
@@ -138,6 +140,47 @@ public class CompositePopulationModel extends AbstractNode implements Population
 
 		return retValAgents;
 	}
+	
+
+	@Override
+	public ArrayList<Node> getPossibleParents(Node agent) {
+		
+		if(getParameter(REPRODUCE_TO_DISTANCE).getInteger() < 0){
+			return currentGeneration;
+		}else{
+
+			int distance = getParameter(REPRODUCE_TO_DISTANCE).getInteger();
+			
+			int location = currentGeneration.indexOf(agent);
+
+			ArrayList<Node> retValAgents = new ArrayList<Node>();
+
+			//add the ancestor at the same point as the specified agent
+			retValAgents.add(currentGeneration.get(location));
+
+			for (int i = 1; i <= distance; i++) {
+				//Add pair of agents distance i from the central agent
+				
+				int neighbour1 = location - i;
+				int neighbour2 = location + i;
+
+				//wrap around the end of arrays
+				if (neighbour1 < 0) {
+					neighbour1 = currentGeneration.size() + neighbour1;
+				}
+				if (neighbour2 >= currentGeneration.size()) {
+					neighbour2 = neighbour2 - currentGeneration.size();
+				}
+
+				retValAgents.add(currentGeneration.get(neighbour1));
+				retValAgents.add(currentGeneration.get(neighbour2));
+
+			}
+
+			return retValAgents;
+		}
+	}//TODO switch out for a graphbased implemenation
+
 
 	@Override
 	public ArrayList<Agent> getAncestorGeneration() {
@@ -263,11 +306,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			g.translate(0, agentDimension.height);
 		}
 	}
-
-	@Override
-	public ArrayList<Node> getPossibleParents(Node agent) {
-		return currentGeneration;
-	}//TODO switch out for a graphbased implemenation
 
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){

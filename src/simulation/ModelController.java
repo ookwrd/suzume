@@ -36,6 +36,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	public static final String LEARN_TO_DISTANCE = "Max learning distance:";//TODO remove these should be recursive
 	public static final String COMMUNICATE_TO_DISTANCE = "Max Communication distance:";
+	public static final String REPRODUCE_TO_DISTANCE = "Max reproduction distance:";
+	
 	public static final String SELECTION_MODEL = "Selection model:";
 	
 	public static final String PRINT_GENERATION_COUNT = "Print generation count?";
@@ -52,6 +54,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(-1));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
 		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
@@ -108,7 +111,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		//TODO temp hack for setting learning distance
 		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, getParameter(LEARN_TO_DISTANCE));
 		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, getParameter(COMMUNICATE_TO_DISTANCE));
-		
+		population.setParameter(CompositePopulationModel.REPRODUCE_TO_DISTANCE, getParameter(REPRODUCE_TO_DISTANCE));
+	
 		if(visualizer!=null){
 			visualizer.updateModel(population);
 		}
