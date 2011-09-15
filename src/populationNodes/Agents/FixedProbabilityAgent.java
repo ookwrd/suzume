@@ -25,29 +25,29 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Desc
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < config.getParameter(LEARNING_COST_ON_MATCH).getInteger()){
+			if(learningResource < getParameter(LEARNING_COST_ON_MATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
-			if(randomGenerator.random() < config.getParameter(MATCH_LEARN_PROB).getDouble()){
+			if(randomGenerator.random() < getParameter(MATCH_LEARN_PROB).getDouble()){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= config.getParameter(LEARNING_COST_ON_MATCH).getInteger();
-			}else if (config.getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){//still subtract
-				learningResource -= config.getParameter(LEARNING_COST_ON_MATCH).getInteger();
+				learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
+			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){//still subtract
+				learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
 			}
 			
 		}else{//Doesn't match this agents UG
-			if(learningResource < config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
+			if(learningResource < getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
-			if(randomGenerator.random() < config.getParameter(NON_MATCH_LEARN_PROB).getDouble()){
+			if(randomGenerator.random() < getParameter(NON_MATCH_LEARN_PROB).getDouble()){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
-			}else if (config.getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){
-				learningResource -= config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
+				learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
+			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){
+				learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
 			}
 		}
 		

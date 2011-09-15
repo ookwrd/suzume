@@ -17,7 +17,9 @@ public class BasicConfigurable implements Configurable {
 		this.parameters = parameters;
 	}
 	
-	//TODO initialization method suitable for the agents to use
+	public void initialize(BasicConfigurable source){
+		this.parameters = source.parameters;
+	}
 	
 	@Override
 	public ConfigurationParameter getParameter(String key){

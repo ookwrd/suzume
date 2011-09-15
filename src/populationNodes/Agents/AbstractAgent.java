@@ -48,7 +48,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	public Double numberOfNulls() {
 		double count = 0;
-		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}

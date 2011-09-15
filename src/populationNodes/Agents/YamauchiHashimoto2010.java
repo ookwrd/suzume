@@ -57,27 +57,27 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
-		super.initializeAgent(parent1.getConfiguration(),id,randomGenerator);
-		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		super.initializeAgent(parent1,id,randomGenerator);
+		chromosome = new ArrayList<Integer>(getParameter(NUMBER_OF_MEANINGS).getInteger());
 
 
-		learningResource = config.getParameter(LEARNING_RESOURCE).getInteger();
+		learningResource = getParameter(LEARNING_RESOURCE).getInteger();
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < config.getParameter(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < config.getParameter(MUTATION_RATE).getDouble()){
+		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
+			if(randomGenerator.random() < getParameter(MUTATION_RATE).getDouble()){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
 		}
@@ -110,7 +110,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
-			if(randomGenerator.random() < config.getParameter(INVENTION_PROBABILITY).getDouble()){
+			if(randomGenerator.random() < getParameter(INVENTION_PROBABILITY).getDouble()){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -146,23 +146,23 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < config.getParameter(LEARNING_COST_ON_MATCH).getInteger()){
+			if(learningResource < getParameter(LEARNING_COST_ON_MATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= config.getParameter(LEARNING_COST_ON_MATCH).getInteger();
+			learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
 			
 		}else{//Doesn't match this agents UG
 			//TODO what do we do if we can't afford this anymore? Check with jimmy
-			if(learningResource < config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
+			if(learningResource < getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= config.getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
+			learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
 			
 		}
 		
@@ -178,7 +178,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		
 		double count = 0;
 		
-		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
@@ -278,7 +278,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 
 	@Override
 	public ArrayList<Object> getVisualizationKeys() {
-		return new ArrayList<Object>(Arrays.asList(config.getParameter(VISUALIZATION_TYPE).getList()));
+		return new ArrayList<Object>(Arrays.asList(getParameter(VISUALIZATION_TYPE).getList()));
 	}	
 
 	@Override

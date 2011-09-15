@@ -17,7 +17,6 @@ import tools.Pair;
 import AutoConfiguration.BasicConfigurable;
 import AutoConfiguration.BasicConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
-import Launcher.Launcher;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
@@ -43,9 +42,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
 	{
-		System.out.println("SimulationConfig" + new YamauchiHashimoto2010().getConfiguration());
+		System.out.println("SimulationConfig" + new YamauchiHashimoto2010());
 		
-		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new YamauchiHashimoto2010().getConfiguration()));
+		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new YamauchiHashimoto2010()));
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));

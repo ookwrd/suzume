@@ -52,29 +52,29 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {
-		super.initializeAgent(parentA.getConfiguration(), id, randomGenerator);
+		super.initializeAgent((ProbabalityAgent)parentA, id, randomGenerator);
 		
 		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
 		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;
 		
-		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<Integer>(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < config.getParameter(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < config.getParameter(MUTATION_RATE).getDouble()){
-				chromosome.set(j, randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
+		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
+			if(randomGenerator.random() < getParameter(MUTATION_RATE).getDouble()){
+				chromosome.set(j, randomGenerator.randomInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
@@ -94,10 +94,10 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	@Override
 	public void invent() {
 		
-		int chances = config.getParameter(INVENTION_CHANCES).getInteger();
+		int chances = getParameter(INVENTION_CHANCES).getInteger();
 		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
-			if(randomGenerator.random() < config.getParameter(INVENTION_PROBABILITY).getDouble()){
+			if(randomGenerator.random() < getParameter(INVENTION_PROBABILITY).getDouble()){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -112,7 +112,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
+				grammar.set(index, randomGenerator.randomInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
@@ -127,13 +127,13 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
 
-			if(randomGenerator.random() < config.getParameter(LEARNING_PROBABILITY_ON_MATCH).getDouble()){
+			if(randomGenerator.random() < getParameter(LEARNING_PROBABILITY_ON_MATCH).getDouble()){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
 		}else{//Doesn't match this agents UG
 
-			if(randomGenerator.random() < config.getParameter(LEARNING_PROBABILITY_ON_MISMATCH).getDouble()){
+			if(randomGenerator.random() < getParameter(LEARNING_PROBABILITY_ON_MISMATCH).getDouble()){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
@@ -146,7 +146,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	public Double geneGrammarMatch() {
 		double count = 0;
 		
-		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
@@ -229,7 +229,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 
 	@Override
 	public ArrayList<Object> getVisualizationKeys() {
-		return new ArrayList<Object>(Arrays.asList(config.getParameter(VISUALIZATION_TYPE).getList()));
+		return new ArrayList<Object>(Arrays.asList(getParameter(VISUALIZATION_TYPE).getList()));
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import populationNodes.Utterance;
 
 import simulation.RandomGenerator;
 
+import AutoConfiguration.BasicConfigurable;
 import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
@@ -67,27 +68,27 @@ public class BiasAgent extends AbstractAgent implements Describable{
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
 		BiasAgent parent1 = (BiasAgent)parentA;
 		BiasAgent parent2 = (BiasAgent)parentB;
-		super.initializeAgent(parent1.getConfiguration(), id, randomGenerator);
-		initializeParameters(config);
+		super.initializeAgent(parent1, id, randomGenerator);
+		initializeParameters((BiasAgent)parentA);
 		
-		chromosome = new ArrayList<double[]>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<double[]>(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		
 		this.randomGenerator = randomGenerator;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < config.getParameter(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
+		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
 			if(randomGenerator.random() < mutationRate){
 				double[] gene = chromosome.get(j).clone();
 				
@@ -128,7 +129,7 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		}
 	}
 	
-	private void initializeParameters(NodeConfiguration config){
+	private void initializeParameters(BasicConfigurable config){
 		dimensions = config.getParameter("Dimensions").getInteger();
 		mutationRate = config.getParameter("Mutation rate").getDouble();
 		inventionProbability= config.getParameter("Invention Probability").getDouble();
@@ -195,13 +196,13 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		System.out.println("Agent " + getId() + ":");
 		for(int j = 0; j < dimensions; j++){
 			System.out.print("Dimension " + j + ":\t");
-			for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) {
+			for (int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) {
 				System.out.print(chromosome.get(i)[j] + "\t");
 			}
 			System.out.println();
 		}
 		System.out.print("Grammar:\t");
-		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			System.out.print(grammar.get(i) + "\t\t\t");
 		}
 		
@@ -218,7 +219,7 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		
 		double antiCount = 0;
 		
-		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
 			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
 				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];
