@@ -43,17 +43,17 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 			
 			switch (parameter.type) {
 			case INTEGER:
-				JTextField field = addField(key, parameter.getInteger().toString());
+				JTextField field = addField(key, parameter.toString());
 				components.put(key, field);
 				break;
 				
 			case DOUBLE:
-				JTextField field1 = addField(key, parameter.getDouble().toString());
+				JTextField field1 = addField(key, parameter.toString());
 				components.put(key, field1);
 				break;
 				
 			case LONG:
-				JTextField field3 = addField(key, parameter.getLong().toString());
+				JTextField field3 = addField(key, parameter.toString());
 				components.put(key, field3);
 				break;
 				
@@ -63,7 +63,7 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 				break;
 				
 			case STRING:
-				JTextField field2 = addField(key, parameter.getString());
+				JTextField field2 = addField(key, parameter.toString());
 				components.put(key, field2);
 				break;
 				
