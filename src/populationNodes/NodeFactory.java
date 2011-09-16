@@ -43,15 +43,6 @@ public class NodeFactory {
 		
 	}
 	
-	public static Node constructPopulationNode(NodeConfiguration nodeConfig){
-		
-		Node node = constructUninitializedNode(
-				 (NodeType) nodeConfig.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
-		
-		return node;
-		
-	}
-	
 	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
 		NodeType type = (NodeType) parentA.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue();

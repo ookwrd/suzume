@@ -12,9 +12,4 @@ public class GraphConfiguration extends BasicConfigurable {
 	
 	public GraphConfiguration(){}
 	
-	public GraphConfiguration(GraphType type, BasicConfigurable baseConfig){
-		super(baseConfig);
-		this.type = type;
-	}
-	
 }

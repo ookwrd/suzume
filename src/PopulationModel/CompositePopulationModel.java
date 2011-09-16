@@ -9,6 +9,7 @@ import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.Utterance;
+import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
 import populationNodes.Agents.YamauchiHashimoto2010;
 
@@ -316,21 +317,17 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
-			
-			Node node = NodeFactory.constructPopulationNode(sub);
+			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
 			node.initializeAgent(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
-			
 		}
 		currentGeneration = nodes;
 		
 		nodes = new ArrayList<Node>();
 		for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
-			
-			Node node = NodeFactory.constructPopulationNode(sub);
+			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
 			node.initializeAgent(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
-			
 		}
 		previousGeneration = nodes;
 	

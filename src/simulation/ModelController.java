@@ -139,7 +139,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		if(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){
 			
-			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(nodeConfiguration);
+			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
 			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 			population = node;
 			
@@ -150,7 +150,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			ArrayList<Node> nodes = new ArrayList<Node>();
 			for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
 				
-				Node node = NodeFactory.constructPopulationNode(nodeConfiguration);
+				Node node = NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
 				node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 				nodes.add(node);
 			}
