@@ -97,21 +97,6 @@ public class ConfigurationParameter {
 		return (String)value;
 	}
 	
-	public Object[] getList(){
-		assert(type == ConfigurationParameterType.LIST);
-		return (Object[])value;
-	}
-	
-	public Object getSelectedValue(){
-		assert(type == ConfigurationParameterType.LIST && singleSelection);
-		return ((Object[])selected)[0];
-	}
-	
-	public Object[] getSelectedValues(){
-		assert(type == ConfigurationParameterType.LIST);
-		return (Object[])selected;
-	}
-	
 	public Integer getInteger(){
 		assert(type == ConfigurationParameterType.INTEGER);
 		return (Integer)value;
@@ -135,6 +120,21 @@ public class ConfigurationParameter {
 	public NodeConfiguration getNodeConfiguration(){
 		assert(type == ConfigurationParameterType.NODE);
 		return (NodeConfiguration)value;
+	}
+	
+	public Object[] getList(){
+		assert(type == ConfigurationParameterType.LIST);
+		return (Object[])value;
+	}
+	
+	public Object getSelectedValue(){
+		assert(type == ConfigurationParameterType.LIST && singleSelection);
+		return ((Object[])selected)[0];
+	}
+	
+	public Object[] getSelectedValues(){
+		assert(type == ConfigurationParameterType.LIST);
+		return (Object[])selected;
 	}
 	
 	@Override

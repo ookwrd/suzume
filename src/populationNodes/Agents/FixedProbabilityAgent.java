@@ -25,12 +25,12 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Desc
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < getParameter(LEARNING_COST_ON_MATCH).getInteger()){
+			if(learningResource < getIntegerParameter(LEARNING_COST_ON_MATCH)){
 				learningResource = 0;
 				return;
 			}
 			
-			if(randomGenerator.random() < getParameter(MATCH_LEARN_PROB).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(MATCH_LEARN_PROB)){
 				grammar.set(u.meaning, u.signal);
 				learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
 			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){//still subtract

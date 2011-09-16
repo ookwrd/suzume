@@ -43,7 +43,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(config, id, randomGenerator);
 
-		setFitness(getParameter(BASE_FITNESS).getInteger());;
+		setFitness(getIntegerParameter(BASE_FITNESS));;
 		
 		grammar = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
 		for (int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
@@ -57,7 +57,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	public Double numberOfNulls() {
 		double count = 0;
-		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}

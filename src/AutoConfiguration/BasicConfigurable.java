@@ -1,9 +1,9 @@
  package AutoConfiguration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+
+import populationNodes.NodeConfiguration;
 
 import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
 
@@ -28,6 +28,34 @@ public class BasicConfigurable implements Configurable {
 	@Override
 	public ConfigurationParameter getParameter(String key){
 		return parameters.get(key);
+	}
+	
+	protected String getStringParameter(String key){
+		return getParameter(key).getString();
+	}
+	
+	protected Integer getIntegerParameter(String key){
+		return getParameter(key).getInteger();
+	}
+	
+	protected Boolean getBooleanParameter(String key){
+		return getParameter(key).getBoolean();
+	}
+	
+	protected Double getDoubleParameter(String key){
+		return getParameter(key).getDouble();
+	}
+	
+	protected Long getLongParameter(String key){
+		return getParameter(key).getLong();
+	}
+	
+	protected Object[] getListParameter(String key){
+		return getParameter(key).getSelectedValues();
+	}
+	
+	protected NodeConfiguration getNodeParameter(String key){
+		return getParameter(key).getNodeConfiguration();
 	}
 	
 	@Override

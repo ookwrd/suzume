@@ -42,12 +42,12 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 		
-		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
-		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
+		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
+		for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomBoolean()?0:1);
 		}
 
-		learningResource = config.getParameter(LEARNING_RESOURCE).getInteger();
+		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 	}
 	
 	@Override
@@ -57,7 +57,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
 		super.initializeAgent(parent1,id,randomGenerator);
-		chromosome = new ArrayList<Integer>(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 
 
 		learningResource = getParameter(LEARNING_RESOURCE).getInteger();
@@ -76,7 +76,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		
 		//Mutation
 		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < getParameter(MUTATION_RATE).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(MUTATION_RATE)){
 				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
 			}
 		}
@@ -109,7 +109,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			
 			learningResource--;
-			if(randomGenerator.random() < getParameter(INVENTION_PROBABILITY).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(INVENTION_PROBABILITY)){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -145,7 +145,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-			if(learningResource < getParameter(LEARNING_COST_ON_MATCH).getInteger()){
+			if(learningResource < getIntegerParameter(LEARNING_COST_ON_MATCH)){
 				learningResource = 0;
 				return;
 			}
@@ -177,7 +177,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		
 		double count = 0;
 		
-		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
