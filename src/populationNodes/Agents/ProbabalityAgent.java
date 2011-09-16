@@ -24,7 +24,6 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	private static final String MUTATION_RATE = "Mutation Rate";
 	private static final String INVENTION_PROBABILITY = "Invention Probability";
 	private static final String INVENTION_CHANCES = "Invention Chances";
-	private static final String VISUALIZATION_TYPE = "Visualization Type";
 
 	{
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
@@ -33,7 +32,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes, true));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
 	}
 	
 	protected ArrayList<Integer> chromosome;
@@ -225,11 +224,6 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		g.setColor(c);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 		
-	}
-
-	@Override
-	public ArrayList<Object> getVisualizationKeys() {
-		return new ArrayList<Object>(Arrays.asList(getParameter(VISUALIZATION_TYPE).getList()));
 	}
 	
 	@Override

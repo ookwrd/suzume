@@ -31,7 +31,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), true));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values()));
 	}
 
 	protected ArrayList<Integer> chromosome;
@@ -279,11 +279,6 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 		}
 		
 	}
-
-	@Override
-	public ArrayList<Object> getVisualizationKeys() {
-		return new ArrayList<Object>(Arrays.asList(getParameter(VISUALIZATION_TYPE).getList()));
-	}	
 
 	@Override
 	public String getDescription() {

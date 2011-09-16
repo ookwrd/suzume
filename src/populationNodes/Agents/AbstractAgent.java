@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
@@ -28,7 +29,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	{
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), true));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
 	}
 	
 	private double fitness;
@@ -192,4 +193,9 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	public abstract  Double learningIntensity(); //TODO how do i make this more general??
 	public abstract Object getGenotype();//TODO get rid of this
 
+	@Override
+	public ArrayList<Object> getVisualizationKeys() {
+		return new ArrayList<Object>(Arrays.asList(getParameter(VISUALIZATION_TYPE).getSelectedValues()));
+	}	
+	
 }
