@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import AutoConfiguration.BasicConfigurationPanel;
+import AutoConfiguration.ConfigurationPanel;
 
 import simulation.ModelController;
 import simulation.RandomGenerator;
@@ -19,8 +19,8 @@ public class Launcher extends JPanel {
 
 	private JFrame window;
 	
-	private BasicConfigurationPanel randomOptions;
-	private BasicConfigurationPanel modelOptions;
+	private ConfigurationPanel randomOptions;
+	private ConfigurationPanel modelOptions;
 	
 	private JPanel menuBar;
 	private JButton createButton;
