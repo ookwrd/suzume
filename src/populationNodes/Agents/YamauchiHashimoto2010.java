@@ -17,9 +17,8 @@ import simulation.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Describable {
 
-	enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
+	private enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
 	
-	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
 	protected static final String MUTATION_RATE = "Mutation Rate";
 	protected static final String LEARNING_RESOURCE = "Learning Resource";
@@ -202,6 +201,11 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 	@Override//TODO this should just choose a color
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		
+		if(!(visualizationKey instanceof VisualizationTypes)){
+			super.draw(baseDimension, type, visualizationKey, g);
+			return;
+		}
+		
 		Color c;
 		
 		switch ((VisualizationTypes)visualizationKey) {
@@ -271,7 +275,7 @@ public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Descr
 			break;
 			
 		default:
-			super.draw(baseDimension, type, visualizationKey, g);
+			System.err.println("Unrecognized Visualization type in YamauchiHashimoto2010");
 		}
 		
 	}

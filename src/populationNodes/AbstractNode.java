@@ -39,7 +39,7 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
-		System.out.println("Abstract Node: This method shouldnt be reached.");
+		System.out.println("Abstract Node: Method draw() shouldnt be reached.");
 		g.setColor(Color.green);
 		g.drawRect(0, 0, baseDimension.width, baseDimension.height);
 	}
