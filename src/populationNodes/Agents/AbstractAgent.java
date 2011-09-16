@@ -1,5 +1,8 @@
 package populationNodes.Agents;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import populationNodes.AbstractNode;
@@ -13,6 +16,10 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
+	protected static final String VISUALIZATION_TYPE = "Visualization Type";
+	
+	private enum VisualizationTypes {FITNESS}
+	
 	public static final String FITNESS_STATISTICS = "Fitness";
 	public static final String BASE_FITNESS = "Base fitness value:";
 	
@@ -21,6 +28,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	{
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), true));
 	}
 	
 	private double fitness;
@@ -105,6 +113,29 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		ArrayList<Agent> retAgents = new ArrayList<Agent>();
 		retAgents.add(this);
 		return retAgents;
+	}
+	
+	@Override
+	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
+		
+		if(!(visualizationKey instanceof VisualizationTypes)){
+			super.draw(baseDimension, type, visualizationKey, g);
+			return;
+		}
+		
+		Color c;
+		
+		switch ((VisualizationTypes)visualizationKey) {
+		case FITNESS:
+			int fitness = new Double(getFitness()).intValue();
+			c = new Color(fitness*8, fitness*8, 0);
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+
+		default:
+			System.err.println("Unrecognized Visualization type in AbstractAgent");
+		}
 	}
 	
 	@Override

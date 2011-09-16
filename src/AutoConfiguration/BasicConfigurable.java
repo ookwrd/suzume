@@ -3,6 +3,8 @@
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
+
 public class BasicConfigurable implements Configurable {
 
 	private LinkedHashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();
@@ -35,6 +37,15 @@ public class BasicConfigurable implements Configurable {
 	public void setDefaultParameter(String key, ConfigurationParameter parameter){
 		if(!parameters.containsKey(key)){
 			parameters.put(key, parameter);
+		}else if (
+				parameter.type == parameters.get(key).type 
+				&& (parameter.type == ConfigurationParameterType.SINGLE_LIST 
+				|| parameter.type == ConfigurationParameterType.MULTI_LIST)){
+			//System.out.println("SHould be joining lists with name " + key);
+			
+			//TODO check how many are being constructed
+		}else{
+			System.err.println("Duplicate parameter key ("+ key + ") for non-list parameter");
 		}
 	}
 	

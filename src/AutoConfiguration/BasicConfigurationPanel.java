@@ -67,14 +67,14 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 				components.put(key, field2);
 				break;
 				
-			case LIST:
-				if(parameter.multiple){
-					JList list = addList(key, parameter.getList());
-					components.put(key, list);
-				}else{
-					JComboBox listBox = addComboBox(key, parameter.getList());
-					components.put(key, listBox);
-				}
+			case SINGLE_LIST:
+				JComboBox listBox = addComboBox(key, parameter.getList());
+				components.put(key, listBox);
+				break;
+				
+			case MULTI_LIST:
+				JList list = addList(key, parameter.getList());
+				components.put(key, list);
 				break;
 				
 			case NODE:
@@ -130,12 +130,14 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 				retParameters.put(key, new ConfigurationParameter(((JCheckBox)comp).isSelected()));
 				break;
 				
-			case LIST:
-				if(comp instanceof JComboBox){
-					retParameters.put(key, new ConfigurationParameter(((JComboBox)comp).getSelectedItem().toString()));
-				}else{
-					retParameters.put(key, new ConfigurationParameter(((JList)comp).getSelectedValues()));
-				}
+			case SINGLE_LIST:
+				retParameters.put(key, new ConfigurationParameter(
+						parameters.get(key).getList(), ((JComboBox)comp).getSelectedItem()));
+				break;
+				
+				
+			case MULTI_LIST:
+				retParameters.put(key, new ConfigurationParameter(parameters.get(key).getList(),((JList)comp).getSelectedValues()));
 				break;
 				
 			case NODE:

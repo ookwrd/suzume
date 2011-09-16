@@ -2,29 +2,23 @@ package AutoConfiguration;
 
 import populationNodes.NodeConfiguration;
 
+/**
+ * Would be nicer if Java had union types...
+ * 
+ * @author lukemccrohon
+ *
+ */
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {STRING, INTEGER, DOUBLE, LONG, BOOLEAN, LIST, NODE}
+	public enum ConfigurationParameterType {STRING, INTEGER, DOUBLE, LONG, BOOLEAN, SINGLE_LIST, MULTI_LIST, NODE}
 	
 	public ConfigurationParameterType type;
 	private Object value;
-	boolean multiple;
+	private Object selected;
 	
 	public ConfigurationParameter(String value){
 		type = ConfigurationParameterType.STRING;
 		this.value = value;
-	}
-	
-	public ConfigurationParameter(Object[] values){
-		type = ConfigurationParameterType.LIST;
-		this.value = values;
-		this.multiple = false;
-	}
-	
-	public ConfigurationParameter(Object[] values, boolean multiple){
-		type = ConfigurationParameterType.LIST;
-		this.value = values;
-		this.multiple = multiple;
 	}
 	
 	public ConfigurationParameter(Integer value){
@@ -54,14 +48,40 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
+	public ConfigurationParameter(Object[] values){
+		this(values, values[0]);
+	}
+	
+	public ConfigurationParameter(Object[] values, Object selected){
+		type = ConfigurationParameterType.SINGLE_LIST;
+		this.value = values;
+		this.selected = selected;
+	}
+	
+	public ConfigurationParameter(Object[] values, Object[] selected){
+		type = ConfigurationParameterType.MULTI_LIST;
+		this.value = values;
+		this.selected = selected;
+	}
+	
 	public String getString(){
 		assert(type == ConfigurationParameterType.STRING);
 		return (String)value;
 	}
 	
 	public Object[] getList(){
-		assert(type == ConfigurationParameterType.LIST);
+		assert(type == ConfigurationParameterType.SINGLE_LIST || type == ConfigurationParameterType.MULTI_LIST);
 		return (Object[])value;
+	}
+	
+	public Object getSelectedValue(){
+		assert(type == ConfigurationParameterType.SINGLE_LIST);
+		return selected;
+	}
+	
+	public Object[] getSelectedValues(){
+		assert(type == ConfigurationParameterType.MULTI_LIST);
+		return (Object[])selected;
 	}
 	
 	public Integer getInteger(){

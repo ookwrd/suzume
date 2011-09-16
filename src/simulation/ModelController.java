@@ -92,7 +92,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		//this.config = configuration;
 		this.randomGenerator = randomGenerator;
 		
-		this.selectionModel = SelectionModel.constructSelectionModel(SelectionModels.valueOf(getParameter(SELECTION_MODEL).getString()), randomGenerator);
+		this.selectionModel = SelectionModel.constructSelectionModel((SelectionModels)getParameter(SELECTION_MODEL).getSelectedValue(), randomGenerator);
 		
 		resetModel();
 		
@@ -137,7 +137,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
-		if(NodeType.valueOf(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getString()) == NodeType.ConfigurablePopulation){
+		if(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){
 			
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructPopulationNode(nodeConfiguration);
 			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
@@ -382,7 +382,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getString() + " " + "gen_" + getParameter(GENERATION_COUNT).getInteger() + "run_" + getParameter(RUN_COUNT).getInteger() + "pop_" + getParameter(POPULATION_SIZE).getInteger() + "crit_" + getParameter(CRITICAL_PERIOD).getInteger();
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() + " " + "gen_" + getParameter(GENERATION_COUNT).getInteger() + "run_" + getParameter(RUN_COUNT).getInteger() + "pop_" + getParameter(POPULATION_SIZE).getInteger() + "crit_" + getParameter(CRITICAL_PERIOD).getInteger();
 	}
 	
 	@Override
