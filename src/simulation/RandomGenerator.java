@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.swing.border.TitledBorder;
 
 import AutoConfiguration.BasicConfigurable;
-import AutoConfiguration.BasicConfigurationPanel;
+import AutoConfiguration.ConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 
 
@@ -50,8 +50,8 @@ public class RandomGenerator extends BasicConfigurable {
 	}
 	
 	@Override
-	public BasicConfigurationPanel getConfigurationPanel(){
-		BasicConfigurationPanel ret = super.getConfigurationPanel();
+	public ConfigurationPanel getConfigurationPanel(){
+		ConfigurationPanel ret = super.getConfigurationPanel();
 		ret.setBorder(new TitledBorder("Random Number Generator"));
 		return ret;
 	}

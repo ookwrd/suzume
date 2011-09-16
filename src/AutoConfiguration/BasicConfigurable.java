@@ -78,8 +78,8 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public BasicConfigurationPanel getConfigurationPanel(){
-		return new BasicConfigurationPanel(this, parameters);
+	public ConfigurationPanel getConfigurationPanel(){
+		return new ConfigurationPanel(this, parameters);
 	}
 	
 }

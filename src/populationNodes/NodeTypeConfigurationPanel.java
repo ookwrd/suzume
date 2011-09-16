@@ -7,7 +7,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
-import AutoConfiguration.BasicConfigurationPanel;
+import AutoConfiguration.ConfigurationPanel;
 
 import populationNodes.AbstractNode.NodeType;
 
@@ -17,7 +17,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 
 	private JComboBox agentTypesBox;
 	
-	private BasicConfigurationPanel subPanel;
+	private ConfigurationPanel subPanel;
 	
 	public NodeTypeConfigurationPanel(NodeConfiguration initialValue){
 		//TODO initial value

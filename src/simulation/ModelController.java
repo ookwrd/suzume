@@ -15,7 +15,7 @@ import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
 import AutoConfiguration.BasicConfigurable;
-import AutoConfiguration.BasicConfigurationPanel;
+import AutoConfiguration.ConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
@@ -386,8 +386,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	@Override
-	public BasicConfigurationPanel getConfigurationPanel(){
-		BasicConfigurationPanel ret = super.getConfigurationPanel();
+	public ConfigurationPanel getConfigurationPanel(){
+		ConfigurationPanel ret = super.getConfigurationPanel();
 		ret.setBorder(new TitledBorder("Simulation Configuration"));
 		return ret;
 	}
