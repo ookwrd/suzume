@@ -63,8 +63,7 @@ public class BasicConfigurable implements Configurable {
 		parameters.put(key, parameter);
 	}
 	
-	@Override
-	public void setDefaultParameter(String key, ConfigurationParameter parameter){
+	protected void setDefaultParameter(String key, ConfigurationParameter parameter){
 		if(!parameters.containsKey(key)){
 			parameters.put(key, parameter);
 		}else if (
