@@ -42,7 +42,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
 
-		chromosome = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 		}
@@ -56,7 +56,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
 		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;
 		
-		chromosome = new ArrayList<Integer>(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
@@ -72,7 +72,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		
 		//Mutation
 		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < getParameter(MUTATION_RATE).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(MUTATION_RATE)){
 				chromosome.set(j, randomGenerator.randomInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
@@ -93,10 +93,10 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	@Override
 	public void invent() {
 		
-		int chances = getParameter(INVENTION_CHANCES).getInteger();
+		int chances = getIntegerParameter(INVENTION_CHANCES);
 		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
-			if(randomGenerator.random() < getParameter(INVENTION_PROBABILITY).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(INVENTION_PROBABILITY)){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -111,7 +111,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
+				grammar.set(index, randomGenerator.randomInt(getIntegerParameter(SYNTACTIC_STATE_SPACE_SIZE)));
 			}
 		}
 	}
@@ -126,13 +126,13 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
 
-			if(randomGenerator.random() < getParameter(LEARNING_PROBABILITY_ON_MATCH).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(LEARNING_PROBABILITY_ON_MATCH)){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
 		}else{//Doesn't match this agents UG
 
-			if(randomGenerator.random() < getParameter(LEARNING_PROBABILITY_ON_MISMATCH).getDouble()){
+			if(randomGenerator.random() < getDoubleParameter(LEARNING_PROBABILITY_ON_MISMATCH)){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
@@ -145,7 +145,7 @@ public class ProbabalityAgent extends AbstractAgent implements Describable {
 	public Double geneGrammarMatch() {
 		double count = 0;
 		
-		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}

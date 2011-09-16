@@ -38,7 +38,7 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		this.randomGenerator = randomGenerator;
 		
 		chromosome = new ArrayList<double[]>();
-		for(int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
 			
 			double[] biases = new double[dimensions];
 			
@@ -71,7 +71,7 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		super.initializeAgent(parent1, id, randomGenerator);
 		initializeParameters((BiasAgent)parentA);
 		
-		chromosome = new ArrayList<double[]>(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		chromosome = new ArrayList<double[]>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		
 		this.randomGenerator = randomGenerator;
 		
@@ -196,13 +196,13 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		System.out.println("Agent " + getId() + ":");
 		for(int j = 0; j < dimensions; j++){
 			System.out.print("Dimension " + j + ":\t");
-			for (int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) {
+			for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) {
 				System.out.print(chromosome.get(i)[j] + "\t");
 			}
 			System.out.println();
 		}
 		System.out.print("Grammar:\t");
-		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
 			System.out.print(grammar.get(i) + "\t\t\t");
 		}
 		
@@ -219,7 +219,7 @@ public class BiasAgent extends AbstractAgent implements Describable{
 		
 		double antiCount = 0;
 		
-		for(int i = 0; i < getParameter(NUMBER_OF_MEANINGS).getInteger(); i++){
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
 			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
 				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];

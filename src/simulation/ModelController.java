@@ -99,7 +99,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		resetStatistics();
 	
 		if(population.getVisualizationKeys().size() != 0){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),getParameter(GENERATION_COUNT).getInteger(), population, this);
+			this.visualizer = new RuntimeVisualizer(getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
 		}
 		
 	}
@@ -125,7 +125,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
 		@SuppressWarnings("unchecked")
-		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getParameter(RUN_COUNT).getInteger()];
+		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getIntegerParameter(RUN_COUNT)];
 		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
 			arrayLists[i].addAll(population.getStatisticsAggregators());
@@ -148,7 +148,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 			//THis case needs to be gotten rid of.
 			ArrayList<Node> nodes = new ArrayList<Node>();
-			for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
+			for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
 				
 				Node node = NodeFactory.constructPopulationNode(nodeConfiguration);
 				node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
@@ -179,16 +179,16 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public void runSimulation(){
 
 		//Runs
-		while(currentRun < getParameter(RUN_COUNT).getInteger()){
+		while(currentRun < getIntegerParameter(RUN_COUNT)){
 		
 			//Generations
-			while(continueSimulation && currentGeneration < getParameter(GENERATION_COUNT).getInteger()){
+			while(continueSimulation && currentGeneration < getIntegerParameter(GENERATION_COUNT)){
 	
 				iterateGeneration();
 	
 				//Print progress information
-				if(getParameter(PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % getParameter(PRINT_EACH_X_GENERATIONS).getInteger() == 0){
-					System.out.println("Run " + currentRun + "/" + getParameter(RUN_COUNT).getInteger() +"\tGeneration " + currentGeneration + "/"+getParameter(GENERATION_COUNT).getInteger()+ "\tElapsed time: " + longTimeToString(elapsedTime()));
+				if(getParameter(PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % getIntegerParameter(PRINT_EACH_X_GENERATIONS) == 0){
+					System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
 				//Update stepwise visualization
@@ -239,7 +239,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			//get its ancestors (teachers)
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
-			for(int i = 0; i < getParameter(CRITICAL_PERIOD).getInteger(); i++){
+			for(int i = 0; i < getIntegerParameter(CRITICAL_PERIOD); i++){
 
 				//Get random teacher
 				Node teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
@@ -268,7 +268,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 			//Communicate with all neighbours
 			for(Node neighbour : neighbouringAgents){      
-				for(int i = 0; i < getParameter(COMMUNICATIONS_PER_NEIGHBOUR).getInteger(); i++){
+				for(int i = 0; i < getIntegerParameter(COMMUNICATIONS_PER_NEIGHBOUR); i++){
 					agent.communicate(neighbour);
 				}
 			}
@@ -320,7 +320,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		String configName = (printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		for(int i = 0; i < statsAggregators[0].size(); i++){
-			ArrayList[] array = new ArrayList[getParameter(RUN_COUNT).getInteger()];
+			ArrayList[] array = new ArrayList[getIntegerParameter(RUN_COUNT)];
 			for(int run = 0; run < statsAggregators.length; run++){
 				StatisticsAggregator aggregator = statsAggregators[run].get(i);
 				array[run] = aggregator.getStatistics();
@@ -382,7 +382,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() + " " + "gen_" + getParameter(GENERATION_COUNT).getInteger() + "run_" + getParameter(RUN_COUNT).getInteger() + "pop_" + getParameter(POPULATION_SIZE).getInteger() + "crit_" + getParameter(CRITICAL_PERIOD).getInteger();
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT) + "pop_" + getIntegerParameter(POPULATION_SIZE) + "crit_" + getIntegerParameter(CRITICAL_PERIOD);
 	}
 	
 	@Override

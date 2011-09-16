@@ -77,7 +77,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	@Override
 	public ArrayList<Node> getPossibleCommunicators(Node agent) {
 
-		int distance = getParameter(COMMUNICATE_TO_DISTANCE).getInteger();
+		int distance = getIntegerParameter(COMMUNICATE_TO_DISTANCE);
 		
 		int location = currentGeneration.indexOf(agent);
 
@@ -110,7 +110,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	@Override
 	public ArrayList<Node> getPossibleTeachers(Node agent) {
 
-		int distance = getParameter(LEARN_TO_DISTANCE).getInteger();
+		int distance = getIntegerParameter(LEARN_TO_DISTANCE);
 		
 		int location = currentGeneration.indexOf(agent);
 
@@ -145,7 +145,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	@Override
 	public ArrayList<Node> getPossibleParents(Node agent) {
 		
-		if(getParameter(REPRODUCE_TO_DISTANCE).getInteger() < 0){
+		if(getIntegerParameter(REPRODUCE_TO_DISTANCE) < 0){
 			return currentGeneration;
 		}else{
 
@@ -310,7 +310,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(config, id, randomGenerator);
-	
+		//TODO remove config
 		
 		NodeConfiguration sub = config.getParameter(SUB_NODE).getNodeConfiguration();
 			
