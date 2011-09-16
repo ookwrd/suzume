@@ -10,11 +10,13 @@ import populationNodes.NodeConfiguration;
  */
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {STRING, INTEGER, DOUBLE, LONG, BOOLEAN, SINGLE_LIST, MULTI_LIST, NODE}
+	public enum ConfigurationParameterType {STRING, INTEGER, DOUBLE, LONG, BOOLEAN, LIST, NODE}
 	
 	public ConfigurationParameterType type;
 	private Object value;
 	private Object selected;
+	
+	public boolean singleSelection = true;
 	
 	public ConfigurationParameter(String value){
 		type = ConfigurationParameterType.STRING;
@@ -49,19 +51,45 @@ public class ConfigurationParameter {
 	}
 	
 	public ConfigurationParameter(Object[] values){
-		this(values, values[0]);
+		this(values, true);
 	}
 	
-	public ConfigurationParameter(Object[] values, Object selected){
-		type = ConfigurationParameterType.SINGLE_LIST;
-		this.value = values;
-		this.selected = selected;
+	public ConfigurationParameter(Object[] values, boolean singleSelection){
+		this(values, new Object[]{values[0]});
+		this.singleSelection = singleSelection;
 	}
 	
 	public ConfigurationParameter(Object[] values, Object[] selected){
-		type = ConfigurationParameterType.MULTI_LIST;
+		type = ConfigurationParameterType.LIST;
 		this.value = values;
 		this.selected = selected;
+		this.singleSelection = false;
+	}
+	
+	public void addListOptions(ConfigurationParameter other){
+		assert(type == ConfigurationParameterType.LIST);
+		
+		//Values
+		Object[] extraOptions = other.getList();
+		Object[] newArray = new Object[extraOptions.length
+				+ ((Object[])value).length];
+		System.arraycopy(extraOptions, 0, newArray, 0, extraOptions.length);
+		System.arraycopy(((Object[])value), 0, newArray, extraOptions.length,
+				((Object[])value).length);
+		this.value = newArray;
+		
+		//Selected
+		Object[] extraSelected = other.getSelectedValues();
+		Object[] newSelected = new Object[extraSelected.length
+				+ ((Object[])selected).length];
+		System.arraycopy(extraSelected, 0, newSelected, 0,
+				extraSelected.length);
+		System.arraycopy(((Object[])selected), 0, newSelected, extraSelected.length,
+				((Object[])selected).length);
+		this.selected = newSelected;
+		
+		//Multivalued
+		this.singleSelection = singleSelection && other.singleSelection;
 	}
 	
 	public String getString(){
@@ -70,17 +98,17 @@ public class ConfigurationParameter {
 	}
 	
 	public Object[] getList(){
-		assert(type == ConfigurationParameterType.SINGLE_LIST || type == ConfigurationParameterType.MULTI_LIST);
+		assert(type == ConfigurationParameterType.LIST);
 		return (Object[])value;
 	}
 	
 	public Object getSelectedValue(){
-		assert(type == ConfigurationParameterType.SINGLE_LIST);
-		return selected;
+		assert(type == ConfigurationParameterType.LIST && singleSelection);
+		return ((Object[])selected)[0];
 	}
 	
 	public Object[] getSelectedValues(){
-		assert(type == ConfigurationParameterType.MULTI_LIST);
+		assert(type == ConfigurationParameterType.LIST);
 		return (Object[])selected;
 	}
 	

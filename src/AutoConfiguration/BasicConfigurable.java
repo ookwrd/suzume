@@ -1,5 +1,7 @@
  package AutoConfiguration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -39,9 +41,8 @@ public class BasicConfigurable implements Configurable {
 			parameters.put(key, parameter);
 		}else if (
 				parameter.type == parameters.get(key).type 
-				&& (parameter.type == ConfigurationParameterType.SINGLE_LIST 
-				|| parameter.type == ConfigurationParameterType.MULTI_LIST)){
-			//System.out.println("SHould be joining lists with name " + key);
+				&& (parameter.type == ConfigurationParameterType.LIST)){
+			parameters.get(key).addListOptions(parameter);
 			
 			//TODO check how many are being constructed
 		}else{
