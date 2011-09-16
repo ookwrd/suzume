@@ -9,9 +9,11 @@ import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
 
 public class BasicConfigurable implements Configurable {
 
-	private LinkedHashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();
-		
-	public BasicConfigurable(){}
+	private LinkedHashMap<String, ConfigurationParameter> parameters;
+	
+	public BasicConfigurable(){
+		parameters = new LinkedHashMap<String, ConfigurationParameter>();
+	}
 
 	public BasicConfigurable(BasicConfigurable source) {
 		this.parameters = source.parameters;
@@ -28,6 +30,11 @@ public class BasicConfigurable implements Configurable {
 	@Override
 	public ConfigurationParameter getParameter(String key){
 		return parameters.get(key);
+	}
+	
+	@Override
+	public HashMap<String, ConfigurationParameter> getParameters(){
+		return parameters;
 	}
 	
 	protected String getStringParameter(String key){
@@ -79,7 +86,7 @@ public class BasicConfigurable implements Configurable {
 	
 	@Override
 	public ConfigurationPanel getConfigurationPanel(){
-		return new ConfigurationPanel(this, parameters);
+		return new ConfigurationPanel(this);
 	}
 	
 }
