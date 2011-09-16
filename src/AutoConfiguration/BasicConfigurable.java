@@ -79,13 +79,8 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public HashMap<String, ConfigurationParameter> getParameters(){
-		return parameters;
-	}
-	
-	@Override
 	public BasicConfigurationPanel getConfigurationPanel(){
-		return new BasicConfigurationPanel(this);
+		return new BasicConfigurationPanel(this, parameters);
 	}
 	
 }

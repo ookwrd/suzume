@@ -24,15 +24,14 @@ public class BasicConfigurationPanel extends ConfigurationPanel {
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components;
 	
-	public BasicConfigurationPanel(Configurable toConfigure){
+	public BasicConfigurationPanel(Configurable toConfigure, HashMap<String, ConfigurationParameter> parameters){
 		super();
 		
 		if(toConfigure instanceof Describable){
 			addTextField(((Describable)toConfigure).getDescription());
 		}
 		
-		//Get default parameter map for this agent type
-		parameters = toConfigure.getParameters();
+		this.parameters = parameters;//toConfigure.getParameters();
 		components = new HashMap<String, Component>();
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
