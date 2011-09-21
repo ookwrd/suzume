@@ -345,7 +345,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	//TODO extract these to an interface
 	@Override
 	public void teach(Node agent) {
-
 		System.out.println("Shouldnt be here");
 	}
 

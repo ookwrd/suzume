@@ -44,8 +44,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
 	{
-		System.out.println("SimulationConfig" + new YamauchiHashimoto2010());
-		
 		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new YamauchiHashimoto2010()));
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
@@ -137,7 +135,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
-		if(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){
+		System.out.println("Type at initialization: " + nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
+		
+		if(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){//BROKEN looking at the wrong thing
 			
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
 			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);

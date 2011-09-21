@@ -11,7 +11,6 @@ import AutoConfiguration.ConfigurationPanel;
 
 import populationNodes.AbstractNode.NodeType;
 
-
 @SuppressWarnings("serial")
 public class NodeTypeConfigurationPanel extends JPanel {
 
@@ -50,7 +49,6 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();
-		
 		return subPanel;
 	}
 	

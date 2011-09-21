@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,7 +22,9 @@ import javax.swing.border.TitledBorder;
 import AutoConfiguration.Configurable.Describable;
 
 import populationNodes.NodeConfiguration;
+import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
+import populationNodes.Agents.AlteredAgent;
 
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {
@@ -80,11 +83,12 @@ public class ConfigurationPanel extends JPanel {
 				
 			case LIST:
 				if(parameter.singleSelection){
-					JComboBox listBox = addComboBox(key, parameter.getList());
+					JComboBox listBox = addComboBox(key, parameter.getList(), parameter.getSelectedValue());
 					components.put(key, listBox);
 					break;
 				}else{
-					JList list = addList(key, parameter.getList());
+					System.out.println(key +   "######" + parameter.getSelectedValues().length);
+					JList list = addList(key, parameter.getList(), parameter.getSelectedValues());
 					components.put(key, list);
 					break;
 				}
@@ -144,15 +148,15 @@ public class ConfigurationPanel extends JPanel {
 				
 			case LIST:
 				if(parameter.singleSelection){
-				retParameters.put(key, new ConfigurationParameter(
+					retParameters.put(key, new ConfigurationParameter(
 						parameters.get(key).getList(), new Object[]{((JComboBox)comp).getSelectedItem()}));
-					break;
 				}else{
 					retParameters.put(key, new ConfigurationParameter(parameters.get(key).getList(),((JList)comp).getSelectedValues()));
-					break;
 				}
+				break;
 				
 			case NODE:
+				System.out.println("Key" + key);
 				retParameters.put(key, new ConfigurationParameter(((NodeTypeConfigurationPanel)comp).getConfiguration()));
 				break;
 				
@@ -198,7 +202,7 @@ public class ConfigurationPanel extends JPanel {
 		add(jLabel, constraints);
 	}
 	
-	public JComboBox addComboBox(String label, Object[] values) {
+	public JComboBox addComboBox(String label, Object[] values, Object selected) {
 		
 		addLabel(label);
 		
@@ -207,12 +211,13 @@ public class ConfigurationPanel extends JPanel {
 		constraints.weightx = 1;
 		
 		JComboBox comboBox = new JComboBox(values);
+		comboBox.setSelectedItem(selected);
 		add(comboBox, constraints);
 		
 		return comboBox;
 	}
 	
-	public JList addList(String label, Object[] values){
+	public JList addList(String label, Object[] values, Object[] selected){
 		
 		addLabel(label);
 		
@@ -221,6 +226,14 @@ public class ConfigurationPanel extends JPanel {
 		constraints.weightx = 1;
 		
 		JList list = new JList(values);
+		for(Object item : selected){
+			for(int i = 0; i < values.length; i++){
+				if(values[i] == item){
+					list.addSelectionInterval(i, i);
+					break;
+				}
+			}
+		}
 		add(list, constraints);
 		
 		return list;

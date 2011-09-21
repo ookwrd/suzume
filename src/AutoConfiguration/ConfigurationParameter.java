@@ -45,7 +45,7 @@ public class ConfigurationParameter {
 
 	public ConfigurationParameter(NodeConfiguration value){
 		
-		System.out.println("ConfigurationParameter" + value);
+		System.out.println("ConfigurationParameter constructor: " + value.getClass());
 		type = ConfigurationParameterType.NODE;
 		this.value = value;
 	}
