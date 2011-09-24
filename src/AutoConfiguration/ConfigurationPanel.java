@@ -33,7 +33,7 @@ public class ConfigurationPanel extends JPanel {
 	private int row;
 	
 	private HashMap<String, ConfigurationParameter> parameters;
-	private HashMap<String, Component> components;
+	private HashMap<String, Component> components = new HashMap<String, Component>();
 	
 	public ConfigurationPanel(Configurable toConfigure){
 
@@ -47,7 +47,6 @@ public class ConfigurationPanel extends JPanel {
 		}
 		
 		this.parameters = toConfigure.getParameters();
-		components = new HashMap<String, Component>();
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
@@ -57,41 +56,32 @@ public class ConfigurationPanel extends JPanel {
 			
 			switch (parameter.type) {
 			case INTEGER:
-				JTextField field = addField(key, parameter.toString());
-				components.put(key, field);
+				addField(key, parameter.toString());
 				break;
 				
 			case DOUBLE:
-				JTextField field1 = addField(key, parameter.toString());
-				components.put(key, field1);
+				addField(key, parameter.toString());
 				break;
 				
 			case LONG:
-				JTextField field3 = addField(key, parameter.toString());
-				components.put(key, field3);
+				addField(key, parameter.toString());
 				break;
 				
 			case BOOLEAN:
-				JCheckBox box = addCheckBox(key, parameter.getBoolean());
-				components.put(key, box);
+				addCheckBox(key, parameter.getBoolean());
 				break;
 				
 			case STRING:
-				JTextField field2 = addField(key, parameter.toString());
-				components.put(key, field2);
+				addField(key, parameter.toString());
 				break;
 				
 			case LIST:
 				if(parameter.singleSelection){
-					JComboBox listBox = addComboBox(key, parameter.getList(), parameter.getSelectedValue());
-					components.put(key, listBox);
-					break;
+					addComboBox(key, parameter.getList(), parameter.getSelectedValue());
 				}else{
-					System.out.println(key +   "######" + parameter.getSelectedValues().length);
-					JList list = addList(key, parameter.getList(), parameter.getSelectedValues());
-					components.put(key, list);
-					break;
+					addList(key, parameter.getList(), parameter.getSelectedValues());
 				}
+				break;
 				
 			case NODE:
 				NodeTypeConfigurationPanel panel1 = addNodeSelector(key, parameter.getNodeConfiguration());
@@ -191,17 +181,6 @@ public class ConfigurationPanel extends JPanel {
 		return field;
 	} 
 	
-	private void addLabel(String label){
-		
-		constraints.gridx=0;
-		constraints.gridy=row;
-		constraints.weightx = 0;
-		
-		JLabel jLabel = new JLabel(label);
-		jLabel.setHorizontalAlignment(JLabel.TRAILING);
-		add(jLabel, constraints);
-	}
-	
 	public JComboBox addComboBox(String label, Object[] values, Object selected) {
 		
 		addLabel(label);
@@ -213,6 +192,8 @@ public class ConfigurationPanel extends JPanel {
 		JComboBox comboBox = new JComboBox(values);
 		comboBox.setSelectedItem(selected);
 		add(comboBox, constraints);
+		
+		components.put(label, comboBox);
 		
 		return comboBox;
 	}
@@ -236,6 +217,8 @@ public class ConfigurationPanel extends JPanel {
 		}
 		add(list, constraints);
 		
+		components.put(label, list);
+		
 		return list;
 		
 	} 
@@ -251,6 +234,8 @@ public class ConfigurationPanel extends JPanel {
 		JTextField field = new JTextField(initialValue, 10);
 		add(field, constraints);
 		
+		components.put(label, field);
+		
 		return field;
 	}
 	
@@ -265,6 +250,8 @@ public class ConfigurationPanel extends JPanel {
 		JCheckBox checkBox = new JCheckBox();
 		checkBox.setSelected(initialValue);
 		add(checkBox, constraints);
+		
+		components.put(label, checkBox);
 		
 		return checkBox;
 	}
@@ -282,6 +269,17 @@ public class ConfigurationPanel extends JPanel {
 		constraints.gridwidth =1;
 		
 		return nodeConfigPanel;
+	}
+	
+	private void addLabel(String label){
+		
+		constraints.gridx=0;
+		constraints.gridy=row;
+		constraints.weightx = 0;
+		
+		JLabel jLabel = new JLabel(label);
+		jLabel.setHorizontalAlignment(JLabel.TRAILING);
+		add(jLabel, constraints);
 	}
 	
 }

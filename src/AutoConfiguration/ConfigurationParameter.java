@@ -14,7 +14,7 @@ public class ConfigurationParameter {
 	
 	public ConfigurationParameterType type;
 	private Object value;
-	private Object selected;
+	private Object[] selected;
 	
 	public boolean singleSelection = true;
 	
@@ -55,7 +55,7 @@ public class ConfigurationParameter {
 	}
 	
 	public ConfigurationParameter(Object[] values, boolean singleSelection){
-		this(values, new Object[]{values[0]});
+		this(values, new Object[0]);
 		this.singleSelection = singleSelection;
 	}
 	
@@ -129,12 +129,16 @@ public class ConfigurationParameter {
 	
 	public Object getSelectedValue(){
 		assert(type == ConfigurationParameterType.LIST && singleSelection);
-		return ((Object[])selected)[0];
+		if(selected.length > 0){
+			return selected[0];
+		}else{
+			return ((Object[])value)[0];
+		}
 	}
 	
 	public Object[] getSelectedValues(){
 		assert(type == ConfigurationParameterType.LIST);
-		return (Object[])selected;
+		return selected;
 	}
 	
 	@Override
