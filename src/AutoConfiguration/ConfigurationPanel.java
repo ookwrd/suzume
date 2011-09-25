@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,9 +21,7 @@ import javax.swing.border.TitledBorder;
 import AutoConfiguration.Configurable.Describable;
 
 import populationNodes.NodeConfiguration;
-import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
-import populationNodes.Agents.AlteredAgent;
 
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {
@@ -35,12 +32,19 @@ public class ConfigurationPanel extends JPanel {
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components = new HashMap<String, Component>();
 	
-	public ConfigurationPanel(Configurable toConfigure){
-
+	public ConfigurationPanel(){
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		row = 0;
+	}
+	
+	public ConfigurationPanel(Configurable toConfigure){
+		this();
+		initializeParameters(toConfigure);
+	}
+	
+	public void initializeParameters(Configurable toConfigure){
 		
 		if(toConfigure instanceof Describable){
 			addTextField(((Describable)toConfigure).getDescription());
@@ -181,7 +185,7 @@ public class ConfigurationPanel extends JPanel {
 		return field;
 	} 
 	
-	public JComboBox addComboBox(String label, Object[] values, Object selected) {
+	protected JComboBox addComboBox(String label, Object[] values, Object selected) {
 		
 		addLabel(label);
 		
@@ -198,7 +202,7 @@ public class ConfigurationPanel extends JPanel {
 		return comboBox;
 	}
 	
-	public JList addList(String label, Object[] values, Object[] selected){
+	protected JList addList(String label, Object[] values, Object[] selected){
 		
 		addLabel(label);
 		
@@ -223,7 +227,7 @@ public class ConfigurationPanel extends JPanel {
 		
 	} 
 	
-	public JTextField addField(String label, String initialValue){
+	protected JTextField addField(String label, String initialValue){
 		
 		addLabel(label);
 		
@@ -239,7 +243,7 @@ public class ConfigurationPanel extends JPanel {
 		return field;
 	}
 	
-	public JCheckBox addCheckBox(String label, boolean initialValue){
+	protected JCheckBox addCheckBox(String label, boolean initialValue){
 		
 		addLabel(label);
 		
@@ -256,7 +260,7 @@ public class ConfigurationPanel extends JPanel {
 		return checkBox;
 	}
 	
-	public NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
+	protected NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.gridy=row++;
@@ -271,7 +275,7 @@ public class ConfigurationPanel extends JPanel {
 		return nodeConfigPanel;
 	}
 	
-	private void addLabel(String label){
+	protected void addLabel(String label){
 		
 		constraints.gridx=0;
 		constraints.gridy=row;

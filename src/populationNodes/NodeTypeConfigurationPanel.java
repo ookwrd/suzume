@@ -8,12 +8,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import AutoConfiguration.ConfigurationPanel;
+import AutoConfiguration.ConfigurationParameter;
 
 import populationNodes.AbstractNode.NodeType;
 
 @SuppressWarnings("serial")
 public class NodeTypeConfigurationPanel extends JPanel {
 
+	public static final String NODE_TYPE = "Node type";
+	
 	private JComboBox agentTypesBox;
 	
 	private ConfigurationPanel subPanel;
@@ -21,7 +24,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	public NodeTypeConfigurationPanel(NodeConfiguration initialValue){
 		//TODO initial value
 		
-		System.out.println("NodeTypeConfigurationPanel" + initialValue);
+		System.out.println("NodeTypeConfigurationPanel" + initialValue.getClass());
 		
 		setLayout(new BorderLayout());
 		setBorder(new EtchedBorder());
@@ -36,14 +39,17 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		
 		add(agentTypesBox,BorderLayout.NORTH);
 		
-		reconfigureSubPanel();
+		//agentTypesBox.setSelectedItem(initialValue.NODE_TYPE);
+		
+		subPanel = initialValue.getConfigurationPanel();
+		add(subPanel,BorderLayout.SOUTH);
+		
+		//reconfigureSubPanel();
 	}
 	
 	private JPanel reconfigureSubPanel(){
 		
-		if(subPanel != null ) {
-			remove(subPanel);
-		}
+		remove(subPanel);
 		
 		subPanel = NodeFactory.constructUninitializedNode((NodeType)agentTypesBox.getSelectedItem()).getConfigurationPanel();	
 		add(subPanel,BorderLayout.SOUTH);
@@ -53,7 +59,9 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	}
 	
 	public NodeConfiguration getConfiguration(){
-		return new NodeConfiguration(subPanel.getConfiguration());
+		NodeConfiguration config = new NodeConfiguration(subPanel.getConfiguration());
+		config.setParameter(NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{agentTypesBox.getSelectedItem()}));
+		return config;
 	}
 	
 }

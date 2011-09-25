@@ -6,6 +6,7 @@ import javax.swing.border.TitledBorder;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
+import populationNodes.NodeTypeConfigurationPanel;
 
 import runTimeVisualization.RuntimeVisualizer;
 import runTimeVisualization.Visualizable.Stoppable;
@@ -23,20 +24,14 @@ import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.PopulationModel;
 import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
-import populationNodes.Agents.YamauchiHashimoto2010;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
 
 	public static final String AGENT_TYPE = "Agent1";
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
-	public static final String POPULATION_SIZE = "Population Size:";
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
 	public static final String CRITICAL_PERIOD = "Critical Period:";
-	
-	public static final String LEARN_TO_DISTANCE = "Max learning distance:";//TODO remove these should be recursive
-	public static final String COMMUNICATE_TO_DISTANCE = "Max Communication distance:";
-	public static final String REPRODUCE_TO_DISTANCE = "Max reproduction distance:";
 	
 	public static final String SELECTION_MODEL = "Selection model:";
 	
@@ -44,15 +39,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
 	{
-		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new YamauchiHashimoto2010()));
+		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new CompositePopulationModel()));
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
-		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
-		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
-		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
-		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(-1));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
 		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
@@ -107,9 +98,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		initializePopulation();
 		
 		//TODO temp hack for setting learning distance
-		population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, getParameter(LEARN_TO_DISTANCE));
-		population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, getParameter(COMMUNICATE_TO_DISTANCE));
-		population.setParameter(CompositePopulationModel.REPRODUCE_TO_DISTANCE, getParameter(REPRODUCE_TO_DISTANCE));
+		//population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, getParameter(LEARN_TO_DISTANCE));
+		//population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, getParameter(COMMUNICATE_TO_DISTANCE));
+		//population.setParameter(CompositePopulationModel.REPRODUCE_TO_DISTANCE, getParameter(REPRODUCE_TO_DISTANCE));
 	
 		if(visualizer!=null){
 			visualizer.updateModel(population);
@@ -135,18 +126,20 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
-		System.out.println("Type at initialization: " + nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
+		System.out.println("Type at initialization: " + nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
 		
-		if(nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){//BROKEN looking at the wrong thing
+		if(nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){//BROKEN looking at the wrong thing
 			
-			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
+			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
 			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 			population = node;
 			
 			
 		} else {
 		
-			//THis case needs to be gotten rid of.
+			System.err.println("Shodn't be here: ModelController:initialize population");
+			
+			/*//THis case needs to be gotten rid of.
 			ArrayList<Node> nodes = new ArrayList<Node>();
 			for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
 				
@@ -155,7 +148,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				nodes.add(node);
 			}
 		
-			 population = new CompositePopulationModel(nodes, nodes);
+			 population = new CompositePopulationModel(nodes, nodes);*/
 		}
 		
 	}
@@ -300,15 +293,12 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 * Gather statistics on the population at this point.
 	 */
 	private void gatherStatistics(){
-
 		ArrayList<Agent> agents = population.getCurrentGeneration();
-
 		for(Agent agent : agents){
 			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
 				aggregator.collectStatistics(agent);
 			}
 		}
-		
 	}
 	
 	/**
@@ -382,7 +372,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT) + "pop_" + getIntegerParameter(POPULATION_SIZE) + "crit_" + getIntegerParameter(CRITICAL_PERIOD);
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT) + "crit_" + getIntegerParameter(CRITICAL_PERIOD);
 	}
 	
 	@Override

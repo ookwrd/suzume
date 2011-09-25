@@ -29,7 +29,7 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	@Override
 	public String getName(){
-		return getParameter(NodeConfiguration.NODE_TYPE).toString();
+		return getParameter(NodeTypeConfigurationPanel.NODE_TYPE).toString();
 	}
 	
 	@Override
