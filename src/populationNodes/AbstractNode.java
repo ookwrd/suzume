@@ -32,6 +32,11 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 		return getParameter(NodeTypeConfigurationPanel.NODE_TYPE).toString();
 	}
 	
+	@Override 
+	public NodeConfiguration getConfiguration(){
+		return this;
+	}
+	
 	@Override
 	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type){
 		return baseDimension;

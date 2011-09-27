@@ -22,7 +22,7 @@ import PopulationModel.Node.StatisticsAggregator;
 
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
-	public static final String SUB_NODE = "Sub node";
+	public static final String SUB_NODE = "Sub Model:";
 	public static final String REPRODUCTION_GRAPH = "Reproduction Graph";
 	public static final String COMMUNICATION_GRAPH = "Communication Graph";
 	public static final String LEARNING_GRAPH = "Learning Graph";
@@ -36,10 +36,10 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		//setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
 		//setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
 		//setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		setDefaultParameter(SUB_NODE, new ConfigurationParameter(new YamauchiHashimoto2010()));
 		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
 		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010).getConfiguration()));
 	}
 	
 	private Graph learningGraph;

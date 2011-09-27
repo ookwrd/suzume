@@ -88,12 +88,11 @@ public class ConfigurationPanel extends JPanel {
 				break;
 				
 			case NODE:
-				NodeTypeConfigurationPanel panel1 = addNodeSelector(key, parameter.getNodeConfiguration());
-				components.put(key, panel1);
+				addNodeSelector(key, parameter.getNodeConfiguration());
 				break;
 				
 			default:
-				System.out.println("Unsupported Configuration Parameter type.");
+				System.err.println("Unsupported Configuration Parameter type in ConfigurationPanel:initializeParameters.");
 				break;
 			}	
 		}
@@ -267,10 +266,13 @@ public class ConfigurationPanel extends JPanel {
 		constraints.weightx = 1;
 		
 		NodeTypeConfigurationPanel nodeConfigPanel = new NodeTypeConfigurationPanel(initialValue);
+		
 		nodeConfigPanel.setBorder(new TitledBorder(label));
 		add(nodeConfigPanel, constraints);
 		
 		constraints.gridwidth =1;
+		
+		components.put(label, nodeConfigPanel);
 		
 		return nodeConfigPanel;
 	}

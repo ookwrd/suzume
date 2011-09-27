@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
 
 import AutoConfiguration.ConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
@@ -13,21 +12,18 @@ import AutoConfiguration.ConfigurationParameter;
 import populationNodes.AbstractNode.NodeType;
 
 @SuppressWarnings("serial")
-public class NodeTypeConfigurationPanel extends JPanel {
+public class NodeTypeConfigurationPanel extends ConfigurationPanel {
 
-	public static final String NODE_TYPE = "Node type";
+	public static final String NODE_TYPE = "Node type";//TODO move
 	
 	private JComboBox agentTypesBox;
+	private Object currentlySelected;
 	
 	private ConfigurationPanel subPanel;
 	
 	public NodeTypeConfigurationPanel(NodeConfiguration initialValue){
-		//TODO initial value
-		
-		System.out.println("NodeTypeConfigurationPanel" + initialValue.getClass());
 		
 		setLayout(new BorderLayout());
-		setBorder(new EtchedBorder());
 		
 		agentTypesBox = new JComboBox(AbstractNode.NodeType.values());
 		agentTypesBox.addActionListener(new ActionListener() {		
@@ -39,23 +35,27 @@ public class NodeTypeConfigurationPanel extends JPanel {
 		
 		add(agentTypesBox,BorderLayout.NORTH);
 		
-		//agentTypesBox.setSelectedItem(initialValue.NODE_TYPE);
-		
 		subPanel = initialValue.getConfigurationPanel();
 		add(subPanel,BorderLayout.SOUTH);
 		
-		//reconfigureSubPanel();
+		currentlySelected = initialValue.getParameter(NODE_TYPE).getSelectedValue();
+		agentTypesBox.setSelectedItem(currentlySelected);
 	}
 	
-	private JPanel reconfigureSubPanel(){
+	private void reconfigureSubPanel(){
+		
+		NodeType selected = (NodeType)agentTypesBox.getSelectedItem();
+		if(currentlySelected == selected){
+			return;
+		}
+		currentlySelected = selected;
 		
 		remove(subPanel);
 		
-		subPanel = NodeFactory.constructUninitializedNode((NodeType)agentTypesBox.getSelectedItem()).getConfigurationPanel();	
+		subPanel = NodeFactory.constructUninitializedNode(selected).getConfigurationPanel();	
 		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();
-		return subPanel;
 	}
 	
 	public NodeConfiguration getConfiguration(){
