@@ -8,6 +8,7 @@ import populationNodes.Agents.FixedProbabilityAgent;
 import populationNodes.Agents.ProbabalityAgent;
 import populationNodes.Agents.YamauchiHashimoto2010;
 import simulation.RandomGenerator;
+import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
 
@@ -17,30 +18,40 @@ public class NodeFactory {
 	
 	public static Node constructUninitializedNode(NodeType type){
 		
+		Node retVal;
+		
 		switch (type) {
 		case YamauchiHashimoto2010:
-			return new YamauchiHashimoto2010();
+			retVal = new YamauchiHashimoto2010();
 			
 		case AlteredAgent:
-			return new AlteredAgent();
+			retVal = new AlteredAgent();
+			break;
 			
 		case BiasAgent:
-			return new BiasAgent();
+			retVal = new BiasAgent();
+			break;
 			
 		case FixedProbabilityAgent:
-			return new FixedProbabilityAgent();
+			retVal = new FixedProbabilityAgent();
+			break;
 			
 		case ProbabilityAgent:
-			return new ProbabalityAgent();
+			retVal = new ProbabalityAgent();
+			break;
 		
 		case ConfigurablePopulation:
-			return new CompositePopulationModel();
+			retVal = new CompositePopulationModel();
+			break;
 
 		default:
 			System.out.println("Unrecognized agent type in AgentFactory.");
-			return null;
+			retVal = null;
 		}
 		
+		retVal.setParameter(NodeTypeConfigurationPanel.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
+		
+		return retVal;	
 	}
 	
 	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){

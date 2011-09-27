@@ -1,21 +1,10 @@
 package populationNodes;
+ 
 
-import java.awt.Color;
 
-import javax.swing.JLabel;
-
-import populationNodes.AbstractNode.NodeType;
 import AutoConfiguration.BasicConfigurable;
-import AutoConfiguration.ConfigurationPanel;
-import AutoConfiguration.ConfigurationParameter;
 
 public class NodeConfiguration extends BasicConfigurable {
-
-	/*public static final String NODE_TYPE = "Node type";
-	
-	{
-		setDefaultParameter(NODE_TYPE, new ConfigurationParameter(NodeType.values()));
-	}*/
 	
 	public NodeConfiguration(){	
 	}

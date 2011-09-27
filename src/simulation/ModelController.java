@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.border.TitledBorder;
 
+import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
@@ -27,7 +28,7 @@ import populationNodes.Agents.Agent;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
 
-	public static final String AGENT_TYPE = "Agent1";
+	public static final String AGENT_TYPE = "Population Model:";
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
@@ -39,7 +40,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
 	{
-		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(new CompositePopulationModel()));
+		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.ConfigurablePopulation).getConfiguration()));
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
