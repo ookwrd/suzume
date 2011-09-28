@@ -39,18 +39,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String PRINT_GENERATION_COUNT = "Print generation count?";
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
-	{
-		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.ConfigurablePopulation).getConfiguration()));
-		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
-		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
-		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
-		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
-		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
-
-		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
-		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
-	}
-	
 	//Configuration Settings
 	private RandomGenerator randomGenerator;
 
@@ -73,7 +61,17 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	//Stoppable
 	private boolean continueSimulation = true;
 	
-	public ModelController(){}
+	public ModelController(){
+		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.ConfigurablePopulation).getConfiguration()));
+		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
+		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
+		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
+		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
+		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
+
+		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
+		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
+	}
 	
 	public ModelController(BasicConfigurable baseConfig, 
 			RandomGenerator randomGenerator){
@@ -84,7 +82,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		this.selectionModel = SelectionModel.constructSelectionModel((SelectionModels)getParameter(SELECTION_MODEL).getSelectedValue(), randomGenerator);
 		
-		resetModel();
+		resetRun();
 		
 		resetStatistics();
 	
@@ -94,7 +92,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 	}
 
-	private void resetModel(){
+	private void resetRun(){
+		
+		currentGeneration = 0;
 		
 		initializePopulation();
 		
@@ -199,10 +199,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			}
 	
 			currentRun++;
-			currentGeneration = 0;
 			
-			resetModel();
-
+			resetRun();
 		}
 		
 	}
@@ -212,20 +210,23 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 */
 	private void iterateGeneration(){
 
-		training();
-
+		initializeAgents();
+		trainAgents();
 		communication();
-
 		gatherStatistics();
-
-		population.switchGenerations(selection());
+		killAgents();
+		replaceDeadAgents();
 
 	}
 
+	private void initializeAgents(){
+		//TODO
+	}
+	
 	/**
 	 * Training and invention phase of a single round of the simulation.
 	 */
-	private void training(){
+	private void trainAgents(){
 
 		//for each agent
 		for(Node learner : population.getCurrentGeneration()){
@@ -237,7 +238,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 				//Get random teacher
 				Node teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
-
 				teacher.teach(learner);
 
 				if(!learner.canStillLearn()){
@@ -257,7 +257,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void communication(){
 
 		for(Agent agent : population.getCurrentGeneration()){
-
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Communicate with all neighbours
@@ -270,13 +269,15 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			agent.adjustFinalFitnessValue();
 		}
 	}
+	
+	private void killAgents(){
+		//TODO
+	}
 
 	/**
 	 * Selection and construction of the new generation.
-	 * 
-	 * @return
 	 */
-	private ArrayList<Node> selection(){
+	private void replaceDeadAgents(){
 		
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
 		
@@ -287,11 +288,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
 		}
 
-		return newGenerationAgents;
+		population.setNewAgents(newGenerationAgents);
 	}
 
 	/**
-	 * Gather statistics on the population at this point.
+	 * Gather statistics on the population at the current point in time.
 	 */
 	private void gatherStatistics(){
 		ArrayList<Agent> agents = population.getCurrentGeneration();
@@ -302,9 +303,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		}
 	}
 	
-	/**
-	 * 
-	 */
 	private void plotStatistics() {
 		
 		statisticsWindow = new StatisticsVisualizer(getTitleString());

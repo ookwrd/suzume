@@ -23,6 +23,7 @@ public class NodeFactory {
 		switch (type) {
 		case YamauchiHashimoto2010:
 			retVal = new YamauchiHashimoto2010();
+			break;
 			
 		case AlteredAgent:
 			retVal = new AlteredAgent();

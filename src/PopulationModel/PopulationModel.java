@@ -19,7 +19,7 @@ public interface PopulationModel extends Visualizable, Node {
 	 * 
 	 * @param newGeneration
 	 */
-	public void switchGenerations(ArrayList<Node> newGeneration);
+	public void setNewAgents(ArrayList<Node> newGeneration);
 
 	public ArrayList<Node> getPossibleTeachers(Node agent);
 
