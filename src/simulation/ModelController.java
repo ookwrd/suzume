@@ -312,7 +312,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, false);
 	
 			//TODO remove temp code to add atleast a single density plot
-			if(i == 1){
+			if(i == 3){
 				statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, true);
 			}
 		}

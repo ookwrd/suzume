@@ -14,7 +14,7 @@ import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
-public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent, Describable {
+public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements Agent, Describable {
 
 	private enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
 	
@@ -24,7 +24,9 @@ public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent
 	protected static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
 	protected static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
 	
-	{
+	protected double learningResource;
+	
+	public YamauchiHashimoto2010(){
 		setDefaultParameter(LEARNING_RESOURCE, new ConfigurationParameter(24));
 		setDefaultParameter(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
@@ -32,20 +34,10 @@ public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values()));
 	}
-
-	protected ArrayList<Integer> chromosome;
-	
-	protected double learningResource;
 	
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initializeAgent(config, id, randomGenerator);
-		
-		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
-		for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomBoolean()?0:1);
-		}
-
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 	}
 	
@@ -160,29 +152,17 @@ public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent
 	}
 	
 	@Override
-	public Double geneGrammarMatch(){
-		
-		double count = 0;
-		
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
-			if(chromosome.get(i).equals(grammar.get(i))){
-				count++;
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
+		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+	
+		retVal.add(new AbstractCountingAggregator("Leftover Learning resource") {
+			@Override
+			protected void updateCount(Node agent) {
+				addToCount(((YamauchiHashimoto2010)agent).learningResource);
 			}
-		}
+		});
 		
-		return count;
-	}
-
-	@Override
-	public Double learningIntensity() {
-		// TODO Some better more general way of measuring this...
-		return learningResource;
-	}
-	
-	
-	@Override
-	public ArrayList<Integer> getGenotype() {
-		return chromosome;
+		return retVal;
 	}
 	
 	@Override//TODO this should just choose a color
@@ -211,7 +191,7 @@ public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent
 			break;
 			
 		case LEARNING_INTENSITY:
-			int learningIntensity = new Double(learningIntensity()).intValue();
+			int learningIntensity = new Double(learningResource).intValue();
 			c = new Color(255, 255-learningIntensity*16, 255-learningIntensity);
 			g.setColor(c);
 			g.fillRect(0, 0, baseDimension.width, baseDimension.height);

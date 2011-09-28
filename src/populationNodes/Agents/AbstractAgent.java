@@ -52,13 +52,10 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public void invent(){
-	}
+	public void invent(){}
 	
 	@Override
-	public void finalizeFitnessValue(){
-		//Do nothing.
-	}
+	public void finalizeFitnessValue(){}
 	
 	@Override
 	public ArrayList<Agent> getBaseAgents(){
