@@ -50,7 +50,7 @@ public class NodeFactory {
 			retVal = null;
 		}
 		
-		retVal.setParameter(NodeTypeConfigurationPanel.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
+		retVal.setFixedParameter(NodeTypeConfigurationPanel.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
 		
 		return retVal;	
 	}
