@@ -31,6 +31,8 @@ public class ConfigurationPanel extends JPanel {
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components = new HashMap<String, Component>();
 	
+	private Configurable configurationTarget;
+	
 	public ConfigurationPanel(){
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
@@ -38,8 +40,8 @@ public class ConfigurationPanel extends JPanel {
 	}
 	
 	public ConfigurationPanel(Configurable toConfigure){
-		this();
 		initializeParameters(toConfigure);
+		this.configurationTarget = toConfigure;
 	}
 	
 	public void initializeParameters(Configurable toConfigure){
@@ -48,7 +50,7 @@ public class ConfigurationPanel extends JPanel {
 			addTextField(((Describable)toConfigure).getDescription());
 		}
 		
-		this.parameters = toConfigure.getParameters();
+		this.parameters = toConfigure.getEditableParameters();
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){

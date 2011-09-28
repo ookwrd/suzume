@@ -1,5 +1,6 @@
  package AutoConfiguration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -9,14 +10,13 @@ import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
 
 public class BasicConfigurable implements Configurable {
 
-	private LinkedHashMap<String, ConfigurationParameter> parameters;
-	
-	public BasicConfigurable(){
-		parameters = new LinkedHashMap<String, ConfigurationParameter>();
-	}
+	private LinkedHashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();;
+	private ArrayList<String> fixedParameters = new ArrayList<String>();
 
+	public BasicConfigurable(){}
+	
 	public BasicConfigurable(BasicConfigurable source) {
-		this.parameters = source.parameters;
+		initialize(source);
 	}
 	
 	public BasicConfigurable(LinkedHashMap<String, ConfigurationParameter> parameters) {
@@ -25,6 +25,7 @@ public class BasicConfigurable implements Configurable {
 	
 	public void initialize(BasicConfigurable source){
 		this.parameters = source.parameters;
+		this.fixedParameters = source.fixedParameters;
 	}
 	
 	@Override
@@ -35,6 +36,19 @@ public class BasicConfigurable implements Configurable {
 	@Override
 	public HashMap<String, ConfigurationParameter> getParameters(){
 		return parameters;
+	}
+	
+	@Override
+	public HashMap<String, ConfigurationParameter> getEditableParameters(){
+		LinkedHashMap<String, ConfigurationParameter> retVal = new LinkedHashMap<String, ConfigurationParameter>();
+		
+		for(String key : parameters.keySet()){
+			if(!fixedParameters.contains(key)){
+				retVal.put(key, parameters.get(key));
+			}
+		}
+		
+		return retVal;
 	}
 	
 	protected String getStringParameter(String key){
@@ -66,8 +80,20 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public void setParameter(String key, ConfigurationParameter parameter){
+	public void setParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
+		//TODO check not fixed
 		parameters.put(key, parameter);
+	}
+	
+	@Override
+	public void setFixedParameter(String key, ConfigurationParameter parameter){
+		setParameter(key, parameter);
+		fixParameter(key);
+	}
+	
+	@Override
+	public void fixParameter(String key){
+		fixedParameters.add(key);
 	}
 	
 	protected void setDefaultParameter(String key, ConfigurationParameter parameter){
@@ -80,7 +106,7 @@ public class BasicConfigurable implements Configurable {
 			
 			//TODO check how many are being constructed
 		}else{
-			System.err.println("Duplicate parameter key ("+ key + ") for non-list parameter");
+			System.err.println("Duplicate parameter key in BasicConfigurable:setDefaultParameter ("+ key + ") for non-list parameter");
 		}
 	}
 	

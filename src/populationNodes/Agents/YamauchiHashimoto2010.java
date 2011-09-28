@@ -33,6 +33,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values()));
+		
+		fixParameter(NUMBER_OF_TOKENS);
 	}
 	
 	@Override
@@ -133,7 +135,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 			learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
 			
 		}else{//Doesn't match this agents UG
-			//TODO what do we do if we can't afford this anymore? Check with jimmy
 			if(learningResource < getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
 				learningResource = 0;
 				return;
