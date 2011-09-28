@@ -14,7 +14,7 @@ import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
-public class YamauchiHashimoto2010 extends AbstractAgent implements Agent, Describable {
+public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent, Describable {
 
 	private enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
 	

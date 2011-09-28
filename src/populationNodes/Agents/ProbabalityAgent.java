@@ -14,7 +14,7 @@ import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 
-public class ProbabalityAgent extends AbstractAgent implements Describable {
+public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
 
 	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
 	

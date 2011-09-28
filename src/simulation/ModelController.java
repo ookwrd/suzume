@@ -97,12 +97,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		currentGeneration = 0;
 		
 		initializePopulation();
-		
-		//TODO temp hack for setting learning distance
-		//population.setParameter(CompositePopulationModel.LEARN_TO_DISTANCE, getParameter(LEARN_TO_DISTANCE));
-		//population.setParameter(CompositePopulationModel.COMMUNICATE_TO_DISTANCE, getParameter(COMMUNICATE_TO_DISTANCE));
-		//population.setParameter(CompositePopulationModel.REPRODUCE_TO_DISTANCE, getParameter(REPRODUCE_TO_DISTANCE));
-	
+
 		if(visualizer!=null){
 			visualizer.updateModel(population);
 		}
@@ -317,7 +312,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, false);
 	
 			//TODO remove temp code to add atleast a single density plot
-			if(i ==0){
+			if(i == 1){
 				statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, true);
 			}
 		}
