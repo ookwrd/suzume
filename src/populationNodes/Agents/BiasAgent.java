@@ -11,14 +11,9 @@ import AutoConfiguration.BasicConfigurable;
 import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
+import PopulationModel.Node.StatisticsAggregator;
 
 public class BiasAgent extends AbstractGrammarAgent implements Describable{
-	
-	{
-		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
-		setDefaultParameter("Mutation rate", new ConfigurationParameter(0.01));
-		setDefaultParameter("Invention Probability", new ConfigurationParameter(0.1));
-	}
 	
 	private int dimensions;
 	private double mutationRate;
@@ -28,7 +23,11 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	
 	private RandomGenerator randomGenerator;
 	
-	public BiasAgent(){}
+	public BiasAgent(){
+		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
+		setDefaultParameter("Mutation rate", new ConfigurationParameter(0.01));
+		setDefaultParameter("Invention Probability", new ConfigurationParameter(0.1));
+	}
 	
 	@Override
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
@@ -202,10 +201,23 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		System.out.println();
 	}
 	
+	@Override
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
+		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+	
+		retVal.add(new AbstractCountingAggregator("Gene-Grammar Match Probability") {
+			@Override
+			protected void updateCount(Node agent) {
+				addToCount(((BiasAgent)agent).geneGrammarMatch());
+			}
+		});
+		
+		return retVal;
+	}
+	
 	/**
 	 * Sum of the probabilites of the grammar having the values that they do. 
 	 */
-	@Override
 	public Double geneGrammarMatch() {
 
 		double count = 0;
@@ -220,18 +232,6 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		}
 
 		return count;		
-	}
-
-	@Override
-	public Double learningIntensity() {
-		// TODO Auto-generated method stub
-		return 0.0;
-	}
-
-	
-	@Override
-	public ArrayList getGenotype() {
-		return chromosome;
 	}
 
 	@Override

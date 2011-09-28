@@ -13,6 +13,7 @@ import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
+import PopulationModel.Node.StatisticsAggregator;
 
 public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
 
@@ -133,28 +134,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		
 
 	}
-
-	@Override
-	public Double geneGrammarMatch() {
-		double count = 0;
-		
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
-			if(chromosome.get(i).equals(grammar.get(i))){
-				count++;
-			}
-		}
-		return count;
-	}
-
-	@Override
-	public Double learningIntensity() {
-		return grammarAdjustmentCount;
-	}
-
-	@Override
-	public ArrayList<Integer> getGenotype() {
-		return chromosome;
-	}
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
@@ -217,6 +196,20 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		g.setColor(c);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 		
+	}
+	
+	@Override
+	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
+		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+
+		retVal.add(new AbstractCountingAggregator("Grammar Adjustment count") {
+			@Override
+			protected void updateCount(Node agent) {
+				addToCount(((ProbabalityAgent)agent).grammarAdjustmentCount);
+			}
+		});
+		
+		return retVal;
 	}
 	
 	@Override
