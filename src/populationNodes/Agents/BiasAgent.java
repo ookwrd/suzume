@@ -12,7 +12,7 @@ import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 
-public class BiasAgent extends AbstractAgent implements Describable{
+public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	
 	{
 		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
