@@ -10,7 +10,7 @@ import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
 
 public class BasicConfigurable implements Configurable {
 
-	private LinkedHashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();;
+	private HashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();;
 	private ArrayList<String> fixedParameters = new ArrayList<String>();
 
 	public BasicConfigurable(){}
@@ -19,7 +19,7 @@ public class BasicConfigurable implements Configurable {
 		initialize(source);
 	}
 	
-	public BasicConfigurable(LinkedHashMap<String, ConfigurationParameter> parameters) {
+	public BasicConfigurable(HashMap<String, ConfigurationParameter> parameters) {
 		this.parameters = parameters;
 	}
 	

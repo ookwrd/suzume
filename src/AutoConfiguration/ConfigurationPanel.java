@@ -40,6 +40,8 @@ public class ConfigurationPanel extends JPanel {
 	}
 	
 	public ConfigurationPanel(Configurable toConfigure){
+		this();
+		
 		initializeParameters(toConfigure);
 		this.configurationTarget = toConfigure;
 	}
@@ -108,7 +110,7 @@ public class ConfigurationPanel extends JPanel {
 
 	public BasicConfigurable getConfiguration(){
 		
-		LinkedHashMap<String, ConfigurationParameter> retParameters = new LinkedHashMap<String, ConfigurationParameter>();
+		HashMap<String, ConfigurationParameter> retParameters = configurationTarget.getParameters();
 		
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
 			
@@ -255,6 +257,8 @@ public class ConfigurationPanel extends JPanel {
 	}
 	
 	protected NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
+		System.out.println("Is null? " + constraints);
+		
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.weightx = 1;
