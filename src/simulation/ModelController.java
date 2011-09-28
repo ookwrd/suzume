@@ -261,7 +261,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				}
 			}
 
-			agent.adjustFinalFitnessValue();
+			agent.finalizeFitnessValue();
 		}
 	}
 	

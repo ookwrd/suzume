@@ -87,18 +87,6 @@ public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent
 	}
 	
 	/**
-	 * Returns a random utterance from this agents grammar.
-	 * 
-	 * @return
-	 */
-	@Override
-	public Utterance getRandomUtterance() {
-		int index = randomGenerator.randomInt(chromosome.size());
-		Integer value = grammar.get(index);
-		return new Utterance(index, value);
-	}
-	
-	/**
 	 * Use the remainder of the learning resource to potentially invent parts of the grammar.
 	 * The agent has a probability of 0.01 to turn an empty value to a 0 or a 1   
 	 */
@@ -209,7 +197,7 @@ public class YamauchiHashimoto2010 extends AbstractGrammarAgent implements Agent
 		
 		switch ((VisualizationTypes)visualizationKey) {
 		case NUMBER_NULLS:
-			int numberOfNulls = new Double(numberOfNulls()).intValue();
+			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
 			g.setColor(c);
 			g.fillRect(0, 0, baseDimension.width, baseDimension.height);

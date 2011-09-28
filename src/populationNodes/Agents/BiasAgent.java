@@ -136,13 +136,6 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	}
 	
 	@Override
-	public Utterance getRandomUtterance() {
-		int index = randomGenerator.randomInt(chromosome.size());
-		Integer value = grammar.get(index);
-		return new Utterance(index, value);
-	}
-	
-	@Override
 	public void invent() {
 		
 		if(grammar.contains(Utterance.SIGNAL_NULL_VALUE)){//Single iteration... max 1 invention per turn.

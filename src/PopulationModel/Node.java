@@ -26,7 +26,6 @@ public interface Node extends Visualizable, Configurable {
 	public void teach(Node agent);
 	public void learnUtterance(Utterance utterance);
 	public boolean canStillLearn();
-	public Utterance getRandomUtterance();//TODO is this needed externally?
 	
 	//Invention Phase
 	public void invent();
