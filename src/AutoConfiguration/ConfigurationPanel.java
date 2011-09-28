@@ -27,7 +27,6 @@ import populationNodes.NodeTypeConfigurationPanel;
 public class ConfigurationPanel extends JPanel {
 	
 	private GridBagConstraints constraints;
-	private int row;
 	
 	private HashMap<String, ConfigurationParameter> parameters;
 	private HashMap<String, Component> components = new HashMap<String, Component>();
@@ -36,7 +35,6 @@ public class ConfigurationPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		row = 0;
 	}
 	
 	public ConfigurationPanel(Configurable toConfigure){
@@ -167,7 +165,6 @@ public class ConfigurationPanel extends JPanel {
 		GridBagConstraints constraints = (GridBagConstraints)this.constraints.clone();
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
-		constraints.gridy=row++;
 		constraints.weightx = 1;
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(5, 5, 5, 5);
@@ -189,7 +186,6 @@ public class ConfigurationPanel extends JPanel {
 		addLabel(label);
 		
 		constraints.gridx=1;
-		constraints.gridy=row++;
 		constraints.weightx = 1;
 		
 		JComboBox comboBox = new JComboBox(values);
@@ -206,7 +202,6 @@ public class ConfigurationPanel extends JPanel {
 		addLabel(label);
 		
 		constraints.gridx=1;
-		constraints.gridy=row++;
 		constraints.weightx = 1;
 		
 		JList list = new JList(values);
@@ -231,7 +226,6 @@ public class ConfigurationPanel extends JPanel {
 		addLabel(label);
 		
 		constraints.gridx=1;
-		constraints.gridy=row++;
 		constraints.weightx = 1;
 		
 		JTextField field = new JTextField(initialValue, 10);
@@ -247,7 +241,6 @@ public class ConfigurationPanel extends JPanel {
 		addLabel(label);
 		
 		constraints.gridx=1;
-		constraints.gridy=row++;
 		constraints.weightx = 1;
 		
 		JCheckBox checkBox = new JCheckBox();
@@ -262,7 +255,6 @@ public class ConfigurationPanel extends JPanel {
 	protected NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
-		constraints.gridy=row++;
 		constraints.weightx = 1;
 		
 		NodeTypeConfigurationPanel nodeConfigPanel = new NodeTypeConfigurationPanel(initialValue);
@@ -280,7 +272,6 @@ public class ConfigurationPanel extends JPanel {
 	protected void addLabel(String label){
 		
 		constraints.gridx=0;
-		constraints.gridy=row;
 		constraints.weightx = 0;
 		
 		JLabel jLabel = new JLabel(label);

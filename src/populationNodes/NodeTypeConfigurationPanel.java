@@ -6,13 +6,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import AutoConfiguration.Configurable;
 import AutoConfiguration.ConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 
 import populationNodes.AbstractNode.NodeType;
 
 @SuppressWarnings("serial")
-public class NodeTypeConfigurationPanel extends ConfigurationPanel {
+public class NodeTypeConfigurationPanel extends JPanel {
 
 	public static final String NODE_TYPE = "Node type";//TODO move
 	
@@ -21,7 +22,7 @@ public class NodeTypeConfigurationPanel extends ConfigurationPanel {
 	
 	private ConfigurationPanel subPanel;
 	
-	public NodeTypeConfigurationPanel(NodeConfiguration initialValue){
+	public NodeTypeConfigurationPanel(Configurable initialValue){
 		
 		setLayout(new BorderLayout());
 		

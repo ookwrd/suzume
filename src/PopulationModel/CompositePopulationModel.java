@@ -66,7 +66,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 
 	@Override
-	public void switchGenerations(ArrayList<Node> newGeneration) {
+	public void setNewAgents(ArrayList<Node> newGeneration) {
 		previousGeneration = currentGeneration;
 		currentGeneration = newGeneration;
 	}

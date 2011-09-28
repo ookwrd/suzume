@@ -26,27 +26,22 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 
-	{
+	private double fitness;
+	protected ArrayList<Integer> grammar;
+	
+	public AbstractAgent(){	
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
 	}
-	
-	private double fitness;
-	
-	protected ArrayList<Integer> grammar;
-	
-	public AbstractAgent(){		
-		super();
-		}
 	
 	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initializeAgent(config, id, randomGenerator);
 
 		setFitness(getIntegerParameter(BASE_FITNESS));;
 		
-		grammar = new ArrayList<Integer>(config.getParameter(NUMBER_OF_MEANINGS).getInteger());
-		for (int j = 0; j < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
+		grammar = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
+		for (int j = 0; j < getIntegerParameter(NUMBER_OF_MEANINGS); j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
 	}
