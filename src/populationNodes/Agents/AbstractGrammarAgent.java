@@ -7,7 +7,6 @@ import populationNodes.Utterance;
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
-import PopulationModel.Node.StatisticsAggregator;
 
 public abstract class AbstractGrammarAgent extends AbstractAgent {
 
@@ -28,34 +27,26 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
 	}
-	
-	public ArrayList<Integer> getGrammar() {
-		return grammar;
-	}
-	
-	public Double numberOfNulls() {
-		double count = 0;
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
-			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
-				count++;
-			}
-		}
-		return count;
+		
+	@Override
+	public void teach(Node learner) {
+		learner.learnUtterance(getRandomUtterance());
 	}
 
 	@Override
 	public void communicate(Node partner){
-		
-		Utterance utterance = partner.getRandomUtterance();
+		Utterance utterance = ((AbstractGrammarAgent)partner).getRandomUtterance();
 
 		//If agent and neighbour agree update fitnes.
-		if(!utterance.isNull() && (getGrammar().get(utterance.meaning) == utterance.signal)){
+		if(!utterance.isNull() && (grammar.get(utterance.meaning) == utterance.signal)){
 			setFitness(getFitness()+1);
 		}
 	}
-	
-	public ArrayList getPhenotype(){
-		return grammar;
+
+	public Utterance getRandomUtterance() {
+		int index = randomGenerator.randomInt(grammar.size());
+		Integer value = grammar.get(index);
+		return new Utterance(index, value);
 	}
 	
 	@Override
@@ -79,14 +70,14 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		retVal.add(new AbstractCountingAggregator("Number of Nulls") {	
 			@Override
 			protected void updateCount(Node agent) {
-				addToCount(((AbstractGrammarAgent)agent).numberOfNulls());
+				addToCount(((AbstractGrammarAgent)agent).numberOfNullsInGrammar());
 			}
 		});
 		
 		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Phenotypes") {
 			@Override
 			protected void checkUniqueness(Node agent) {
-				addItem(((AbstractGrammarAgent)agent).getPhenotype());
+				addItem(((AbstractGrammarAgent)agent).grammar);
 			}
 		});
 		
@@ -97,8 +88,17 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 			}
 		});
 		
-		return retVal;
-		
+		return retVal;	
+	}
+	
+	public Double numberOfNullsInGrammar() {
+		double count = 0;
+		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
+			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
+				count++;
+			}
+		}
+		return count;
 	}
 	
 	//Statistics

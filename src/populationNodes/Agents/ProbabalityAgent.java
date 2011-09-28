@@ -84,13 +84,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	}
 	
 	@Override
-	public Utterance getRandomUtterance() {
-		int index = randomGenerator.randomInt(chromosome.size());
-		Integer value = grammar.get(index);
-		return new Utterance(index, value);
-	}
-	
-	@Override
 	public void invent() {
 		
 		int chances = getIntegerParameter(INVENTION_CHANCES);
@@ -169,7 +162,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		Color c;
 		
 		if(visualizationKey.equals("numberNulls")){
-			int numberOfNulls = new Double(numberOfNulls()).intValue();
+			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
 		}else if (visualizationKey.equals("genotype")){
 			c = new Color(

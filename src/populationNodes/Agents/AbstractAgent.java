@@ -16,10 +16,9 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
-	protected static final String VISUALIZATION_TYPE = "Visualization Type";
-	
 	private enum VisualizationTypes {FITNESS}
 	
+	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String FITNESS_STATISTICS = "Fitness";
 	protected static final String BASE_FITNESS = "Base fitness value:";
 
@@ -57,12 +56,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public void teach(Node learner) {
-		learner.learnUtterance(getRandomUtterance());
-	}
-	
-	@Override
-	public void adjustFinalFitnessValue(){
+	public void finalizeFitnessValue(){
 		//Do nothing.
 	}
 	
@@ -75,24 +69,21 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
-		
 		if(!(visualizationKey instanceof VisualizationTypes)){
 			super.draw(baseDimension, type, visualizationKey, g);
 			return;
 		}
 		
-		Color c;
-		
 		switch ((VisualizationTypes)visualizationKey) {
 		case FITNESS:
 			int fitness = new Double(getFitness()).intValue();
-			c = new Color(fitness*8, fitness*8, 0);
+			Color c = new Color(fitness*8, fitness*8, 0);
 			g.setColor(c);
 			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 
 		default:
-			System.err.println("Unrecognized Visualization type in AbstractAgent");
+			System.err.println("Unrecognized Visualization type in AbstractAgent:draw.");
 		}
 	}
 	
@@ -106,7 +97,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 				addToCount(((Agent)agent).getFitness());
 			}
 		});
-	
+		
 		return retVal;
 	}
 

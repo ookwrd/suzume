@@ -363,12 +363,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 
 	@Override
-	public Utterance getRandomUtterance() {
-		System.out.println("Shouldnt be here");
-		return null;
-	}
-
-	@Override
 	public void invent() {
 		System.out.println("Shouldnt be here");
 		
