@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import AutoConfiguration.BasicConfigurable;
 
-public abstract class AbstractGraph extends BasicConfigurable implements Graph {
+public abstract class AbstractGraph extends GraphConfiguration implements Graph {
 
 	protected ArrayList<Node> populations;
 	protected GraphConfiguration config;
@@ -18,6 +18,11 @@ public abstract class AbstractGraph extends BasicConfigurable implements Graph {
 	@Override
 	public ArrayList<Node> getNodeSet(){
 		return populations;
+	}
+
+	@Override
+	public GraphConfiguration getConfiguration() {
+		return this;
 	}
 	
 	/**

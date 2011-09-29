@@ -1,25 +1,25 @@
 package PopulationModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import AutoConfiguration.ConfigurationParameter;
 
 public class CyclicGraph extends AbstractGraph {
 
-	@SuppressWarnings("serial")
-	public static HashMap<String, ConfigurationParameter> defaultParameters = new HashMap<String, ConfigurationParameter>(){{
-		put("Include Self Links", new ConfigurationParameter(false));
-		put("Max link distance", new ConfigurationParameter(1));//TODO factor out these strings
-	}};
+	protected static final String SELF_LINKS = "Include Self Links";
+	protected static final String LINK_DISTANCE = "Link Distance";
+	
+	public CyclicGraph(){
+		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(false));
+		setDefaultParameter(LINK_DISTANCE, new ConfigurationParameter(1));
+	}
 
 	@Override
 	public ArrayList<Node> getInNodes(Node node) {
-
+		//TODO better with index?
 		ArrayList<Node> retValAgents = new ArrayList<Node>();
 		
 		int distance = config.getParameter("Max link distance").getInteger();
-		
 		int location = populations.indexOf(node);
 
 		if(config.getParameter("Include Self Links").getBoolean()){

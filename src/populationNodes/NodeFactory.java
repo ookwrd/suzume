@@ -46,7 +46,7 @@ public class NodeFactory {
 			break;
 
 		default:
-			System.out.println("Unrecognized agent type in AgentFactory.");
+			System.err.println("Unrecognized agent type in AgentFactory.");
 			retVal = null;
 		}
 		

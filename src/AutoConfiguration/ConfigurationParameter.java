@@ -1,16 +1,17 @@
 package AutoConfiguration;
 
+import PopulationModel.GraphConfiguration;
 import populationNodes.NodeConfiguration;
 
 /**
  * Would be nicer if Java had union types...
  * 
- * @author lukemccrohon
+ * @author Luke McCrohon
  *
  */
 public class ConfigurationParameter {
 
-	public enum ConfigurationParameterType {STRING, INTEGER, DOUBLE, LONG, BOOLEAN, LIST, NODE}
+	public enum ConfigurationParameterType {STRING, INTEGER, DOUBLE, LONG, BOOLEAN, NODE, GRAPH, LIST}
 	
 	public ConfigurationParameterType type;
 	private Object value;
@@ -45,6 +46,11 @@ public class ConfigurationParameter {
 
 	public ConfigurationParameter(NodeConfiguration value){
 		type = ConfigurationParameterType.NODE;
+		this.value = value;
+	}
+	
+	public ConfigurationParameter(GraphConfiguration value){
+		type = ConfigurationParameterType.GRAPH;
 		this.value = value;
 	}
 	
@@ -118,6 +124,11 @@ public class ConfigurationParameter {
 	public NodeConfiguration getNodeConfiguration(){
 		assert(type == ConfigurationParameterType.NODE);
 		return (NodeConfiguration)value;
+	}
+	
+	public GraphConfiguration getGraphConfiguration(){
+		assert(type == ConfigurationParameterType.GRAPH);
+		return (GraphConfiguration)value;
 	}
 	
 	public Object[] getList(){

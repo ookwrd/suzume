@@ -22,8 +22,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	
 	private ConfigurationPanel subPanel;
 	
-	public NodeTypeConfigurationPanel(Configurable initialValue){
-		
+	public NodeTypeConfigurationPanel(Configurable initialValue){	
 		setLayout(new BorderLayout());
 		
 		agentTypesBox = new JComboBox(AbstractNode.NodeType.values());
