@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
@@ -19,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import AutoConfiguration.Configurable.Describable;
+import PopulationModel.GraphConfiguration;
+import PopulationModel.GraphTypeConfigurationPanel;
 
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeTypeConfigurationPanel;
@@ -93,6 +94,10 @@ public class ConfigurationPanel extends JPanel {
 				addNodeSelector(key, parameter.getNodeConfiguration());
 				break;
 				
+			case GRAPH:
+				addGraphSelector(key, parameter.getGraphConfiguration());
+				break;
+				
 			default:
 				System.err.println("Unsupported Configuration Parameter type in ConfigurationPanel:initializeParameters.");
 				break;
@@ -106,7 +111,6 @@ public class ConfigurationPanel extends JPanel {
 			add(innerPanel);
 		}
 	}
-	
 
 	public BasicConfigurable getConfiguration(){
 		
@@ -257,8 +261,6 @@ public class ConfigurationPanel extends JPanel {
 	}
 	
 	protected NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
-		System.out.println("Is null? " + constraints);
-		
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.weightx = 1;
@@ -271,6 +273,23 @@ public class ConfigurationPanel extends JPanel {
 		constraints.gridwidth =1;
 		
 		components.put(label, nodeConfigPanel);
+		
+		return nodeConfigPanel;
+	}
+	
+	private GraphTypeConfigurationPanel addGraphSelector(String key, GraphConfiguration graphConfiguration) {
+		constraints.gridx=0;
+		constraints.gridwidth = 2;
+		constraints.weightx = 1;
+		
+		GraphTypeConfigurationPanel nodeConfigPanel = new GraphTypeConfigurationPanel(graphConfiguration);
+		
+		nodeConfigPanel.setBorder(new TitledBorder(key));
+		add(nodeConfigPanel, constraints);
+		
+		constraints.gridwidth =1;
+		
+		components.put(key, nodeConfigPanel);
 		
 		return nodeConfigPanel;
 	}

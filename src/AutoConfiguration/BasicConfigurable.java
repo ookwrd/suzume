@@ -81,7 +81,9 @@ public class BasicConfigurable implements Configurable {
 	
 	@Override
 	public void setParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
-		//TODO check not fixed
+		if(parameters.containsKey(key)){
+			return;
+		}
 		parameters.put(key, parameter);
 	}
 	

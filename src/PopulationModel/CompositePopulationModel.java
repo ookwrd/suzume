@@ -10,15 +10,11 @@ import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
 import populationNodes.Utterance;
-import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
-import populationNodes.Agents.YamauchiHashimoto2010;
 
 import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.GraphConfiguration.GraphType;
-import PopulationModel.Node.StatisticsAggregator;
 
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
@@ -31,17 +27,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
 	public static final String REPRODUCE_TO_DISTANCE = "Parents selected out to distance:";
 	
-	{
-		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
-		//setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphType.FullyConnected));
-		//setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		//setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphType.CyclicGraph));
-		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
-		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
-		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(1));
-		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010).getConfiguration()));
-	}
-	
 	private Graph learningGraph;
 	private Graph communicationGraph;
 	private Graph reproductionGraph;
@@ -49,15 +34,20 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	private ArrayList<Node> previousGeneration = new ArrayList<Node>();
 	private ArrayList<Node> currentGeneration = new ArrayList<Node>();
 	
-	public CompositePopulationModel(){}
+	public CompositePopulationModel(){
+		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
+		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
+		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
+		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
+		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
+		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010).getConfiguration()));
+	}
 	
-	public CompositePopulationModel(//TODO use initialization pattern
+	public CompositePopulationModel(
 			ArrayList<Node> currentGeneration, 
-			ArrayList<Node> previousGeneration 
-			//ModelConfiguration config
-			//GraphConfiguration learning, 
-			//GraphConfiguration communication, 
-			//GraphConfiguration reproduction
+			ArrayList<Node> previousGeneration
 			) 
 	{//TODO kill this
 		this.currentGeneration = currentGeneration;
