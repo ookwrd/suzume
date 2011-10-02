@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import populationNodes.NodeConfiguration;
 
 import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
+import PopulationModel.GraphConfiguration;
 
 public class BasicConfigurable implements Configurable {
 
@@ -77,6 +78,10 @@ public class BasicConfigurable implements Configurable {
 	
 	protected NodeConfiguration getNodeParameter(String key){
 		return getParameter(key).getNodeConfiguration();
+	}
+	
+	protected GraphConfiguration getGraphParameter(String key){
+		return getParameter(key).getGraphConfiguration();
 	}
 	
 	@Override

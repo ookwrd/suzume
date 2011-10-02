@@ -15,7 +15,6 @@ import populationNodes.Agents.Agent;
 import simulation.RandomGenerator;
 
 import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.Graph.GraphType;
 
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
@@ -38,228 +37,116 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public CompositePopulationModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
 		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
-		setDefaultParameter(LEARN_TO_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
-		setDefaultParameter(COMMUNICATE_TO_DISTANCE, new ConfigurationParameter(1));
-		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
-		setDefaultParameter(REPRODUCE_TO_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.COMPLETE).getConfiguration()));
 		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010).getConfiguration()));
 	}
-
-	@Override
-	public void setNewAgents(ArrayList<Node> newGeneration) {
-		CyclicGraph graph = (CyclicGraph)GraphFactory.constructGraph(GraphType.CYCLIC);
-		graph.init(newGeneration, getParameter(LEARNING_GRAPH).getGraphConfiguration(), randomGenerator);
-		graph.testPrint();
-		
-		
-		previousGeneration = currentGeneration;
-		currentGeneration = newGeneration;
-	}
-
-	/**
-	 * 
-	 * size of returnValue = distance*2 
-	 * 
-	 */
-	@Override
-	public ArrayList<Node> getPossibleCommunicators(Node agent) {
-
-		int distance = getIntegerParameter(COMMUNICATE_TO_DISTANCE);
-		
-		int location = currentGeneration.indexOf(agent);
-
-		ArrayList<Node> retValAgents = new ArrayList<Node>();
-
-		for (int i = 1; i <= distance; i++) {
-			//Add pair of agents distance i from the central agent
-			int neighbour1 = location - i;
-			int neighbour2 = location + i;
-
-			//wrap around ends of arrays
-			if (neighbour1 < 0) {
-				neighbour1 = currentGeneration.size() + neighbour1;
-			}
-			if (neighbour2 >= currentGeneration.size()) {
-				neighbour2 = neighbour2 - currentGeneration.size();
-			}
-
-			retValAgents.add(currentGeneration.get(neighbour1));
-			retValAgents.add(currentGeneration.get(neighbour2));
-		}
-
-		return retValAgents;
-	}
-
-	/**
-	 * 
-	 * size of return = agents*2 + 1
-	 */
-	@Override
-	public ArrayList<Node> getPossibleTeachers(Node agent) {
-
-		int distance = getIntegerParameter(LEARN_TO_DISTANCE);
-		
-		int location = currentGeneration.indexOf(agent);
-
-		ArrayList<Node> retValAgents = new ArrayList<Node>();
-
-		//add the ancestor at the same point as the specified agent
-		retValAgents.add(previousGeneration.get(location));
-
-		for (int i = 1; i <= distance; i++) {
-			//Add pair of agents distance i from the central agent
-			
-			int neighbour1 = location - i;
-			int neighbour2 = location + i;
-
-			//wrap around the end of arrays
-			if (neighbour1 < 0) {
-				neighbour1 = currentGeneration.size() + neighbour1;
-			}
-			if (neighbour2 >= currentGeneration.size()) {
-				neighbour2 = neighbour2 - currentGeneration.size();
-			}
-
-			retValAgents.add(previousGeneration.get(neighbour1));
-			retValAgents.add(previousGeneration.get(neighbour2));
-
-		}
-
-		return retValAgents;
-	}
 	
-
 	@Override
-	public ArrayList<Node> getPossibleParents(Node agent) {
-		
-		if(getIntegerParameter(REPRODUCE_TO_DISTANCE) < 0){
-			return currentGeneration;
-		}else{
-
-			int distance = getParameter(REPRODUCE_TO_DISTANCE).getInteger();
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+		super.initialize(config, id, randomGenerator);
 			
-			int location = currentGeneration.indexOf(agent);
-
-			ArrayList<Node> retValAgents = new ArrayList<Node>();
-
-			//add the ancestor at the same point as the specified agent
-			retValAgents.add(currentGeneration.get(location));
-
-			for (int i = 1; i <= distance; i++) {
-				//Add pair of agents distance i from the central agent
-				
-				int neighbour1 = location - i;
-				int neighbour2 = location + i;
-
-				//wrap around the end of arrays
-				if (neighbour1 < 0) {
-					neighbour1 = currentGeneration.size() + neighbour1;
-				}
-				if (neighbour2 >= currentGeneration.size()) {
-					neighbour2 = neighbour2 - currentGeneration.size();
-				}
-
-				retValAgents.add(currentGeneration.get(neighbour1));
-				retValAgents.add(currentGeneration.get(neighbour2));
-
-			}
-
-			return retValAgents;
-		}
-	}//TODO switch out for a graphbased implemenation
-
-
-	@Override
-	public ArrayList<Agent> getAncestorGeneration() {
+		//Initialize SubNodes
+		NodeConfiguration sub = getParameter(SUB_NODE).getNodeConfiguration();
 		
-		ArrayList<Agent> retAgents = new ArrayList<Agent>();
-		for(Node node :previousGeneration){
-			retAgents.addAll(node.getBaseAgents());
-		}
-		return retAgents;
-	}
-
-	@Override
-	public ArrayList<Agent> getCurrentGeneration() {
-		
-		ArrayList<Agent> retAgents = new ArrayList<Agent>();
-		for(Node node : currentGeneration){
-			retAgents.addAll(node.getBaseAgents());
-		}
-		return retAgents;
-		
-	}
-
-
-	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
-		super.initializeAgent(config, id, randomGenerator);
-		//TODO remove config
-		
-		NodeConfiguration sub = config.getParameter(SUB_NODE).getNodeConfiguration();
-			
 		ArrayList<Node> nodes = new ArrayList<Node>();
-		for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
+		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
 			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
-			node.initializeAgent(sub, NodeFactory.nextNodeID++, randomGenerator);
+			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
 		}
 		currentGeneration = nodes;
 		
 		nodes = new ArrayList<Node>();
-		for (int i = 1; i <= config.getParameter(POPULATION_SIZE).getInteger(); i++) {
+		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
 			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
-			node.initializeAgent(sub, NodeFactory.nextNodeID++, randomGenerator);
+			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
 		}
 		previousGeneration = nodes;
 	
+		//Initialize Graphs
+		learningGraph = GraphFactory.constructGraph(getGraphParameter(LEARNING_GRAPH).getType());
+		learningGraph.init(previousGeneration, getGraphParameter(LEARNING_GRAPH), randomGenerator);
+		
+		communicationGraph = GraphFactory.constructGraph(getGraphParameter(COMMUNICATION_GRAPH).getType());
+		communicationGraph.init(currentGeneration, getGraphParameter(COMMUNICATION_GRAPH), randomGenerator);
+		
+		reproductionGraph = GraphFactory.constructGraph(getGraphParameter(REPRODUCTION_GRAPH).getType());
+		reproductionGraph.init(currentGeneration, getGraphParameter(REPRODUCTION_GRAPH), randomGenerator);
 	}
+
+	@Override
+	public void setNewSubNodes(ArrayList<Node> newGeneration) {	
+		previousGeneration = currentGeneration;
+		currentGeneration = newGeneration;
+		
+		learningGraph.resetSubNodes(previousGeneration);
+		communicationGraph.resetSubNodes(currentGeneration);
+		reproductionGraph.resetSubNodes(currentGeneration);
+	}
+
+	@Override
+	public ArrayList<Node> getPossibleCommunicators(Node target) {
+		return communicationGraph.getInNodes(currentGeneration.indexOf(target));
+	}
+
+	@Override
+	public ArrayList<Node> getPossibleTeachers(Node target) {
+		return learningGraph.getInNodes(currentGeneration.indexOf(target));
+	}
+
+	@Override
+	public ArrayList<Node> getPossibleParents(Node target) {	
+		return reproductionGraph.getInNodes(currentGeneration.indexOf(target));
+	}
+
+	@Override
+	public ArrayList<Agent> getCurrentGeneration() {	
+		ArrayList<Agent> retAgents = new ArrayList<Agent>();
+		for(Node node : currentGeneration){
+			retAgents.addAll(node.getBaseAgents());
+		}
+		return retAgents;
+	}
+
 	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {
-		
-		System.out.println("In population mode this should never be called.");
-		
+		System.err.println("In population mode this should never be called.");
 	}
 
-	
-	//TODO extract these to an interface
 	@Override
 	public void teach(Node agent) {
-		System.out.println("Shouldnt be here");
+		System.err.println("Shouldnt be here");
 	}
 
 	@Override
 	public void learnUtterance(Utterance utterance) {
-
-		System.out.println("Shouldnt be here");
+		System.err.println("Shouldnt be here");
 	}
 
 	@Override
 	public boolean canStillLearn() {
-
-		System.out.println("Shouldnt be here");
+		System.err.println("Shouldnt be here");
 		return false;
 	}
 
 	@Override
 	public void invent() {
-		System.out.println("Shouldnt be here");
-		
+		System.err.println("Shouldnt be here");
 	}
 
 	@Override
 	public ArrayList<Agent> getBaseAgents() {
-		System.out.println("Shouldnt be here");
+		System.err.println("Shouldnt be here");
 		return getCurrentGeneration();
 	}
 
 	@Override
 	public void communicate(Node partner) {
-		System.out.println("Shouldnt be here");
+		System.err.println("Shouldnt be here");
 	}
 
 	@Override
@@ -271,7 +158,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public ArrayList<Object> getVisualizationKeys() {
 		return currentGeneration.get(0).getVisualizationKeys();
 	}
-	
 	
 	@Override
 	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type){
@@ -359,12 +245,10 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		
 		//Left edge
 		for(; i < size; i++){
-			//TODO reset the translate point.
 			previousGeneration.get(i).draw(baseDimension,type,key,g);
 			g.translate(0, -agentDimension.height);
 		}
 	}
-	
 
 	private void drawVertical(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		int size = previousGeneration.size();

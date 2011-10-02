@@ -18,8 +18,8 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	}
 	
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
-		super.initializeAgent(config, id, randomGenerator);
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+		super.initialize(config, id, randomGenerator);
 		
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		

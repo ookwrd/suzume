@@ -127,7 +127,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		if(nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){//BROKEN looking at the wrong thing
 			
 			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
-			node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
+			node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 			population = node;
 			
 			
@@ -283,7 +283,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
 		}
 
-		population.setNewAgents(newGenerationAgents);
+		population.setNewSubNodes(newGenerationAgents);
 	}
 
 	/**

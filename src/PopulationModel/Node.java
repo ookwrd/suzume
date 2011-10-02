@@ -14,7 +14,7 @@ import AutoConfiguration.Configurable;
 public interface Node extends Visualizable, Configurable {
 
 	//Initialization
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator);
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator);
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator);
 	
 	//General Properties
