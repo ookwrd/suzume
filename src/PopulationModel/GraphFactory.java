@@ -1,7 +1,5 @@
 package PopulationModel;
 
-import populationNodes.AbstractNode;
-import populationNodes.NodeTypeConfigurationPanel;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Graph.GraphType;
 
@@ -12,7 +10,6 @@ public class GraphFactory {
 		Graph retVal;
 		
 		switch (type) {
-		
 		case CYCLIC:
 			retVal = new CyclicGraph();
 			break;

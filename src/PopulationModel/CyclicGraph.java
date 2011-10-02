@@ -12,6 +12,7 @@ public class CyclicGraph extends AbstractGraph {
 	public CyclicGraph(){
 		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(false));
 		setDefaultParameter(LINK_DISTANCE, new ConfigurationParameter(1));
+		setDefaultParameter("test", new ConfigurationParameter("test"));
 	}
 
 	@Override
@@ -19,10 +20,10 @@ public class CyclicGraph extends AbstractGraph {
 		//TODO better with index?
 		ArrayList<Node> retValAgents = new ArrayList<Node>();
 		
-		int distance = config.getParameter("Max link distance").getInteger();
+		int distance = getIntegerParameter("Max link distance");
 		int location = populations.indexOf(node);
 
-		if(config.getParameter("Include Self Links").getBoolean()){
+		if(getBooleanParameter("Include Self Links")){
 			retValAgents.add(populations.get(location));
 		}
 
@@ -43,8 +44,11 @@ public class CyclicGraph extends AbstractGraph {
 			retValAgents.add(populations.get(neighbour2));
 		}
 
-		return retValAgents;
-		
+		return retValAgents;	
+	}
+	
+	public void testPrint(){
+		System.out.println("Printing graph data: " + getStringParameter("test"));
 	}
 	
 }

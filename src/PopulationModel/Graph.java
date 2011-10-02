@@ -2,7 +2,7 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import populationNodes.NodeConfiguration;
+import simulation.RandomGenerator;
 
 import AutoConfiguration.Configurable;
 
@@ -10,7 +10,7 @@ public interface Graph extends Configurable {
 
 	public enum GraphType {COMPLETE, CYCLIC/*, GRID*/}
 	
-	public void init(ArrayList<Node> populations, GraphConfiguration config);
+	public void init(ArrayList<Node> populations, GraphConfiguration config, RandomGenerator randomGenerator);
 	
 	public ArrayList<Node> getNodeSet();
 	
