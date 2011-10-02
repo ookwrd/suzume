@@ -52,43 +52,40 @@ public class BasicConfigurable implements Configurable {
 		return retVal;
 	}
 	
-	protected String getStringParameter(String key){
+	public String getStringParameter(String key){
 		return getParameter(key).getString();
 	}
 	
-	protected Integer getIntegerParameter(String key){
+	public Integer getIntegerParameter(String key){
 		return getParameter(key).getInteger();
 	}
 	
-	protected Boolean getBooleanParameter(String key){
+	public Boolean getBooleanParameter(String key){
 		return getParameter(key).getBoolean();
 	}
 	
-	protected Double getDoubleParameter(String key){
+	public Double getDoubleParameter(String key){
 		return getParameter(key).getDouble();
 	}
 	
-	protected Long getLongParameter(String key){
+	public Long getLongParameter(String key){
 		return getParameter(key).getLong();
 	}
 	
-	protected Object[] getListParameter(String key){
+	public Object[] getListParameter(String key){
 		return getParameter(key).getSelectedValues();
 	}
 	
-	protected NodeConfiguration getNodeParameter(String key){
+	public NodeConfiguration getNodeParameter(String key){
 		return getParameter(key).getNodeConfiguration();
 	}
 	
-	protected GraphConfiguration getGraphParameter(String key){
+	public GraphConfiguration getGraphParameter(String key){
 		return getParameter(key).getGraphConfiguration();
 	}
 	
 	@Override
 	public void setParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
-		if(parameters.containsKey(key)){
-			return;
-		}
 		parameters.put(key, parameter);
 	}
 	
