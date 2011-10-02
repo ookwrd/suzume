@@ -155,11 +155,15 @@ public class ConfigurationPanel extends JPanel {
 				break;
 				
 			case NODE:
-				System.out.println("Key" + key);
 				retParameters.put(key, new ConfigurationParameter(((NodeTypeConfigurationPanel)comp).getConfiguration()));
 				break;
 				
+			case GRAPH:
+				retParameters.put(key, new ConfigurationParameter(((GraphTypeConfigurationPanel)comp).getConfiguration()));
+				break;
+				
 			default:
+				System.err.println("Unsupported Configuration Parameter type in ConfigurationPanel:getConfiguration.");
 				break;
 			}
 		

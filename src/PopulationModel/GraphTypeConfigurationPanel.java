@@ -12,6 +12,7 @@ import populationNodes.AbstractNode.NodeType;
 
 import AutoConfiguration.Configurable;
 import AutoConfiguration.ConfigurationPanel;
+import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Graph.GraphType;
 
 @SuppressWarnings("serial")
@@ -59,5 +60,11 @@ public class GraphTypeConfigurationPanel extends JPanel {
 		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();
+	}
+	
+	public GraphConfiguration getConfiguration(){
+		GraphConfiguration retVal = new GraphConfiguration(subPanel.getConfiguration());
+		retVal.setFixedParameter(GRAPH_TYPE, new ConfigurationParameter(Graph.GraphType.values(), new Object[]{graphTypesBox.getSelectedItem()}));
+		return retVal;
 	}
 }

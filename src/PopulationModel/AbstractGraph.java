@@ -2,16 +2,15 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import AutoConfiguration.BasicConfigurable;
+import simulation.RandomGenerator;
 
 public abstract class AbstractGraph extends GraphConfiguration implements Graph {
 
 	protected ArrayList<Node> populations;
-	protected GraphConfiguration config;
 	
 	@Override
-	public void init(ArrayList<Node> populations, GraphConfiguration config){
-		this.config = config;
+	public void init(ArrayList<Node> populations, GraphConfiguration config, RandomGenerator randomGenerator){
+		super.initialize(config);
 		this.populations = populations; 
 	}
 	
