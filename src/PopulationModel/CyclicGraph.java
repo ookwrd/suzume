@@ -10,7 +10,7 @@ public class CyclicGraph extends AbstractGraph {
 	protected static final String LINK_DISTANCE = "Link Distance";
 	
 	public CyclicGraph(){
-		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(false));
+		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(true));
 		setDefaultParameter(LINK_DISTANCE, new ConfigurationParameter(1));
 	}
 

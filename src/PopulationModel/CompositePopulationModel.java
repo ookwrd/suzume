@@ -36,8 +36,15 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 	public CompositePopulationModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
-		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
-		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration()));
+		
+		GraphConfiguration learning = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
+		learning.setParameter(CyclicGraph.LINK_DISTANCE, new ConfigurationParameter(2));
+		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(learning));
+		
+		GraphConfiguration communication = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
+		communication.setParameter(CyclicGraph.SELF_LINKS, new ConfigurationParameter(false));
+		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(communication));
+		
 		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.COMPLETE).getConfiguration()));
 		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010).getConfiguration()));
 	}
@@ -259,5 +266,4 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			g.translate(0, agentDimension.height);
 		}
 	}
-
 }
