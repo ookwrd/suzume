@@ -10,14 +10,16 @@ public interface Graph extends Configurable {
 
 	public enum GraphType {COMPLETE, CYCLIC/*, GRID*/}
 	
-	public void init(ArrayList<Node> populations, GraphConfiguration config, RandomGenerator randomGenerator);
+	public void init(ArrayList<Node> subNodes /*TODO is this needed?*/, GraphConfiguration config, RandomGenerator randomGenerator);
+	
+	public void resetSubNodes(ArrayList<Node> subNodes);
 	
 	public ArrayList<Node> getNodeSet();
 	
 	public GraphConfiguration getConfiguration();
 	
-	public ArrayList<Node> getInNodes(Node node);
+	public ArrayList<Node> getInNodes(int index);
 	
-	public ArrayList<Node> getOutNodes(Node node);
+	public ArrayList<Node> getOutNodes(int index);
 	
 }

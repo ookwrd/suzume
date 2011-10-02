@@ -27,9 +27,9 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent,
 	}
 
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id,
+	public void initialize(NodeConfiguration config, int id,
 			RandomGenerator randomGenerator) {
-		super.initializeAgent(config, id, randomGenerator);
+		super.initialize(config, id, randomGenerator);
 		resourceMultiplier = ((ConfigurationParameter) config
 				.getParameter("Leftover Resource Multiplier")).getDouble();
 	}

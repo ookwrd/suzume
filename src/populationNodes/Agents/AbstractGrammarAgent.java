@@ -19,8 +19,8 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
-		super.initializeAgent(config, id, randomGenerator);
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+		super.initialize(config, id, randomGenerator);
 
 		grammar = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		for (int j = 0; j < getIntegerParameter(NUMBER_OF_MEANINGS); j++){

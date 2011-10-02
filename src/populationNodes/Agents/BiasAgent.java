@@ -30,8 +30,8 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	}
 	
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
-		super.initializeAgent(config, id, randomGenerator);
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+		super.initialize(config, id, randomGenerator);
 		initializeParameters(config);
 		
 		this.randomGenerator = randomGenerator;
@@ -67,7 +67,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
 		BiasAgent parent1 = (BiasAgent)parentA;
 		BiasAgent parent2 = (BiasAgent)parentB;
-		super.initializeAgent(parent1, id, randomGenerator);
+		super.initialize(parent1, id, randomGenerator);
 		initializeParameters((BiasAgent)parentA);
 		
 		chromosome = new ArrayList<double[]>(getIntegerParameter(NUMBER_OF_MEANINGS));

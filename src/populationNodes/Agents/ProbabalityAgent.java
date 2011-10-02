@@ -40,8 +40,8 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	
 	private double grammarAdjustmentCount = 0;
 	
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
-		super.initializeAgent(config, id, randomGenerator);
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+		super.initialize(config, id, randomGenerator);
 
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
@@ -52,7 +52,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {
-		super.initializeAgent((ProbabalityAgent)parentA, id, randomGenerator);
+		super.initialize((ProbabalityAgent)parentA, id, randomGenerator);
 		
 		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
 		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;

@@ -16,7 +16,7 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	protected RandomGenerator randomGenerator;
 
 	@Override
-	public void initializeAgent(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		initialize(config);
 		this.id = id;
 		this.randomGenerator = randomGenerator;

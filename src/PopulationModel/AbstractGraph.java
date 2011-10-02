@@ -6,17 +6,22 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractGraph extends GraphConfiguration implements Graph {
 
-	protected ArrayList<Node> populations;
+	protected ArrayList<Node> subNodes;
 	
 	@Override
-	public void init(ArrayList<Node> populations, GraphConfiguration config, RandomGenerator randomGenerator){
+	public void init(ArrayList<Node> subNodes, GraphConfiguration config, RandomGenerator randomGenerator){
 		super.initialize(config);
-		this.populations = populations; 
+		this.subNodes = subNodes; 
+	}
+	
+	@Override
+	public void resetSubNodes(ArrayList<Node> subNodes){
+		this.subNodes = subNodes;
 	}
 	
 	@Override
 	public ArrayList<Node> getNodeSet(){
-		return populations;
+		return subNodes;
 	}
 
 	@Override
@@ -28,8 +33,8 @@ public abstract class AbstractGraph extends GraphConfiguration implements Graph 
 	 * Override this implementation to create a directed graph.
 	 */
 	@Override
-	public ArrayList<Node> getOutNodes(Node node){
-		return getInNodes(node);
+	public ArrayList<Node> getOutNodes(int index){
+		return getInNodes(index);
 	}
 	
 }

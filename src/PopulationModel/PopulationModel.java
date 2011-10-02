@@ -19,7 +19,7 @@ public interface PopulationModel extends Visualizable, Node {
 	 * 
 	 * @param newGeneration
 	 */
-	public void setNewAgents(ArrayList<Node> newGeneration);
+	public void setNewSubNodes(ArrayList<Node> newGeneration);
 
 	public ArrayList<Node> getPossibleTeachers(Node agent);
 
@@ -33,12 +33,5 @@ public interface PopulationModel extends Visualizable, Node {
 	 * @return
 	 */
 	public ArrayList<Agent> getCurrentGeneration();
-
-	/**
-	 * Returns the set of agents comprising the previous generation.
-	 * 
-	 * @return
-	 */
-	public ArrayList<Agent> getAncestorGeneration();
 	
 }

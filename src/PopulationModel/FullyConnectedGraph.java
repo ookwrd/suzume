@@ -11,14 +11,10 @@ public class FullyConnectedGraph extends AbstractGraph implements Graph {
 	public FullyConnectedGraph(){
 		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(true));
 	}
-	
-	@Override
-	public ArrayList<Node> getOutNodes(Node node) {
-		return getNodeSet();
-	}
 
 	@Override
-	public ArrayList<Node> getInNodes(Node node) {
+	public ArrayList<Node> getInNodes(int index) {
+		//TODO self links
 		return getNodeSet();
 	}
 
