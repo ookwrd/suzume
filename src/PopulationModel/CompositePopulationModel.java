@@ -116,7 +116,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		}
 		return retAgents;
 	}
-
 	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
@@ -168,11 +167,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 	@Override
 	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type){
-		
-		if(currentGeneration.size() == 0){
-			System.out.print("Trying to get Dimension of empty population model");
-			return null;
-		}
+		assert(currentGeneration.size() != 0);
 	
 		switch(type){
 		case layout:
@@ -182,19 +177,14 @@ public class CompositePopulationModel extends AbstractNode implements Population
 			return getDimensionVertical(baseDimension, type);
 			
 		default:
-			System.out.println("Unsupported Visualization type");
+			System.err.println("Unsupported Visualization type");
 			return null;
 		}
 	
 	}
 	
 	private Dimension getDimensionLayout(Dimension baseDimension, VisualizationStyle type){
-		int size = currentGeneration.size();
-		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
-		
-		int agentsPerEdge = (size/4)+(size%4!=0?1:0) + 1;
-		
-		return new Dimension(agentsPerEdge*agentDimension.width, agentsPerEdge*agentDimension.height);
+		return learningGraph.getDimension(baseDimension, type);
 	}
 	
 	private Dimension getDimensionVertical(Dimension baseDimension, VisualizationStyle type){
@@ -222,39 +212,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 	
 	private void drawLayout(Dimension baseDimension, VisualizationStyle type, Object key, Graphics g){
-		int size = currentGeneration.size();
-		Dimension thisDimension = getDimension(baseDimension, type);
-		Dimension agentDimension = currentGeneration.get(0).getDimension(baseDimension, type);
-
-		int agentsPerSection = (size/4)+(size%4!=0?1:0);
-		
-		g.setColor(Color.white);
-		g.fillRect(0, 0, thisDimension.width, thisDimension.height);
-		
-		//Top edge
-		int i;
-		for(i = 0; i < agentsPerSection; i++){
-			previousGeneration.get(i).draw(baseDimension,type,key,g);
-			g.translate(agentDimension.width, 0);
-		}
-		
-		//right edge
-		for(; i < 2*agentsPerSection; i++){
-			previousGeneration.get(i).draw(baseDimension,type,key,g);
-			g.translate(0, agentDimension.height);
-		}
-		
-		//Bottom edge
-		for(; i < 3*agentsPerSection; i++){
-			previousGeneration.get(i).draw(baseDimension,type,key,g);
-			g.translate(-agentDimension.width, 0);
-		}
-		
-		//Left edge
-		for(; i < size; i++){
-			previousGeneration.get(i).draw(baseDimension,type,key,g);
-			g.translate(0, -agentDimension.height);
-		}
+		learningGraph.draw(baseDimension, type, key, g);
 	}
 
 	private void drawVertical(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
