@@ -1,30 +1,21 @@
 package populationNodes.Agents;
 
-import java.util.ArrayList;
-
 import tools.Pair;
 import PopulationModel.Node;
-import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.Node.StatisticsCollectionPoint;
 
-public abstract class AbstractMinMaxAggregator implements StatisticsAggregator {
+public abstract class AbstractMinMaxAggregator extends BaseStatisticsAggregator {
 
 	public enum Type {Min, Max}
-	
-	private ArrayList<Pair<Double, Double>> stats = new ArrayList<Pair<Double,Double>>();
-	
+
 	private double value = 0;
 	private boolean unset = true;
 	
 	private Type type;
 	
-	private String name;
-	private StatisticsCollectionPoint point;
-	
-	public AbstractMinMaxAggregator(Type type,StatisticsCollectionPoint point, String name){
+	public AbstractMinMaxAggregator(Type type, StatisticsCollectionPoint point, String name){
+		super(point, name);
 		this.type = type;
-		this.name = name;
-		this.point = point;
 	}
 	
 	@Override
@@ -47,8 +38,7 @@ public abstract class AbstractMinMaxAggregator implements StatisticsAggregator {
 				if(tempValue > value){
 					value = tempValue;
 				}
-			}
-			
+			}	
 		}
 		
 	}
@@ -59,16 +49,6 @@ public abstract class AbstractMinMaxAggregator implements StatisticsAggregator {
 	public void endGeneration(Integer generation) {
 		stats.add(new Pair<Double,Double>(generation.doubleValue(),value));
 		unset = true;
-	}
-
-	@Override
-	public ArrayList<Pair<Double, Double>> getStatistics() {
-		return stats;
-	}
-
-	@Override
-	public String getTitle() {
-		return name;
 	}
 
 }
