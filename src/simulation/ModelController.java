@@ -63,7 +63,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	public ModelController(){
 		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.ConfigurablePopulation).getConfiguration()));
-		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
+		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(1000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));

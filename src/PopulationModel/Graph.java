@@ -2,11 +2,12 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
+import runTimeVisualization.Visualizable;
 import simulation.RandomGenerator;
 
 import AutoConfiguration.Configurable;
 
-public interface Graph extends Configurable {
+public interface Graph extends Configurable, Visualizable {
 
 	public enum GraphType {COMPLETE, CYCLIC/*, GRID*/}
 	
