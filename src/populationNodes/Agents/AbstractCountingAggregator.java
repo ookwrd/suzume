@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import tools.Pair;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
+import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractCountingAggregator implements StatisticsAggregator {
 
@@ -13,13 +14,19 @@ public abstract class AbstractCountingAggregator implements StatisticsAggregator
 		private int agentCount = 0;
 		
 		private String name;
+		private StatisticsCollectionPoint point;
 		
-		public AbstractCountingAggregator(String name){
+		public AbstractCountingAggregator(StatisticsCollectionPoint point, String name){
 			this.name = name;
+			this.point = point;
 		}
 		
 		@Override
-		public final void collectStatistics(Node agent) {
+		public final void collectStatistics(StatisticsCollectionPoint point, Node agent) {
+			if(this.point != point){
+				return;
+			}
+			
 			agentCount++;
 			updateCount(agent);
 		}

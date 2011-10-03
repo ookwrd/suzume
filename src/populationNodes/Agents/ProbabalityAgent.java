@@ -14,6 +14,7 @@ import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
+import PopulationModel.Node.StatisticsCollectionPoint;
 
 public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
 
@@ -202,7 +203,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
 
-		retVal.add(new AbstractCountingAggregator("Grammar Adjustment count") {
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Grammar Adjustment count") {
 			@Override
 			protected void updateCount(Node agent) {
 				addToCount(((ProbabalityAgent)agent).grammarAdjustmentCount);

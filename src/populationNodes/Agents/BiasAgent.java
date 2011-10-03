@@ -12,6 +12,7 @@ import AutoConfiguration.ConfigurationParameter;
 import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
+import PopulationModel.Node.StatisticsCollectionPoint;
 
 public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	
@@ -205,7 +206,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
 	
-		retVal.add(new AbstractCountingAggregator("Gene-Grammar Match Probability") {
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Gene-Grammar Match Probability") {
 			@Override
 			protected void updateCount(Node agent) {
 				addToCount(((BiasAgent)agent).geneGrammarMatch());

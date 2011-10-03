@@ -35,11 +35,12 @@ public interface Node extends Visualizable, Configurable {
 	public ArrayList<Agent> getBaseAgents();
 	
 	//Statistics
+	public enum StatisticsCollectionPoint {PostIntialization, PostTraining, PostInvention, PostCommunication, PostKilling, PostReproduction}
+	
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators();
 	
 	public interface StatisticsAggregator{
-		//TODO multiple collection points
-		public void collectStatistics(Node agent);
+		public void collectStatistics(StatisticsCollectionPoint point, Node agent);
 		public void endGeneration(Integer generation);
 		
 		public ArrayList<Pair<Double,Double>> getStatistics();

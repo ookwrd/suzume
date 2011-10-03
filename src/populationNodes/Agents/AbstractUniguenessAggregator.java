@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import tools.Pair;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
+import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggregator {
 
@@ -13,13 +14,19 @@ public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggre
 		private int agentCount = 0;
 		
 		private String name;
+		private StatisticsCollectionPoint point;
 		
-		public AbstractUniguenessAggregator(String name){
+		public AbstractUniguenessAggregator(StatisticsCollectionPoint point, String name){
 			this.name = name;
+			this.point = point;
 		}
 		
 		@Override
-		public final void collectStatistics(Node agent) {
+		public final void collectStatistics(StatisticsCollectionPoint point, Node agent) {
+			if(point != this.point){
+				return;
+			}
+			
 			agentCount++;
 			checkUniqueness(agent);
 		}

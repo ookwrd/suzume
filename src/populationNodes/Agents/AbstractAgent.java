@@ -11,6 +11,7 @@ import populationNodes.NodeConfiguration;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
+import static PopulationModel.Node.StatisticsCollectionPoint;
 
 import simulation.RandomGenerator;
 
@@ -88,7 +89,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = new ArrayList<StatisticsAggregator>();
 		
-		retVal.add(new AbstractCountingAggregator("Fitness") {
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Fitness") {
 			@Override
 			public void updateCount(Node agent) {	
 				addToCount(((Agent)agent).getFitness());
