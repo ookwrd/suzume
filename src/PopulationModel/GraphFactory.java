@@ -15,7 +15,11 @@ public class GraphFactory {
 			break;
 			
 		case COMPLETE:
-			retVal = new FullyConnectedGraph();
+			retVal = new CompleteGraph();
+			break;
+			
+		case GRID:
+			retVal = new Grid();
 			break;
 
 		default:

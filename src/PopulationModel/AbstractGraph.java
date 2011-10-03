@@ -58,7 +58,7 @@ public abstract class AbstractGraph extends GraphConfiguration implements Graph 
 				);
 	}
 	
-	private int edgeLength(){
+	protected int edgeLength(){
 		int subNodeCount = subNodes.size();
 		double sqrt = Math.sqrt(subNodeCount);
 		int edgeLength;
