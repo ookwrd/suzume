@@ -28,10 +28,10 @@ public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggre
 			}
 			
 			agentCount++;
-			checkUniqueness(agent);
+			addItem(getItem(agent));
 		}
 		
-		protected abstract void checkUniqueness(Node agent);
+		protected abstract K getItem(Node agent);
 		
 		@Override
 		public void endGeneration(Integer generation){
@@ -50,7 +50,7 @@ public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggre
 			return name;
 		}
 		
-		protected final void addItem(K item){
+		private final void addItem(K item){
 			if(!collection.contains(item)){
 				collection.add(item);
 			}

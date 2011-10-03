@@ -208,8 +208,8 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	
 		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Gene-Grammar Match Probability") {
 			@Override
-			protected void updateCount(Node agent) {
-				addToCount(((BiasAgent)agent).geneGrammarMatch());
+			protected double getValue(Node agent) {
+				return ((BiasAgent)agent).geneGrammarMatch();
 			}
 		});
 		

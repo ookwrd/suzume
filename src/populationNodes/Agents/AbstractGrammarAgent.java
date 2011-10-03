@@ -56,15 +56,15 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		
 		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Number of Nulls") {	
 			@Override
-			protected void updateCount(Node agent) {
-				addToCount(((AbstractGrammarAgent)agent).numberOfNullsInGrammar());
+			protected double getValue(Node agent) {
+				return ((AbstractGrammarAgent)agent).numberOfNullsInGrammar();
 			}
 		});
 		
 		retVal.add(new AbstractUniguenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication, "Number of Phenotypes") {
 			@Override
-			protected void checkUniqueness(Node agent) {
-				addItem(((AbstractGrammarAgent)agent).grammar);
+			protected Object getItem(Node agent) {
+				return ((AbstractGrammarAgent)agent).grammar;
 			}
 		});
 		

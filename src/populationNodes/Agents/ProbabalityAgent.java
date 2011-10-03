@@ -205,8 +205,8 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 
 		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Grammar Adjustment count") {
 			@Override
-			protected void updateCount(Node agent) {
-				addToCount(((ProbabalityAgent)agent).grammarAdjustmentCount);
+			protected double getValue(Node agent) {
+				return ((ProbabalityAgent)agent).grammarAdjustmentCount;
 			}
 		});
 		
