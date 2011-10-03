@@ -9,9 +9,9 @@ import AutoConfiguration.Configurable;
 
 public interface Graph extends Configurable, Visualizable {
 
-	public enum GraphType {COMPLETE, CYCLIC/*, GRID*/}
+	public enum GraphType {COMPLETE, CYCLIC, GRID}
 	
-	public void init(ArrayList<Node> subNodes /*TODO is this needed?*/, GraphConfiguration config, RandomGenerator randomGenerator);
+	public void init(ArrayList<Node> subNodes, GraphConfiguration config, RandomGenerator randomGenerator);
 	
 	public void resetSubNodes(ArrayList<Node> subNodes);
 	

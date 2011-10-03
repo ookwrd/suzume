@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import AutoConfiguration.ConfigurationParameter;
 
-public class FullyConnectedGraph extends AbstractGraph implements Graph {
+public class CompleteGraph extends AbstractGraph implements Graph {
 
 	protected static final String SELF_LINKS = "Include Self Links";
 	
-	public FullyConnectedGraph(){
+	public CompleteGraph(){
 		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(true));
 	}
 

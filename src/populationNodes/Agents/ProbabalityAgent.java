@@ -145,6 +145,14 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
 		}else if (visualizationKey.equals("genotype")){
+			
+			System.out.println(chromosome.get(0));
+			System.out.println(Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16));
+			System.out.println(
+					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16));
+			System.out.println(Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16));
+			System.out.println();
+			
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
