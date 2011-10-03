@@ -6,6 +6,7 @@ import populationNodes.NodeConfiguration;
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
+import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 
@@ -32,14 +33,14 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
 	
-		retVal.add(new AbstractCountingAggregator("Gene Grammar Match") {
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Gene Grammar Match") {
 			@Override
 			protected void updateCount(Node agent) {
 				addToCount(((AbstractGeneGrammarAgent)agent).geneGrammarMatch());
 			}
 		});
 		
-		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Genotypes") {
+		retVal.add(new AbstractUniguenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
 			@Override
 			protected void checkUniqueness(Node agent) {
 				addItem(((AbstractGeneGrammarAgent)agent).chromosome);

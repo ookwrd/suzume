@@ -7,6 +7,7 @@ import populationNodes.Utterance;
 import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
+import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractGrammarAgent extends AbstractAgent {
 
@@ -53,14 +54,14 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
 		
-		retVal.add(new AbstractCountingAggregator("Number of Nulls") {	
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Number of Nulls") {	
 			@Override
 			protected void updateCount(Node agent) {
 				addToCount(((AbstractGrammarAgent)agent).numberOfNullsInGrammar());
 			}
 		});
 		
-		retVal.add(new AbstractUniguenessAggregator<Object>("Number of Phenotypes") {
+		retVal.add(new AbstractUniguenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication, "Number of Phenotypes") {
 			@Override
 			protected void checkUniqueness(Node agent) {
 				addItem(((AbstractGrammarAgent)agent).grammar);

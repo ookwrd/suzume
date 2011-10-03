@@ -10,6 +10,7 @@ import populationNodes.Utterance;
 
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
+import PopulationModel.Node.StatisticsCollectionPoint;
 import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
@@ -156,7 +157,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
 		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
 	
-		retVal.add(new AbstractCountingAggregator("Leftover Learning resource") {
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Leftover Learning resource") {
 			@Override
 			protected void updateCount(Node agent) {
 				addToCount(((YamauchiHashimoto2010)agent).learningResource);

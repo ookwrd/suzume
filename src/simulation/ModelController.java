@@ -8,6 +8,7 @@ import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
 import populationNodes.NodeTypeConfigurationPanel;
+import static PopulationModel.Node.StatisticsCollectionPoint;
 
 import runTimeVisualization.RuntimeVisualizer;
 import runTimeVisualization.Visualizable.Stoppable;
@@ -172,30 +173,38 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 */
 	private void iterateGeneration(){
 
-		initializeAgents();
-		trainAgents();
-		communication();
-		gatherStatistics();
-		killAgents();
+		initializationPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostIntialization);
+		
+		trainingPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostTraining);
+		
+		inventionPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostInvention);
+		
+		communicationPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostCommunication);
+		
+		killingPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostKilling);
 
 		visualize();
 		
-		replaceDeadAgents();
+		reproductionPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostReproduction);
 	
-		for(StatisticsAggregator agg: statsAggregators[currentRun]){
-			agg.endGeneration(currentGeneration);
-		}//TODO
+		finalizeStatistics();
 
 	}
 
-	private void initializeAgents(){
+	private void initializationPhase(){
 		//TODO
 	}
 	
 	/**
 	 * Training and invention phase of a single round of the simulation.
 	 */
-	private void trainAgents(){
+	private void trainingPhase(){
 
 		//for each agent
 		for(Node learner : population.getCurrentGeneration()){
@@ -214,16 +223,21 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				}
 			}
 
-			//Use leftover learning resource to potentially invent new grammar items.
+		}
+	}
+	
+	private void inventionPhase(){
+		
+		for(Node learner : population.getCurrentGeneration()){
 			learner.invent();
 		}
-
+		
 	}
 
 	/**
 	 * Communication Phase  which calculates the fitness of all agents in the population.
 	 */
-	private void communication(){
+	private void communicationPhase(){
 
 		for(Agent agent : population.getCurrentGeneration()){
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
@@ -239,7 +253,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		}
 	}
 	
-	private void killAgents(){
+	private void killingPhase(){
 		//TODO
 	}
 	
@@ -255,7 +269,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	/**
 	 * Selection and construction of the new generation.
 	 */
-	private void replaceDeadAgents(){
+	private void reproductionPhase(){
 		
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
 		
@@ -272,12 +286,18 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	/**
 	 * Gather statistics on the population at the current point in time.
 	 */
-	private void gatherStatistics(){
+	private void gatherStatistics(StatisticsCollectionPoint collectionPoint){
 		ArrayList<Agent> agents = population.getCurrentGeneration();
 		for(Agent agent : agents){
 			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
-				aggregator.collectStatistics(agent);
+				aggregator.collectStatistics(collectionPoint, agent);
 			}
+		}
+	}
+	
+	private void finalizeStatistics(){
+		for(StatisticsAggregator agg: statsAggregators[currentRun]){
+			agg.endGeneration(currentGeneration);
 		}
 	}
 	
