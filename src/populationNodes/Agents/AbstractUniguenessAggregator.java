@@ -4,21 +4,15 @@ import java.util.ArrayList;
 
 import tools.Pair;
 import PopulationModel.Node;
-import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.Node.StatisticsCollectionPoint;
 
-public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggregator {
+public abstract class AbstractUniguenessAggregator<K> extends BaseStatisticsAggregator {
 
-		private ArrayList<Pair<Double, Double>> stats = new ArrayList<Pair<Double,Double>>();
 		private ArrayList<K> collection = new ArrayList<K>();  
 		private int agentCount = 0;
 		
-		private String name;
-		private StatisticsCollectionPoint point;
-		
 		public AbstractUniguenessAggregator(StatisticsCollectionPoint point, String name){
-			this.name = name;
-			this.point = point;
+			super(point, name);
 		}
 		
 		@Override
@@ -31,6 +25,12 @@ public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggre
 			addItem(getItem(agent));
 		}
 		
+		private void addItem(K item){
+			if(!collection.contains(item)){
+				collection.add(item);
+			}
+		}
+		
 		protected abstract K getItem(Node agent);
 		
 		@Override
@@ -39,21 +39,4 @@ public abstract class AbstractUniguenessAggregator<K> implements StatisticsAggre
 			agentCount = 0;
 			collection = new ArrayList<K>();
 		}
-
-		@Override
-		public final ArrayList<Pair<Double, Double>> getStatistics() {
-			return stats;
-		}
-		
-		@Override
-		public String getTitle(){
-			return name;
-		}
-		
-		private final void addItem(K item){
-			if(!collection.contains(item)){
-				collection.add(item);
-			}
-		}
-	
 }
