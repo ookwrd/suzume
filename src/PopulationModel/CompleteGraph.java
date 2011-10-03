@@ -14,7 +14,11 @@ public class CompleteGraph extends AbstractGraph implements Graph {
 
 	@Override
 	public ArrayList<Node> getInNodes(int index) {
-		//TODO self links
+		@SuppressWarnings("unchecked")
+		ArrayList<Node> retVal = (ArrayList<Node>) getNodeSet().clone();
+		if(!getBooleanParameter(SELF_LINKS)){
+			retVal.remove(retVal.get(index));
+		}
 		return getNodeSet();
 	}
 
