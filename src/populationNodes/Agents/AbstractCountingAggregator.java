@@ -28,10 +28,10 @@ public abstract class AbstractCountingAggregator implements StatisticsAggregator
 			}
 			
 			agentCount++;
-			updateCount(agent);
+			count += getValue(agent);
 		}
 		
-		protected abstract void updateCount(Node agent);
+		protected abstract double getValue(Node agent);
 		
 		@Override
 		public void endGeneration(Integer generation){
@@ -48,14 +48,6 @@ public abstract class AbstractCountingAggregator implements StatisticsAggregator
 		@Override
 		public String getTitle(){
 			return name;
-		}
-		
-		protected final void setCount(double count){
-			this.count = count;
-		}
-		
-		protected final void addToCount(double count){
-			this.count += count;
 		}
 		
 		protected final double getCount(){

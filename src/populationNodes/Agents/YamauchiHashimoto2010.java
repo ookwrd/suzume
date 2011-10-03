@@ -159,8 +159,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	
 		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Leftover Learning resource") {
 			@Override
-			protected void updateCount(Node agent) {
-				addToCount(((YamauchiHashimoto2010)agent).learningResource);
+			protected double getValue(Node agent) {
+				return ((YamauchiHashimoto2010)agent).learningResource;
 			}
 		});
 		

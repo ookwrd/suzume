@@ -91,10 +91,24 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		
 		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Fitness") {
 			@Override
-			public void updateCount(Node agent) {	
-				addToCount(((Agent)agent).getFitness());
+			public double getValue(Node agent) {	
+				return ((Agent)agent).getFitness();
 			}
 		});
+		
+		/*retVal.add(new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Max, StatisticsCollectionPoint.PostCommunication, "Max Fitness") {
+			@Override
+			protected double statValue(Node agent) {
+				return ((Agent)agent).getFitness();
+			}
+		});
+		
+		retVal.add(new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Min, StatisticsCollectionPoint.PostCommunication, "Min Fitness") {
+			@Override
+			protected double statValue(Node agent) {
+				return ((Agent)agent).getFitness();
+			}
+		});*/
 		
 		return retVal;
 	}

@@ -35,15 +35,15 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	
 		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Gene Grammar Match") {
 			@Override
-			protected void updateCount(Node agent) {
-				addToCount(((AbstractGeneGrammarAgent)agent).geneGrammarMatch());
+			protected double getValue(Node agent) {
+				return ((AbstractGeneGrammarAgent)agent).geneGrammarMatch();
 			}
 		});
 		
 		retVal.add(new AbstractUniguenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
 			@Override
-			protected void checkUniqueness(Node agent) {
-				addItem(((AbstractGeneGrammarAgent)agent).chromosome);
+			protected Object getItem(Node agent) {
+				return ((AbstractGeneGrammarAgent)agent).chromosome;
 			}
 		});
 		
