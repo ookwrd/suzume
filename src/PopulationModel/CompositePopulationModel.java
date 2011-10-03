@@ -18,6 +18,8 @@ import AutoConfiguration.ConfigurationParameter;
 
 public class CompositePopulationModel extends AbstractNode implements PopulationModel {
 
+	private enum VisualizationStructure {LEARNING_GRAPH, COMMUNICATION_GRAPH, REPRODUCTION_GRAPH}
+	
 	public static final String SUB_NODE = "Sub Model:";
 	public static final String REPRODUCTION_GRAPH = "Reproduction Graph";
 	public static final String COMMUNICATION_GRAPH = "Communication Graph";
@@ -26,6 +28,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public static final String LEARN_TO_DISTANCE = "Learn from agents to distance:";
 	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
 	public static final String REPRODUCE_TO_DISTANCE = "Parents selected out to distance:";
+	public static final String VISUALIZATION_STRUCTURE = "Visualize based on:";
 	
 	private Graph learningGraph;
 	private Graph communicationGraph;
@@ -36,6 +39,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	
 	public CompositePopulationModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
+		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values()));
 		
 		GraphConfiguration learning = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
 		learning.setParameter(CyclicGraph.LINK_DISTANCE, new ConfigurationParameter(2));
@@ -184,7 +188,21 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 	
 	private Dimension getDimensionLayout(Dimension baseDimension, VisualizationStyle type){
-		return learningGraph.getDimension(baseDimension, type);
+
+		switch((VisualizationStructure)getListParameter(VISUALIZATION_STRUCTURE)[0]){
+		case LEARNING_GRAPH:
+			return learningGraph.getDimension(baseDimension, type);
+			
+		case COMMUNICATION_GRAPH:
+			return communicationGraph.getDimension(baseDimension, type);
+			
+		case REPRODUCTION_GRAPH:
+			return reproductionGraph.getDimension(baseDimension, type);
+			
+		default:
+			System.err.println("Unknown Visualization Structure selected in CompositePopulationModel.getDimension");
+			return null;
+		}
 	}
 	
 	private Dimension getDimensionVertical(Dimension baseDimension, VisualizationStyle type){
@@ -212,7 +230,23 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	}
 	
 	private void drawLayout(Dimension baseDimension, VisualizationStyle type, Object key, Graphics g){
-		learningGraph.draw(baseDimension, type, key, g);
+		
+		switch((VisualizationStructure)getListParameter(VISUALIZATION_STRUCTURE)[0]){
+		case LEARNING_GRAPH:
+			learningGraph.draw(baseDimension, type, key, g);
+			return;
+			
+		case COMMUNICATION_GRAPH:
+			communicationGraph.draw(baseDimension, type, key, g);
+			return;
+			
+		case REPRODUCTION_GRAPH:
+			reproductionGraph.draw(baseDimension, type, key, g);
+			return;
+			
+		default:
+			System.err.println("Unknown Visualization Structure selected in CompositePopulationModel.getDimension");
+		}
 	}
 
 	private void drawVertical(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){

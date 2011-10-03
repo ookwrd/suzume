@@ -122,31 +122,10 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
-		System.out.println("Type at initialization: " + nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
-		
-		if(nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue() == NodeType.ConfigurablePopulation){//BROKEN looking at the wrong thing
-			
-			CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
-			node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
-			population = node;
-			
-			
-		} else {
-		
-			System.err.println("Shodn't be here: ModelController:initialize population");
-			
-			/*//THis case needs to be gotten rid of.
-			ArrayList<Node> nodes = new ArrayList<Node>();
-			for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
-				
-				Node node = NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfiguration.NODE_TYPE).getSelectedValue());
-				node.initializeAgent(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
-				nodes.add(node);
-			}
-		
-			 population = new CompositePopulationModel(nodes, nodes);*/
-		}
-		
+		CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
+		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
+		population = node;
+
 	}
 
 
@@ -154,12 +133,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public void run(){
 		
 		startTimer();
-		
 		runSimulation();
+		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
 
 		plotStatistics();
 		
-		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
 	}
 
 	/**
@@ -180,21 +158,10 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 					System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 				}
 	
-				//Update stepwise visualization
-				if(visualizer != null){
-					visualizer.update(currentRun, currentGeneration);
-				}
-				
-				for(StatisticsAggregator agg: statsAggregators[currentRun]){
-					agg.endGeneration(currentGeneration);
-				}
-	
 				currentGeneration++;
-				
 			}
 	
 			currentRun++;
-			
 			resetRun();
 		}
 		
@@ -210,7 +177,14 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		communication();
 		gatherStatistics();
 		killAgents();
+
+		visualize();
+		
 		replaceDeadAgents();
+	
+		for(StatisticsAggregator agg: statsAggregators[currentRun]){
+			agg.endGeneration(currentGeneration);
+		}//TODO
 
 	}
 
@@ -267,6 +241,15 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private void killAgents(){
 		//TODO
+	}
+	
+	private void visualize(){
+
+		//Update stepwise visualization
+		if(visualizer != null){
+			visualizer.update(currentRun, currentGeneration);
+		}
+		
 	}
 
 	/**
