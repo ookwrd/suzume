@@ -21,18 +21,16 @@ public interface Node extends Visualizable, Configurable {
 	public String getName();
 	public int getId();
 	public NodeConfiguration getConfiguration();
+
+	public ArrayList<Agent> getBaseAgents();
 	
 	//Language Learning
 	public void teach(Node agent);
 	public void learnUtterance(Utterance utterance);
 	public boolean canStillLearn();
 	
-	//Invention Phase
-	public void invent();
-	
+	//Communications Phase
 	public void communicate(Node partner);
-	
-	public ArrayList<Agent> getBaseAgents();
 	
 	//Statistics
 	public enum StatisticsCollectionPoint {PostIntialization, PostTraining, PostInvention, PostCommunication, PostKilling, PostReproduction}

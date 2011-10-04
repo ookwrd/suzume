@@ -6,6 +6,7 @@ import nodes.Agents.AlteredAgent;
 import nodes.Agents.BiasAgent;
 import nodes.Agents.FixedProbabilityAgent;
 import nodes.Agents.ProbabalityAgent;
+import nodes.Agents.TestAgent;
 import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
@@ -47,6 +48,10 @@ public class NodeFactory {
 			
 		case SimpleConfigurable:
 			retVal = new SimpleConfigurableModel();
+			break;
+			
+		case TestAgent:
+			retVal = new TestAgent();
 			break;
 
 		default:

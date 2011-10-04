@@ -9,7 +9,7 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
-	public enum NodeType { YamauchiHashimoto2010, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation, SimpleConfigurable }
+	public enum NodeType { YamauchiHashimoto2010, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation, SimpleConfigurable, TestAgent }
 	
 	private int id;
 	protected RandomGenerator randomGenerator;
