@@ -1,4 +1,4 @@
-package Launcher;
+package simulation;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -9,10 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import AutoConfiguration.ConfigurationPanel;
+import auto_configuration.ConfigurationPanel;
 
-import simulation.ModelController;
-import simulation.RandomGenerator;
+
 
 @SuppressWarnings("serial")
 public class Launcher extends JPanel {

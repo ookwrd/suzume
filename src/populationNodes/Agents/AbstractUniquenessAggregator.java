@@ -6,12 +6,12 @@ import tools.Pair;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsCollectionPoint;
 
-public abstract class AbstractUniguenessAggregator<K> extends BaseStatisticsAggregator {
+public abstract class AbstractUniquenessAggregator<K> extends BaseStatisticsAggregator {
 
 		private ArrayList<K> collection = new ArrayList<K>();  
 		private int agentCount = 0;
 		
-		public AbstractUniguenessAggregator(StatisticsCollectionPoint point, String name){
+		public AbstractUniquenessAggregator(StatisticsCollectionPoint point, String name){
 			super(point, name);
 		}
 		

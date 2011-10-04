@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import PopulationModel.Node;
 
-import populationNodes.Agents.Agent;
-
 
 public class ConstantProbabilitySelectionModel extends SelectionModel {
 

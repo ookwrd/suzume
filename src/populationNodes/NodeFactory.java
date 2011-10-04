@@ -1,5 +1,6 @@
 package populationNodes;
 
+import auto_configuration.ConfigurationParameter;
 import populationNodes.AbstractNode.NodeType;
 import populationNodes.Agents.Agent;
 import populationNodes.Agents.AlteredAgent;
@@ -8,10 +9,9 @@ import populationNodes.Agents.FixedProbabilityAgent;
 import populationNodes.Agents.ProbabalityAgent;
 import populationNodes.Agents.YamauchiHashimoto2010;
 import simulation.RandomGenerator;
-import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.CompositePopulationModel;
+import PopulationModel.ConfigurableModel;
 import PopulationModel.Node;
-import PopulationModel.SimpleCompositeModel;
+import PopulationModel.SimpleConfigurableModel;
 
 public class NodeFactory {
 
@@ -43,11 +43,11 @@ public class NodeFactory {
 			break;
 		
 		case ConfigurablePopulation:
-			retVal = new CompositePopulationModel();
+			retVal = new ConfigurableModel();
 			break;
 			
 		case SimpleConfigurable:
-			retVal = new SimpleCompositeModel();
+			retVal = new SimpleConfigurableModel();
 			break;
 
 		default:
@@ -55,16 +55,16 @@ public class NodeFactory {
 			retVal = null;
 		}
 		
-		retVal.setFixedParameter(NodeTypeConfigurationPanel.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
+		retVal.setFixedParameter(NodeConfigurationPanel.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
 		
 		return retVal;	
 	}
 	
 	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
-		NodeType type = (NodeType) parentA.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue();
+		NodeType type = (NodeType) parentA.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue();
 		
-		if(type != parentB.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue()){
+		if(type != parentB.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue()){
 			System.out.println("Agent type of parents do not match in AgentFactory. Sexual reproduction not possible.");
 			return null;
 		}	

@@ -1,6 +1,6 @@
 package populationNodes;
 
-import AutoConfiguration.BasicConfigurable;
+import auto_configuration.BasicConfigurable;
 
 public class NodeConfiguration extends BasicConfigurable {
 	

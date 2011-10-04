@@ -1,14 +1,14 @@
 package PopulationModel;
 
+import auto_configuration.ConfigurationParameter;
 import populationNodes.NodeConfiguration;
 import simulation.RandomGenerator;
-import AutoConfiguration.ConfigurationParameter;
 
-public class SimpleCompositeModel extends CompositePopulationModel {
+public class SimpleConfigurableModel extends ConfigurableModel {
 
 	public static final String GRAPH = "Graph:";
 	
-	public SimpleCompositeModel(){
+	public SimpleConfigurableModel(){
 		fixParameter(REPRODUCTION_GRAPH);
 		fixParameter(LEARNING_GRAPH);
 		fixParameter(COMMUNICATION_GRAPH);

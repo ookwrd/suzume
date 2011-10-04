@@ -6,12 +6,13 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import auto_configuration.ConfigurationParameter;
+import auto_configuration.Configurable.Describable;
+
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
 
 import simulation.RandomGenerator;
-import AutoConfiguration.ConfigurationParameter;
-import AutoConfiguration.Configurable.Describable;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.Node.StatisticsCollectionPoint;

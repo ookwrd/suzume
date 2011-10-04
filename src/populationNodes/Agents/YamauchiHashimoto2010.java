@@ -5,13 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import auto_configuration.ConfigurationParameter;
+import auto_configuration.Configurable.Describable;
+
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
 
-import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsCollectionPoint;
-import AutoConfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 

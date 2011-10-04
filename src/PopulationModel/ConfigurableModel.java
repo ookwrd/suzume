@@ -4,18 +4,19 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import auto_configuration.ConfigurationParameter;
+
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
-import populationNodes.NodeTypeConfigurationPanel;
+import populationNodes.NodeConfigurationPanel;
 import populationNodes.Utterance;
 import populationNodes.Agents.Agent;
 
 import simulation.RandomGenerator;
 
-import AutoConfiguration.ConfigurationParameter;
 
-public class CompositePopulationModel extends AbstractNode implements PopulationModel {
+public class ConfigurableModel extends AbstractNode implements PopulationModel {
 
 	private enum VisualizationStructure {LEARNING_GRAPH, COMMUNICATION_GRAPH, REPRODUCTION_GRAPH}
 	
@@ -33,7 +34,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	private ArrayList<Node> previousGeneration = new ArrayList<Node>();
 	private ArrayList<Node> currentGeneration = new ArrayList<Node>();
 	
-	public CompositePopulationModel(){
+	public ConfigurableModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
 		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values()));
 		
@@ -58,7 +59,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
-			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
+			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
 			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
 		}
@@ -66,7 +67,7 @@ public class CompositePopulationModel extends AbstractNode implements Population
 		
 		nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
-			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
+			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
 			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
 		}

@@ -4,9 +4,10 @@ import java.util.Random;
 
 import javax.swing.border.TitledBorder;
 
-import AutoConfiguration.BasicConfigurable;
-import AutoConfiguration.ConfigurationPanel;
-import AutoConfiguration.ConfigurationParameter;
+import auto_configuration.BasicConfigurable;
+import auto_configuration.ConfigurationPanel;
+import auto_configuration.ConfigurationParameter;
+
 
 
 public class RandomGenerator extends BasicConfigurable {

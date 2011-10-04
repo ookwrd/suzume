@@ -1,12 +1,13 @@
- package AutoConfiguration;
+ package auto_configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import auto_configuration.ConfigurationParameter.ConfigurationParameterType;
+
 import populationNodes.NodeConfiguration;
 
-import AutoConfiguration.ConfigurationParameter.ConfigurationParameterType;
 import PopulationModel.GraphConfiguration;
 
 public class BasicConfigurable implements Configurable {
