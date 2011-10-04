@@ -27,7 +27,6 @@ public interface Node extends Visualizable, Configurable {
 	//Language Learning
 	public void teach(Node agent);
 	public void learnUtterance(Utterance utterance);
-	public boolean canStillLearn();
 	
 	//Communications Phase
 	public void communicate(Node partner);
