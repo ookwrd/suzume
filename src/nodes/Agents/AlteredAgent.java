@@ -1,8 +1,8 @@
-package populationNodes.Agents;
+package nodes.Agents;
 
-import auto_configuration.ConfigurationParameter;
-import auto_configuration.Configurable.Describable;
-import populationNodes.NodeConfiguration;
+import nodes.NodeConfiguration;
+import autoconfiguration.ConfigurationParameter;
+import autoconfiguration.Configurable.Describable;
 import simulation.RandomGenerator;
 import PopulationModel.Node;
 

@@ -1,6 +1,6 @@
 package PopulationModel;
 
-import auto_configuration.ConfigurationParameter;
+import autoconfiguration.ConfigurationParameter;
 import PopulationModel.Graph.GraphType;
 
 public class GraphFactory {

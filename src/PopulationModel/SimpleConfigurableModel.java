@@ -1,7 +1,7 @@
 package PopulationModel;
 
-import auto_configuration.ConfigurationParameter;
-import populationNodes.NodeConfiguration;
+import nodes.NodeConfiguration;
+import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 
 public class SimpleConfigurableModel extends ConfigurableModel {

@@ -4,14 +4,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import auto_configuration.ConfigurationParameter;
+import nodes.AbstractNode;
+import nodes.NodeConfiguration;
+import nodes.NodeConfigurationPanel;
+import nodes.NodeFactory;
+import nodes.Utterance;
+import nodes.Agents.Agent;
 
-import populationNodes.AbstractNode;
-import populationNodes.NodeConfiguration;
-import populationNodes.NodeFactory;
-import populationNodes.NodeConfigurationPanel;
-import populationNodes.Utterance;
-import populationNodes.Agents.Agent;
+import autoconfiguration.ConfigurationParameter;
+
 
 import simulation.RandomGenerator;
 

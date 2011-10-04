@@ -2,7 +2,7 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import auto_configuration.Configurable;
+import autoconfiguration.Configurable;
 
 import runTimeVisualization.Visualizable;
 import simulation.RandomGenerator;

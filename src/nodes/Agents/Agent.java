@@ -1,4 +1,4 @@
-package populationNodes.Agents;
+package nodes.Agents;
 
 import PopulationModel.Node;
 

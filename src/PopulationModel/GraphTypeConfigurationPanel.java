@@ -7,12 +7,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import auto_configuration.Configurable;
-import auto_configuration.ConfigurationPanel;
-import auto_configuration.ConfigurationParameter;
+import nodes.NodeFactory;
+import nodes.AbstractNode.NodeType;
 
-import populationNodes.NodeFactory;
-import populationNodes.AbstractNode.NodeType;
+import autoconfiguration.Configurable;
+import autoconfiguration.ConfigurationPanel;
+import autoconfiguration.ConfigurationParameter;
+
 
 import PopulationModel.Graph.GraphType;
 

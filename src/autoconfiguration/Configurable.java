@@ -1,4 +1,4 @@
-package auto_configuration;
+package autoconfiguration;
 
 import java.util.HashMap;
 

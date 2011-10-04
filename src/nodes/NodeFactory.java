@@ -1,13 +1,13 @@
-package populationNodes;
+package nodes;
 
-import auto_configuration.ConfigurationParameter;
-import populationNodes.AbstractNode.NodeType;
-import populationNodes.Agents.Agent;
-import populationNodes.Agents.AlteredAgent;
-import populationNodes.Agents.BiasAgent;
-import populationNodes.Agents.FixedProbabilityAgent;
-import populationNodes.Agents.ProbabalityAgent;
-import populationNodes.Agents.YamauchiHashimoto2010;
+import nodes.AbstractNode.NodeType;
+import nodes.Agents.Agent;
+import nodes.Agents.AlteredAgent;
+import nodes.Agents.BiasAgent;
+import nodes.Agents.FixedProbabilityAgent;
+import nodes.Agents.ProbabalityAgent;
+import nodes.Agents.YamauchiHashimoto2010;
+import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 import PopulationModel.ConfigurableModel;
 import PopulationModel.Node;

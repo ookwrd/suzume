@@ -2,7 +2,7 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
-import auto_configuration.ConfigurationParameter;
+import autoconfiguration.ConfigurationParameter;
 
 
 public class CompleteGraph extends AbstractGraph implements Graph {

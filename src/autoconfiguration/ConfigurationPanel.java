@@ -1,4 +1,4 @@
-package auto_configuration;
+package autoconfiguration;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -17,13 +17,14 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import auto_configuration.Configurable.Describable;
+import nodes.NodeConfiguration;
+import nodes.NodeConfigurationPanel;
+
+import autoconfiguration.Configurable.Describable;
 
 import PopulationModel.GraphConfiguration;
 import PopulationModel.GraphTypeConfigurationPanel;
 
-import populationNodes.NodeConfiguration;
-import populationNodes.NodeConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {

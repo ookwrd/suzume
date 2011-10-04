@@ -1,12 +1,13 @@
- package auto_configuration;
+ package autoconfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import auto_configuration.ConfigurationParameter.ConfigurationParameterType;
+import nodes.NodeConfiguration;
 
-import populationNodes.NodeConfiguration;
+import autoconfiguration.ConfigurationParameter.ConfigurationParameterType;
+
 
 import PopulationModel.GraphConfiguration;
 

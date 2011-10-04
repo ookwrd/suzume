@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import auto_configuration.ConfigurationParameter;
+import autoconfiguration.ConfigurationParameter;
 
 
 public class CyclicGraph extends AbstractGraph {
