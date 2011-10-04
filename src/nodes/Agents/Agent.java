@@ -9,4 +9,12 @@ public interface Agent extends Node {
 	public double getFitness();
 	public void finalizeFitnessValue();
 	
+	//Invention Phase
+	public void invent();
+	
+	//Death Phase
+	public void killPhase();
+	
+	//Reproduction Phase
+	public boolean isAlive();
 }

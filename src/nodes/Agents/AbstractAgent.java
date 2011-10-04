@@ -18,13 +18,14 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
-	private enum VisualizationTypes {FITNESS}
+	private enum VisualizationTypes {FITNESS, ALIVE}
 	
 	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String FITNESS_STATISTICS = "Fitness";
 	protected static final String BASE_FITNESS = "Base fitness value:";
 
 	private double fitness;
+	private boolean isAlive = true;
 	
 	public AbstractAgent(){	
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
@@ -57,6 +58,20 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	public void invent(){}
 	
 	@Override
+	public void killPhase(){
+		killAgent();
+	}
+	
+	@Override
+	public boolean isAlive(){
+		return isAlive;
+	}
+	
+	protected void killAgent(){
+		isAlive = false;
+	}
+	
+	@Override
 	public void finalizeFitnessValue(){}
 	
 	@Override
@@ -72,11 +87,22 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 			super.draw(baseDimension, type, visualizationKey, g);
 			return;
 		}
-		
+
+		Color c;
 		switch ((VisualizationTypes)visualizationKey) {
 		case FITNESS:
 			int fitness = new Double(getFitness()).intValue();
-			Color c = new Color(fitness*8, fitness*8, 0);
+			c = new Color(fitness*8, fitness*8, 0);
+			g.setColor(c);
+			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			break;
+			
+		case ALIVE:
+			if(isAlive){
+				c = Color.GREEN;
+			}else{
+				c = Color.RED;
+			}
 			g.setColor(c);
 			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;

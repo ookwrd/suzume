@@ -80,9 +80,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			RandomGenerator randomGenerator){
 		super(baseConfig);
 		
-		//this.config = configuration;
 		this.randomGenerator = randomGenerator;
-		
 		this.selectionModel = SelectionModel.constructSelectionModel((SelectionModels)getParameter(SELECTION_MODEL).getSelectedValue(), randomGenerator);
 		
 		resetRun();
@@ -98,7 +96,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void resetRun(){
 		
 		currentGeneration = 0;
-		
 		initializePopulation();
 
 		if(visualizer!=null){
@@ -196,7 +193,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		gatherStatistics(StatisticsCollectionPoint.PostReproduction);
 	
 		finalizeStatistics();
-
 	}
 
 	private void initializationPhase(){
@@ -224,23 +220,19 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 					break;
 				}
 			}
-
 		}
 	}
 	
-	private void inventionPhase(){
-		
-		for(Node learner : population.getCurrentGeneration()){
-			learner.invent();
+	private void inventionPhase(){		
+		for(Agent agent : population.getCurrentGeneration()){
+			agent.invent();
 		}
-		
 	}
 
 	/**
-	 * Communication Phase  which calculates the fitness of all agents in the population.
+	 * Communication Phase which calculates the fitness of all agents in the population.
 	 */
 	private void communicationPhase(){
-
 		for(Agent agent : population.getCurrentGeneration()){
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
 
@@ -250,22 +242,23 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 					agent.communicate(neighbour);
 				}
 			}
-
-			agent.finalizeFitnessValue();
+			agent.finalizeFitnessValue();//TODO
 		}
 	}
 	
 	private void killingPhase(){
-		//TODO
+		for(Agent agent : population.getCurrentGeneration()){
+			agent.killPhase();
+		}
 	}
 	
+	/**
+	 * Update StepwiseVisualizer
+	 */
 	private void visualize(){
-
-		//Update stepwise visualization
 		if(visualizer != null){
 			visualizer.update(currentRun, currentGeneration);
 		}
-		
 	}
 
 	/**
@@ -274,12 +267,14 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void reproductionPhase(){
 		
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
-		
 		for(Agent agent : population.getCurrentGeneration()){
-			ArrayList<Node> possibleParents = population.getPossibleParents(agent);
-			ArrayList<Node> parents = selectionModel.selectAgents(possibleParents, 2);
-			
-			newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
+			if(agent.isAlive()){
+				newGenerationAgents.add(agent);
+			}else{
+				ArrayList<Node> possibleParents = population.getPossibleParents(agent);
+				ArrayList<Node> parents = selectionModel.selectAgents(possibleParents, 2);
+				newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
+			}
 		}
 
 		population.setNewSubNodes(newGenerationAgents);
@@ -387,4 +382,3 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 
 }		
-		

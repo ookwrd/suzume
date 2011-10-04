@@ -147,11 +147,6 @@ public class ConfigurableModel extends AbstractNode implements PopulationModel {
 	}
 
 	@Override
-	public void invent() {
-		System.err.println("Shouldnt be here");
-	}
-
-	@Override
 	public ArrayList<Agent> getBaseAgents() {
 		System.err.println("Shouldnt be here");
 		return getCurrentGeneration();
