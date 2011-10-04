@@ -1,4 +1,4 @@
-package nodes.Agents;
+package nodes.Agents.statisticaggregators;
 
 import nodes.Node;
 import nodes.Node.StatisticsCollectionPoint;

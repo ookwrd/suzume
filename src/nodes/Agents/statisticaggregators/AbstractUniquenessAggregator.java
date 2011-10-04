@@ -1,4 +1,4 @@
-package nodes.Agents;
+package nodes.Agents.statisticaggregators;
 
 import java.util.ArrayList;
 
