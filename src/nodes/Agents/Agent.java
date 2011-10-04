@@ -9,6 +9,9 @@ public interface Agent extends Node {
 	public double getFitness();
 	public void finalizeFitnessValue();
 	
+	//Learning Phase
+	public boolean canStillLearn();
+	
 	//Invention Phase
 	public void invent();
 	

@@ -205,7 +205,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void trainingPhase(){
 
 		//for each agent
-		for(Node learner : population.getCurrentGeneration()){
+		for(Agent learner : population.getCurrentGeneration()){
 
 			//get its ancestors (teachers)
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
