@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import nodes.Node;
 import nodes.NodeConfiguration;
+import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
+import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
 import nodes.Node.StatisticsCollectionPoint;
 
 import autoconfiguration.ConfigurationParameter;

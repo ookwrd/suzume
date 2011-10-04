@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.Utterance;
+import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Node.StatisticsCollectionPoint;
 
 import autoconfiguration.ConfigurationParameter;

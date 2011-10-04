@@ -9,6 +9,7 @@ import java.util.Arrays;
 import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.Utterance;
+import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Node.StatisticsAggregator;
 import nodes.Node.StatisticsCollectionPoint;
 
