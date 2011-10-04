@@ -2,9 +2,10 @@ package nodes.Agents;
 
 import java.util.ArrayList;
 
+import nodes.Node;
+import nodes.Node.StatisticsCollectionPoint;
+
 import tools.Pair;
-import PopulationModel.Node;
-import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractUniquenessAggregator<K> extends BaseStatisticsAggregator {
 

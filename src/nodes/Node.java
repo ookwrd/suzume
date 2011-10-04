@@ -1,9 +1,7 @@
-package PopulationModel;
+package nodes;
 
 import java.util.ArrayList;
 
-import nodes.NodeConfiguration;
-import nodes.Utterance;
 import nodes.Agents.Agent;
 
 import autoconfiguration.Configurable;

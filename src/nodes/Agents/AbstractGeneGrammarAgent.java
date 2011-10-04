@@ -2,13 +2,13 @@ package nodes.Agents;
 
 import java.util.ArrayList;
 
+import nodes.Node;
 import nodes.NodeConfiguration;
+import nodes.Node.StatisticsCollectionPoint;
 
 import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
-import PopulationModel.Node;
-import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 

@@ -2,9 +2,10 @@ package nodes.Agents;
 
 import java.util.ArrayList;
 
+import nodes.Node.StatisticsAggregator;
+import nodes.Node.StatisticsCollectionPoint;
+
 import tools.Pair;
-import PopulationModel.Node.StatisticsAggregator;
-import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class BaseStatisticsAggregator implements StatisticsAggregator {
 

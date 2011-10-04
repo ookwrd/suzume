@@ -1,6 +1,8 @@
-package PopulationModel;
+package PopulationModel.graphs;
 
 import java.util.ArrayList;
+
+import nodes.Node;
 
 import autoconfiguration.Configurable;
 

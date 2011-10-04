@@ -22,8 +22,8 @@ import nodes.NodeConfigurationPanel;
 
 import autoconfiguration.Configurable.Describable;
 
-import PopulationModel.GraphConfiguration;
-import PopulationModel.GraphTypeConfigurationPanel;
+import PopulationModel.graphs.GraphConfiguration;
+import PopulationModel.graphs.GraphTypeConfigurationPanel;
 
 
 @SuppressWarnings("serial")

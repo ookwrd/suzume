@@ -5,12 +5,17 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import nodes.AbstractNode;
+import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.NodeConfigurationPanel;
 import nodes.NodeFactory;
 import nodes.Utterance;
 import nodes.Agents.Agent;
 
+import PopulationModel.graphs.CyclicGraph;
+import PopulationModel.graphs.Graph;
+import PopulationModel.graphs.GraphConfiguration;
+import PopulationModel.graphs.GraphFactory;
 import autoconfiguration.ConfigurationParameter;
 
 

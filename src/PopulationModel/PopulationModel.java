@@ -2,6 +2,7 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
+import nodes.Node;
 import nodes.Agents.Agent;
 
 import runTimeVisualization.Visualizable;

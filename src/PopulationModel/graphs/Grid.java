@@ -1,8 +1,10 @@
-package PopulationModel;
+package PopulationModel.graphs;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import nodes.Node;
 
 import autoconfiguration.ConfigurationParameter;
 
@@ -11,9 +13,9 @@ import simulation.RandomGenerator;
 
 public class Grid extends AbstractGraph {
 
-	protected static final String SELF_LINKS = "Include Self Links";
-	protected static final String ROW_NUMBERS = "Number of rows:";
-	protected static final String AUTO_LAYOUT = "Automatic layout:";
+	public static final String SELF_LINKS = "Include Self Links";
+	public static final String ROW_NUMBERS = "Number of rows:";
+	public static final String AUTO_LAYOUT = "Automatic layout:";
 	
 	protected int size;
 	protected int columns;

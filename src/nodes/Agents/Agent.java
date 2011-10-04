@@ -1,6 +1,6 @@
 package nodes.Agents;
 
-import PopulationModel.Node;
+import nodes.Node;
 
 public interface Agent extends Node {
 	

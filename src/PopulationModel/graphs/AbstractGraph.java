@@ -1,8 +1,11 @@
-package PopulationModel;
+package PopulationModel.graphs;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+
+import nodes.Node;
 
 import simulation.RandomGenerator;
 

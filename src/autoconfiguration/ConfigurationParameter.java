@@ -1,7 +1,7 @@
 package autoconfiguration;
 
 import nodes.NodeConfiguration;
-import PopulationModel.GraphConfiguration;
+import PopulationModel.graphs.GraphConfiguration;
 
 /**
  * Would be nicer if Java had union types...
