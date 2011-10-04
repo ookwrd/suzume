@@ -4,9 +4,9 @@ import java.util.Random;
 
 import javax.swing.border.TitledBorder;
 
-import auto_configuration.BasicConfigurable;
-import auto_configuration.ConfigurationPanel;
-import auto_configuration.ConfigurationParameter;
+import autoconfiguration.BasicConfigurable;
+import autoconfiguration.ConfigurationPanel;
+import autoconfiguration.ConfigurationParameter;
 
 
 

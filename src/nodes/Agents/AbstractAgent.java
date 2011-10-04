@@ -1,4 +1,4 @@
-package populationNodes.Agents;
+package nodes.Agents;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,10 +6,11 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import auto_configuration.ConfigurationParameter;
+import nodes.AbstractNode;
+import nodes.NodeConfiguration;
 
-import populationNodes.AbstractNode;
-import populationNodes.NodeConfiguration;
+import autoconfiguration.ConfigurationParameter;
+
 
 import PopulationModel.Node;
 import static PopulationModel.Node.StatisticsCollectionPoint;

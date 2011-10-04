@@ -1,4 +1,4 @@
-package populationNodes;
+package nodes;
 
 import java.awt.Color;
 import java.awt.Dimension;

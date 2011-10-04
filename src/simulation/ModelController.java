@@ -4,14 +4,17 @@ import java.util.ArrayList;
 
 import javax.swing.border.TitledBorder;
 
-import auto_configuration.BasicConfigurable;
-import auto_configuration.ConfigurationPanel;
-import auto_configuration.ConfigurationParameter;
+import nodes.AbstractNode;
+import nodes.NodeConfiguration;
+import nodes.NodeConfigurationPanel;
+import nodes.NodeFactory;
+import nodes.AbstractNode.NodeType;
+import nodes.Agents.Agent;
 
-import populationNodes.AbstractNode;
-import populationNodes.NodeConfiguration;
-import populationNodes.NodeFactory;
-import populationNodes.NodeConfigurationPanel;
+import autoconfiguration.BasicConfigurable;
+import autoconfiguration.ConfigurationPanel;
+import autoconfiguration.ConfigurationParameter;
+
 import static PopulationModel.Node.StatisticsCollectionPoint;
 
 import runTimeVisualization.RuntimeVisualizer;
@@ -25,8 +28,6 @@ import PopulationModel.ConfigurableModel;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.PopulationModel;
-import populationNodes.AbstractNode.NodeType;
-import populationNodes.Agents.Agent;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
 

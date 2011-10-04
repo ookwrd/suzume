@@ -1,4 +1,4 @@
-package populationNodes;
+package nodes;
 
 public class Utterance {
 

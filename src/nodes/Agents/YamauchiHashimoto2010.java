@@ -1,15 +1,16 @@
-package populationNodes.Agents;
+package nodes.Agents;
 import java.awt.Color;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import auto_configuration.ConfigurationParameter;
-import auto_configuration.Configurable.Describable;
+import nodes.NodeConfiguration;
+import nodes.Utterance;
 
-import populationNodes.NodeConfiguration;
-import populationNodes.Utterance;
+import autoconfiguration.ConfigurationParameter;
+import autoconfiguration.Configurable.Describable;
+
 
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsCollectionPoint;

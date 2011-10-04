@@ -1,11 +1,12 @@
-package populationNodes.Agents;
+package nodes.Agents;
 
 import java.util.ArrayList;
 
-import auto_configuration.ConfigurationParameter;
+import nodes.NodeConfiguration;
+import nodes.Utterance;
 
-import populationNodes.NodeConfiguration;
-import populationNodes.Utterance;
+import autoconfiguration.ConfigurationParameter;
+
 import simulation.RandomGenerator;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsCollectionPoint;
