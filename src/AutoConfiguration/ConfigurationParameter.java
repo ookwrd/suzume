@@ -61,6 +61,9 @@ public class ConfigurationParameter {
 	public ConfigurationParameter(Object[] values, boolean singleSelection){
 		this(values, new Object[0]);
 		this.singleSelection = singleSelection;
+		if(singleSelection){
+			selected = new Object[]{values[0]};
+		}
 	}
 	
 	public ConfigurationParameter(Object[] values, Object[] selected){

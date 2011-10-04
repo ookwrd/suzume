@@ -1,6 +1,5 @@
 package PopulationModel;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -25,9 +24,6 @@ public class CompositePopulationModel extends AbstractNode implements Population
 	public static final String COMMUNICATION_GRAPH = "Communication Graph";
 	public static final String LEARNING_GRAPH = "Learning Graph";
 	public static final String POPULATION_SIZE = "Population Size";
-	public static final String LEARN_TO_DISTANCE = "Learn from agents to distance:";
-	public static final String COMMUNICATE_TO_DISTANCE = "Communicate with agents to distance:";
-	public static final String REPRODUCE_TO_DISTANCE = "Parents selected out to distance:";
 	public static final String VISUALIZATION_STRUCTURE = "Visualize based on:";
 	
 	private Graph learningGraph;

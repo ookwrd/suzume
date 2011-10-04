@@ -11,6 +11,7 @@ import simulation.RandomGenerator;
 import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.CompositePopulationModel;
 import PopulationModel.Node;
+import PopulationModel.SimpleCompositeModel;
 
 public class NodeFactory {
 
@@ -43,6 +44,10 @@ public class NodeFactory {
 		
 		case ConfigurablePopulation:
 			retVal = new CompositePopulationModel();
+			break;
+			
+		case SimpleConfigurable:
+			retVal = new SimpleCompositeModel();
 			break;
 
 		default:
