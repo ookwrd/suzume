@@ -2,9 +2,10 @@ package populationNodes.Agents;
 
 import java.util.ArrayList;
 
+import auto_configuration.ConfigurationParameter;
+
 import populationNodes.NodeConfiguration;
 import simulation.RandomGenerator;
-import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsCollectionPoint;
 
@@ -40,7 +41,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 			}
 		});
 		
-		retVal.add(new AbstractUniguenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
+		retVal.add(new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
 			@Override
 			protected Object getItem(Node agent) {
 				return ((AbstractGeneGrammarAgent)agent).chromosome;

@@ -2,10 +2,11 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
+import auto_configuration.Configurable;
+
 import runTimeVisualization.Visualizable;
 import simulation.RandomGenerator;
 
-import AutoConfiguration.Configurable;
 
 public interface Graph extends Configurable, Visualizable {
 

@@ -1,4 +1,4 @@
-package AutoConfiguration;
+package auto_configuration;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -17,12 +17,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import AutoConfiguration.Configurable.Describable;
+import auto_configuration.Configurable.Describable;
+
 import PopulationModel.GraphConfiguration;
 import PopulationModel.GraphTypeConfigurationPanel;
 
 import populationNodes.NodeConfiguration;
-import populationNodes.NodeTypeConfigurationPanel;
+import populationNodes.NodeConfigurationPanel;
 
 @SuppressWarnings("serial")
 public class ConfigurationPanel extends JPanel {
@@ -155,7 +156,7 @@ public class ConfigurationPanel extends JPanel {
 				break;
 				
 			case NODE:
-				retParameters.put(key, new ConfigurationParameter(((NodeTypeConfigurationPanel)comp).getConfiguration()));
+				retParameters.put(key, new ConfigurationParameter(((NodeConfigurationPanel)comp).getConfiguration()));
 				break;
 				
 			case GRAPH:
@@ -264,12 +265,12 @@ public class ConfigurationPanel extends JPanel {
 		return checkBox;
 	}
 	
-	protected NodeTypeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
+	protected NodeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.weightx = 1;
 		
-		NodeTypeConfigurationPanel nodeConfigPanel = new NodeTypeConfigurationPanel(initialValue);
+		NodeConfigurationPanel nodeConfigPanel = new NodeConfigurationPanel(initialValue);
 		
 		nodeConfigPanel.setBorder(new TitledBorder(label));
 		add(nodeConfigPanel, constraints);

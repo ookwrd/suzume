@@ -1,8 +1,8 @@
 package populationNodes.Agents;
 
+import auto_configuration.ConfigurationParameter;
+import auto_configuration.Configurable.Describable;
 import populationNodes.Utterance;
-import AutoConfiguration.ConfigurationParameter;
-import AutoConfiguration.Configurable.Describable;
 
 public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Describable {
 

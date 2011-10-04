@@ -7,9 +7,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import simulation.Launcher;
 import simulation.ModelController;
 
-import Launcher.Launcher;
 
 
 /**

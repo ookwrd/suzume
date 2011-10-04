@@ -6,14 +6,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import AutoConfiguration.Configurable;
-import AutoConfiguration.ConfigurationPanel;
-import AutoConfiguration.ConfigurationParameter;
+import auto_configuration.Configurable;
+import auto_configuration.ConfigurationPanel;
+import auto_configuration.ConfigurationParameter;
+
 
 import populationNodes.AbstractNode.NodeType;
 
 @SuppressWarnings("serial")
-public class NodeTypeConfigurationPanel extends JPanel {
+public class NodeConfigurationPanel extends JPanel {
 
 	public static final String NODE_TYPE = "Node type";//TODO move
 	
@@ -22,7 +23,7 @@ public class NodeTypeConfigurationPanel extends JPanel {
 	
 	private ConfigurationPanel subPanel;
 	
-	public NodeTypeConfigurationPanel(Configurable initialValue){	
+	public NodeConfigurationPanel(Configurable initialValue){	
 		setLayout(new BorderLayout());
 		
 		agentTypesBox = new JComboBox(AbstractNode.NodeType.values());

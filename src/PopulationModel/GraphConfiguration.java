@@ -1,6 +1,6 @@
 package PopulationModel;
 
-import AutoConfiguration.BasicConfigurable;
+import auto_configuration.BasicConfigurable;
 import PopulationModel.Graph.GraphType;
 
 public class GraphConfiguration extends BasicConfigurable {

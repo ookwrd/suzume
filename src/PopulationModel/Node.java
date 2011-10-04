@@ -2,6 +2,8 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
+import auto_configuration.Configurable;
+
 import populationNodes.NodeConfiguration;
 import populationNodes.Utterance;
 import populationNodes.Agents.Agent;
@@ -9,7 +11,6 @@ import populationNodes.Agents.Agent;
 import runTimeVisualization.Visualizable;
 import simulation.RandomGenerator;
 import tools.Pair;
-import AutoConfiguration.Configurable;
 
 public interface Node extends Visualizable, Configurable {
 

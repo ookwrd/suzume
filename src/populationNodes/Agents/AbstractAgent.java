@@ -6,10 +6,11 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import auto_configuration.ConfigurationParameter;
+
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 
-import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 import static PopulationModel.Node.StatisticsCollectionPoint;
 

@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import javax.swing.border.TitledBorder;
 
+import auto_configuration.BasicConfigurable;
+import auto_configuration.ConfigurationPanel;
+import auto_configuration.ConfigurationParameter;
+
 import populationNodes.AbstractNode;
 import populationNodes.NodeConfiguration;
 import populationNodes.NodeFactory;
-import populationNodes.NodeTypeConfigurationPanel;
+import populationNodes.NodeConfigurationPanel;
 import static PopulationModel.Node.StatisticsCollectionPoint;
 
 import runTimeVisualization.RuntimeVisualizer;
@@ -17,10 +21,7 @@ import simulation.selectionModels.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
-import AutoConfiguration.BasicConfigurable;
-import AutoConfiguration.ConfigurationPanel;
-import AutoConfiguration.ConfigurationParameter;
-import PopulationModel.CompositePopulationModel;
+import PopulationModel.ConfigurableModel;
 import PopulationModel.Node;
 import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.PopulationModel;
@@ -123,7 +124,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
-		CompositePopulationModel node = (CompositePopulationModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue());
+		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
 		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 		population = node;
 
@@ -369,7 +370,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeTypeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT) + "crit_" + getIntegerParameter(CRITICAL_PERIOD);
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT) + "crit_" + getIntegerParameter(CRITICAL_PERIOD);
 	}
 	
 	@Override

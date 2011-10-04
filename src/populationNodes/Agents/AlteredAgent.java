@@ -1,9 +1,9 @@
 package populationNodes.Agents;
 
+import auto_configuration.ConfigurationParameter;
+import auto_configuration.Configurable.Describable;
 import populationNodes.NodeConfiguration;
 import simulation.RandomGenerator;
-import AutoConfiguration.Configurable.Describable;
-import AutoConfiguration.ConfigurationParameter;
 import PopulationModel.Node;
 
 public class AlteredAgent extends YamauchiHashimoto2010 implements Agent,
