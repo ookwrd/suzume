@@ -1,10 +1,10 @@
 package nodes.Agents;
 
+import nodes.Node;
 import nodes.NodeConfiguration;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 import simulation.RandomGenerator;
-import PopulationModel.Node;
 
 public class AlteredAgent extends YamauchiHashimoto2010 implements Agent,
 		Describable {

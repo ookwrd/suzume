@@ -7,13 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import nodes.AbstractNode;
+import nodes.Node;
 import nodes.NodeConfiguration;
 
 import autoconfiguration.ConfigurationParameter;
 
-
-import PopulationModel.Node;
-import static PopulationModel.Node.StatisticsCollectionPoint;
 
 import simulation.RandomGenerator;
 

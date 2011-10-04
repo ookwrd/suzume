@@ -1,17 +1,19 @@
-package PopulationModel;
+package PopulationModel.graphs;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import nodes.Node;
+
 import autoconfiguration.ConfigurationParameter;
 
 
 public class CyclicGraph extends AbstractGraph {
 
-	protected static final String SELF_LINKS = "Include Self Links";
-	protected static final String LINK_DISTANCE = "Link Distance";
+	public static final String SELF_LINKS = "Include Self Links";
+	public static final String LINK_DISTANCE = "Link Distance";
 	
 	public CyclicGraph(){
 		setDefaultParameter(SELF_LINKS, new ConfigurationParameter(true));

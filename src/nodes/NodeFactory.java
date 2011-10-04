@@ -10,7 +10,6 @@ import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 import PopulationModel.ConfigurableModel;
-import PopulationModel.Node;
 import PopulationModel.SimpleConfigurableModel;
 
 public class NodeFactory {

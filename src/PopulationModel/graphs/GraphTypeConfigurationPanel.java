@@ -1,4 +1,4 @@
-package PopulationModel;
+package PopulationModel.graphs;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -7,15 +7,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import nodes.NodeFactory;
-import nodes.AbstractNode.NodeType;
+import PopulationModel.graphs.Graph.GraphType;
 
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
-
-
-import PopulationModel.Graph.GraphType;
 
 @SuppressWarnings("serial")
 public class GraphTypeConfigurationPanel extends JPanel {

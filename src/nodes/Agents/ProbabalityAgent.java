@@ -6,17 +6,17 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.Utterance;
+import nodes.Node.StatisticsAggregator;
+import nodes.Node.StatisticsCollectionPoint;
 
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
 
 import simulation.RandomGenerator;
-import PopulationModel.Node;
-import PopulationModel.Node.StatisticsAggregator;
-import PopulationModel.Node.StatisticsCollectionPoint;
 
 public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
 

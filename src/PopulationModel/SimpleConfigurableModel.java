@@ -1,6 +1,10 @@
 package PopulationModel;
 
 import nodes.NodeConfiguration;
+import PopulationModel.graphs.Graph;
+import PopulationModel.graphs.GraphConfiguration;
+import PopulationModel.graphs.GraphFactory;
+import PopulationModel.graphs.Grid;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 

@@ -5,17 +5,19 @@ import java.util.ArrayList;
 import javax.swing.border.TitledBorder;
 
 import nodes.AbstractNode;
+import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.NodeConfigurationPanel;
 import nodes.NodeFactory;
 import nodes.AbstractNode.NodeType;
 import nodes.Agents.Agent;
+import nodes.Node.StatisticsAggregator;
 
 import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
 
-import static PopulationModel.Node.StatisticsCollectionPoint;
+import static nodes.Node.StatisticsCollectionPoint;
 
 import runTimeVisualization.RuntimeVisualizer;
 import runTimeVisualization.Visualizable.Stoppable;
@@ -25,8 +27,6 @@ import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
 import PopulationModel.ConfigurableModel;
-import PopulationModel.Node;
-import PopulationModel.Node.StatisticsAggregator;
 import PopulationModel.PopulationModel;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {

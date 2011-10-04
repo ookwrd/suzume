@@ -1,8 +1,8 @@
 package nodes.Agents;
 
+import nodes.Node;
+import nodes.Node.StatisticsCollectionPoint;
 import tools.Pair;
-import PopulationModel.Node;
-import PopulationModel.Node.StatisticsCollectionPoint;
 
 public abstract class AbstractCountingAggregator extends BaseStatisticsAggregator {
 

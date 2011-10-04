@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import simulation.RandomGenerator;
-import PopulationModel.Node;
 
 public abstract class AbstractNode extends NodeConfiguration implements Node{
 	

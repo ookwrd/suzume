@@ -9,7 +9,7 @@ import nodes.NodeConfiguration;
 import autoconfiguration.ConfigurationParameter.ConfigurationParameterType;
 
 
-import PopulationModel.GraphConfiguration;
+import PopulationModel.graphs.GraphConfiguration;
 
 public class BasicConfigurable implements Configurable {
 

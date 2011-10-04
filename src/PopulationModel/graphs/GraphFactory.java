@@ -1,7 +1,7 @@
-package PopulationModel;
+package PopulationModel.graphs;
 
 import autoconfiguration.ConfigurationParameter;
-import PopulationModel.Graph.GraphType;
+import PopulationModel.graphs.Graph.GraphType;
 
 public class GraphFactory {
 
