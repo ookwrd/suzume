@@ -11,8 +11,11 @@ import simulation.RandomGenerator;
 
 public class SynonymAgent extends AbstractAgent {
 	
+	private enum MeaningDistribution {UNIFORM, SQUARED}
+	
 	public final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
 	public final String MEANING_SPACE_SIZE = "Meaning space size";
+	public final String MEANING_DISTRIBUTION = "Meaning distribution";
 	public final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
 	
 	private ArrayList<Integer>[] lexicon;
@@ -25,6 +28,7 @@ public class SynonymAgent extends AbstractAgent {
 	public SynonymAgent(){
 		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
 		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
+		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(),true));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
 	}
 
@@ -88,7 +92,7 @@ public class SynonymAgent extends AbstractAgent {
 
 	@Override
 	public void invent(){
-		int meaning = randomGenerator.randomInt(lexicon.length);
+		int meaning = getRandomMeaning();
 		int value = randomGenerator.randomInt(10000);
 		learnUtterance(new Utterance(meaning, value));
 	}
@@ -114,6 +118,19 @@ public class SynonymAgent extends AbstractAgent {
 				return ((SynonymAgent)agent).lexiconCapacity;
 			}
 		});
+		
+		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Semantic Coverage:") {
+			@Override
+			protected double getValue(Node agent) {
+				int count = 0;
+				for(ArrayList<Integer> meaningArrayList : ((SynonymAgent)agent).lexicon){
+					if(meaningArrayList.size() > 0){
+						count++;
+					}
+				}
+				return count;
+			}
+		});
 		return retVal;
 	}
 	
@@ -123,7 +140,7 @@ public class SynonymAgent extends AbstractAgent {
 	}
 	
 	private Utterance getRandomUtterance(){
-		int meaning = randomGenerator.randomInt(lexicon.length);
+		int meaning = getRandomMeaning();
 		int tokensForMeaning = lexicon[meaning].size();
 		int token;
 		if(tokensForMeaning == 0){
@@ -132,6 +149,21 @@ public class SynonymAgent extends AbstractAgent {
 			token = randomGenerator.randomInt(tokensForMeaning);
 		}
 		return new Utterance(meaning, token);
+	}
+	
+	private int getRandomMeaning(){
+		
+		switch ((MeaningDistribution)getListParameter(MEANING_DISTRIBUTION)[0]) {
+		case SQUARED:
+			return (int)(randomGenerator.random()*randomGenerator.random()*lexicon.length);
+
+		case UNIFORM:
+			return randomGenerator.randomInt(lexicon.length);
+			
+		default:
+			System.err.println("Shouldn't be here");
+			return -1;
+		}
 	}
 
 	@Override
