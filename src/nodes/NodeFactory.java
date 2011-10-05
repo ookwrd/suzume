@@ -6,6 +6,7 @@ import nodes.Agents.AlteredAgent;
 import nodes.Agents.BiasAgent;
 import nodes.Agents.FixedProbabilityAgent;
 import nodes.Agents.ProbabalityAgent;
+import nodes.Agents.SynonymAgent;
 import nodes.Agents.TestAgent;
 import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.ConfigurationParameter;
@@ -52,6 +53,10 @@ public class NodeFactory {
 			
 		case TestAgent:
 			retVal = new TestAgent();
+			break;
+			
+		case SynonymAgent:
+			retVal = new SynonymAgent();
 			break;
 
 		default:

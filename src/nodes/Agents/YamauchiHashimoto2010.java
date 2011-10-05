@@ -25,13 +25,16 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
 	protected static final String MUTATION_RATE = "Mutation Rate";
 	protected static final String LEARNING_RESOURCE = "Learning Resource";
+	protected static final String CRITICAL_PERIOD = "Critical Period";
 	protected static final String LEARNING_COST_ON_MATCH = "Learning Resource on Match";
 	protected static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
 	
 	protected double learningResource;
+	protected int learningTokensViewable;
 	
 	public YamauchiHashimoto2010(){
 		setDefaultParameter(LEARNING_RESOURCE, new ConfigurationParameter(24));
+		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
@@ -45,11 +48,11 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
+		learningTokensViewable = getIntegerParameter(CRITICAL_PERIOD);
 	}
 	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
-		
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
@@ -57,7 +60,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 
 
-		learningResource = getParameter(LEARNING_RESOURCE).getInteger();
+		learningResource = getIntegerParameter(LEARNING_RESOURCE);
+		learningTokensViewable = getIntegerParameter(CRITICAL_PERIOD);
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
@@ -92,7 +96,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	public void invent() {
 		
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
-			
 			learningResource--;
 			if(randomGenerator.random() < getDoubleParameter(INVENTION_PROBABILITY)){
 				
@@ -124,6 +127,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	@Override
 	public void learnUtterance(Utterance u) {
 		
+		learningTokensViewable--;
+		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
@@ -146,14 +151,13 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 			
 			grammar.set(u.meaning, u.signal);
 			learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
-			
 		}
 		
 	}
 
 	@Override
 	public boolean canStillLearn() {
-		return learningResource > 0;
+		return learningResource > 0 && learningTokensViewable > 0;
 	}
 	
 	@Override
@@ -170,7 +174,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		return retVal;
 	}
 	
-	@Override//TODO this should just choose a color
+	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		
 		if(!(visualizationKey instanceof VisualizationTypes)){
