@@ -38,7 +38,8 @@ public interface Node extends Visualizable, Configurable {
 	
 	public interface StatisticsAggregator{
 		public void collectStatistics(StatisticsCollectionPoint point, Node agent);
-		public void endGeneration(Integer generation);
+		public void endGeneration(Integer generation, ArrayList<Agent> agents);
+		public void endRun(Integer run, ArrayList<Agent> agents);
 		
 		public ArrayList<Pair<Double,Double>> getStatistics();
 		public String getTitle();

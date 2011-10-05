@@ -7,7 +7,10 @@ import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
+import nodes.Agents.statisticaggregators.BaseStatisticsAggregator;
+import nodes.Node.StatisticsCollectionPoint;
 import simulation.RandomGenerator;
+import tools.Pair;
 
 public class SynonymAgent extends AbstractAgent {
 	
@@ -131,6 +134,21 @@ public class SynonymAgent extends AbstractAgent {
 				return count;
 			}
 		});
+		
+		retVal.add(new BaseStatisticsAggregator(null, "Lexical Distribution:") {
+			@Override
+			public void endRun(Integer run, ArrayList<Agent> agents) {
+				for(int i = 0; i < ((SynonymAgent)agents.get(0)).lexicon.length; i++){
+					double count = 0;
+					for(Agent agent : agents){
+						SynonymAgent synonymAgent = (SynonymAgent)agent;
+						count += synonymAgent.lexicon[i].size();
+					}
+					stats.add(new Pair<Double, Double>(new Double(i), count/agents.size()));
+				}
+			}
+		});
+		
 		return retVal;
 	}
 	
