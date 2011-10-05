@@ -23,12 +23,14 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	protected static final String VISUALIZATION_TYPE = "Visualization Type";
 	protected static final String FITNESS_STATISTICS = "Fitness";
 	protected static final String BASE_FITNESS = "Base fitness value:";
+	protected static final String MIN_FITNESS = "Minimum fitness:";
 
 	private double fitness;
 	private boolean isAlive = true;
 	
 	public AbstractAgent(){	
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
+		setDefaultParameter(MIN_FITNESS, new ConfigurationParameter(1));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
 	}
 	
@@ -47,6 +49,10 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	@Override
 	public void setFitness(double fitness){
 		this.fitness = fitness;
+		int min = getIntegerParameter(MIN_FITNESS);
+		if(this.fitness < min){
+			this.fitness = min;
+		}
 	}
 	
 	@Override

@@ -35,7 +35,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
-	public static final String CRITICAL_PERIOD = "Critical Period:";
 	
 	public static final String SELECTION_MODEL = "Selection model:";
 	
@@ -69,7 +68,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(1000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
-		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
 		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
@@ -210,15 +208,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			//get its ancestors (teachers)
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
-			for(int i = 0; i < getIntegerParameter(CRITICAL_PERIOD); i++){
-
-				//Get random teacher
+			while(learner.canStillLearn()){//Get random teacher
 				Node teacher = teachers.get(randomGenerator.randomInt(teachers.size()));
 				teacher.teach(learner);
-
-				if(!learner.canStillLearn()){
-					break;
-				}
 			}
 		}
 	}
@@ -366,7 +358,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT) + "crit_" + getIntegerParameter(CRITICAL_PERIOD);
+		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
 	}
 	
 	@Override
