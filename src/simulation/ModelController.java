@@ -1,5 +1,6 @@
 package simulation;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.border.TitledBorder;
@@ -84,10 +85,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		resetRun();
 		
 		resetStatistics();
-	
-		if(population.getVisualizationKeys().size() != 0){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
-		}
 		
 	}
 
@@ -117,20 +114,22 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 
 	private void initializePopulation(){
-		
 		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
 		
 		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
 		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 		population = node;
-
 	}
-
 
 	@Override
 	public void run(){
 		
 		startTimer();
+		
+		if(population.getVisualizationKeys().size() != 0){
+			this.visualizer = new RuntimeVisualizer(getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
+		}
+		
 		runSimulation();
 		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
 
@@ -313,7 +312,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getTitleString(){
-		return "[Seed: " + randomGenerator.getSeed() + "   " + printName() + "]";
+		return "[" + new Time(simulationStart) + " Seed: " + randomGenerator.getSeed() + "   " + printName() + "]";
 	}
     
 	private void startTimer(){
@@ -358,7 +357,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	public String printName(){
-		return "" + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
+		return ""  + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
 	}
 	
 	@Override
