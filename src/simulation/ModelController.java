@@ -157,11 +157,10 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 				currentGeneration++;
 			}
-	
+			
 			currentRun++;
 			resetRun();
 		}
-		
 	}
 
 	/**
@@ -185,11 +184,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		gatherStatistics(StatisticsCollectionPoint.PostKilling);
 
 		visualize();
+		endGenerationStatistics();
 		
 		reproductionPhase();
 		gatherStatistics(StatisticsCollectionPoint.PostReproduction);
 	
-		finalizeStatistics();
 	}
 
 	private void initializationPhase(){
@@ -283,9 +282,19 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		}
 	}
 	
-	private void finalizeStatistics(){
+	private void endGenerationStatistics(){
 		for(StatisticsAggregator agg: statsAggregators[currentRun]){
-			agg.endGeneration(currentGeneration);
+			agg.endGeneration(currentGeneration, population.getCurrentGeneration());
+		}
+		
+		if(currentGeneration + 1 >= getIntegerParameter(GENERATION_COUNT)){
+			endRunStatistics();
+		}
+	}
+	
+	private void endRunStatistics(){
+		for(StatisticsAggregator agg: statsAggregators[currentRun]){
+			agg.endRun(currentRun, population.getCurrentGeneration());
 		}
 	}
 	
@@ -325,7 +334,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private String longTimeToString(long period){
 		long seconds = period/1000;
-		return "Seconds " + seconds;//TODO
+		return "Seconds " + seconds;
 	}
 	
 	//TODO put this somewhere else.

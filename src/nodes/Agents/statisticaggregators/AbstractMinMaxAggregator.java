@@ -1,6 +1,9 @@
 package nodes.Agents.statisticaggregators;
 
+import java.util.ArrayList;
+
 import nodes.Node;
+import nodes.Agents.Agent;
 import nodes.Node.StatisticsCollectionPoint;
 import tools.Pair;
 
@@ -46,7 +49,7 @@ public abstract class AbstractMinMaxAggregator extends BaseStatisticsAggregator 
 	protected abstract double statValue(Node agent);
 	
 	@Override
-	public void endGeneration(Integer generation) {
+	public void endGeneration(Integer generation, ArrayList<Agent> agents) {
 		stats.add(new Pair<Double,Double>(generation.doubleValue(),value));
 		unset = true;
 	}

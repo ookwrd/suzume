@@ -2,6 +2,8 @@ package nodes.Agents.statisticaggregators;
 
 import java.util.ArrayList;
 
+import nodes.Node;
+import nodes.Agents.Agent;
 import nodes.Node.StatisticsAggregator;
 import nodes.Node.StatisticsCollectionPoint;
 
@@ -19,8 +21,14 @@ public abstract class BaseStatisticsAggregator implements StatisticsAggregator {
 	}	
 	
 	@Override
-	public void endGeneration(Integer generation) {}
+	public void collectStatistics(StatisticsCollectionPoint point, Node agent) {}
+	
+	@Override
+	public void endGeneration(Integer generation, ArrayList<Agent> agents) {}
 
+	@Override
+	public void endRun(Integer run, ArrayList<Agent> agents) {}
+	
 	@Override
 	public String getTitle() {
 		return name;

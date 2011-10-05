@@ -1,6 +1,9 @@
 package nodes.Agents.statisticaggregators;
 
+import java.util.ArrayList;
+
 import nodes.Node;
+import nodes.Agents.Agent;
 import nodes.Node.StatisticsCollectionPoint;
 import tools.Pair;
 
@@ -26,7 +29,7 @@ public abstract class AbstractCountingAggregator extends BaseStatisticsAggregato
 		protected abstract double getValue(Node agent);
 		
 		@Override
-		public void endGeneration(Integer generation){
+		public void endGeneration(Integer generation, ArrayList<Agent> agents){
 			stats.add(new Pair<Double,Double>(generation.doubleValue(),count/agentCount));
 			count = 0;
 			agentCount = 0;
