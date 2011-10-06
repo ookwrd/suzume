@@ -33,8 +33,9 @@ public interface Node extends Visualizable, Configurable {
 	
 	//Statistics
 	public enum StatisticsCollectionPoint {PostIntialization, PostTraining, PostInvention, PostCommunication, PostKilling, PostReproduction}
-	
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators();
+
+	public StatisticsAggregator getStatisticsAggregator(Object aggregatorKey);
+	public ArrayList<Object> getStatisticsKeys();
 	
 	public interface StatisticsAggregator{
 		public void collectStatistics(StatisticsCollectionPoint point, Node agent);

@@ -11,6 +11,7 @@ import nodes.NodeConfiguration;
 import nodes.NodeConfigurationPanel;
 import nodes.NodeFactory;
 import nodes.AbstractNode.NodeType;
+import nodes.Agents.AbstractAgent;
 import nodes.Agents.Agent;
 import nodes.Node.StatisticsAggregator;
 
@@ -108,7 +109,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getIntegerParameter(RUN_COUNT)];
 		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
-			arrayLists[i].addAll(population.getStatisticsAggregators());
+			for(Object key : population.getStatisticsKeys()){
+				arrayLists[i].add(population.getStatisticsAggregator(key));
+			}
 		}
 		return arrayLists;
 	}
@@ -232,7 +235,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 					agent.communicate(neighbour);
 				}
 			}
-			agent.finalizeFitnessValue();//TODO
+			agent.finalizeFitnessValue();
 		}
 	}
 	

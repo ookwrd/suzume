@@ -4,12 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import nodes.Agents.AbstractAgent;
 
 import simulation.RandomGenerator;
 
 public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	public enum NodeType { YamauchiHashimoto2010, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation, SimpleConfigurable, TestAgent, SynonymAgent }
+	
+	protected static final String STATISTICS_TYPE = "Statistics Type";
 	
 	private int id;
 	protected RandomGenerator randomGenerator;
@@ -43,14 +48,15 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
-		System.out.println("Abstract Node: Method draw() shouldnt be reached.");
+		System.out.println(AbstractNode.class.getName() + ": Method draw() shouldnt be reached.");
 		g.setColor(Color.green);
 		g.drawRect(0, 0, baseDimension.width, baseDimension.height);
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		return new ArrayList<Node.StatisticsAggregator>();
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		System.err.println(AbstractNode.class.getName() + ": Unknown statistics AggregatorKey.");
+		return null;
 	}
 	
 }

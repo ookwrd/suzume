@@ -152,13 +152,18 @@ public class ConfigurableModel extends AbstractNode implements PopulationModel {
 	}
 
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		return currentGeneration.get(0).getStatisticsAggregators();
+	public StatisticsAggregator getStatisticsAggregator(Object key){
+		return currentGeneration.get(0).getStatisticsAggregator(key);
 	}
 
 	@Override
 	public ArrayList<Object> getVisualizationKeys() {
 		return currentGeneration.get(0).getVisualizationKeys();
+	}
+	
+	@Override
+	public ArrayList<Object> getStatisticsKeys(){
+		return currentGeneration.get(0).getStatisticsKeys();
 	}
 	
 	@Override
