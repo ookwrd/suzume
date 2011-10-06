@@ -8,17 +8,18 @@ import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.BaseStatisticsAggregator;
-import nodes.Node.StatisticsCollectionPoint;
 import simulation.RandomGenerator;
 import tools.Pair;
 
 public class SynonymAgent extends AbstractAgent {
 	
 	private enum MeaningDistribution {UNIFORM, SQUARED}
+	private enum FitnessAdjustment {CAPACITY_COST, NO_ADJUSTMENT, COVERAGE}
 	
 	public final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
 	public final String MEANING_SPACE_SIZE = "Meaning space size";
 	public final String MEANING_DISTRIBUTION = "Meaning distribution";
+	public final String FITNESS_ADJUSTMENT = "Fitness adjustment stratergy:";
 	public final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
 	
 	private ArrayList<Integer>[] lexicon;
@@ -32,6 +33,7 @@ public class SynonymAgent extends AbstractAgent {
 		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
 		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
 		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(),true));
+		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),true));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
 	}
 
@@ -135,7 +137,7 @@ public class SynonymAgent extends AbstractAgent {
 			}
 		});
 		
-		retVal.add(new BaseStatisticsAggregator(null, "Lexical Distribution:") {
+		retVal.add(new BaseStatisticsAggregator(null, "Final Lexical Distribution:") {
 			@Override
 			public void endRun(Integer run, ArrayList<Agent> agents) {
 				for(int i = 0; i < ((SynonymAgent)agents.get(0)).lexicon.length; i++){
@@ -204,6 +206,27 @@ public class SynonymAgent extends AbstractAgent {
 	
 	@Override
 	public void finalizeFitnessValue() {
-		setFitness(getFitness()-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST));
+		
+		switch ((FitnessAdjustment)getListParameter(FITNESS_ADJUSTMENT)[0]) {
+		case CAPACITY_COST:
+			setFitness(getFitness()-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST));
+			break;
+			
+		case COVERAGE:
+			int count = 0;
+			for(ArrayList<Integer> meaning : lexicon){
+				if(meaning.size() > 0){
+					count++;
+				}
+			}
+			setFitness(getFitness()+count);
+			break;
+			
+		default:
+			System.err.println("Unknown FitnessAdjustment type in " + SynonymAgent.class.getName());
+			break;
+			
+		case NO_ADJUSTMENT:
+		}
 	}
 }
