@@ -16,7 +16,7 @@ public class SynonymAgent extends AbstractAgent {
 	private enum StatisticsTypes {LEXICON_CAPACITY,LEXICON_SIZE,SEMANTIC_CONVERAGE}
 	
 	private enum MeaningDistribution {UNIFORM, SQUARED}
-	private enum FitnessAdjustment {CAPACITY_COST, NO_ADJUSTMENT, COVERAGE}
+	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE}
 	
 	public final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
 	public final String MEANING_SPACE_SIZE = "Meaning space size";
@@ -36,7 +36,7 @@ public class SynonymAgent extends AbstractAgent {
 		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
 		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
 		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(),true));
-		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),true));
+		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST}));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
 	}
 
@@ -207,26 +207,28 @@ public class SynonymAgent extends AbstractAgent {
 	@Override
 	public void finalizeFitnessValue() {
 		
-		switch ((FitnessAdjustment)getListParameter(FITNESS_ADJUSTMENT)[0]) {
-		case CAPACITY_COST:
-			setFitness(getFitness()-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST));
-			break;
+		for(Object key : getListParameter(FITNESS_ADJUSTMENT)){
 			
-		case COVERAGE:
-			int count = 0;
-			for(ArrayList<Integer> meaning : lexicon){
-				if(meaning.size() > 0){
-					count++;
+			switch ((FitnessAdjustment)key) {
+			
+			case CAPACITY_COST:
+				setFitness(getFitness()-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST));
+				break;
+				
+			case COVERAGE:
+				int count = 0;
+				for(ArrayList<Integer> meaning : lexicon){
+					if(meaning.size() > 0){
+						count++;
+					}
 				}
+				setFitness(getFitness()+count);
+				break;
+				
+			default:
+				System.err.println("Unknown FitnessAdjustment type in " + SynonymAgent.class.getName());
+				break;
 			}
-			setFitness(getFitness()+count);
-			break;
-			
-		default:
-			System.err.println("Unknown FitnessAdjustment type in " + SynonymAgent.class.getName());
-			break;
-			
-		case NO_ADJUSTMENT:
 		}
 	}
 }
