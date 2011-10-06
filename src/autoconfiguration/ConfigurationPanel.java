@@ -217,6 +217,8 @@ public class ConfigurationPanel extends JPanel {
 		
 		constraints.gridx=1;
 		constraints.weightx = 1;
+
+		constraints.insets = new Insets(3, 3, 3, 3);
 		
 		JList list = new JList(values);
 		for(Object item : selected){
@@ -228,6 +230,8 @@ public class ConfigurationPanel extends JPanel {
 			}
 		}
 		add(list, constraints);
+		
+		constraints.insets = new Insets(0, 0, 0, 0);
 		
 		components.put(label, list);
 		
