@@ -13,11 +13,11 @@ import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
-
 import simulation.RandomGenerator;
 
-
 public class BiasAgent extends AbstractGrammarAgent implements Describable{
+	
+	private enum StatisticsTypes {GENE_GRAMMAR_MATCH_PROB}
 	
 	private int dimensions;
 	private double mutationRate;
@@ -28,6 +28,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	private RandomGenerator randomGenerator;
 	
 	public BiasAgent(){
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
 		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
 		setDefaultParameter("Mutation rate", new ConfigurationParameter(0.01));
 		setDefaultParameter("Invention Probability", new ConfigurationParameter(0.1));
@@ -206,17 +207,25 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
-	
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Gene-Grammar Match Probability") {
-			@Override
-			protected double getValue(Node agent) {
-				return ((BiasAgent)agent).geneGrammarMatch();
-			}
-		});
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 		
-		return retVal;
+		switch((StatisticsTypes)statisticsKey){
+		
+		case GENE_GRAMMAR_MATCH_PROB:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Gene-Grammar Match Probability") {
+				@Override
+				protected double getValue(Node agent) {
+					return ((BiasAgent)agent).geneGrammarMatch();
+				}
+			};
+			
+		default:
+			System.err.println(BiasAgent.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 	
 	/**

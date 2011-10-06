@@ -13,11 +13,14 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 
+	private enum StatisticsTypes {NUMBER_GENOTYPES, GENE_GRAMMAR_MATCH}
+	
 	protected static final String NUMBER_OF_TOKENS = "Token space size";
 	
 	protected ArrayList<Integer> chromosome;
 
 	public AbstractGeneGrammarAgent(){
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_TOKENS, new ConfigurationParameter(2));
 	}
 	
@@ -33,24 +36,32 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 	
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Gene Grammar Match") {
-			@Override
-			protected double getValue(Node agent) {
-				return ((AbstractGeneGrammarAgent)agent).geneGrammarMatch();
-			}
-		});
-		
-		retVal.add(new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
-			@Override
-			protected Object getItem(Node agent) {
-				return ((AbstractGeneGrammarAgent)agent).chromosome;
-			}
-		});
-		
-		return retVal;
+		switch ((StatisticsTypes)statisticsKey) {
+		case NUMBER_GENOTYPES:
+			return new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
+				@Override
+				protected Object getItem(Node agent) {
+					return ((AbstractGeneGrammarAgent)agent).chromosome;
+				}
+			};
+			
+		case GENE_GRAMMAR_MATCH:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Gene Grammar Match") {
+				@Override
+				protected double getValue(Node agent) {
+					return ((AbstractGeneGrammarAgent)agent).geneGrammarMatch();
+				}
+			};
+
+		default:
+			System.err.println(AbstractGeneGrammarAgent.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 	
 	public int geneGrammarMatch(){

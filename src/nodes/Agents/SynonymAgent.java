@@ -13,6 +13,8 @@ import tools.Pair;
 
 public class SynonymAgent extends AbstractAgent {
 	
+	private enum StatisticsTypes {LEXICON_CAPACITY,LEXICON_SIZE,SEMANTIC_CONVERAGE}
+	
 	private enum MeaningDistribution {UNIFORM, SQUARED}
 	private enum FitnessAdjustment {CAPACITY_COST, NO_ADJUSTMENT, COVERAGE}
 	
@@ -30,6 +32,7 @@ public class SynonymAgent extends AbstractAgent {
 	private int utterancesSeen = 0;
 	
 	public SynonymAgent(){
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
 		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
 		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
 		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(),true));
@@ -107,51 +110,48 @@ public class SynonymAgent extends AbstractAgent {
 		return lexiconSize < lexiconCapacity && utterancesSeen < lexiconCapacity*5;
 	}
 
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+	@Override
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 	
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Lexicon Size:") {
-			@Override
-			protected double getValue(Node agent) {
-				return ((SynonymAgent)agent).lexiconSize;
-			}
-		});
-
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Lexicon Capacity:") {
-			@Override
-			protected double getValue(Node agent) {
-				return ((SynonymAgent)agent).lexiconCapacity;
-			}
-		});
-		
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Semantic Coverage:") {
-			@Override
-			protected double getValue(Node agent) {
-				int count = 0;
-				for(ArrayList<Integer> meaningArrayList : ((SynonymAgent)agent).lexicon){
-					if(meaningArrayList.size() > 0){
-						count++;
+		switch ((StatisticsTypes)statisticsKey) {
+		case LEXICON_SIZE:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Lexicon Size:") {
+				@Override
+				protected double getValue(Node agent) {
+					return ((SynonymAgent)agent).lexiconSize;
+				}
+			};
+			
+		case LEXICON_CAPACITY:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Lexicon Capacity:") {
+				@Override
+				protected double getValue(Node agent) {
+					return ((SynonymAgent)agent).lexiconCapacity;
+				}
+			}; 
+			
+		case SEMANTIC_CONVERAGE:
+			return new BaseStatisticsAggregator(null, "Final Lexical Distribution:") {
+				@Override
+				public void endRun(Integer run, ArrayList<Agent> agents) {
+					for(int i = 0; i < ((SynonymAgent)agents.get(0)).lexicon.length; i++){
+						double count = 0;
+						for(Agent agent : agents){
+							SynonymAgent synonymAgent = (SynonymAgent)agent;
+							count += synonymAgent.lexicon[i].size();
+						}
+						stats.add(new Pair<Double, Double>(new Double(i), count/agents.size()));
 					}
 				}
-				return count;
-			}
-		});
+			};
 		
-		retVal.add(new BaseStatisticsAggregator(null, "Final Lexical Distribution:") {
-			@Override
-			public void endRun(Integer run, ArrayList<Agent> agents) {
-				for(int i = 0; i < ((SynonymAgent)agents.get(0)).lexicon.length; i++){
-					double count = 0;
-					for(Agent agent : agents){
-						SynonymAgent synonymAgent = (SynonymAgent)agent;
-						count += synonymAgent.lexicon[i].size();
-					}
-					stats.add(new Pair<Double, Double>(new Double(i), count/agents.size()));
-				}
-			}
-		});
-		
-		return retVal;
+		default:
+			System.err.println(SynonymAgent.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 	
 	@Override

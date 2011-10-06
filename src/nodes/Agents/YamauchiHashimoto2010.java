@@ -18,6 +18,7 @@ import simulation.RandomGenerator;
 public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements Agent, Describable {
 
 	private enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
+	private enum StatisticsTypes {LEFTOVER_LEARNING_RESC}
 	
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
 	protected static final String MUTATION_RATE = "Mutation Rate";
@@ -30,6 +31,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	protected int learningTokensViewable;
 	
 	public YamauchiHashimoto2010(){
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
 		setDefaultParameter(LEARNING_RESOURCE, new ConfigurationParameter(24));
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
@@ -158,17 +160,25 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 	
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Leftover Learning resource") {
-			@Override
-			protected double getValue(Node agent) {
-				return ((YamauchiHashimoto2010)agent).learningResource;
-			}
-		});
+		switch ((StatisticsTypes)statisticsKey) {
 		
-		return retVal;
+		case LEFTOVER_LEARNING_RESC:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Leftover Learning resource") {
+				@Override
+				protected double getValue(Node agent) {
+					return ((YamauchiHashimoto2010)agent).learningResource;
+				}
+			};
+
+		default:
+			System.err.println(YamauchiHashimoto2010.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 	
 	@Override

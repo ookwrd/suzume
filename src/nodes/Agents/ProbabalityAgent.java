@@ -4,15 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
-import nodes.Node.StatisticsAggregator;
-import nodes.Node.StatisticsCollectionPoint;
-
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
@@ -21,7 +17,9 @@ import simulation.RandomGenerator;
 
 public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
 
-	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};
+	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};//TODO
+	
+	private enum StatisticsTypes {GRAMMAR_ADJUST_COUNT}
 	
 	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
 	private static final String LEARNING_PROBABILITY_ON_MISMATCH = "Learning probability mismatch";
@@ -31,6 +29,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	private static final String INVENTION_CHANCES = "Invention Chances";
 
 	{
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
 		setDefaultParameter(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(8));
@@ -211,17 +210,25 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
-
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Grammar Adjustment count") {
-			@Override
-			protected double getValue(Node agent) {
-				return ((ProbabalityAgent)agent).grammarAdjustmentCount;
-			}
-		});
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 		
-		return retVal;
+		switch((StatisticsTypes)statisticsKey){
+		
+		case GRAMMAR_ADJUST_COUNT:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Grammar Adjustment count") {
+				@Override
+				protected double getValue(Node agent) {
+					return ((ProbabalityAgent)agent).grammarAdjustmentCount;
+				}
+			};
+			
+		default:
+			System.err.println(YamauchiHashimoto2010.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 	
 	@Override

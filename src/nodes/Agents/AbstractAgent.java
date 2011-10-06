@@ -10,6 +10,7 @@ import nodes.AbstractNode;
 import nodes.Node;
 import nodes.NodeConfiguration;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
+import nodes.Agents.statisticaggregators.AbstractMinMaxAggregator;
 
 import autoconfiguration.ConfigurationParameter;
 
@@ -19,9 +20,9 @@ import simulation.RandomGenerator;
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	private enum VisualizationTypes {FITNESS, ALIVE}
-	
-	protected static final String VISUALIZATION_TYPE = "Visualization Type";
-	protected static final String FITNESS_STATISTICS = "Fitness";
+	private enum StatisticsTypes {FITNESS, MAX_FITNESS, MIN_FITNESS}
+
+	protected static final String VISUALIZATION_TYPE = "Visualization Types:";
 	protected static final String BASE_FITNESS = "Base fitness value:";
 	protected static final String MIN_FITNESS = "Minimum fitness:";
 
@@ -29,9 +30,11 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	private boolean isAlive = true;
 	
 	public AbstractAgent(){	
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),new Object[]{StatisticsTypes.FITNESS}));
+		
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
 		setDefaultParameter(MIN_FITNESS, new ConfigurationParameter(1));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
 	}
 	
 	@Override
@@ -119,36 +122,50 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = new ArrayList<StatisticsAggregator>();
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 		
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Fitness") {
-			@Override
-			public double getValue(Node agent) {	
-				return ((Agent)agent).getFitness();
-			}
-		});
-		
-		/*retVal.add(new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Max, StatisticsCollectionPoint.PostCommunication, "Max Fitness") {
-			@Override
-			protected double statValue(Node agent) {
-				return ((Agent)agent).getFitness();
-			}
-		});
-		
-		retVal.add(new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Min, StatisticsCollectionPoint.PostCommunication, "Min Fitness") {
-			@Override
-			protected double statValue(Node agent) {
-				return ((Agent)agent).getFitness();
-			}
-		});*/
-		
-		return retVal;
+		switch ((StatisticsTypes)statisticsKey) {
+		case FITNESS:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Fitness") {
+				@Override
+				public double getValue(Node agent) {	
+					return ((Agent)agent).getFitness();
+				}
+			};
+			
+		case MAX_FITNESS:
+			return new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Max, StatisticsCollectionPoint.PostCommunication, "Max Fitness") {
+				@Override
+				protected double statValue(Node agent) {
+					return ((Agent)agent).getFitness();
+				}
+			};
+			
+		case MIN_FITNESS:
+			return new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Min, StatisticsCollectionPoint.PostCommunication, "Min Fitness") {
+				@Override
+				protected double statValue(Node agent) {
+					return ((Agent)agent).getFitness();
+				}
+			};
+
+		default:
+			System.err.println(AbstractAgent.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 
 	@Override
 	public ArrayList<Object> getVisualizationKeys() {
 		return new ArrayList<Object>(Arrays.asList(getParameter(VISUALIZATION_TYPE).getSelectedValues()));
 	}	
+	
+	@Override
+	public ArrayList<Object> getStatisticsKeys(){
+		return new ArrayList<Object>(Arrays.asList(getParameter(STATISTICS_TYPE).getSelectedValues()));
+	}
 	
 }

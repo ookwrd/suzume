@@ -7,7 +7,6 @@ import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
-import nodes.Node.StatisticsCollectionPoint;
 
 import autoconfiguration.ConfigurationParameter;
 
@@ -15,11 +14,14 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractGrammarAgent extends AbstractAgent {
 
+	private enum StatisticsTypes {NUMBER_NULLS, NUMBER_PHENOTYPES}
+	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 	
 	protected ArrayList<Integer> grammar;
 	
 	public AbstractGrammarAgent(){
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 	}
 
@@ -55,24 +57,32 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	}
 	
 	@Override
-	public ArrayList<StatisticsAggregator> getStatisticsAggregators(){
-		ArrayList<StatisticsAggregator> retVal = super.getStatisticsAggregators();
+	public StatisticsAggregator getStatisticsAggregator(Object statisticsKey){
+		if(!(statisticsKey instanceof StatisticsTypes)){
+			return super.getStatisticsAggregator(statisticsKey);
+		}
 		
-		retVal.add(new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Number of Nulls") {	
-			@Override
-			protected double getValue(Node agent) {
-				return ((AbstractGrammarAgent)agent).numberOfNullsInGrammar();
-			}
-		});
+		switch((StatisticsTypes)statisticsKey){
+		case NUMBER_NULLS:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Number of Nulls") {	
+				@Override
+				protected double getValue(Node agent) {
+					return ((AbstractGrammarAgent)agent).numberOfNullsInGrammar();
+				}
+			};
+			
+		case NUMBER_PHENOTYPES:
+			return new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication, "Number of Phenotypes") {
+				@Override
+				protected Object getItem(Node agent) {
+					return ((AbstractGrammarAgent)agent).grammar;
+				}
+			};
 		
-		retVal.add(new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication, "Number of Phenotypes") {
-			@Override
-			protected Object getItem(Node agent) {
-				return ((AbstractGrammarAgent)agent).grammar;
-			}
-		});
-		
-		return retVal;	
+		default:
+			System.err.println(AbstractGrammarAgent.class.getName() + ": Unknown StatisticsType");
+			return null;
+		}
 	}
 	
 	public Double numberOfNullsInGrammar() {
