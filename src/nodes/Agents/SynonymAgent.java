@@ -1,5 +1,8 @@
 package nodes.Agents;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import autoconfiguration.ConfigurationParameter;
@@ -13,18 +16,27 @@ import tools.Pair;
 
 public class SynonymAgent extends AbstractAgent {
 	
-	private enum StatisticsTypes {LEXICON_CAPACITY,LEXICON_SIZE,SEMANTIC_CONVERAGE}
+	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS}
+	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
 	
-	private enum MeaningDistribution {UNIFORM, SQUARED}
+	private enum MeaningDistribution {Squared, Uniform}
+	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon}
+	private enum InventionStratergy {PerGeneration, AsNeeded}
+	
+	private enum MutationType {Linear, Multiplicative}
+	
 	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE}
 	
 	public final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
 	public final String MEANING_SPACE_SIZE = "Meaning space size";
 	public final String MEANING_DISTRIBUTION = "Meaning distribution";
+	public final String WORD_CHOICE_STRATERGY = "Word choice stratergy:";
+	public final String INVENTION_STRATERGY = "Invention stratergy:";
 	public final String FITNESS_ADJUSTMENT = "Fitness adjustment stratergy:";
 	public final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
+	public final String MUTATION_TYPE = "Mutation Type:";
 	
-	private ArrayList<Integer>[] lexicon;
+	private ArrayList<Pair<Integer, Integer>>[] lexicon;
 	
 	private int lexiconCapacity;
 	private int lexiconSize;
@@ -32,10 +44,15 @@ public class SynonymAgent extends AbstractAgent {
 	private int utterancesSeen = 0;
 	
 	public SynonymAgent(){
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(),false));
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
+		
 		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
 		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
-		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(),true));
+		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(), true));
+		setDefaultParameter(WORD_CHOICE_STRATERGY, new ConfigurationParameter(WordChoiceStratergy.values(), true));
+		setDefaultParameter(INVENTION_STRATERGY, new ConfigurationParameter(InventionStratergy.values(), true));
+		setDefaultParameter(MUTATION_TYPE, new ConfigurationParameter(MutationType.values(),true));
 		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST}));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
 	}
@@ -53,7 +70,7 @@ public class SynonymAgent extends AbstractAgent {
 	private void initializeLexicon(){
 		lexicon = new ArrayList[getIntegerParameter(MEANING_SPACE_SIZE)];
 		for(int i = 0; i < lexicon.length; i++){
-			lexicon[i] = new ArrayList<Integer>();
+			lexicon[i] = new ArrayList<Pair<Integer,Integer>>();
 		}
 	}
 	
@@ -74,9 +91,32 @@ public class SynonymAgent extends AbstractAgent {
 		}
 		
 		//Mutation
-		size += randomGenerator.randomInt(3) - 1;
-		if(size < 1){
-			size = 1;
+		switch ((MutationType)getListParameter(MUTATION_TYPE)[0]) {
+		case Linear:
+			size += randomGenerator.randomInt(3) - 1;
+			if(size < 1){
+				size = 1;
+			}
+			break;
+			
+		case Multiplicative:
+			switch (randomGenerator.randomInt(3)) {
+			case 0:
+				size = (int) (size * 0.8);
+				break;
+				
+			case 2:
+				size = (int) (size * 1.2);
+				break;
+
+			default:
+				break;
+			}
+			break;
+
+		default:
+			System.err.println("Unrecognized mutation type");
+			break;
 		}
 		
 		lexiconCapacity = size;
@@ -91,18 +131,32 @@ public class SynonymAgent extends AbstractAgent {
 
 	@Override
 	public void learnUtterance(Utterance utterance) {
-		if(utterance.signal != Utterance.SIGNAL_NULL_VALUE && !lexicon[utterance.meaning].contains(utterance.signal)){
-			lexicon[utterance.meaning].add(utterance.signal);
-			lexiconSize++;
-		}
 		utterancesSeen++;
+		
+		if(utterance.signal == Utterance.SIGNAL_NULL_VALUE){
+			return;
+		}
+		
+		//Update count if it is already known
+		for(Pair<Integer,Integer> pair : lexicon[utterance.meaning]){
+			if(pair.first == utterance.signal){
+				pair.second++;
+				return;
+			}
+		}
+		
+		//Else update lexicon with new word
+		lexicon[utterance.meaning].add(new Pair<Integer,Integer>(utterance.signal,0));
+		lexiconSize++;
 	}
 
 	@Override
 	public void invent(){
-		int meaning = getRandomMeaning();
-		int value = randomGenerator.randomInt(10000);
-		learnUtterance(new Utterance(meaning, value));
+		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.PerGeneration){
+			int meaning = getMeaning();
+			int value = randomGenerator.randomInt(10000);
+			learnUtterance(new Utterance(meaning, value));
+		}
 	}
 	
 	@Override
@@ -147,6 +201,16 @@ public class SynonymAgent extends AbstractAgent {
 					}
 				}
 			};
+			
+		case PROPORTION_SYNONYMS:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Synonym Proportion:") {
+				@Override
+				protected double getValue(Node in) {
+					SynonymAgent agent = (SynonymAgent)in;
+					
+					return agent.lexiconSize;
+				}
+			};
 		
 		default:
 			System.err.println(SynonymAgent.class.getName() + ": Unknown StatisticsType");
@@ -156,29 +220,61 @@ public class SynonymAgent extends AbstractAgent {
 	
 	@Override
 	public void teach(Node learner) {
-		learner.learnUtterance(getRandomUtterance());
-	}
-	
-	private Utterance getRandomUtterance(){
-		int meaning = getRandomMeaning();
-		int tokensForMeaning = lexicon[meaning].size();
-		int token;
-		if(tokensForMeaning == 0){
-			token = Utterance.SIGNAL_NULL_VALUE;
-		} else{
-			token = randomGenerator.randomInt(tokensForMeaning);
-		}
-		return new Utterance(meaning, token);
-	}
-	
-	private int getRandomMeaning(){
+		Utterance toTeach = getUtterance();
 		
+		if(toTeach.isNull() && getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.AsNeeded){
+			toTeach.signal = randomGenerator.randomInt(10000);
+			learnUtterance(toTeach);
+		}
+		
+		learner.learnUtterance(toTeach);
+	}
+	
+	private Utterance getUtterance(){
+		int meaning = getMeaning();
+		return new Utterance(meaning, getWord(meaning));
+	}
+	
+	private int getMeaning(){	
 		switch ((MeaningDistribution)getListParameter(MEANING_DISTRIBUTION)[0]) {
-		case SQUARED:
+		case Squared:
 			return (int)(randomGenerator.random()*randomGenerator.random()*lexicon.length);
 
-		case UNIFORM:
+		case Uniform:
 			return randomGenerator.randomInt(lexicon.length);
+			
+		default:
+			System.err.println("Shouldn't be here");
+			return -1;
+		}
+	}
+	
+	private int getWord(int meaning){
+
+		int tokensForMeaning = lexicon[meaning].size();
+		if(tokensForMeaning == 0){
+			return Utterance.SIGNAL_NULL_VALUE;
+		}
+		
+		switch((WordChoiceStratergy)getListParameter(WORD_CHOICE_STRATERGY)[0]){
+		case FirstLearnt:
+			return lexicon[meaning].get(0).first;
+			
+		case LastLearnt:
+			return lexicon[meaning].get(tokensForMeaning-1).first;
+			
+		case Random:
+			return lexicon[meaning].get(randomGenerator.randomInt(tokensForMeaning)).first;
+			
+		case MostCommon:
+			Pair<Integer, Integer> bestSoFar = lexicon[meaning].get(0);
+			for(int i = 1; i < lexicon[meaning].size(); i++){
+				Pair<Integer, Integer> current = lexicon[meaning].get(i);
+				if(current.second > bestSoFar.second){
+					bestSoFar = current;
+				}
+			}
+			return bestSoFar.first;
 			
 		default:
 			System.err.println("Shouldn't be here");
@@ -190,18 +286,24 @@ public class SynonymAgent extends AbstractAgent {
 	public void communicate(Node partner) {
 		SynonymAgent opposite = (SynonymAgent)partner;
 		
-		if(opposite.canYouUnderstand(getRandomUtterance())){
+		if(opposite.canYouUnderstand(getUtterance())){
 			setFitness(getFitness()+1);
 		}
 		
 	}
 
 	private boolean canYouUnderstand(Utterance utterance){
-		boolean retVal = lexicon[utterance.meaning].contains(utterance.signal);
+		boolean retVal = false;
+		for(Pair<Integer,Integer> pair : lexicon[utterance.meaning]){
+			if(pair.first == utterance.signal){
+				retVal = true;
+				break;
+			}
+		}
 		if(retVal){
 			setFitness(getFitness()+1);
 		}
-		return retVal;
+		return false;
 	}
 	
 	@Override
@@ -217,7 +319,7 @@ public class SynonymAgent extends AbstractAgent {
 				
 			case COVERAGE:
 				int count = 0;
-				for(ArrayList<Integer> meaning : lexicon){
+				for(ArrayList<Pair<Integer,Integer>> meaning : lexicon){
 					if(meaning.size() > 0){
 						count++;
 					}
@@ -231,4 +333,31 @@ public class SynonymAgent extends AbstractAgent {
 			}
 		}
 	}
+	
+	@Override
+	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
+		if(!(visualizationKey instanceof VisualizationTypes)){
+			super.draw(baseDimension, type, visualizationKey, g);
+			return;
+		}
+		
+		Color c;
+		switch ((VisualizationTypes)visualizationKey) {
+		case LexiconCapacity:
+			c = new Color(lexiconCapacity,lexiconCapacity,0);
+			break;
+			
+		case LexiconSize:
+			c = new Color(lexiconSize,0,lexiconSize);
+			break;
+			
+		default:
+			c = null;
+			System.err.println("What happened?");
+		}
+		
+		g.setColor(c);
+		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+	}
+		
 }

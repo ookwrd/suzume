@@ -101,9 +101,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		switch ((VisualizationTypes)visualizationKey) {
 		case FITNESS:
 			int fitness = new Double(getFitness()).intValue();
-			c = new Color(fitness*8, fitness*8, 0);
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+			c = new Color(fitness,0,0);
 			break;
 			
 		case ALIVE:
@@ -112,13 +110,15 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 			}else{
 				c = Color.RED;
 			}
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 
 		default:
+			c = null;
 			System.err.println("Unrecognized Visualization type in AbstractAgent:draw.");
 		}
+		
+		g.setColor(c);
+		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 	}
 	
 	@Override
