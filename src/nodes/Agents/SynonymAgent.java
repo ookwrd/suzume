@@ -207,8 +207,7 @@ public class SynonymAgent extends AbstractAgent {
 				@Override
 				protected double getValue(Node in) {
 					SynonymAgent agent = (SynonymAgent)in;
-					
-					return agent.lexiconSize;
+					return ((double)agent.lexiconSize)/agent.lexicalCoverage();
 				}
 			};
 		
@@ -318,13 +317,7 @@ public class SynonymAgent extends AbstractAgent {
 				break;
 				
 			case COVERAGE:
-				int count = 0;
-				for(ArrayList<Pair<Integer,Integer>> meaning : lexicon){
-					if(meaning.size() > 0){
-						count++;
-					}
-				}
-				setFitness(getFitness()+count);
+				setFitness(getFitness()+lexicalCoverage());
 				break;
 				
 			default:
@@ -332,6 +325,16 @@ public class SynonymAgent extends AbstractAgent {
 				break;
 			}
 		}
+	}
+	
+	private int lexicalCoverage(){
+		int count = 0;
+		for(ArrayList<Pair<Integer,Integer>> meaning : lexicon){
+			if(meaning.size() > 0){
+				count++;
+			}
+		}
+		return count;
 	}
 	
 	@Override
