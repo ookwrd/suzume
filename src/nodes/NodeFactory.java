@@ -7,7 +7,6 @@ import nodes.Agents.BiasAgent;
 import nodes.Agents.FixedProbabilityAgent;
 import nodes.Agents.ProbabalityAgent;
 import nodes.Agents.SynonymAgent;
-import nodes.Agents.TestAgent;
 import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
@@ -23,7 +22,7 @@ public class NodeFactory {
 		Node retVal;
 		
 		switch (type) {
-		case YamauchiHashimoto2010:
+		case YamauchiHashimoto2010Agent:
 			retVal = new YamauchiHashimoto2010();
 			break;
 			
@@ -43,16 +42,12 @@ public class NodeFactory {
 			retVal = new ProbabalityAgent();
 			break;
 		
-		case ConfigurablePopulation:
+		case AdvancedConfigurableModel:
 			retVal = new ConfigurableModel();
 			break;
 			
-		case SimpleConfigurable:
+		case SimpleConfigurableModel:
 			retVal = new SimpleConfigurableModel();
-			break;
-			
-		case TestAgent:
-			retVal = new TestAgent();
 			break;
 			
 		case SynonymAgent:

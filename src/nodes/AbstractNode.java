@@ -3,16 +3,12 @@ package nodes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import nodes.Agents.AbstractAgent;
 
 import simulation.RandomGenerator;
 
 public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
-	public enum NodeType { YamauchiHashimoto2010, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, ConfigurablePopulation, SimpleConfigurable, TestAgent, SynonymAgent }
+	public enum NodeType {SimpleConfigurableModel, AdvancedConfigurableModel, YamauchiHashimoto2010Agent, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, SynonymAgent }
 	
 	protected static final String STATISTICS_TYPE = "Statistics Type";
 	

@@ -53,7 +53,7 @@ public class ConfigurableModel extends AbstractNode implements PopulationModel {
 		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(communication));
 		
 		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.COMPLETE).getConfiguration()));
-		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010).getConfiguration()));
+		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010Agent).getConfiguration()));
 	}
 	
 	@Override

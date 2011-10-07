@@ -11,7 +11,6 @@ import nodes.NodeConfiguration;
 import nodes.NodeConfigurationPanel;
 import nodes.NodeFactory;
 import nodes.AbstractNode.NodeType;
-import nodes.Agents.AbstractAgent;
 import nodes.Agents.Agent;
 import nodes.Node.StatisticsAggregator;
 
@@ -66,14 +65,16 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private boolean continueSimulation = true;
 	
 	public ModelController(){
-		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.ConfigurablePopulation).getConfiguration()));
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(1000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
+		
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
 		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
 		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
+		
+		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
 	}
 	
 	public ModelController(BasicConfigurable baseConfig, 
@@ -155,15 +156,24 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 				//Print progress information
 				if(getParameter(PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % getIntegerParameter(PRINT_EACH_X_GENERATIONS) == 0){
-					System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
+					printGenerationCount();
 				}
 	
 				currentGeneration++;
 			}
 			
+			if(getParameter(PRINT_GENERATION_COUNT).getBoolean()){
+				printGenerationCount();
+				System.out.println();
+			}
+
 			currentRun++;
 			resetRun();
 		}
+	}
+	
+	private void printGenerationCount(){
+		System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 	}
 
 	/**
@@ -258,7 +268,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 * Selection and construction of the new generation.
 	 */
 	private void reproductionPhase(){
-		
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
 		for(Agent agent : population.getCurrentGeneration()){
 			if(agent.isAlive()){
@@ -269,7 +278,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
 			}
 		}
-
 		population.setNewSubNodes(newGenerationAgents);
 	}
 
