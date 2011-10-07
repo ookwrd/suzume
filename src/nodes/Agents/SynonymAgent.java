@@ -20,8 +20,9 @@ public class SynonymAgent extends AbstractAgent {
 	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
 	
 	private enum MeaningDistribution {Squared, Uniform}
-	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon}
-	private enum InventionStratergy {PerGeneration, AsNeeded}
+	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon, Probabalistic}
+	private enum InventionStratergy {OnePerGeneration, AsNeeded}
+	private enum CriticalPeriodStratergy {Fixed, CapacityRelative}
 	
 	private enum MutationType {Linear, Multiplicative}
 	
@@ -32,6 +33,11 @@ public class SynonymAgent extends AbstractAgent {
 	public final String MEANING_DISTRIBUTION = "Meaning distribution";
 	public final String WORD_CHOICE_STRATERGY = "Word choice stratergy:";
 	public final String INVENTION_STRATERGY = "Invention stratergy:";
+	
+	public final String CRITICAL_PERIOD_STRATERGY = "Critical period:";
+	public final String CRITICAL_PERIOD = "Fixed critical period:";
+	public final String RELATIVE_MODIFIER = "Relative critical period:";
+	
 	public final String FITNESS_ADJUSTMENT = "Fitness adjustment stratergy:";
 	public final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
 	public final String MUTATION_TYPE = "Mutation Type:";
@@ -52,6 +58,11 @@ public class SynonymAgent extends AbstractAgent {
 		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(), true));
 		setDefaultParameter(WORD_CHOICE_STRATERGY, new ConfigurationParameter(WordChoiceStratergy.values(), true));
 		setDefaultParameter(INVENTION_STRATERGY, new ConfigurationParameter(InventionStratergy.values(), true));
+		
+		setDefaultParameter(CRITICAL_PERIOD_STRATERGY, new ConfigurationParameter(CriticalPeriodStratergy.values(), true));
+		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(1000));
+		setDefaultParameter(RELATIVE_MODIFIER, new ConfigurationParameter(5));
+		
 		setDefaultParameter(MUTATION_TYPE, new ConfigurationParameter(MutationType.values(),true));
 		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST}));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
@@ -146,13 +157,13 @@ public class SynonymAgent extends AbstractAgent {
 		}
 		
 		//Else update lexicon with new word
-		lexicon[utterance.meaning].add(new Pair<Integer,Integer>(utterance.signal,0));
+		lexicon[utterance.meaning].add(new Pair<Integer,Integer>(utterance.signal,1));
 		lexiconSize++;
 	}
 
 	@Override
 	public void invent(){
-		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.PerGeneration){
+		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){
 			int meaning = getMeaning();
 			int value = randomGenerator.randomInt(10000);
 			learnUtterance(new Utterance(meaning, value));
@@ -161,7 +172,15 @@ public class SynonymAgent extends AbstractAgent {
 	
 	@Override
 	public boolean canStillLearn() {
-		return lexiconSize < lexiconCapacity && utterancesSeen < lexiconCapacity*5;
+		if(lexiconSize >= lexiconCapacity){
+			return false;
+		}
+		
+		if(getListParameter(CRITICAL_PERIOD_STRATERGY)[0] == CriticalPeriodStratergy.Fixed){
+			return utterancesSeen < getIntegerParameter(CRITICAL_PERIOD);
+		}else{
+			return utterancesSeen < getIntegerParameter(RELATIVE_MODIFIER)*lexiconCapacity;
+		}
 	}
 
 	@Override
@@ -274,6 +293,20 @@ public class SynonymAgent extends AbstractAgent {
 				}
 			}
 			return bestSoFar.first;
+			
+		case Probabalistic:
+			int encounters = 0;
+			for(Pair<Integer, Integer> pair : lexicon[meaning]){
+				encounters += pair.second;
+			}
+			int selectionPoint = randomGenerator.randomInt(encounters);
+			int pointer = 0;
+			for(Pair<Integer, Integer> pair : lexicon[meaning]){
+				pointer += pair.second;
+				if(pointer > selectionPoint){
+					return pair.first;
+				}
+			}
 			
 		default:
 			System.err.println("Shouldn't be here");

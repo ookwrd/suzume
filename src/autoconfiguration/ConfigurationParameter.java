@@ -66,6 +66,13 @@ public class ConfigurationParameter {
 		}
 	}
 	
+	public ConfigurationParameter(Object[] values, Object selected){
+		type = ConfigurationParameterType.LIST;
+		this.value = values;
+		this.selected = new Object[]{selected};
+		this.singleSelection = true;
+	}
+	
 	public ConfigurationParameter(Object[] values, Object[] selected){
 		type = ConfigurationParameterType.LIST;
 		this.value = values;
