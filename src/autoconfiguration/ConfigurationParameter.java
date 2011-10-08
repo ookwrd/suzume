@@ -1,5 +1,8 @@
 package autoconfiguration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import nodes.NodeConfiguration;
 import PopulationModel.graphs.GraphConfiguration;
 
@@ -104,6 +107,12 @@ public class ConfigurationParameter {
 		
 		//Multivalued
 		this.singleSelection = singleSelection && other.singleSelection;
+	}
+	
+	public void removeListOption(Object[] toRemove){
+		ArrayList<Object> newVal = new ArrayList<Object>(Arrays.asList((Object[])value));//Wow, the class cast here actually changes the semantics of the method...
+		newVal.removeAll(Arrays.asList(toRemove));
+		value = newVal.toArray();
 	}
 	
 	public String getString(){

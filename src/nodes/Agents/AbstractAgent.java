@@ -19,8 +19,8 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
-	private enum VisualizationTypes {FITNESS, ALIVE}
-	private enum StatisticsTypes {FITNESS, MAX_FITNESS, MIN_FITNESS}
+	protected enum VisualizationTypes {FITNESS, ALIVE}
+	protected enum StatisticsTypes {FITNESS, MAX_FITNESS, MIN_FITNESS}
 
 	protected static final String VISUALIZATION_TYPE = "Visualization Types:";
 	protected static final String BASE_FITNESS = "Base fitness value:";
@@ -49,8 +49,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		return fitness;
 	}
 	
-	@Override
-	public void setFitness(double fitness){
+	protected void setFitness(double fitness){
 		this.fitness = fitness;
 		int min = getIntegerParameter(MIN_FITNESS);
 		if(this.fitness < min){
