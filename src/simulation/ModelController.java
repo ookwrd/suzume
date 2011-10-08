@@ -274,7 +274,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				newGenerationAgents.add(agent);
 			}else{
 				ArrayList<Node> possibleParents = population.getPossibleParents(agent);
-				ArrayList<Node> parents = selectionModel.selectAgents(possibleParents, 2);
+				ArrayList<Node> parents = selectionModel.select(possibleParents, 2);
 				newGenerationAgents.add(NodeFactory.constructPopulationNode((Agent)parents.get(0), (Agent)parents.get(1), randomGenerator));
 			}
 		}

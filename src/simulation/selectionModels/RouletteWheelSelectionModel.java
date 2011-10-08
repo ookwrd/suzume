@@ -3,22 +3,18 @@ package simulation.selectionModels;
 import java.util.ArrayList;
 
 import nodes.Node;
-import nodes.Agents.Agent;
-
-
 
 public class RouletteWheelSelectionModel extends SelectionModel {
-
 	
 	@Override
-	public ArrayList<Node> selectAgents(ArrayList<Node> agents, int toSelect){
+	public ArrayList<Node> select(ArrayList<Node> nodes, int toSelect){
 
 		ArrayList<Node> toReturn = new ArrayList<Node>();
 
 		//Calculate total fitness of all agents.
 		double totalFitness = 0;
-		for(Node agent : agents){
-			totalFitness += ((Agent)agent).getFitness();
+		for(Node agent : nodes){
+			totalFitness += agent.getFitness();
 		}
 
 		//Loop once for each individual
@@ -26,13 +22,13 @@ public class RouletteWheelSelectionModel extends SelectionModel {
 			double selectionPoint = randomGenerator.random()*totalFitness;
 			double pointer = 0;
 
-			for(Node agent : agents){//TODO binary search, all of the selection points in an ordered list?
+			for(Node node : nodes){//TODO binary search, all of the selection points in an ordered list?
 				//move the pointer along to the next agents borderline
-				pointer += ((Agent)agent).getFitness();
+				pointer += node.getFitness();
 				
 				//have we gone past the selectionPoint?
 				if(pointer > selectionPoint){
-					toReturn.add(agent);
+					toReturn.add(node);
 					break;
 				}
 			}

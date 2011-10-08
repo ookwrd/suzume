@@ -17,7 +17,7 @@ public abstract class SelectionModel {
 		this.randomGenerator = randomGenerator;
 	}
 	
-	public abstract ArrayList<Node> selectAgents(ArrayList<Node> agents, int number);
+	public abstract ArrayList<Node> select(ArrayList<Node> nodes, int number);
 	
 	public static SelectionModel constructSelectionModel(SelectionModels type, RandomGenerator randomGenerator){
 		SelectionModel retVal;
