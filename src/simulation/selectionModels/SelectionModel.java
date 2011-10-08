@@ -9,7 +9,7 @@ import simulation.RandomGenerator;
 
 public abstract class SelectionModel {
 
-	public enum SelectionModels {RouletteWheelSelection, ConstantProbability, RandomProbability}
+	public enum SelectionModels {RouletteWheelSelection, TruncationSelection, ConstantProbability, RandomProbability}
 	
 	protected RandomGenerator randomGenerator;
 	
@@ -24,18 +24,20 @@ public abstract class SelectionModel {
 		
 		switch (type) {
 		case RouletteWheelSelection:
-
 			retVal = new RouletteWheelSelectionModel();
 			break;
 			
-		case RandomProbability:
-			
-			retVal = new RandomProbabilitySelectionModel();
+		case TruncationSelection:
+			retVal = new TruncationSelectionModel();
 			break;
 			
-		case ConstantProbability:
+		case RandomProbability:
+			retVal = new RandomProbabilitySelectionModel();
+			break;
+
 		default:
-			
+			System.err.println("Unknown Selection Model, defaulting to constant probability.");
+		case ConstantProbability:
 			retVal = new ConstantProbabilitySelectionModel();
 			break;
 		}

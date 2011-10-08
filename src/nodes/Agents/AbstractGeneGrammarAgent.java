@@ -13,7 +13,7 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 
-	private enum StatisticsTypes {NUMBER_GENOTYPES, GENE_GRAMMAR_MATCH}
+	protected enum StatisticsTypes {NUMBER_GENOTYPES, GENE_GRAMMAR_MATCH}
 	
 	protected static final String NUMBER_OF_TOKENS = "Token space size";
 	

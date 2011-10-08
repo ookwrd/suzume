@@ -100,7 +100,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		switch ((VisualizationTypes)visualizationKey) {
 		case FITNESS:
 			int fitness = new Double(getFitness()).intValue();
-			c = new Color(fitness,0,0);
+			c = new Color(fitness*8,0,0);
 			break;
 			
 		case ALIVE:
