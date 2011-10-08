@@ -31,6 +31,10 @@ public interface Node extends Visualizable, Configurable {
 	//Communications Phase
 	public void communicate(Node partner);
 	
+	//Fitness Calculation
+	public double getFitness();
+	public void finalizeFitnessValue();
+	
 	//Statistics
 	public enum StatisticsCollectionPoint {PostIntialization, PostTraining, PostInvention, PostCommunication, PostKilling, PostReproduction}
 

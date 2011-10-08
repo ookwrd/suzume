@@ -22,7 +22,7 @@ import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 
 
-public class ConfigurableModel extends AbstractNode implements PopulationModel {
+public class ConfigurableModel extends AbstractPopulationModel implements PopulationModel {
 
 	private enum VisualizationStructure {LEARNING_GRAPH, COMMUNICATION_GRAPH, REPRODUCTION_GRAPH}
 	
@@ -38,7 +38,6 @@ public class ConfigurableModel extends AbstractNode implements PopulationModel {
 	private Graph reproductionGraph;
 	
 	private ArrayList<Node> previousGeneration = new ArrayList<Node>();
-	private ArrayList<Node> currentGeneration = new ArrayList<Node>();
 	
 	public ConfigurableModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
@@ -113,15 +112,6 @@ public class ConfigurableModel extends AbstractNode implements PopulationModel {
 	@Override
 	public ArrayList<Node> getPossibleParents(Node target) {	
 		return reproductionGraph.getInNodes(currentGeneration.indexOf(target));
-	}
-
-	@Override
-	public ArrayList<Agent> getCurrentGeneration() {	
-		ArrayList<Agent> retAgents = new ArrayList<Agent>();
-		for(Node node : currentGeneration){
-			retAgents.addAll(node.getBaseAgents());
-		}
-		return retAgents;
 	}
 	
 	@Override
