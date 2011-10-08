@@ -3,7 +3,6 @@ package simulation.selectionModels;
 import java.util.ArrayList;
 
 import nodes.Node;
-import nodes.Agents.Agent;
 
 public class RandomProbabilitySelectionModel extends
 		ConstantProbabilitySelectionModel {
@@ -12,11 +11,11 @@ public class RandomProbabilitySelectionModel extends
 	public static final int upperFitness = 13;
 	
 
-	public ArrayList<Node> selectAgents(ArrayList<Node> agents, int number){
+	public ArrayList<Node> select(ArrayList<Node> nodes, int number){
 		
 		ArrayList<Integer> fitnessValues = new ArrayList<Integer>();
 		double totalFitness = 0;
-		for(int i = 0; i< agents.size(); i++){
+		for(int i = 0; i< nodes.size(); i++){
 			int newInt = lowerFitness + randomGenerator.randomInt(upperFitness-lowerFitness);
 			fitnessValues.add(newInt);
 			totalFitness += newInt;
@@ -27,19 +26,19 @@ public class RandomProbabilitySelectionModel extends
 			double selectionPoint = randomGenerator.random()*totalFitness;
 			double pointer = 0;
 
-			for(int j = 0; j < agents.size(); j++){
+			for(int j = 0; j < nodes.size(); j++){
 				//move the pointer along to the next agents borderline
 				pointer += fitnessValues.get(j);
 				
 				//have we gone past the selectionPoint?
 				if(pointer > selectionPoint){
-					toReturn.add(agents.get(j));
+					toReturn.add(nodes.get(j));
 					break;
 				}
 			}
 		}
 		
-		return super.selectAgents(agents, number);
+		return super.select(nodes, number);
 	}
 
 }

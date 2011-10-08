@@ -4,19 +4,16 @@ import java.util.ArrayList;
 
 import nodes.Node;
 
-
-
 public class ConstantProbabilitySelectionModel extends SelectionModel {
 
 	@Override
-	public ArrayList<Node> selectAgents(ArrayList<Node> agents, int number) {
+	public ArrayList<Node> select(ArrayList<Node> nodes, int number) {
 		
 		ArrayList<Node> toReturn = new ArrayList<Node>();
-		int inputSize = agents.size();
+		int inputSize = nodes.size();
 		while(toReturn.size() < number){
-			toReturn.add(agents.get(randomGenerator.randomInt(inputSize)));
+			toReturn.add(nodes.get(randomGenerator.randomInt(inputSize)));
 		}
-		
 		return toReturn;
 	}
 
