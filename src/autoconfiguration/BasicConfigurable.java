@@ -102,6 +102,10 @@ public class BasicConfigurable implements Configurable {
 		fixedParameters.add(key);
 	}
 	
+	protected void removeListOptions(String key, Object[] options){
+		getParameter(key).removeListOption(options);
+	}
+	
 	protected void setDefaultParameter(String key, ConfigurationParameter parameter){
 		if(!parameters.containsKey(key)){
 			parameters.put(key, parameter);
