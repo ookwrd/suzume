@@ -14,7 +14,7 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractGrammarAgent extends AbstractAgent {
 
-	private enum StatisticsTypes {NUMBER_NULLS, NUMBER_PHENOTYPES}
+	protected enum StatisticsTypes {NUMBER_NULLS, NUMBER_PHENOTYPES}
 	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
 	
