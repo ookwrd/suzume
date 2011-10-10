@@ -116,7 +116,12 @@ public class ConfigurationPanel extends JPanel {
 
 	public BasicConfigurable getConfiguration(){
 		
-		HashMap<String, ConfigurationParameter> retParameters = configurationTarget.getParameters();
+		HashMap<String, ConfigurationParameter> retParameters = new HashMap<String, ConfigurationParameter>();
+		if(configurationTarget instanceof BasicConfigurable){//May contain fixed (hidden) parameters
+			for(String key : ((BasicConfigurable)configurationTarget).getFixedParameters()){
+				retParameters.put(key, configurationTarget.getParameter(key));
+			}
+		}
 		
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
 			
@@ -126,7 +131,6 @@ public class ConfigurationPanel extends JPanel {
 			Component comp = components.get(key);
 			
 			switch (parameter.type) {
-			
 			case INTEGER:
 				retParameters.put(key, new ConfigurationParameter(Integer.parseInt(((JTextField)comp).getText().trim())));
 				break;
@@ -168,7 +172,6 @@ public class ConfigurationPanel extends JPanel {
 				System.err.println("Unsupported Configuration Parameter type in ConfigurationPanel:getConfiguration.");
 				break;
 			}
-		
 		}
 		
 		return new BasicConfigurable(retParameters);
