@@ -22,6 +22,10 @@ public class ConfigurationParameter {
 	
 	public boolean singleSelection = true;
 	
+	//Used by clone
+	private ConfigurationParameter(){
+	}
+	
 	public ConfigurationParameter(String value){
 		type = ConfigurationParameterType.STRING;
 		this.value = value;
@@ -172,5 +176,14 @@ public class ConfigurationParameter {
 	@Override
 	public String toString(){
 		return value.toString();
+	}
+	
+	public ConfigurationParameter cloneParameter(){
+		ConfigurationParameter retVal = new ConfigurationParameter();
+		retVal.type = this.type;
+		retVal.value = this.value;
+		retVal.selected = this.selected;
+		retVal.singleSelection = this.singleSelection;
+		return retVal;
 	}
 }

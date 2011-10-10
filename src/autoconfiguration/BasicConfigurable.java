@@ -54,6 +54,10 @@ public class BasicConfigurable implements Configurable {
 		return retVal;
 	}
 	
+	public ArrayList<String> getFixedParameters(){
+		return fixedParameters;
+	}
+	
 	public String getStringParameter(String key){
 		return getParameter(key).getString();
 	}

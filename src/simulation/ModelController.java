@@ -180,7 +180,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 * Runs a single round of the simulation. 
 	 */
 	private void iterateGeneration(){
-
+		
 		initializationPhase();
 		gatherStatistics(StatisticsCollectionPoint.PostIntialization);
 		
