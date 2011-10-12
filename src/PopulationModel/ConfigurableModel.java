@@ -21,7 +21,6 @@ import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
 
-
 public class ConfigurableModel extends AbstractPopulationModel implements PopulationModel {
 
 	private enum VisualizationStructure {LEARNING_GRAPH, COMMUNICATION_GRAPH, REPRODUCTION_GRAPH}
@@ -132,7 +131,6 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 
 	@Override
 	public ArrayList<Agent> getBaseAgents() {
-		System.err.println("Shouldnt be here");
 		return getCurrentGeneration();
 	}
 
