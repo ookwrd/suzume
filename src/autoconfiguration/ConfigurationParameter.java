@@ -175,7 +175,20 @@ public class ConfigurationParameter {
 	
 	@Override
 	public String toString(){
-		return value.toString();
+		if(type != ConfigurationParameterType.LIST){
+			return value.toString();
+		}
+		else{
+			String retVal = "\n";
+			for(Object object : (Object[])value){
+				if(Arrays.asList(selected).contains(object)){
+					retVal += object + "\t[selected]\n";
+				}else{
+					retVal += object + "\n";
+				}
+			}
+			return retVal;
+		}
 	}
 	
 	public ConfigurationParameter cloneParameter(){

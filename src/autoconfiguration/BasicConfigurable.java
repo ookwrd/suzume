@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import nodes.NodeConfiguration;
 
@@ -129,4 +130,14 @@ public class BasicConfigurable implements Configurable {
 		return new ConfigurationPanel(this);
 	}
 	
+	@Override
+	public String toString(){
+		String retVal = "\n";
+		int i = 1;
+		for(Map.Entry<String, ConfigurationParameter> param : parameters.entrySet()){
+			retVal += i + " " + param.getKey() + ": " + param.getValue() + "\n";
+			i++;
+		}
+		return retVal;
+	}
 }
