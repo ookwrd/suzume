@@ -130,11 +130,6 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 	}
 
 	@Override
-	public ArrayList<Agent> getBaseAgents() {
-		return getCurrentGeneration();
-	}
-
-	@Override
 	public void communicate(Node partner) {
 		System.err.println("Shouldnt be here");
 	}

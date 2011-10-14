@@ -40,8 +40,6 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	@Override
 	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
 		super.initialize(config, id, randomGenerator);
-
-		setFitness(getIntegerParameter(BASE_FITNESS));;
 	}
 	
 	@Override
@@ -55,6 +53,11 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		if(this.fitness < min){
 			this.fitness = min;
 		}
+	}
+	
+	@Override
+	public void reset(){
+		setFitness(getIntegerParameter(BASE_FITNESS));
 	}
 	
 	@Override

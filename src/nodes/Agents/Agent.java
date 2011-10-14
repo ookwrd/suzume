@@ -4,6 +4,9 @@ import nodes.Node;
 
 public interface Agent extends Node {
 	
+	//Reset Phase
+	public void reset();
+	
 	//Learning Phase
 	public boolean canStillLearn();
 	
