@@ -7,7 +7,6 @@ import nodes.Agents.Agent;
 
 import runTimeVisualization.Visualizable;
 
-
 /**
  * Interface capturing the common elements of population structure. Makes the assumption of discrete generations.
  * 
@@ -28,12 +27,5 @@ public interface PopulationModel extends Visualizable, Node {
 	public ArrayList<Node> getPossibleCommunicators(Node agent);
 	
 	public ArrayList<Node> getPossibleParents(Node agent);
-	
-	/**
-	 * Returns the set of agents representing the previous generation.
-	 * 
-	 * @return
-	 */
-	public ArrayList<Agent> getCurrentGeneration();
 	
 }

@@ -11,7 +11,7 @@ public abstract class AbstractPopulationModel extends AbstractNode implements Po
 	protected ArrayList<Node> currentGeneration = new ArrayList<Node>();
 	
 	@Override
-	public ArrayList<Agent> getCurrentGeneration() {	
+	public ArrayList<Agent> getBaseAgents() {	
 		ArrayList<Agent> retAgents = new ArrayList<Agent>();
 		for(Node node : currentGeneration){
 			retAgents.addAll(node.getBaseAgents());

@@ -3,8 +3,6 @@ package simulation;
 import java.sql.Time;
 import java.util.ArrayList;
 
-import javax.swing.border.TitledBorder;
-
 import nodes.AbstractNode;
 import nodes.Node;
 import nodes.NodeConfiguration;
@@ -15,7 +13,6 @@ import nodes.Agents.Agent;
 import nodes.Node.StatisticsAggregator;
 
 import autoconfiguration.BasicConfigurable;
-import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
 
 import static nodes.Node.StatisticsCollectionPoint;
@@ -171,17 +168,13 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			resetRun();
 		}
 	}
-	
-	private void printGenerationCount(){
-		System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
-	}
 
 	/**
 	 * Runs a single round of the simulation. 
 	 */
 	private void iterateGeneration(){
 		
-		initializationPhase();
+		resetPhase();
 		gatherStatistics(StatisticsCollectionPoint.PostIntialization);
 		
 		trainingPhase();
@@ -204,8 +197,10 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	}
 
-	private void initializationPhase(){
-		//TODO
+	private void resetPhase(){
+		for(Agent agent : population.getBaseAgents()){
+			agent.reset();
+		}
 	}
 	
 	/**
@@ -214,7 +209,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void trainingPhase(){
 
 		//for each agent
-		for(Agent learner : population.getCurrentGeneration()){
+		for(Agent learner : population.getBaseAgents()){
 
 			//get its ancestors (teachers)
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
@@ -227,7 +222,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private void inventionPhase(){		
-		for(Agent agent : population.getCurrentGeneration()){
+		for(Agent agent : population.getBaseAgents()){
 			agent.invent();
 		}
 	}
@@ -236,7 +231,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 * Communication Phase which calculates the fitness of all agents in the population.
 	 */
 	private void communicationPhase(){
-		for(Agent agent : population.getCurrentGeneration()){
+		for(Agent agent : population.getBaseAgents()){
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
 
 			//Communicate with all neighbours
@@ -250,7 +245,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private void killingPhase(){
-		for(Agent agent : population.getCurrentGeneration()){
+		for(Agent agent : population.getBaseAgents()){
 			agent.killPhase();
 		}
 	}
@@ -269,7 +264,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 */
 	private void reproductionPhase(){
 		ArrayList<Node> newGenerationAgents = new ArrayList<Node>();
-		for(Agent agent : population.getCurrentGeneration()){
+		for(Agent agent : population.getBaseAgents()){
 			if(agent.isAlive()){
 				newGenerationAgents.add(agent);
 			}else{
@@ -285,7 +280,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 * Gather statistics on the population at the current point in time.
 	 */
 	private void gatherStatistics(StatisticsCollectionPoint collectionPoint){
-		ArrayList<Agent> agents = population.getCurrentGeneration();
+		ArrayList<Agent> agents = population.getBaseAgents();
 		for(Agent agent : agents){
 			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
 				aggregator.collectStatistics(collectionPoint, agent);
@@ -295,7 +290,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private void endGenerationStatistics(){
 		for(StatisticsAggregator agg: statsAggregators[currentRun]){
-			agg.endGeneration(currentGeneration, population.getCurrentGeneration());
+			agg.endGeneration(currentGeneration, population.getBaseAgents());
 		}
 		
 		if(currentGeneration + 1 >= getIntegerParameter(GENERATION_COUNT)){
@@ -305,14 +300,14 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private void endRunStatistics(){
 		for(StatisticsAggregator agg: statsAggregators[currentRun]){
-			agg.endRun(currentRun, population.getCurrentGeneration());
+			agg.endRun(currentRun, population.getBaseAgents());
 		}
 	}
 	
 	private void plotStatistics() {
 		
 		statisticsWindow = new StatisticsVisualizer("Statistics Visualizer: " +getTitleString());
-		String configName = (printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
+		String configName = (getPrintName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		for(int i = 0; i < statsAggregators[0].size(); i++){
 			ArrayList[] array = new ArrayList[getIntegerParameter(RUN_COUNT)];
@@ -332,13 +327,16 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getTitleString(){
-		return "[Start time: " + new Time(simulationStart) + " Seed: " + randomGenerator.getSeed() + "   " + printName() + "]";
+		return "[Start time: " + new Time(simulationStart) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName() + "]";
 	}
 	
-	private String printName(){
+	private String getPrintName(){
 		return ""  + getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
 	}
-    
+
+	private void printGenerationCount(){
+		System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
+	}
 	private void startTimer(){
 		simulationStart = System.currentTimeMillis();
 	}
