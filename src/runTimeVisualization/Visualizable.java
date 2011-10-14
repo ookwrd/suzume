@@ -13,7 +13,4 @@ public interface Visualizable {
 	public Dimension getDimension(Dimension baseDimension, VisualizationStyle type);
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualiztionKey, Graphics g);
 	
-	public interface Stoppable{
-		public void stopRequest();
-	}
 }

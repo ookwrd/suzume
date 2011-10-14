@@ -21,7 +21,7 @@ import autoconfiguration.ConfigurationParameter;
 import static nodes.Node.StatisticsCollectionPoint;
 
 import runTimeVisualization.RuntimeVisualizer;
-import runTimeVisualization.Visualizable.Stoppable;
+import runTimeVisualization.RuntimeVisualizer.Stoppable;
 import simulation.selectionModels.SelectionModel;
 import simulation.selectionModels.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
@@ -32,9 +32,10 @@ import PopulationModel.PopulationModel;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
 
-	public static final String AGENT_TYPE = "Population Model:";
+	public static final String TOP_LEVEL_MODEL = "Population Model:";
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
+	
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
 	
 	public static final String SELECTION_MODEL = "Selection model:";
@@ -71,10 +72,10 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
+		setDefaultParameter(TOP_LEVEL_MODEL, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
+		
 		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
 		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
-		
-		setDefaultParameter(AGENT_TYPE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
 	}
 	
 	public ModelController(BasicConfigurable baseConfig, 
@@ -87,7 +88,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		resetRun();
 		
 		resetStatistics();
-		
 	}
 
 	private void resetRun(){
@@ -118,7 +118,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 
 	private void initializePopulation(){
-		NodeConfiguration nodeConfiguration = getParameter(AGENT_TYPE).getNodeConfiguration();
+		NodeConfiguration nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
 		
 		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
 		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
@@ -131,7 +131,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		startTimer();
 		
 		if(population.getVisualizationKeys().size() != 0){
-			this.visualizer = new RuntimeVisualizer(getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
+			this.visualizer = new RuntimeVisualizer("Runtime Visualizer: " +getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
 		}
 		
 		runSimulation();
@@ -311,7 +311,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private void plotStatistics() {
 		
-		statisticsWindow = new StatisticsVisualizer(getTitleString());
+		statisticsWindow = new StatisticsVisualizer("Statistics Visualizer: " +getTitleString());
 		String configName = (printName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		for(int i = 0; i < statsAggregators[0].size(); i++){
@@ -332,7 +332,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getTitleString(){
-		return "[" + new Time(simulationStart) + " Seed: " + randomGenerator.getSeed() + "   " + printName() + "]";
+		return "[Start time: " + new Time(simulationStart) + " Seed: " + randomGenerator.getSeed() + "   " + printName() + "]";
+	}
+	
+	private String printName(){
+		return ""  + getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
 	}
     
 	private void startTimer(){
@@ -374,17 +378,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		this.statisticsWindow.saveGraphs("state-transition-graphs-"+this.getTitleString());
 		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
-	}
-	
-	public String printName(){
-		return ""  + getParameter(AGENT_TYPE).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
-	}
-	
-	@Override
-	public ConfigurationPanel getConfigurationPanel(){
-		ConfigurationPanel ret = super.getConfigurationPanel();
-		ret.setBorder(new TitledBorder("Simulation Configuration"));
-		return ret;
 	}
 
 	@Override
