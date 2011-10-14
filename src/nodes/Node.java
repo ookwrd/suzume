@@ -13,6 +13,8 @@ import tools.Pair;
 
 public interface Node extends Visualizable, Configurable {
 
+	public static final String STATISTICS_TYPE = "Statistics Type";
+
 	//Initialization
 	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator);
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator);
@@ -36,7 +38,7 @@ public interface Node extends Visualizable, Configurable {
 	public void finalizeFitnessValue();
 	
 	//Statistics
-	public enum StatisticsCollectionPoint {PostIntialization, PostTraining, PostInvention, PostCommunication, PostKilling, PostReproduction}
+	public enum StatisticsCollectionPoint {PostIntialization, PostTraining, PostInvention, PostCommunication, PostFinalizeFitness, PostKilling, PostReproduction}
 
 	public StatisticsAggregator getStatisticsAggregator(Object aggregatorKey);
 	public ArrayList<Object> getStatisticsKeys();

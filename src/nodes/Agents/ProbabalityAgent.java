@@ -29,7 +29,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	private static final String INVENTION_CHANCES = "Invention Chances";
 
 	{
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
 		setDefaultParameter(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(8));
@@ -218,7 +218,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		switch((StatisticsTypes)statisticsKey){
 		
 		case GRAMMAR_ADJUST_COUNT:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Grammar Adjustment count") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Grammar Adjustment count") {
 				@Override
 				protected double getValue(Node agent) {
 					return ((ProbabalityAgent)agent).grammarAdjustmentCount;

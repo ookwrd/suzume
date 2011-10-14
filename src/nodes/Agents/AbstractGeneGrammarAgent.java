@@ -20,7 +20,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	protected ArrayList<Integer> chromosome;
 
 	public AbstractGeneGrammarAgent(){
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_TOKENS, new ConfigurationParameter(2));
 	}
 	
@@ -43,7 +43,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	
 		switch ((StatisticsTypes)statisticsKey) {
 		case NUMBER_GENOTYPES:
-			return new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication,"Number of Genotypes") {
+			return new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostFinalizeFitness,"Number of Genotypes") {
 				@Override
 				protected Object getItem(Node agent) {
 					return ((AbstractGeneGrammarAgent)agent).chromosome;
@@ -51,7 +51,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 			};
 			
 		case GENE_GRAMMAR_MATCH:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Gene Grammar Match") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness,"Gene Grammar Match") {
 				@Override
 				protected double getValue(Node agent) {
 					return ((AbstractGeneGrammarAgent)agent).geneGrammarMatch();

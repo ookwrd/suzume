@@ -28,7 +28,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	private RandomGenerator randomGenerator;
 	
 	public BiasAgent(){
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
 		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
 		setDefaultParameter("Mutation rate", new ConfigurationParameter(0.01));
 		setDefaultParameter("Invention Probability", new ConfigurationParameter(0.1));
@@ -215,7 +215,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		switch((StatisticsTypes)statisticsKey){
 		
 		case GENE_GRAMMAR_MATCH_PROB:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Gene-Grammar Match Probability") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Gene-Grammar Match Probability") {
 				@Override
 				protected double getValue(Node agent) {
 					return ((BiasAgent)agent).geneGrammarMatch();

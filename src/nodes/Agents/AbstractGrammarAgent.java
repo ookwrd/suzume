@@ -21,7 +21,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	protected ArrayList<Integer> grammar;
 	
 	public AbstractGrammarAgent(){
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 	}
 
@@ -64,7 +64,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		
 		switch((StatisticsTypes)statisticsKey){
 		case NUMBER_NULLS:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Number of Nulls") {	
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Number of Nulls") {	
 				@Override
 				protected double getValue(Node agent) {
 					return ((AbstractGrammarAgent)agent).numberOfNullsInGrammar();
@@ -72,7 +72,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 			};
 			
 		case NUMBER_PHENOTYPES:
-			return new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostCommunication, "Number of Phenotypes") {
+			return new AbstractUniquenessAggregator<Object>(StatisticsCollectionPoint.PostFinalizeFitness, "Number of Phenotypes") {
 				@Override
 				protected Object getItem(Node agent) {
 					return ((AbstractGrammarAgent)agent).grammar;
