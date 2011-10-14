@@ -18,10 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import runTimeVisualization.Visualizable.Stoppable;
-
 @SuppressWarnings("serial")
 public class RuntimeVisualizer extends JPanel {
+	
+	public interface Stoppable{
+		public void stopRequest();
+	}
 	
 	private static final String RUN_COUNTER_PREFIX = "Run : ";
 	private static final String GENERATION_COUNTER_PREFIX = "Generation : ";
@@ -41,6 +43,14 @@ public class RuntimeVisualizer extends JPanel {
 	private boolean pauseStatus;
 	private int steps;
 	
+	/**
+	 * 
+	 * 
+	 * @param title
+	 * @param generationCount
+	 * @param model
+	 * @param stoppable
+	 */
 	public RuntimeVisualizer(String title, int generationCount, Visualizable model, final Stoppable stoppable){
 		setLayout(new BorderLayout());		
 		frame = new JFrame();
@@ -48,6 +58,7 @@ public class RuntimeVisualizer extends JPanel {
 		frame.setLayout(new BorderLayout());
 		
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		
 		if(stoppable != null){
 			frame.addWindowListener(new WindowAdapter() {
 				@Override
@@ -74,7 +85,6 @@ public class RuntimeVisualizer extends JPanel {
 	
 	private void configureBottomBar(){
 		
-
 		JPanel bottomBar = new JPanel();
 		bottomBar.setLayout(new BorderLayout());
 		
@@ -185,8 +195,7 @@ public class RuntimeVisualizer extends JPanel {
 	
 	public void update(int run,int generation){
 		
-		while(true){
-			
+		while(true){//TODO a better implementation of pause.	
 			if(steps > 0){
 				steps--;
 				break;
