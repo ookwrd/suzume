@@ -37,7 +37,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	public static final String SELECTION_MODEL = "Selection model:";
 	
-	public static final String PRINT_GENERATION_COUNT = "Print generation count?";
+	public static final String PRINT_TO_CONSOLE = "Print details to console?";
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
 	//Configuration Settings
@@ -57,7 +57,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	//Progress counters
 	private Integer currentGeneration = 0;
 	private int currentRun = 0;
-	private long simulationStart;
+	private long simulationStartTime;
 
 	//Stoppable
 	private boolean continueSimulation = true;
@@ -71,7 +71,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 		setDefaultParameter(TOP_LEVEL_MODEL, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
 		
-		setDefaultParameter(PRINT_GENERATION_COUNT, new ConfigurationParameter(true));
+		setDefaultParameter(PRINT_TO_CONSOLE, new ConfigurationParameter(true));
 		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
 	}
 	
@@ -83,8 +83,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		this.selectionModel = SelectionModel.constructSelectionModel((SelectionModels)getParameter(SELECTION_MODEL).getSelectedValue(), randomGenerator);
 		
 		resetRun();
-		
-		resetStatistics();
+
+		statsAggregators = getInitializedStatisticsAggregators();
 	}
 
 	private void resetRun(){
@@ -98,8 +98,12 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 	}
 
-	private void resetStatistics(){
-		statsAggregators = getInitializedStatisticsAggregators();		 
+	private void initializePopulation(){
+		NodeConfiguration nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
+		
+		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
+		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
+		population = node;
 	}
 	
 	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
@@ -107,19 +111,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getIntegerParameter(RUN_COUNT)];
 		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
-			for(Object key : population.getStatisticsKeys()){
+			for(Object key : getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter("Sub Model:").getNodeConfiguration().getListParameter(Node.STATISTICS_TYPE)){
 				arrayLists[i].add(population.getStatisticsAggregator(key));
 			}
 		}
 		return arrayLists;
-	}
-
-	private void initializePopulation(){
-		NodeConfiguration nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
-		
-		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
-		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
-		population = node;
 	}
 
 	@Override
@@ -132,8 +128,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		}
 		
 		runSimulation();
-		System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
-
+		
+		if(getBooleanParameter(PRINT_TO_CONSOLE)){
+			System.out.println("Execution completed in: " + longTimeToString(elapsedTime()));
+		}
+		
 		plotStatistics();
 		
 	}
@@ -145,26 +144,27 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 		//Runs
 		while(currentRun < getIntegerParameter(RUN_COUNT)){
-		
+			
 			//Generations
 			while(continueSimulation && currentGeneration < getIntegerParameter(GENERATION_COUNT)){
 	
 				iterateGeneration();
 	
 				//Print progress information
-				if(getParameter(PRINT_GENERATION_COUNT).getBoolean() && currentGeneration % getIntegerParameter(PRINT_EACH_X_GENERATIONS) == 0){
+				if(getParameter(PRINT_TO_CONSOLE).getBoolean() && currentGeneration % getIntegerParameter(PRINT_EACH_X_GENERATIONS) == 0){
 					printGenerationCount();
 				}
 	
 				currentGeneration++;
 			}
 			
-			if(getParameter(PRINT_GENERATION_COUNT).getBoolean()){
+			if(getBooleanParameter(PRINT_TO_CONSOLE)){
 				printGenerationCount();
 				System.out.println();
 			}
 
 			currentRun++;
+
 			resetRun();
 		}
 	}
@@ -186,6 +186,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		communicationPhase();
 		gatherStatistics(StatisticsCollectionPoint.PostCommunication);
 		
+		finalizeFitnessPhase();
+		gatherStatistics(StatisticsCollectionPoint.PostFinalizeFitness);
+		
 		killingPhase();
 		gatherStatistics(StatisticsCollectionPoint.PostKilling);
 
@@ -203,15 +206,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		}
 	}
 	
-	/**
-	 * Training and invention phase of a single round of the simulation.
-	 */
 	private void trainingPhase(){
-
 		//for each agent
 		for(Agent learner : population.getBaseAgents()){
 
-			//get its ancestors (teachers)
+			//get its teachers
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
 			while(learner.canStillLearn()){//Get random teacher
@@ -227,9 +226,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		}
 	}
 
-	/**
-	 * Communication Phase which calculates the fitness of all agents in the population.
-	 */
 	private void communicationPhase(){
 		for(Agent agent : population.getBaseAgents()){
 			ArrayList<Node> neighbouringAgents = population.getPossibleCommunicators(agent);
@@ -240,6 +236,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 					agent.communicate(neighbour);
 				}
 			}
+		}
+	}
+	
+	private void finalizeFitnessPhase(){
+		for(Agent agent : population.getBaseAgents()){
 			agent.finalizeFitnessValue();
 		}
 	}
@@ -247,15 +248,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void killingPhase(){
 		for(Agent agent : population.getBaseAgents()){
 			agent.killPhase();
-		}
-	}
-	
-	/**
-	 * Update StepwiseVisualizer
-	 */
-	private void visualize(){
-		if(visualizer != null){
-			visualizer.update(currentRun, currentGeneration);
 		}
 	}
 
@@ -285,6 +277,15 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
 				aggregator.collectStatistics(collectionPoint, agent);
 			}
+		}
+	}
+	
+	/**
+	 * Update StepwiseVisualizer
+	 */
+	private void visualize(){
+		if(visualizer != null){
+			visualizer.update(currentRun, currentGeneration);
 		}
 	}
 	
@@ -327,7 +328,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getTitleString(){
-		return "[Start time: " + new Time(simulationStart) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName() + "]";
+		return "[Start time: " + new Time(simulationStartTime) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName() + "]";
 	}
 	
 	private String getPrintName(){
@@ -338,11 +339,11 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		System.out.println("Run " + currentRun + "/" + getIntegerParameter(RUN_COUNT) +"\tGeneration " + currentGeneration + "/"+getIntegerParameter(GENERATION_COUNT)+ "\tElapsed time: " + longTimeToString(elapsedTime()));
 	}
 	private void startTimer(){
-		simulationStart = System.currentTimeMillis();
+		simulationStartTime = System.currentTimeMillis();
 	}
 	
 	private long elapsedTime(){
-		return System.currentTimeMillis() - simulationStart;
+		return System.currentTimeMillis() - simulationStartTime;
 	}
 	
 	private String longTimeToString(long period){

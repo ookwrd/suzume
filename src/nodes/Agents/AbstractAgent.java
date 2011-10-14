@@ -31,7 +31,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	public AbstractAgent(){	
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),new Object[]{StatisticsTypes.FITNESS}));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),new Object[]{StatisticsTypes.FITNESS}));
 		
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
 		setDefaultParameter(MIN_FITNESS, new ConfigurationParameter(1));
@@ -131,7 +131,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		
 		switch ((StatisticsTypes)statisticsKey) {
 		case FITNESS:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication,"Fitness") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness,"Fitness") {
 				@Override
 				public double getValue(Node agent) {	
 					return ((Agent)agent).getFitness();
@@ -139,7 +139,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 			};
 			
 		case MAX_FITNESS:
-			return new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Max, StatisticsCollectionPoint.PostCommunication, "Max Fitness") {
+			return new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Max, StatisticsCollectionPoint.PostFinalizeFitness, "Max Fitness") {
 				@Override
 				protected double statValue(Node agent) {
 					return ((Agent)agent).getFitness();
@@ -147,7 +147,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 			};
 			
 		case MIN_FITNESS:
-			return new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Min, StatisticsCollectionPoint.PostCommunication, "Min Fitness") {
+			return new AbstractMinMaxAggregator(AbstractMinMaxAggregator.Type.Min, StatisticsCollectionPoint.PostFinalizeFitness, "Min Fitness") {
 				@Override
 				protected double statValue(Node agent) {
 					return ((Agent)agent).getFitness();
@@ -167,7 +167,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	@Override
 	public ArrayList<Object> getStatisticsKeys(){
-		return new ArrayList<Object>(Arrays.asList(getParameter(STATISTICS_TYPE).getSelectedValues()));
+		return new ArrayList<Object>(Arrays.asList(getParameter(Node.STATISTICS_TYPE).getSelectedValues()));
 	}
 	
 }

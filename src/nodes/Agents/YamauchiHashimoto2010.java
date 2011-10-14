@@ -31,7 +31,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	protected int learningTokensViewable;
 	
 	public YamauchiHashimoto2010(){
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
 		setDefaultParameter(LEARNING_RESOURCE, new ConfigurationParameter(24));
 		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
 		setDefaultParameter(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
@@ -169,7 +169,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		switch ((StatisticsTypes)statisticsKey) {
 		
 		case LEFTOVER_LEARNING_RESC:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Leftover Learning resource") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Leftover Learning resource") {
 				@Override
 				protected double getValue(Node agent) {
 					return ((YamauchiHashimoto2010)agent).learningResource;

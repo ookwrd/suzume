@@ -51,7 +51,7 @@ public class SynonymAgent extends AbstractAgent {
 	
 	public SynonymAgent(){
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(),false));
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
 		
 		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
 		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
@@ -191,7 +191,7 @@ public class SynonymAgent extends AbstractAgent {
 	
 		switch ((StatisticsTypes)statisticsKey) {
 		case LEXICON_SIZE:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Lexicon Size:") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Lexicon Size:") {
 				@Override
 				protected double getValue(Node agent) {
 					return ((SynonymAgent)agent).lexiconSize;
@@ -199,7 +199,7 @@ public class SynonymAgent extends AbstractAgent {
 			};
 			
 		case LEXICON_CAPACITY:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Lexicon Capacity:") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Lexicon Capacity:") {
 				@Override
 				protected double getValue(Node agent) {
 					return ((SynonymAgent)agent).lexiconCapacity;
@@ -222,7 +222,7 @@ public class SynonymAgent extends AbstractAgent {
 			};
 			
 		case PROPORTION_SYNONYMS:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostCommunication, "Synonym Proportion:") {
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Synonym Proportion:") {
 				@Override
 				protected double getValue(Node in) {
 					SynonymAgent agent = (SynonymAgent)in;

@@ -10,8 +10,6 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	public enum NodeType {SimpleConfigurableModel, AdvancedConfigurableModel, YamauchiHashimoto2010Agent, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, SynonymAgent }
 	
-	protected static final String STATISTICS_TYPE = "Statistics Type";
-	
 	private int id;
 	protected RandomGenerator randomGenerator;
 
