@@ -13,6 +13,8 @@ import PopulationModel.graphs.CyclicGraph;
 import PopulationModel.graphs.Graph;
 import PopulationModel.graphs.GraphConfiguration;
 import PopulationModel.graphs.GraphFactory;
+import PopulationModel.graphs.GraphTypeConfigurationPanel;
+import PopulationModel.graphs.Graph.GraphType;
 import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 
@@ -75,13 +77,13 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 		previousGeneration = nodes;
 	
 		//Initialize Graphs
-		learningGraph = GraphFactory.constructGraph(getGraphParameter(LEARNING_GRAPH).getType());
+		learningGraph = GraphFactory.constructGraph((GraphType)getGraphParameter(LEARNING_GRAPH).getParameter(GraphTypeConfigurationPanel.GRAPH_TYPE).getSelectedValue());
 		learningGraph.init(previousGeneration, getGraphParameter(LEARNING_GRAPH), randomGenerator);
 		
-		communicationGraph = GraphFactory.constructGraph(getGraphParameter(COMMUNICATION_GRAPH).getType());
+		communicationGraph = GraphFactory.constructGraph((GraphType)getGraphParameter(COMMUNICATION_GRAPH).getParameter(GraphTypeConfigurationPanel.GRAPH_TYPE).getSelectedValue());
 		communicationGraph.init(currentGeneration, getGraphParameter(COMMUNICATION_GRAPH), randomGenerator);
 		
-		reproductionGraph = GraphFactory.constructGraph(getGraphParameter(REPRODUCTION_GRAPH).getType());
+		reproductionGraph = GraphFactory.constructGraph((GraphType)getGraphParameter(REPRODUCTION_GRAPH).getParameter(GraphTypeConfigurationPanel.GRAPH_TYPE).getSelectedValue());
 		reproductionGraph.init(currentGeneration, getGraphParameter(REPRODUCTION_GRAPH), randomGenerator);
 	}
 
