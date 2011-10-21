@@ -17,7 +17,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import nodes.NodeConfiguration;
 import nodes.NodeConfigurationPanel;
 
 import autoconfiguration.Configurable.Describable;
@@ -273,7 +272,7 @@ public class ConfigurationPanel extends JPanel {
 		return checkBox;
 	}
 	
-	protected NodeConfigurationPanel addNodeSelector(String label, NodeConfiguration initialValue){
+	protected NodeConfigurationPanel addNodeSelector(String label, BasicConfigurable initialValue){
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.weightx = 1;

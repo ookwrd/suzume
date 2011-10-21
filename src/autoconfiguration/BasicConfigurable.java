@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import nodes.NodeConfiguration;
-
 import autoconfiguration.ConfigurationParameter.ConfigurationParameterType;
 
 
@@ -83,7 +81,7 @@ public class BasicConfigurable implements Configurable {
 		return getParameter(key).getSelectedValues();
 	}
 	
-	public NodeConfiguration getNodeParameter(String key){
+	public BasicConfigurable getNodeParameter(String key){
 		return getParameter(key).getNodeConfiguration();
 	}
 	

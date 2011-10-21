@@ -8,10 +8,10 @@ import java.util.Arrays;
 
 import nodes.AbstractNode;
 import nodes.Node;
-import nodes.NodeConfiguration;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractMinMaxAggregator;
 
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 
 
@@ -38,7 +38,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
 		super.initialize(config, id, randomGenerator);
 	}
 	

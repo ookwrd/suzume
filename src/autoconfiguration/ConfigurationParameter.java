@@ -3,7 +3,6 @@ package autoconfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import nodes.NodeConfiguration;
 import PopulationModel.graphs.GraphConfiguration;
 
 /**
@@ -51,7 +50,7 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 
-	public ConfigurationParameter(NodeConfiguration value){
+	public ConfigurationParameter(BasicConfigurable value){
 		type = ConfigurationParameterType.NODE;
 		this.value = value;
 	}
@@ -144,9 +143,9 @@ public class ConfigurationParameter {
 		return (Boolean)value;
 	}
 	
-	public NodeConfiguration getNodeConfiguration(){
+	public BasicConfigurable getNodeConfiguration(){
 		assert(type == ConfigurationParameterType.NODE);
-		return (NodeConfiguration)value;
+		return (BasicConfigurable)value;
 	}
 	
 	public GraphConfiguration getGraphConfiguration(){

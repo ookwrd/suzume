@@ -1,13 +1,9 @@
 package nodes.Agents;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import nodes.Node;
-import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
-import nodes.Node.StatisticsAggregator;
-import nodes.Node.StatisticsCollectionPoint;
 
 import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
@@ -35,7 +31,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	}
 	
 	@Override
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		initializeParameters(config);
 		

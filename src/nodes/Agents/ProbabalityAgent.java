@@ -6,9 +6,9 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import nodes.Node;
-import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
@@ -43,7 +43,8 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	
 	private double grammarAdjustmentCount = 0;
 	
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator) {
+	@Override
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));

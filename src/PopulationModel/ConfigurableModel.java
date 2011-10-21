@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import nodes.AbstractNode;
 import nodes.Node;
-import nodes.NodeConfiguration;
-import nodes.NodeConfigurationPanel;
 import nodes.NodeFactory;
 import nodes.Utterance;
 
@@ -15,6 +13,7 @@ import PopulationModel.graphs.CyclicGraph;
 import PopulationModel.graphs.Graph;
 import PopulationModel.graphs.GraphConfiguration;
 import PopulationModel.graphs.GraphFactory;
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
@@ -53,15 +52,15 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 	}
 	
 	@Override
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
 		super.initialize(config, id, randomGenerator);
 			
 		//Initialize SubNodes
-		NodeConfiguration sub = getParameter(SUB_NODE).getNodeConfiguration();
+		BasicConfigurable sub = getParameter(SUB_NODE).getNodeConfiguration();
 		
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
-			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
+			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
 		}
@@ -69,7 +68,7 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 		
 		nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
-			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
+			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
 		}

@@ -8,17 +8,14 @@ import javax.swing.JPanel;
 
 import nodes.AbstractNode.NodeType;
 
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
 
-
-
 @SuppressWarnings("serial")
 public class NodeConfigurationPanel extends JPanel {
 
-	public static final String NODE_TYPE = "Node type";//TODO move
-	
 	private JComboBox agentTypesBox;
 	private Object currentlySelected;
 	
@@ -40,7 +37,7 @@ public class NodeConfigurationPanel extends JPanel {
 		subPanel = initialValue.getConfigurationPanel();
 		add(subPanel,BorderLayout.SOUTH);
 		
-		currentlySelected = initialValue.getParameter(NODE_TYPE).getSelectedValue();
+		currentlySelected = initialValue.getParameter(AbstractNode.NODE_TYPE).getSelectedValue();
 		agentTypesBox.setSelectedItem(currentlySelected);
 	}
 	
@@ -60,9 +57,9 @@ public class NodeConfigurationPanel extends JPanel {
 		revalidate();
 	}
 	
-	public NodeConfiguration getConfiguration(){
-		NodeConfiguration config = new NodeConfiguration(subPanel.getConfiguration());
-		config.setParameter(NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{agentTypesBox.getSelectedItem()}));
+	public BasicConfigurable getConfiguration(){
+		BasicConfigurable config = subPanel.getConfiguration();
+		config.setParameter(AbstractNode.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{agentTypesBox.getSelectedItem()}));
 		return config;
 	}
 	
