@@ -4,17 +4,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import autoconfiguration.BasicConfigurable;
+
 import simulation.RandomGenerator;
 
-public abstract class AbstractNode extends NodeConfiguration implements Node{
+public abstract class AbstractNode extends BasicConfigurable implements Node{
 	
-	public enum NodeType {SimpleConfigurableModel, AdvancedConfigurableModel, YamauchiHashimoto2010Agent, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, SynonymAgent }
+	public enum NodeType {SimpleConfigurableModel, AdvancedConfigurableModel, YamauchiHashimoto2010Agent, BiasAgent, AlteredAgent, FixedProbabilityAgent, ProbabilityAgent, SynonymAgent}
+	public static final String NODE_TYPE = "Node type";
 	
 	private int id;
 	protected RandomGenerator randomGenerator;
 
 	@Override
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
 		initialize(config);
 		this.id = id;
 		this.randomGenerator = randomGenerator;
@@ -27,11 +30,11 @@ public abstract class AbstractNode extends NodeConfiguration implements Node{
 	
 	@Override
 	public String getName(){
-		return getParameter(NodeConfigurationPanel.NODE_TYPE).toString();
+		return getParameter(AbstractNode.NODE_TYPE).toString();
 	}
 	
 	@Override 
-	public NodeConfiguration getConfiguration(){
+	public BasicConfigurable getConfiguration(){
 		return this;
 	}
 	

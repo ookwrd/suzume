@@ -59,16 +59,16 @@ public class NodeFactory {
 			retVal = null;
 		}
 		
-		retVal.setFixedParameter(NodeConfigurationPanel.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
+		retVal.setFixedParameter(AbstractNode.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
 		
 		return retVal;	
 	}
 	
 	public static Node constructPopulationNode(Agent parentA, Agent parentB, RandomGenerator randomGenerator){
 		
-		NodeType type = (NodeType) parentA.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue();
+		NodeType type = (NodeType) parentA.getParameter(AbstractNode.NODE_TYPE).getSelectedValue();
 		
-		if(type != parentB.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue()){
+		if(type != parentB.getParameter(AbstractNode.NODE_TYPE).getSelectedValue()){
 			System.out.println("Agent type of parents do not match in AgentFactory. Sexual reproduction not possible.");
 			return null;
 		}	

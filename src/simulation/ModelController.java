@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import nodes.AbstractNode;
 import nodes.Node;
-import nodes.NodeConfiguration;
-import nodes.NodeConfigurationPanel;
 import nodes.NodeFactory;
 import nodes.AbstractNode.NodeType;
 import nodes.Agents.Agent;
@@ -99,9 +97,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 
 	private void initializePopulation(){
-		NodeConfiguration nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
+		BasicConfigurable nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
 		
-		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue());
+		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 		population = node;
 	}
@@ -332,7 +330,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getPrintName(){
-		return ""  + getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter(NodeConfigurationPanel.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
+		return ""  + getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter(AbstractNode.NODE_TYPE).getSelectedValue() + " " + "gen_" + getIntegerParameter(GENERATION_COUNT) + "run_" + getIntegerParameter(RUN_COUNT);
 	}
 
 	private void printGenerationCount(){

@@ -3,11 +3,11 @@ package nodes.Agents;
 import java.util.ArrayList;
 
 import nodes.Node;
-import nodes.NodeConfiguration;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
 
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
@@ -26,7 +26,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
 		super.initialize(config, id, randomGenerator);
 
 		grammar = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));

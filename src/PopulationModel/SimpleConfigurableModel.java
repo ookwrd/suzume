@@ -1,10 +1,10 @@
 package PopulationModel;
 
-import nodes.NodeConfiguration;
 import PopulationModel.graphs.Graph;
 import PopulationModel.graphs.GraphConfiguration;
 import PopulationModel.graphs.GraphFactory;
 import PopulationModel.graphs.Grid;
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 
@@ -26,7 +26,7 @@ public class SimpleConfigurableModel extends ConfigurableModel {
 	}
 	
 	@Override
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator){
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
 		config.setParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(config.getGraphParameter(GRAPH)));
 		config.setParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(config.getGraphParameter(GRAPH)));
 		config.setParameter(LEARNING_GRAPH, new ConfigurationParameter(config.getGraphParameter(GRAPH)));

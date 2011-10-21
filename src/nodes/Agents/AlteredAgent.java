@@ -1,7 +1,7 @@
 package nodes.Agents;
 
 import nodes.Node;
-import nodes.NodeConfiguration;
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 import simulation.RandomGenerator;
@@ -27,7 +27,7 @@ public class AlteredAgent extends YamauchiHashimoto2010 implements Agent,
 	}
 
 	@Override
-	public void initialize(NodeConfiguration config, int id,
+	public void initialize(BasicConfigurable config, int id,
 			RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		resourceMultiplier = ((ConfigurationParameter) config

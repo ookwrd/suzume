@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import nodes.Agents.Agent;
 
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 
 
@@ -16,13 +17,13 @@ public interface Node extends Visualizable, Configurable {
 	public static final String STATISTICS_TYPE = "Statistics Type";
 
 	//Initialization
-	public void initialize(NodeConfiguration config, int id, RandomGenerator randomGenerator);
+	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator);
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator);
 	
 	//General Properties
 	public String getName();
 	public int getId();
-	public NodeConfiguration getConfiguration();
+	public BasicConfigurable getConfiguration();
 
 	public ArrayList<Agent> getBaseAgents();
 	
