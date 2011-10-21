@@ -3,7 +3,9 @@ package autoconfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import PopulationModel.graphs.GraphConfiguration;
+import PopulationModel.graphs.Graph;
+
+import nodes.Node;
 
 /**
  * Would be nicer if Java had union types...
@@ -50,13 +52,14 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 
-	public ConfigurationParameter(BasicConfigurable value){
-		type = ConfigurationParameterType.NODE;
-		this.value = value;
-	}
-	
-	public ConfigurationParameter(GraphConfiguration value){
-		type = ConfigurationParameterType.GRAPH;
+	public ConfigurationParameter(Configurable value){
+		if(value instanceof Node){
+			type = ConfigurationParameterType.NODE;
+		}else if (value instanceof Graph){
+			type = ConfigurationParameterType.GRAPH;
+		}else{
+			System.err.println("Unknown type in ConfigurationParameter... fix this" + value.getClass());
+		}
 		this.value = value;
 	}
 	
@@ -143,14 +146,14 @@ public class ConfigurationParameter {
 		return (Boolean)value;
 	}
 	
-	public BasicConfigurable getNodeConfiguration(){
+	public Configurable getNodeConfiguration(){
 		assert(type == ConfigurationParameterType.NODE);
 		return (BasicConfigurable)value;
 	}
 	
-	public GraphConfiguration getGraphConfiguration(){
+	public Configurable getGraphConfiguration(){
 		assert(type == ConfigurationParameterType.GRAPH);
-		return (GraphConfiguration)value;
+		return (BasicConfigurable)value;
 	}
 	
 	public Object[] getList(){

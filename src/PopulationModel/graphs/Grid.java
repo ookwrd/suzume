@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import nodes.Node;
 
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.ConfigurationParameter;
 
 
@@ -26,7 +27,7 @@ public class Grid extends AbstractGraph {
 		setDefaultParameter(ROW_NUMBERS, new ConfigurationParameter(30));
 	}
 	
-	public void init(ArrayList<Node> subNodes, GraphConfiguration config, RandomGenerator randomGenerator){
+	public void init(ArrayList<Node> subNodes, BasicConfigurable config, RandomGenerator randomGenerator){
 		super.init(subNodes, config, randomGenerator);
 		
 		size = subNodes.size();

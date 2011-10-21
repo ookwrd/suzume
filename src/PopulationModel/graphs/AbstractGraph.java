@@ -4,17 +4,20 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
+
 
 import nodes.Node;
 
 import simulation.RandomGenerator;
 
-public abstract class AbstractGraph extends GraphConfiguration implements Graph {
+public abstract class AbstractGraph extends BasicConfigurable implements Graph {
 
 	protected ArrayList<Node> subNodes;
 	
 	@Override
-	public void init(ArrayList<Node> subNodes, GraphConfiguration config, RandomGenerator randomGenerator){
+	public void init(ArrayList<Node> subNodes, Configurable config, RandomGenerator randomGenerator){
 		super.initialize(config);
 		this.subNodes = subNodes; 
 	}
@@ -30,7 +33,7 @@ public abstract class AbstractGraph extends GraphConfiguration implements Graph 
 	}
 
 	@Override
-	public GraphConfiguration getConfiguration() {
+	public BasicConfigurable getConfiguration() {
 		return this;
 	}
 	

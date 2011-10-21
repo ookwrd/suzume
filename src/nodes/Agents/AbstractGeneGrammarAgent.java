@@ -7,6 +7,7 @@ import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
@@ -25,7 +26,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	}
 	
 	@Override
-	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator) {
+	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));

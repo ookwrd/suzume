@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.swing.border.TitledBorder;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
 
@@ -25,7 +26,7 @@ public class RandomGenerator extends BasicConfigurable {
 	
 	public RandomGenerator(){};
 	
-	public RandomGenerator(BasicConfigurable config){
+	public RandomGenerator(Configurable config){
 		if(!config.getParameter(KEY_SET).getBoolean()){
 			randomSeed = config.getParameter(SEED).getLong();
 		} else {
