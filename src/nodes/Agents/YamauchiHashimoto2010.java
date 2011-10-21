@@ -11,6 +11,7 @@ import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
@@ -47,7 +48,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	}
 	
 	@Override
-	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator) {
+	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 		learningTokensViewable = getIntegerParameter(CRITICAL_PERIOD);

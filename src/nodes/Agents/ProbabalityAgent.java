@@ -9,6 +9,7 @@ import nodes.Node;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
@@ -44,7 +45,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	private double grammarAdjustmentCount = 0;
 	
 	@Override
-	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator) {
+	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));

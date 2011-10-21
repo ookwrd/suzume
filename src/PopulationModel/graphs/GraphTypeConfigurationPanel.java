@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import PopulationModel.graphs.Graph.GraphType;
 
+import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
@@ -60,8 +61,8 @@ public class GraphTypeConfigurationPanel extends JPanel {
 		revalidate();
 	}
 	
-	public GraphConfiguration getConfiguration(){
-		GraphConfiguration retVal = new GraphConfiguration(subPanel.getConfiguration());
+	public Configurable getConfiguration(){
+		Configurable retVal = subPanel.getConfiguration();
 		retVal.setFixedParameter(GRAPH_TYPE, new ConfigurationParameter(Graph.GraphType.values(), new Object[]{graphTypesBox.getSelectedItem()}));
 		return retVal;
 	}

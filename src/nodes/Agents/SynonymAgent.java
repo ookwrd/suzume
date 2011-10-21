@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import nodes.Node;
 import nodes.Utterance;
@@ -69,7 +70,7 @@ public class SynonymAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator) {
+	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		this.lexiconCapacity = getIntegerParameter(INIT_LEXICAL_CAPACITY);
 		this.lexiconSize = 0;

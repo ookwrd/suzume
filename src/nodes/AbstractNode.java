@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 
 import simulation.RandomGenerator;
 
@@ -17,7 +18,7 @@ public abstract class AbstractNode extends BasicConfigurable implements Node{
 	protected RandomGenerator randomGenerator;
 
 	@Override
-	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
+	public void initialize(Configurable config, int id, RandomGenerator randomGenerator){
 		initialize(config);
 		this.id = id;
 		this.randomGenerator = randomGenerator;

@@ -7,9 +7,6 @@ import java.util.Map;
 
 import autoconfiguration.ConfigurationParameter.ConfigurationParameterType;
 
-
-import PopulationModel.graphs.GraphConfiguration;
-
 public class BasicConfigurable implements Configurable {
 
 	private HashMap<String, ConfigurationParameter> parameters = new LinkedHashMap<String, ConfigurationParameter>();;
@@ -17,17 +14,18 @@ public class BasicConfigurable implements Configurable {
 
 	public BasicConfigurable(){}
 	
-	public BasicConfigurable(BasicConfigurable source) {
+	public BasicConfigurable(Configurable source) {
 		initialize(source);
 	}
 	
-	public BasicConfigurable(HashMap<String, ConfigurationParameter> parameters) {
+	@Override
+	public void initialize(HashMap<String, ConfigurationParameter> parameters) {
 		this.parameters = parameters;
 	}
 	
-	public void initialize(BasicConfigurable source){
-		this.parameters = source.parameters;
-		this.fixedParameters = source.fixedParameters;
+	public void initialize(Configurable source){
+		this.parameters = source.getParameters();
+		this.fixedParameters = source.getFixedParameters();
 	}
 	
 	@Override
@@ -53,6 +51,7 @@ public class BasicConfigurable implements Configurable {
 		return retVal;
 	}
 	
+	@Override
 	public ArrayList<String> getFixedParameters(){
 		return fixedParameters;
 	}
@@ -81,11 +80,11 @@ public class BasicConfigurable implements Configurable {
 		return getParameter(key).getSelectedValues();
 	}
 	
-	public BasicConfigurable getNodeParameter(String key){
+	public Configurable getNodeParameter(String key){
 		return getParameter(key).getNodeConfiguration();
 	}
 	
-	public GraphConfiguration getGraphParameter(String key){
+	public Configurable getGraphParameter(String key){
 		return getParameter(key).getGraphConfiguration();
 	}
 	

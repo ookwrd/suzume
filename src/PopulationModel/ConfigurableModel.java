@@ -11,11 +11,11 @@ import nodes.Utterance;
 
 import PopulationModel.graphs.CyclicGraph;
 import PopulationModel.graphs.Graph;
-import PopulationModel.graphs.GraphConfiguration;
 import PopulationModel.graphs.GraphFactory;
 import PopulationModel.graphs.GraphTypeConfigurationPanel;
 import PopulationModel.graphs.Graph.GraphType;
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
@@ -41,11 +41,11 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
 		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values()));
 		
-		GraphConfiguration learning = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
+		BasicConfigurable learning = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
 		learning.setParameter(CyclicGraph.LINK_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(learning));
 		
-		GraphConfiguration communication = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
+		BasicConfigurable communication = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
 		communication.setParameter(CyclicGraph.SELF_LINKS, new ConfigurationParameter(false));
 		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(communication));
 		
@@ -54,11 +54,11 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 	}
 	
 	@Override
-	public void initialize(BasicConfigurable config, int id, RandomGenerator randomGenerator){
+	public void initialize(Configurable config, int id, RandomGenerator randomGenerator){
 		super.initialize(config, id, randomGenerator);
 			
 		//Initialize SubNodes
-		BasicConfigurable sub = getParameter(SUB_NODE).getNodeConfiguration();
+		Configurable sub = getParameter(SUB_NODE).getNodeConfiguration();
 		
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {

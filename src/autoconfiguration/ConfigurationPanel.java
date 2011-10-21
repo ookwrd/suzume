@@ -17,11 +17,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import nodes.AbstractNode;
+import nodes.Node;
 import nodes.NodeConfigurationPanel;
+import nodes.NodeFactory;
+import nodes.AbstractNode.NodeType;
 
 import autoconfiguration.Configurable.Describable;
 
-import PopulationModel.graphs.GraphConfiguration;
+import PopulationModel.graphs.Graph;
+import PopulationModel.graphs.Graph.GraphType;
+import PopulationModel.graphs.GraphFactory;
 import PopulationModel.graphs.GraphTypeConfigurationPanel;
 
 
@@ -113,7 +119,7 @@ public class ConfigurationPanel extends JPanel {
 		}
 	}
 
-	public BasicConfigurable getConfiguration(){
+	public Configurable getConfiguration(){
 		
 		HashMap<String, ConfigurationParameter> retParameters = new HashMap<String, ConfigurationParameter>();
 		if(configurationTarget instanceof BasicConfigurable){//May contain fixed (hidden) parameters
@@ -173,7 +179,17 @@ public class ConfigurationPanel extends JPanel {
 			}
 		}
 		
-		return new BasicConfigurable(retParameters);
+		Configurable retVal;
+		if(configurationTarget instanceof Graph){
+			retVal = GraphFactory.constructGraph((GraphType)retParameters.get(GraphTypeConfigurationPanel.GRAPH_TYPE).getSelectedValue());
+		}else if(configurationTarget instanceof Node) {
+			retVal = NodeFactory.constructUninitializedNode((NodeType)retParameters.get(AbstractNode.NODE_TYPE).getSelectedValue());
+		}else{
+			retVal = new BasicConfigurable();
+		}
+		retVal.initialize(retParameters);
+		
+		return retVal;
 	}
 	
 	protected JTextArea addTextField(String message){
@@ -272,7 +288,7 @@ public class ConfigurationPanel extends JPanel {
 		return checkBox;
 	}
 	
-	protected NodeConfigurationPanel addNodeSelector(String label, BasicConfigurable initialValue){
+	protected NodeConfigurationPanel addNodeSelector(String label, Configurable initialValue){
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.weightx = 1;
@@ -289,7 +305,7 @@ public class ConfigurationPanel extends JPanel {
 		return nodeConfigPanel;
 	}
 	
-	private GraphTypeConfigurationPanel addGraphSelector(String key, GraphConfiguration graphConfiguration) {
+	private GraphTypeConfigurationPanel addGraphSelector(String key, Configurable graphConfiguration) {
 		constraints.gridx=0;
 		constraints.gridwidth = 2;
 		constraints.weightx = 1;

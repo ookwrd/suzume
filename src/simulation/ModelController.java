@@ -11,6 +11,7 @@ import nodes.Agents.Agent;
 import nodes.Node.StatisticsAggregator;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 
 import static nodes.Node.StatisticsCollectionPoint;
@@ -73,7 +74,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
 	}
 	
-	public ModelController(BasicConfigurable baseConfig, 
+	public ModelController(Configurable baseConfig, 
 			RandomGenerator randomGenerator){
 		super(baseConfig);
 		
@@ -97,7 +98,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 
 	private void initializePopulation(){
-		BasicConfigurable nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
+		Configurable nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
 		
 		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
@@ -109,7 +110,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getIntegerParameter(RUN_COUNT)];
 		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
-			for(Object key : getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter("Sub Model:").getNodeConfiguration().getListParameter(Node.STATISTICS_TYPE)){
+			for(Object key : getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter("Sub Model:").getNodeConfiguration().getParameter(Node.STATISTICS_TYPE).getSelectedValues()){
 				arrayLists[i].add(population.getStatisticsAggregator(key));
 			}
 		}
