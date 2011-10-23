@@ -7,7 +7,7 @@ public interface Configurable {
 
 	public void initialize(HashMap<String, ConfigurationParameter> parameters);
 	
-	public void setParameter(String key, ConfigurationParameter parameter);
+	public void overrideParameter(String key, ConfigurationParameter parameter);
 	public void setFixedParameter(String key, ConfigurationParameter parameter);
 	public void fixParameter(String key);
 	

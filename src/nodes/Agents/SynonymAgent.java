@@ -67,7 +67,7 @@ public class SynonymAgent extends AbstractAgent {
 		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST}));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
 		
-		setParameter(BASE_FITNESS, new ConfigurationParameter(10));
+		overrideParameter(BASE_FITNESS, new ConfigurationParameter(10));
 	}
 
 	@Override

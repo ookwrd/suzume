@@ -19,17 +19,17 @@ public class SimpleConfigurableModel extends ConfigurableModel {
 		fixParameter(VISUALIZATION_STRUCTURE);
 		
 		BasicConfigurable graph = GraphFactory.constructGraph(Graph.GraphType.GRID).getConfiguration();
-		graph.setParameter(Grid.SELF_LINKS, new ConfigurationParameter(true));
-		graph.setParameter(Grid.AUTO_LAYOUT, new ConfigurationParameter(false));
-		graph.setParameter(Grid.ROW_NUMBERS, new ConfigurationParameter(20));
+		graph.overrideParameter(Grid.SELF_LINKS, new ConfigurationParameter(true));
+		graph.overrideParameter(Grid.AUTO_LAYOUT, new ConfigurationParameter(false));
+		graph.overrideParameter(Grid.ROW_NUMBERS, new ConfigurationParameter(20));
 		setDefaultParameter(GRAPH, new ConfigurationParameter(graph));
 	}
 	
 	@Override
 	public void initialize(Configurable config, int id, RandomGenerator randomGenerator){
-		config.setParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
-		config.setParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
-		config.setParameter(LEARNING_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
+		config.overrideParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
+		config.overrideParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
+		config.overrideParameter(LEARNING_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
 		
 		super.initialize(config, id, randomGenerator);
 	}

@@ -57,7 +57,7 @@ public class NodeConfigurationPanel extends JPanel {
 	
 	public Configurable getConfiguration(){
 		Configurable config = subPanel.getConfiguration();
-		config.setParameter(AbstractNode.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{agentTypesBox.getSelectedItem()}));
+		config.overrideParameter(AbstractNode.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{agentTypesBox.getSelectedItem()}));
 		return config;
 	}
 	

@@ -43,11 +43,11 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values()));
 		
 		BasicConfigurable learning = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
-		learning.setParameter(CyclicGraph.LINK_DISTANCE, new ConfigurationParameter(2));
+		learning.overrideParameter(CyclicGraph.LINK_DISTANCE, new ConfigurationParameter(2));
 		setDefaultParameter(LEARNING_GRAPH, new ConfigurationParameter(learning));
 		
 		BasicConfigurable communication = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
-		communication.setParameter(CyclicGraph.SELF_LINKS, new ConfigurationParameter(false));
+		communication.overrideParameter(CyclicGraph.SELF_LINKS, new ConfigurationParameter(false));
 		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(communication));
 		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		
