@@ -36,7 +36,7 @@ import tools.ScreenImage;
 @SuppressWarnings("serial")
 public class StatisticsVisualizer extends JPanel {
 
-	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts"; //TODO refactor to a configuration class
+	public static final String DEFAULT_SAVE_LOCATION = "/suzume-charts";
 	
 	public static final boolean PRINT_THUMBNAIL = true;
 
@@ -304,6 +304,14 @@ public class StatisticsVisualizer extends JPanel {
 	private void importDataset(){
 		//TODO
 		System.out.println("Should be importing data set right now.");
+	}
+	
+
+
+	@Override
+	public void finalize() throws Throwable{
+		System.out.println("StatisticsVisualization Being finalized");
+		super.finalize();
 	}
 
 }

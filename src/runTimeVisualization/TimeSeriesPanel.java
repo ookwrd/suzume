@@ -23,12 +23,10 @@ public class TimeSeriesPanel extends JPanel {
 	private static final Dimension verticalBaseDimension = new Dimension(1,1);
 	
 	private final Object key;
-	private Visualizable model;
 	private DrawingLabel label;
 	private boolean isSelected = false;
 	
 	public TimeSeriesPanel(Visualizable model, int generationCount, final JButton printButton, Object visualizationKey){
-		this.model = model;
 		
 		key = visualizationKey;
 
@@ -86,7 +84,7 @@ public class TimeSeriesPanel extends JPanel {
 		return isSelected;
 	}
 	
-	public void updateImage(){
+	public void updateImage(Visualizable model){
 		model.draw(verticalBaseDimension, VisualizationStyle.vertical, key, label.getGraphics().create());
 		label.getGraphics().translate(verticalBaseDimension.height, 0);
 		label.repaint();

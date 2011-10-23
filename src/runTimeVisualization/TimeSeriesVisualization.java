@@ -14,7 +14,6 @@ public class TimeSeriesVisualization extends JScrollPane {
 
 	private ArrayList<TimeSeriesSet> runs = new ArrayList<TimeSeriesSet>();
 	
-	private Visualizable model;
 	private int generationCount;
 	
 	private JButton printButton;
@@ -30,19 +29,18 @@ public class TimeSeriesVisualization extends JScrollPane {
 		getHorizontalScrollBar().setUnitIncrement(16);
 		getVerticalScrollBar().setUnitIncrement(16);
 		
-		this.model = model;
 		this.generationCount = generationCount;
 		this.printButton = printButton;
 		
 		inner = new JPanel();
 		inner.setLayout(new BoxLayout(inner, BoxLayout.Y_AXIS));
 
-		configureNewSetTimeseries(runAtLastUpdate);
+		configureNewSetTimeseries(runAtLastUpdate, model);
 		getViewport().setView(inner);
 		
 	}
 	
-	public void configureNewSetTimeseries(int runNum){
+	public void configureNewSetTimeseries(int runNum, Visualizable model){
 		TimeSeriesSet run = new TimeSeriesSet(model, generationCount, runNum, printButton);
 		runs.add(run);
 		inner.add(run);
@@ -54,18 +52,14 @@ public class TimeSeriesVisualization extends JScrollPane {
         inner.scrollRectToVisible(rect);     
 	}
 	
-	public void updateImage(int run){
+	public void updateImage(int run, Visualizable model){
 		//Is the update the start of a new run visualization?
 		if(this.runAtLastUpdate != run){
-			configureNewSetTimeseries(run);
+			configureNewSetTimeseries(run, model);
 			runAtLastUpdate = run;
 		}
 		
-		runs.get(runs.size()-1).updateImage();
-	}
-
-	public void updateModel(Visualizable model) {//TODO is this needed
-		this.model = model;
+		runs.get(runs.size()-1).updateImage(model);
 	}
 	
 	public BufferedImage getSelected(){

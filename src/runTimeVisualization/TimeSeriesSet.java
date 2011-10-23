@@ -32,9 +32,9 @@ public class TimeSeriesSet extends JPanel {
 		}
 	}
 	
-	public void updateImage(){
+	public void updateImage(Visualizable model){
 		for(TimeSeriesPanel ts : series){
-			ts.updateImage();
+			ts.updateImage(model);
 		}
 	}
 	

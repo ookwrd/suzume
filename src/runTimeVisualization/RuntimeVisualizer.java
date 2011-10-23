@@ -38,7 +38,7 @@ public class RuntimeVisualizer extends JPanel {
 	private JButton stepButton;
 	private JLabel generationCounter;
 	private JLabel runCounter;
-	JButton printSelectedButton;
+	private JButton printSelectedButton;
 	
 	private boolean pauseStatus;
 	private int steps;
@@ -181,17 +181,7 @@ public class RuntimeVisualizer extends JPanel {
 		
 	}
 	
-	/**
-	 * Update the model that we are producing visualizations of.
-	 * 
-	 * @param model
-	 */
-	public void updateModel(Visualizable model){
-		singleStepPanel.updateModel(model);
-		timeSeriesPanel.updateModel(model);
-	}
-	
-	public void update(int run,int generation){
+	public void update(int run,int generation, Visualizable model){
 		
 		while(true){//TODO a better implementation of pause.	
 			if(steps > 0){
@@ -211,7 +201,7 @@ public class RuntimeVisualizer extends JPanel {
 		
 		updateCounter(run, generation);
 		
-		updateImage(run);
+		updateImage(run, model);
 	}
 	
 	
@@ -220,10 +210,10 @@ public class RuntimeVisualizer extends JPanel {
 		generationCounter.setText(GENERATION_COUNTER_PREFIX + generation);
 	}
 	
-	private void updateImage(int run){
+	private void updateImage(int run, Visualizable model){
 		//Current Status visualization
-		singleStepPanel.updateImage();
-		timeSeriesPanel.updateImage(run);
+		singleStepPanel.updateImage(model);
+		timeSeriesPanel.updateImage(run, model);
 	}
 	
 	@Override

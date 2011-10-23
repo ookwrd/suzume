@@ -23,7 +23,6 @@ public class GeographicPanel extends JPanel {
 	private static final Dimension layoutBaseDimension = new Dimension(4,4);
 	
 	private final Object key;
-	private Visualizable model;
 	private DrawingLabel iconLabel;
 	private boolean isSelected = false;
 	
@@ -31,7 +30,6 @@ public class GeographicPanel extends JPanel {
 
 	public GeographicPanel(Visualizable model, final JButton printButton, Object key){
 		
-		this.model = model;
 		this.key = key;
 		
 		inner = new JPanel();
@@ -85,13 +83,9 @@ public class GeographicPanel extends JPanel {
 		}
 	}
 	
-	public void updateImage(){
+	public void updateImage(Visualizable model){
 		model.draw(layoutBaseDimension, VisualizationStyle.layout, key, iconLabel.getGraphics().create());
 		inner.repaint();
-	}
-
-	public void updateModel(Visualizable model) {
-		this.model = model;
 	}
 	
 	public boolean isSelected(){
