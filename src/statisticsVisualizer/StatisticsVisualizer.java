@@ -307,13 +307,4 @@ public class StatisticsVisualizer extends JPanel {
 		//TODO
 		System.out.println("Should be importing data set right now.");
 	}
-	
-
-
-	@Override
-	public void finalize() throws Throwable{
-		System.out.println("StatisticsVisualization Being finalized");
-		super.finalize();
-	}
-
 }

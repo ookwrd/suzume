@@ -71,10 +71,4 @@ public class TimeSeriesVisualization extends JScrollPane {
 		}
 		return null;
 	}
-	
-	@Override
-	public void finalize() throws Throwable{
-		System.out.println("TimeSeriesVisualizer Being finalized");
-		super.finalize();
-	}
 }

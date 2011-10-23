@@ -371,11 +371,4 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public void stopRequest() {
 		continueSimulation = false;
 	}
-	
-	@Override
-	public void finalize() throws Throwable{
-		System.out.println("Model Controller Being finalized");
-		super.finalize();
-	}
-
 }		
