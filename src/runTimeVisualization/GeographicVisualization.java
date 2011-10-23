@@ -52,10 +52,4 @@ public class GeographicVisualization extends JScrollPane {
 			panel.updateImage(model);
 		}
 	}
-
-	@Override
-	public void finalize() throws Throwable{
-		System.out.println("Geographic Visualization Being finalized");
-		super.finalize();
-	}
 }
