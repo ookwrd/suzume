@@ -225,5 +225,11 @@ public class RuntimeVisualizer extends JPanel {
 		singleStepPanel.updateImage();
 		timeSeriesPanel.updateImage(run);
 	}
+	
+	@Override
+	public void finalize() throws Throwable{
+		System.out.println("Runtime Visualizer Being finalized");
+		super.finalize();
+	}
 
 }

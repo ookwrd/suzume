@@ -89,13 +89,13 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public void setParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
+	public void overrideParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
 		parameters.put(key, parameter);
 	}
 	
 	@Override
 	public void setFixedParameter(String key, ConfigurationParameter parameter){
-		setParameter(key, parameter);
+		overrideParameter(key, parameter);
 		fixParameter(key);
 	}
 	

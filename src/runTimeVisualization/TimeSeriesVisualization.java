@@ -9,14 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import PopulationModel.PopulationModel;
-
-
 @SuppressWarnings("serial")
 public class TimeSeriesVisualization extends JScrollPane {
 
-	//private ArrayList<TimeSeries> series = new ArrayList<TimeSeries>();
-	
 	private ArrayList<TimeSeriesSet> runs = new ArrayList<TimeSeriesSet>();
 	
 	private Visualizable model;
@@ -81,5 +76,11 @@ public class TimeSeriesVisualization extends JScrollPane {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public void finalize() throws Throwable{
+		System.out.println("TimeSeriesVisualizer Being finalized");
+		super.finalize();
 	}
 }
