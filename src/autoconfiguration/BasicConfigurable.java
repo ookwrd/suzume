@@ -114,6 +114,7 @@ public class BasicConfigurable implements Configurable {
 		}else if (
 				parameter.type == parameters.get(key).type 
 				&& (parameter.type == ConfigurationParameterType.LIST)){
+			
 			parameters.get(key).addListOptions(parameter);
 			
 			//TODO check how many are being constructed

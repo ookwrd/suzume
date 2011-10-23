@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import nodes.Node;
@@ -67,6 +66,8 @@ public class SynonymAgent extends AbstractAgent {
 		setDefaultParameter(MUTATION_TYPE, new ConfigurationParameter(MutationType.values(),true));
 		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST}));
 		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
+		
+		setParameter(BASE_FITNESS, new ConfigurationParameter(10));
 	}
 
 	@Override
