@@ -70,7 +70,10 @@ public class NodeFactory {
 		case FixedProbabilityAgent:
 		case ProbabilityAgent:
 		case SynonymAgent:
-			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{AbstractNode.NodeType.AdvancedConfigurableModel,AbstractNode.NodeType.SimpleConfigurableModel});
+			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{
+					AbstractNode.NodeType.AdvancedConfigurableModel,
+					AbstractNode.NodeType.SimpleConfigurableModel
+					});
 			break;
 
 		case AdvancedConfigurableModel:

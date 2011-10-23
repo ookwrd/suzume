@@ -26,7 +26,8 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 	
 	public static final String SUB_NODE = "Sub Model:";
 	public static final String REPRODUCTION_GRAPH = "Reproduction Graph";
-	public static final String COMMUNICATION_GRAPH = "Communication Graph";
+	public static final String COMMUNICATION_GRAPH = "Communication Graph";	
+	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";
 	public static final String LEARNING_GRAPH = "Learning Graph";
 	public static final String POPULATION_SIZE = "Population Size";
 	public static final String VISUALIZATION_STRUCTURE = "Visualize based on:";
@@ -48,6 +49,7 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 		BasicConfigurable communication = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
 		communication.setParameter(CyclicGraph.SELF_LINKS, new ConfigurationParameter(false));
 		setDefaultParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(communication));
+		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		
 		setDefaultParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(GraphFactory.constructGraph(Graph.GraphType.COMPLETE).getConfiguration()));
 		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010Agent).getConfiguration()));
@@ -99,7 +101,15 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 
 	@Override
 	public ArrayList<Node> getPossibleCommunicators(Node target) {
-		return communicationGraph.getInNodes(currentGeneration.indexOf(target));
+
+		ArrayList<Node> retVal = new ArrayList<Node>();
+		ArrayList<Node> single = communicationGraph.getInNodes(currentGeneration.indexOf(target)); 
+		
+		for(int i = 0; i < getIntegerParameter(COMMUNICATIONS_PER_NEIGHBOUR); i++){
+			retVal.addAll(single);
+		}
+		
+		return retVal;
 	}
 
 	@Override

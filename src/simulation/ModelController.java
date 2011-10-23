@@ -32,8 +32,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
 	
-	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";//TODO remove to population model
-	
 	public static final String SELECTION_MODEL = "Selection model:";
 	
 	public static final String PRINT_TO_CONSOLE = "Print details to console?";
@@ -65,7 +63,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(1000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
 		
-		setDefaultParameter(COMMUNICATIONS_PER_NEIGHBOUR, new ConfigurationParameter(6));
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
 		setDefaultParameter(TOP_LEVEL_MODEL, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
@@ -231,9 +228,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 			//Communicate with all neighbours
 			for(Node neighbour : neighbouringAgents){      
-				for(int i = 0; i < getIntegerParameter(COMMUNICATIONS_PER_NEIGHBOUR); i++){
-					agent.communicate(neighbour);
-				}
+				agent.communicate(neighbour);
 			}
 		}
 	}
