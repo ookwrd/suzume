@@ -53,22 +53,22 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 	//Progress counters
 	private Integer currentGeneration = 0;
-	private int currentRun = 0;
+	private int currentRun = 1;
 	private long simulationStartTime;
 
 	//Stoppable
 	private boolean continueSimulation = true;
 	
 	public ModelController(){
-		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(1000));
-		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(10));
+		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
+		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(5));
 		
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
 
 		setDefaultParameter(TOP_LEVEL_MODEL, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
 		
 		setDefaultParameter(PRINT_TO_CONSOLE, new ConfigurationParameter(true));
-		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(1000));
+		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(100));
 	}
 	
 	public ModelController(Configurable baseConfig, 
@@ -139,7 +139,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public void runSimulation(){
 
 		//Runs
-		while(currentRun < getIntegerParameter(RUN_COUNT)){
+		while(currentRun <= getIntegerParameter(RUN_COUNT)){
 			
 			//Generations
 			while(continueSimulation && currentGeneration < getIntegerParameter(GENERATION_COUNT)){
@@ -268,7 +268,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void gatherStatistics(StatisticsCollectionPoint collectionPoint){
 		ArrayList<Agent> agents = population.getBaseAgents();
 		for(Agent agent : agents){
-			for(StatisticsAggregator aggregator : statsAggregators[currentRun]){
+			for(StatisticsAggregator aggregator : statsAggregators[currentRun-1]){
 				aggregator.collectStatistics(collectionPoint, agent);
 			}
 		}
@@ -284,7 +284,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private void endGenerationStatistics(){
-		for(StatisticsAggregator agg: statsAggregators[currentRun]){
+		for(StatisticsAggregator agg : statsAggregators[currentRun-1]){
 			agg.endGeneration(currentGeneration, population.getBaseAgents());
 		}
 		
@@ -294,7 +294,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private void endRunStatistics(){
-		for(StatisticsAggregator agg: statsAggregators[currentRun]){
+		for(StatisticsAggregator agg : statsAggregators[currentRun-1]){
 			agg.endRun(currentRun, population.getBaseAgents());
 		}
 	}

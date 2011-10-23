@@ -26,7 +26,7 @@ public class TimeSeriesVisualization extends JScrollPane {
 	
 	private JPanel inner;
 	
-	private int runAtLastUpdate = 0;
+	private int runAtLastUpdate = 1;
 	
 	public TimeSeriesVisualization(Visualizable model, int generationCount, JButton printButton){
 		super();
@@ -42,7 +42,7 @@ public class TimeSeriesVisualization extends JScrollPane {
 		inner = new JPanel();
 		inner.setLayout(new BoxLayout(inner, BoxLayout.Y_AXIS));
 
-		configureNewSetTimeseries(0);
+		configureNewSetTimeseries(runAtLastUpdate);
 		getViewport().setView(inner);
 		
 	}

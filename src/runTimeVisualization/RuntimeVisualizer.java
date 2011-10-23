@@ -44,8 +44,6 @@ public class RuntimeVisualizer extends JPanel {
 	private int steps;
 	
 	/**
-	 * 
-	 * 
 	 * @param title
 	 * @param generationCount
 	 * @param model
