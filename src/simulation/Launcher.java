@@ -25,7 +25,6 @@ public class Launcher extends JPanel {
 	private JButton createButton;
 	
 	public Launcher(){
-		
 		window = new JFrame();
 		window.setTitle("Simulation Launcher");
 		

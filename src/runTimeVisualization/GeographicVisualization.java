@@ -47,16 +47,15 @@ public class GeographicVisualization extends JScrollPane {
 		return null;
 	}
 	
-	public void updateImage(){
+	public void updateImage(Visualizable model){
 		for(GeographicPanel panel : series){
-			panel.updateImage();
-		}
-	}
-	
-	public void updateModel(Visualizable model){
-		for(GeographicPanel panel : series){
-			panel.updateModel(model);
+			panel.updateImage(model);
 		}
 	}
 
+	@Override
+	public void finalize() throws Throwable{
+		System.out.println("Geographic Visualization Being finalized");
+		super.finalize();
+	}
 }

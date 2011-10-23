@@ -84,14 +84,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 
 	private void resetRun(){
-		
 		currentGeneration = 0;
 		initializePopulation();
-
-		if(visualizer!=null){
-			visualizer.updateModel(population);
-		}
-		
 	}
 
 	private void initializePopulation(){
@@ -279,7 +273,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	 */
 	private void visualize(){
 		if(visualizer != null){
-			visualizer.update(currentRun, currentGeneration);
+			visualizer.update(currentRun, currentGeneration, population);
 		}
 	}
 	
