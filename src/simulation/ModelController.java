@@ -49,7 +49,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	//Visualization
 	private RuntimeVisualizer visualizer;
-	private StatisticsVisualizer statisticsWindow;
 
 	//Progress counters
 	private Integer currentGeneration = 0;
@@ -295,7 +294,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private void plotStatistics() {
 		
-		statisticsWindow = new StatisticsVisualizer("Statistics Visualizer: " +getTitleString());
+		StatisticsVisualizer statisticsWindow = new StatisticsVisualizer("Statistics Visualizer: " +getTitleString());
 		String configName = (getPrintName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		for(int i = 0; i < statsAggregators[0].size(); i++){
@@ -341,7 +340,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	//TODO put this somewhere else.
 	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
-		ArrayList<Pair<Double, Double>>[] pairData = data;
+	/*	ArrayList<Pair<Double, Double>>[] pairData = data;
 		
 		ArrayList<Double>[] array = new ArrayList[pairData.length];
 		
@@ -365,6 +364,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		this.statisticsWindow.saveGraphs("state-transition-graphs-"+this.getTitleString());
 		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
+	*/
 	}
 
 	@Override

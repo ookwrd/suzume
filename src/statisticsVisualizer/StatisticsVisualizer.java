@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -58,6 +59,7 @@ public class StatisticsVisualizer extends JPanel {
 		
 		frame = new JFrame();
 		frame.setTitle(title);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		FlowLayout fLO = new FlowLayout(FlowLayout.RIGHT);
 		//fLO.setAlignment(FlowLayout.LEADING);
