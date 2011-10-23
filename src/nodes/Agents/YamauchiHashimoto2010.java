@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import nodes.AbstractNode;
 import nodes.Node;
 import nodes.NodeConfigurationPanel;
 import nodes.Utterance;
@@ -43,8 +44,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE,VisualizationTypes.PHENOTYPE}));
 		
 		fixParameter(NUMBER_OF_TOKENS);
-		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});
-		//removeListOptions(NodeConfigurationPanel.NODE_TYPE, new Object[]{});
+		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
 	}
 	
 	@Override

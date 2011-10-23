@@ -61,6 +61,31 @@ public class NodeFactory {
 		
 		retVal.setFixedParameter(AbstractNode.NODE_TYPE, new ConfigurationParameter(AbstractNode.NodeType.values(), new Object[]{type}));
 		
+		//TODO temp until I implement recursive population models hack to only make valid options appear
+		switch (type) {
+		default:
+		case YamauchiHashimoto2010Agent:
+		case AlteredAgent:
+		case BiasAgent:
+		case FixedProbabilityAgent:
+		case ProbabilityAgent:
+		case SynonymAgent:
+			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{AbstractNode.NodeType.AdvancedConfigurableModel,AbstractNode.NodeType.SimpleConfigurableModel});
+			break;
+
+		case AdvancedConfigurableModel:
+		case SimpleConfigurableModel:
+			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{
+					AbstractNode.NodeType.YamauchiHashimoto2010Agent,
+					AbstractNode.NodeType.AlteredAgent,
+					AbstractNode.NodeType.BiasAgent,
+					AbstractNode.NodeType.FixedProbabilityAgent,
+					AbstractNode.NodeType.ProbabilityAgent,
+					AbstractNode.NodeType.SynonymAgent
+			});
+			break;
+		}
+		
 		return retVal;	
 	}
 	

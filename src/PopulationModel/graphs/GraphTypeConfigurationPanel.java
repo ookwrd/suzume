@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import PopulationModel.graphs.Graph.GraphType;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
@@ -27,7 +26,7 @@ public class GraphTypeConfigurationPanel extends JPanel {
 	public GraphTypeConfigurationPanel(Configurable initialValue){	
 		setLayout(new BorderLayout());
 	
-		graphTypesBox = new JComboBox(GraphType.values());
+		graphTypesBox = new JComboBox(initialValue.getParameter(GRAPH_TYPE).getList());
 		graphTypesBox.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

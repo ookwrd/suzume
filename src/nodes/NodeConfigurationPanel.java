@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import nodes.AbstractNode.NodeType;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationPanel;
 import autoconfiguration.ConfigurationParameter;
@@ -24,7 +23,7 @@ public class NodeConfigurationPanel extends JPanel {
 	public NodeConfigurationPanel(Configurable initialValue){	
 		setLayout(new BorderLayout());
 		
-		agentTypesBox = new JComboBox(AbstractNode.NodeType.values());
+		agentTypesBox = new JComboBox(initialValue.getParameter(AbstractNode.NODE_TYPE).getList());
 		agentTypesBox.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -42,7 +41,6 @@ public class NodeConfigurationPanel extends JPanel {
 	}
 	
 	private void reconfigureSubPanel(){
-		
 		NodeType selected = (NodeType)agentTypesBox.getSelectedItem();
 		if(currentlySelected == selected){
 			return;
