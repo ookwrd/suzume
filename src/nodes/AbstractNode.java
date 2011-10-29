@@ -11,7 +11,7 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractNode extends BasicConfigurable implements Node{
 	
-	public enum NodeType {SimpleConfigurableModel, AdvancedConfigurableModel, YamauchiHashimoto2010Agent, BiasAgent, ExtendedYamauchiHashimotoAgent, ProbabilityAgent, SynonymAgent}
+	public enum NodeType {SimpleConfigurableModel, AdvancedConfigurableModel, YamauchiHashimoto2010Agent, ExtendedYamauchiHashimoto2010Agent, BiasAgent, ProbabilityAgent, SynonymAgent}
 	public static final String NODE_TYPE = "Node type";
 	
 	private int id;

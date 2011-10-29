@@ -29,7 +29,7 @@ public class NodeFactory {
 			retVal = new BiasAgent();
 			break;
 			
-		case ExtendedYamauchiHashimotoAgent:
+		case ExtendedYamauchiHashimoto2010Agent:
 			retVal = new ExtendedYamauchiHashimotoAgent();
 			break;
 			
@@ -61,7 +61,7 @@ public class NodeFactory {
 		default:
 		case YamauchiHashimoto2010Agent:
 		case BiasAgent:
-		case ExtendedYamauchiHashimotoAgent:
+		case ExtendedYamauchiHashimoto2010Agent:
 		case ProbabilityAgent:
 		case SynonymAgent:
 			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{
@@ -75,7 +75,7 @@ public class NodeFactory {
 			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{
 					AbstractNode.NodeType.YamauchiHashimoto2010Agent,
 					AbstractNode.NodeType.BiasAgent,
-					AbstractNode.NodeType.ExtendedYamauchiHashimotoAgent,
+					AbstractNode.NodeType.ExtendedYamauchiHashimoto2010Agent,
 					AbstractNode.NodeType.ProbabilityAgent,
 					AbstractNode.NodeType.SynonymAgent
 			});
