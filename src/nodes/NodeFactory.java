@@ -10,7 +10,7 @@ import nodes.Agents.SynonymAgent;
 import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
-import PopulationModel.ConfigurableModel;
+import PopulationModel.AdvancedConfigurableModel;
 import PopulationModel.SimpleConfigurableModel;
 
 public class NodeFactory {
@@ -43,7 +43,7 @@ public class NodeFactory {
 			break;
 		
 		case AdvancedConfigurableModel:
-			retVal = new ConfigurableModel();
+			retVal = new AdvancedConfigurableModel();
 			break;
 			
 		case SimpleConfigurableModel:

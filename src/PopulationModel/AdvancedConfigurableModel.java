@@ -19,8 +19,9 @@ import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
+import autoconfiguration.Configurable.Describable;
 
-public class ConfigurableModel extends AbstractPopulationModel implements PopulationModel {
+public class AdvancedConfigurableModel extends AbstractPopulationModel implements PopulationModel, Describable {
 
 	private enum VisualizationStructure {LEARNING_GRAPH, COMMUNICATION_GRAPH, REPRODUCTION_GRAPH}
 	
@@ -38,7 +39,7 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 	
 	private ArrayList<Node> previousGeneration = new ArrayList<Node>();
 	
-	public ConfigurableModel(){
+	public AdvancedConfigurableModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
 		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values()));
 		
@@ -246,5 +247,11 @@ public class ConfigurableModel extends AbstractPopulationModel implements Popula
 			previousGeneration.get(i).draw(baseDimension, type, visualizationKey, g);
 			g.translate(0, agentDimension.height);
 		}
+	}
+
+	@Override
+	public String getDescription() {
+		return AbstractNode.NodeType.AdvancedConfigurableModel + " is a population model in which learning, communication and reproduction interactions can be configured" +
+				" independently based on different graphs. For a simpler model use " + AbstractNode.NodeType.SimpleConfigurableModel + ".";
 	}
 }
