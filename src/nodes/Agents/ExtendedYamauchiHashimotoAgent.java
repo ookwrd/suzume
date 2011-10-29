@@ -4,17 +4,17 @@ import nodes.Utterance;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
-public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Describable {
+public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implements Describable {
 
-	private static final String MATCH_LEARN_PROB = "MatchingLearnProbability";
-	private static final String NON_MATCH_LEARN_PROB = "NonMatchingLearnProbability";
-	private static final String DEDUCT_COST_ON_ATTEMPT = "Deduct Cost on attempt";
+	protected static final String MATCH_LEARN_PROB = "MatchingLearnProbability";
+	protected static final String NON_MATCH_LEARN_PROB = "NonMatchingLearnProbability";
+	protected static final String DEDUCT_COST_ON_ATTEMPT = "Deduct Cost on attempt";
 	
-	{
+	public ExtendedYamauchiHashimotoAgent(){
 		setDefaultParameter(MATCH_LEARN_PROB, new ConfigurationParameter(0.7));
 		setDefaultParameter(NON_MATCH_LEARN_PROB, new ConfigurationParameter(0.3));
-		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, new ConfigurationParameter(true));	
-	} 
+		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, new ConfigurationParameter(true));
+	}
 	
 	@Override
 	public void learnUtterance(Utterance u) {
@@ -63,7 +63,7 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Desc
 		return "Extended version of YamauchiHashimoto2010 in which learning is not guranteed " +
 				"on encountering a particular token.\n\n" +
 				"MatchingLearnProbability = probability of learning when token matches UG\n" +
-				"NonMatchingLearnProbability = probability of learning when token doesn't match UG\n\n" +
+				"NonMatchingLearnProbability = probability of learning when token doesn't match UG\n" +
 				"Deduct Cost on attempt = does it cost just to attempt? or only to learn?";
 	}
 	
