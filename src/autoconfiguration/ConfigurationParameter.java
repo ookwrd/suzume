@@ -63,18 +63,6 @@ public class ConfigurationParameter {
 		this.value = value;
 	}
 	
-	public ConfigurationParameter(Object[] values){
-		this(values, true);
-	}
-	
-	public ConfigurationParameter(Object[] values, boolean singleSelection){
-		this(values, new Object[0]);
-		this.singleSelection = singleSelection;
-		if(singleSelection){
-			selected = new Object[]{values[0]};
-		}
-	}
-	
 	public ConfigurationParameter(Object[] values, Object selected){
 		type = ConfigurationParameterType.LIST;
 		this.value = values;

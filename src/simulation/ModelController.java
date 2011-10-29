@@ -65,7 +65,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(5));
 		
-		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values()));
+		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values(), SelectionModels.RouletteWheelSelection));
 
 		setDefaultParameter(TOP_LEVEL_MODEL, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
 		

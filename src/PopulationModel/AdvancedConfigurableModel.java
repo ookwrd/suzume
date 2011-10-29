@@ -41,7 +41,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 	
 	public AdvancedConfigurableModel(){
 		setDefaultParameter(POPULATION_SIZE, new ConfigurationParameter(200));
-		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values()));
+		setDefaultParameter(VISUALIZATION_STRUCTURE, new ConfigurationParameter(VisualizationStructure.values(),VisualizationStructure.LEARNING_GRAPH));
 		
 		BasicConfigurable learning = GraphFactory.constructGraph(Graph.GraphType.CYCLIC).getConfiguration();
 		learning.overrideParameter(CyclicGraph.LINK_DISTANCE, new ConfigurationParameter(2));
