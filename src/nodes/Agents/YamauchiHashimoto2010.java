@@ -28,7 +28,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	protected static final String LEARNING_COST_ON_MISMATCH = "Learning Resource on MisMatch";
 	
 	protected double learningResource;
-	protected int learningTokensViewable;
 	
 	public YamauchiHashimoto2010(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
@@ -48,7 +47,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
-		learningTokensViewable = getIntegerParameter(CRITICAL_PERIOD);
 	}
 	
 	@Override
@@ -59,9 +57,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		super.initialize(parent1,id,randomGenerator);
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 
-
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
-		learningTokensViewable = getIntegerParameter(CRITICAL_PERIOD);
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
@@ -127,8 +123,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	@Override
 	public void learnUtterance(Utterance u) {
 		
-		updateLearningCount();
-		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
@@ -154,14 +148,10 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		}
 		
 	}
-	
-	protected void updateLearningCount(){
-		learningTokensViewable--;
-	}
 
 	@Override
-	public boolean canStillLearn() {
-		return learningResource > 0 && learningTokensViewable > 0;
+	public boolean canStillLearn(int utterancesSeen) {
+		return learningResource > 0 && getIntegerParameter(CRITICAL_PERIOD) > utterancesSeen;
 	}
 	
 	@Override
