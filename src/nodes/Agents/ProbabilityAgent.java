@@ -8,75 +8,60 @@ import java.util.ArrayList;
 import nodes.Node;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
-import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
-public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
+public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Describable {
 
-	private enum VisualizationTypes {NUMBER_NULLS,GENOTYPE,PHENOTYPE,SINGLE_WORD,SINGLE_GENE};//TODO
+	private enum VisualizationTypes {NUMBER_NULLS,GENOTYPE,PHENOTYPE,SINGLE_WORD,SINGLE_GENE};
 	private enum StatisticsTypes {GRAMMAR_ADJUST_COUNT}
 	
 	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
 	private static final String LEARNING_PROBABILITY_ON_MISMATCH = "Learning probability mismatch";
-	private static final String SYNTACTIC_STATE_SPACE_SIZE = "Number of syntactic tokens";
 	private static final String MUTATION_RATE = "Mutation Rate";
 	private static final String INVENTION_PROBABILITY = "Invention Probability";
 	private static final String INVENTION_CHANCES = "Invention Chances";
-
-	protected ArrayList<Integer> chromosome;
 	
 	private double grammarAdjustmentCount = 0;
 	
-	public ProbabalityAgent(){
+	public ProbabilityAgent(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
-		setDefaultParameter(SYNTACTIC_STATE_SPACE_SIZE, new ConfigurationParameter(8));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values()));
-	}
-	
-	@Override
-	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
-		super.initialize(config, id, randomGenerator);
-
-		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
-		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.nextInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
-		}
+		
+		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(8));
 	}
 	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
 			int id, RandomGenerator randomGenerator) {
-		super.initialize((ProbabalityAgent)parentA, id, randomGenerator);
+		super.initialize(parentA, id, randomGenerator);
 		
-		ProbabalityAgent parent1 = (ProbabalityAgent)parentA;
-		ProbabalityAgent parent2 = (ProbabalityAgent)parentB;
-		
-		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
+		ProbabilityAgent parent1 = (ProbabilityAgent)parentA;
+		ProbabilityAgent parent2 = (ProbabilityAgent)parentB;
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
-			chromosome.add(parent1.chromosome.get(i));
+			chromosome.set(i, parent1.chromosome.get(i));
 			i++;
 		}
 		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
-			chromosome.add(parent2.chromosome.get(i));
+			chromosome.set(i, parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
 		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
 			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
-				chromosome.set(j, randomGenerator.nextInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
+				chromosome.set(j, randomGenerator.nextInt(getParameter(SYNTACTIC_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
@@ -88,7 +73,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
 			if(randomGenerator.nextDouble() < getDoubleParameter(INVENTION_PROBABILITY)){
-				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
 				for(int i = 0; i < grammar.size(); i++){
@@ -101,8 +85,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 				
 				//Choose a random null element to invent a new value for
 				Integer index = nullIndexes.get(randomGenerator.nextInt(nullIndexes.size()));
-				
-				grammar.set(index, randomGenerator.nextInt(getIntegerParameter(SYNTACTIC_STATE_SPACE_SIZE)));
+				grammar.set(index, randomGenerator.nextInt(getIntegerParameter(SYNTACTIC_SPACE_SIZE)));
 			}
 		}
 	}
@@ -116,13 +99,11 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		}
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
-
 			if(randomGenerator.nextDouble() < getDoubleParameter(LEARNING_PROBABILITY_ON_MATCH)){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
 		}else{//Doesn't match this agents UG
-
 			if(randomGenerator.nextDouble() < getDoubleParameter(LEARNING_PROBABILITY_ON_MISMATCH)){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
@@ -139,7 +120,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		}
 		
 		Color c;
-		
 		switch((VisualizationTypes)visualizationKey){
 		case NUMBER_NULLS:
 			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
@@ -217,7 +197,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Grammar Adjustment count") {
 				@Override
 				protected double getValue(Node agent) {
-					return ((ProbabalityAgent)agent).grammarAdjustmentCount;
+					return ((ProbabilityAgent)agent).grammarAdjustmentCount;
 				}
 			};
 			

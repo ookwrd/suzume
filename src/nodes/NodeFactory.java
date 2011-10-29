@@ -4,7 +4,7 @@ import nodes.AbstractNode.NodeType;
 import nodes.Agents.Agent;
 import nodes.Agents.BiasAgent;
 import nodes.Agents.ExtendedYamauchiHashimotoAgent;
-import nodes.Agents.ProbabalityAgent;
+import nodes.Agents.ProbabilityAgent;
 import nodes.Agents.SynonymAgent;
 import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.ConfigurationParameter;
@@ -34,7 +34,7 @@ public class NodeFactory {
 			break;
 			
 		case ProbabilityAgent:
-			retVal = new ProbabalityAgent();
+			retVal = new ProbabilityAgent();
 			break;
 		
 		case AdvancedConfigurableModel:

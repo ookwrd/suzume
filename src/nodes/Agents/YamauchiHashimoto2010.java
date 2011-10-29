@@ -39,7 +39,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE,VisualizationTypes.PHENOTYPE}));
 		
-		fixParameter(NUMBER_OF_TOKENS);
+		fixParameter(SYNTACTIC_SPACE_SIZE);
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
 	}
 	
