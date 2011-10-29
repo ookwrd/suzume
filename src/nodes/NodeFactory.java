@@ -4,7 +4,7 @@ import nodes.AbstractNode.NodeType;
 import nodes.Agents.Agent;
 import nodes.Agents.AlteredAgent;
 import nodes.Agents.BiasAgent;
-import nodes.Agents.FixedProbabilityAgent;
+import nodes.Agents.ExtendedYamauchiHashimotoAgent;
 import nodes.Agents.ProbabalityAgent;
 import nodes.Agents.SynonymAgent;
 import nodes.Agents.YamauchiHashimoto2010;
@@ -34,8 +34,8 @@ public class NodeFactory {
 			retVal = new BiasAgent();
 			break;
 			
-		case FixedProbabilityAgent:
-			retVal = new FixedProbabilityAgent();
+		case ExtendedYamauchiHashimotoAgent:
+			retVal = new ExtendedYamauchiHashimotoAgent();
 			break;
 			
 		case ProbabilityAgent:
@@ -67,7 +67,7 @@ public class NodeFactory {
 		case YamauchiHashimoto2010Agent:
 		case AlteredAgent:
 		case BiasAgent:
-		case FixedProbabilityAgent:
+		case ExtendedYamauchiHashimotoAgent:
 		case ProbabilityAgent:
 		case SynonymAgent:
 			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{
@@ -82,7 +82,7 @@ public class NodeFactory {
 					AbstractNode.NodeType.YamauchiHashimoto2010Agent,
 					AbstractNode.NodeType.AlteredAgent,
 					AbstractNode.NodeType.BiasAgent,
-					AbstractNode.NodeType.FixedProbabilityAgent,
+					AbstractNode.NodeType.ExtendedYamauchiHashimotoAgent,
 					AbstractNode.NodeType.ProbabilityAgent,
 					AbstractNode.NodeType.SynonymAgent
 			});
