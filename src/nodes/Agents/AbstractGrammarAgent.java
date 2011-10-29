@@ -17,7 +17,7 @@ import simulation.RandomGenerator;
 
 public abstract class AbstractGrammarAgent extends AbstractAgent {
 
-	protected enum VisualizationTypes {PHENOTYPE, SINGLE_WORD, NUMBER_NULLS}
+	protected enum VisualizationTypes {NUMBER_NULLS, PHENOTYPE, SINGLE_WORD}
 	protected enum StatisticsTypes {NUMBER_NULLS, NUMBER_PHENOTYPES}
 	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
@@ -26,7 +26,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	
 	public AbstractGrammarAgent(){
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
-		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 	}
 

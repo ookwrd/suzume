@@ -15,7 +15,7 @@ import simulation.RandomGenerator;
 
 public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Describable {
 
-	private enum VisualizationTypes {GENOTYPE,SINGLE_GENE};
+	private enum VisualizationTypes {ADJUSTMENT_COUNT};
 	private enum StatisticsTypes {GRAMMAR_ADJUST_COUNT}
 	
 	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
@@ -33,7 +33,7 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values()));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
 		
 		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(8));
 	}
@@ -120,44 +120,9 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		
 		Color c;
 		switch((VisualizationTypes)visualizationKey){
-		case GENOTYPE:
-			c = new Color(
-					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
-					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
-					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
-			);
-			break;
-			
-		case SINGLE_GENE:
-			int value;
-			if(visualizationKey.equals("singleWord")){
-				value = grammar.get(0);
-			}else{
-				value = chromosome.get(0);
-			}		
-			if(value == 0){
-				c = Color.WHITE;
-			} else if (value == 1){
-				c = Color.BLACK;
-			} else if (value == 2){
-				c = Color.BLUE;
-			}else if (value == 3){
-				c = Color.GREEN;
-			}else if (value == 4){
-				c = Color.YELLOW;
-			}else if (value == 5){
-				c = Color.ORANGE;
-			}else if (value == 6){
-				c = Color.CYAN;
-			}else if (value == 7){
-				c = Color.DARK_GRAY;
-			}else if (value == 8){
-				c = Color.GRAY;
-			}else if (value == 9){
-				c = Color.MAGENTA;
-			}else{
-				c = Color.RED;
-			}
+		case ADJUSTMENT_COUNT:
+			int adjustmentCount = new Double(grammarAdjustmentCount).intValue();
+			c = new Color(255, 255-adjustmentCount, 255-adjustmentCount);
 			break;
 			
 		default:
@@ -167,7 +132,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 
 		g.setColor(c);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
-		
 	}
 	
 	@Override

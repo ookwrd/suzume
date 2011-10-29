@@ -17,7 +17,7 @@ import simulation.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements Agent, Describable {
 
-	private enum VisualizationTypes {GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, SINGLE_GENE} 	
+	private enum VisualizationTypes {LEARNING_INTENSITY} 	
 	private enum StatisticsTypes {LEFTOVER_LEARNING_RESC}
 	
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
@@ -37,7 +37,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE, AbstractGrammarAgent.VisualizationTypes.PHENOTYPE}));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{AbstractGeneGrammarAgent.VisualizationTypes.GENOTYPE, AbstractGrammarAgent.VisualizationTypes.PHENOTYPE}));
 		
 		fixParameter(SYNTACTIC_SPACE_SIZE);
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
@@ -161,7 +161,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		}
 	
 		switch ((StatisticsTypes)statisticsKey) {
-		
 		case LEFTOVER_LEARNING_RESC:
 			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Leftover Learning resource") {
 				@Override
@@ -178,7 +177,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
-		
 		if(!(visualizationKey instanceof VisualizationTypes)){
 			super.draw(baseDimension, type, visualizationKey, g);
 			return;
@@ -186,32 +184,9 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		
 		Color c;
 		switch ((VisualizationTypes)visualizationKey) {
-		case GENE_GRAMMAR_MATCH:
-			int geneGrammarMatch = new Double(geneGrammarMatch()).intValue();
-			c = new Color(255, 255-geneGrammarMatch*16, 255-geneGrammarMatch);
-			break;
-			
 		case LEARNING_INTENSITY:
 			int learningIntensity = new Double(learningResource).intValue();
 			c = new Color(255, 255-learningIntensity*16, 255-learningIntensity);
-			break;
-			
-		case GENOTYPE:
-			c = new Color(
-					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
-					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
-					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
-			);
-			break;
-			
-		case SINGLE_GENE:
-			if(chromosome.get(0) == 0){
-				c = Color.WHITE;
-			} else if (chromosome.get(0) == 1){
-				c = Color.BLACK;
-			} else{
-				c = Color.RED;
-			}
 			break;
 			
 		default:

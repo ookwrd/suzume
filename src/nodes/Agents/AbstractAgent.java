@@ -31,7 +31,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	public AbstractAgent(){	
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
-		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),new Object[]{StatisticsTypes.FITNESS}));
+		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),new Object[]{StatisticsTypes.FITNESS}));
 		
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));
 		setDefaultParameter(MIN_FITNESS, new ConfigurationParameter(1));
