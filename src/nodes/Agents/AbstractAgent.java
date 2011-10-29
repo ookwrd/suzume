@@ -30,7 +30,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	private boolean isAlive = true;
 	
 	public AbstractAgent(){	
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),new Object[]{StatisticsTypes.FITNESS}));
 		
 		setDefaultParameter(BASE_FITNESS, new ConfigurationParameter(1));

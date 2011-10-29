@@ -37,7 +37,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
 		
 		fixParameter(SYNTACTIC_SPACE_SIZE);
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
