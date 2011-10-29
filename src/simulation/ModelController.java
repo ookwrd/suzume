@@ -37,6 +37,9 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	public static final String PRINT_TO_CONSOLE = "Print details to console?";
 	public static final String PRINT_EACH_X_GENERATIONS = "Print each X generations";
 	
+	private static final String KEY_SET = "Use Current time as seed";
+	private static final String SEED = "Manual Random Seed";
+	
 	//Configuration Settings
 	private RandomGenerator randomGenerator;
 
@@ -68,13 +71,20 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		
 		setDefaultParameter(PRINT_TO_CONSOLE, new ConfigurationParameter(true));
 		setDefaultParameter(PRINT_EACH_X_GENERATIONS, new ConfigurationParameter(100));
+		
+		setDefaultParameter(KEY_SET, new ConfigurationParameter(true));
+		setDefaultParameter(SEED, new ConfigurationParameter(new Long(0)));
 	}
 	
-	public ModelController(Configurable baseConfig, 
-			RandomGenerator randomGenerator){
+	public ModelController(Configurable baseConfig){
 		super(baseConfig);
 		
-		this.randomGenerator = randomGenerator;
+		if(!getBooleanParameter(KEY_SET)){
+			randomGenerator = new RandomGenerator(getLongParameter(SEED));
+		} else {
+			randomGenerator = new RandomGenerator(System.currentTimeMillis());
+		}
+		
 		this.selectionModel = SelectionModel.constructSelectionModel((SelectionModels)getParameter(SELECTION_MODEL).getSelectedValue(), randomGenerator);
 		
 		resetRun();
