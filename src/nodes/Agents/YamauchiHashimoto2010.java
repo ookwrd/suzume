@@ -5,13 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import nodes.AbstractNode;
 import nodes.Node;
-import nodes.NodeConfigurationPanel;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
@@ -268,11 +265,14 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		default:
 			System.err.println("Unrecognized Visualization type in YamauchiHashimoto2010");
 		}
-		
 	}
 
 	@Override
 	public String getDescription() {
-		return "Agent from Yamauchi and Hashimoto 2010 designed to study the interaction of .... See also McCrohon and Witkowski 2011.";
+		return "An agent as described in Yamauchi and Hashimoto 2010 \"Relaxation of Selection, Niche Construction, and " +
+				"the Baldwin Effect in Language Evolution\" which was designed to study the interaction of biological and " +
+				"cultural evolution on the evolution of language. Please see the paper for model description. For a discussion" +
+				"of model behaviour please also see also McCrohon and Witkowski 2011 \"Devil in the details: Analysis of a " +
+				"coevolutionary model of language evolution via relaxation of selection\".";
 	}
 }
