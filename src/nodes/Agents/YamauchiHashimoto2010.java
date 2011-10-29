@@ -17,7 +17,7 @@ import simulation.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements Agent, Describable {
 
-	private enum VisualizationTypes {NUMBER_NULLS, GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, PHENOTYPE, SINGLE_GENE, SINGLE_WORD} 	
+	private enum VisualizationTypes {GENE_GRAMMAR_MATCH, LEARNING_INTENSITY, GENOTYPE, SINGLE_GENE} 	
 	private enum StatisticsTypes {LEFTOVER_LEARNING_RESC}
 	
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
@@ -37,7 +37,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE,VisualizationTypes.PHENOTYPE}));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE, AbstractGrammarAgent.VisualizationTypes.PHENOTYPE}));
 		
 		fixParameter(SYNTACTIC_SPACE_SIZE);
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
@@ -185,13 +185,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		}
 		
 		Color c;
-		
 		switch ((VisualizationTypes)visualizationKey) {
-		case NUMBER_NULLS:
-			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
-			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-			break;
-
 		case GENE_GRAMMAR_MATCH:
 			int geneGrammarMatch = new Double(geneGrammarMatch()).intValue();
 			c = new Color(255, 255-geneGrammarMatch*16, 255-geneGrammarMatch);
@@ -208,24 +202,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-			break;
-			
-		case PHENOTYPE:
-			c = new Color(
-					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
-					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
-					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
-					);
-			break;
-			
-		case SINGLE_WORD:
-			if(grammar.get(0) == 0){
-				c = Color.WHITE;
-			} else if (grammar.get(0) == 1){
-				c = Color.BLACK;
-			} else{
-				c = Color.RED;
-			}
 			break;
 			
 		case SINGLE_GENE:

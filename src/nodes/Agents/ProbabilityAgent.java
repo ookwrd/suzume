@@ -15,7 +15,7 @@ import simulation.RandomGenerator;
 
 public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Describable {
 
-	private enum VisualizationTypes {NUMBER_NULLS,GENOTYPE,PHENOTYPE,SINGLE_WORD,SINGLE_GENE};
+	private enum VisualizationTypes {GENOTYPE,SINGLE_GENE};
 	private enum StatisticsTypes {GRAMMAR_ADJUST_COUNT}
 	
 	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
@@ -113,7 +113,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
-		
 		if(!(visualizationKey instanceof VisualizationTypes)){
 			super.draw(baseDimension, type, visualizationKey, g);
 			return;
@@ -121,11 +120,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		
 		Color c;
 		switch((VisualizationTypes)visualizationKey){
-		case NUMBER_NULLS:
-			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
-			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-			break;
-			
 		case GENOTYPE:
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
@@ -134,15 +128,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 			);
 			break;
 			
-		case PHENOTYPE:
-			c = new Color(
-					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
-					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
-					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
-			);
-			break;
-			
-		case SINGLE_WORD:
 		case SINGLE_GENE:
 			int value;
 			if(visualizationKey.equals("singleWord")){
