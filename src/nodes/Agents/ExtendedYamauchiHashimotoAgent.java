@@ -20,6 +20,8 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 	
 	@Override
 	public void learnUtterance(Utterance u) {
+		updateLearningCount();
+		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
