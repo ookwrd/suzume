@@ -9,16 +9,17 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 	protected static final String MATCH_LEARN_PROB = "MatchingLearnProbability";
 	protected static final String NON_MATCH_LEARN_PROB = "NonMatchingLearnProbability";
 	protected static final String DEDUCT_COST_ON_ATTEMPT = "Deduct Cost on attempt";
+	protected static final String LEFTOVER_RESOURCE_MULTIPLIER = "Leftover Resource Multiplier";
 	
 	public ExtendedYamauchiHashimotoAgent(){
-		setDefaultParameter(MATCH_LEARN_PROB, new ConfigurationParameter(0.7));
-		setDefaultParameter(NON_MATCH_LEARN_PROB, new ConfigurationParameter(0.3));
+		setDefaultParameter(MATCH_LEARN_PROB, new ConfigurationParameter(0.8));
+		setDefaultParameter(NON_MATCH_LEARN_PROB, new ConfigurationParameter(0.4));
 		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, new ConfigurationParameter(true));
+		setDefaultParameter(LEFTOVER_RESOURCE_MULTIPLIER, new ConfigurationParameter(0.0));
 	}
 	
 	@Override
 	public void learnUtterance(Utterance u) {
-		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
@@ -50,7 +51,16 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 				learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
 			}
 		}
+	}
+	
+	@Override
+	public void finalizeFitnessValue() {
+		super.finalizeFitnessValue();
 		
+		if (learningResource > 0) {
+			setFitness(getFitness()
+					+ learningResource * getDoubleParameter(LEFTOVER_RESOURCE_MULTIPLIER));
+		}
 	}
 	
 	@Override
