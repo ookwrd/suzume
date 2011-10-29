@@ -1,7 +1,6 @@
 package PopulationModel;
 
 import nodes.AbstractNode;
-import nodes.NodeFactory;
 import PopulationModel.graphs.Graph;
 import PopulationModel.graphs.GraphFactory;
 import PopulationModel.graphs.Grid;

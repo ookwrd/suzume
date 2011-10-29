@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import nodes.Node;
 
 import autoconfiguration.BasicConfigurable;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 
 
@@ -27,7 +28,8 @@ public class Grid extends AbstractGraph {
 		setDefaultParameter(ROW_NUMBERS, new ConfigurationParameter(30));
 	}
 	
-	public void init(ArrayList<Node> subNodes, BasicConfigurable config, RandomGenerator randomGenerator){
+	@Override
+	public void init(ArrayList<Node> subNodes, Configurable config, RandomGenerator randomGenerator){
 		super.init(subNodes, config, randomGenerator);
 		
 		size = subNodes.size();
@@ -101,6 +103,7 @@ public class Grid extends AbstractGraph {
 	@Override
 	public Dimension getDimension(Dimension baseDimension,
 			VisualizationStyle type) {
+		
 		return new Dimension(
 				subNodes.get(0).getDimension(baseDimension, type).width*columns,
 				subNodes.get(0).getDimension(baseDimension, type).height*((size%columns)==0?size/columns:size/columns+1)
