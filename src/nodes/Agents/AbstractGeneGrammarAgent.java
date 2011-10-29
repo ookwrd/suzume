@@ -71,7 +71,4 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 		}
 		return count;
 	}
-	
-	//TODO drawing!
-	
 }
