@@ -6,7 +6,6 @@ import nodes.Node;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 
@@ -15,14 +14,13 @@ import simulation.RandomGenerator;
 public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 
 	protected enum StatisticsTypes {NUMBER_GENOTYPES, GENE_GRAMMAR_MATCH}
-	
-	protected static final String NUMBER_OF_TOKENS = "Token space size";
+	protected static final String SYNTACTIC_SPACE_SIZE = "Syntactic space size";
 	
 	protected ArrayList<Integer> chromosome;
 
 	public AbstractGeneGrammarAgent(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
-		setDefaultParameter(NUMBER_OF_TOKENS, new ConfigurationParameter(2));
+		setDefaultParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(2));
 	}
 	
 	@Override
@@ -30,9 +28,8 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 		super.initialize(config, id, randomGenerator);
 		
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
-		
 		for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.nextInt(getIntegerParameter(NUMBER_OF_TOKENS)));
+			chromosome.add(randomGenerator.nextInt(getIntegerParameter(SYNTACTIC_SPACE_SIZE)));
 		}
 	}
 	

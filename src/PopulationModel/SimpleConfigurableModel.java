@@ -21,7 +21,6 @@ public class SimpleConfigurableModel extends AdvancedConfigurableModel {
 		
 		BasicConfigurable graph = GraphFactory.constructGraph(Graph.GraphType.GRID).getConfiguration();
 		graph.overrideParameter(Grid.SELF_LINKS, new ConfigurationParameter(true));
-		graph.overrideParameter(Grid.AUTO_LAYOUT, new ConfigurationParameter(false));
 		graph.overrideParameter(Grid.ROW_NUMBERS, new ConfigurationParameter(20));
 		setDefaultParameter(GRAPH, new ConfigurationParameter(graph));
 	}
