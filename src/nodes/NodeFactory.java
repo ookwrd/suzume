@@ -2,7 +2,6 @@ package nodes;
 
 import nodes.AbstractNode.NodeType;
 import nodes.Agents.Agent;
-import nodes.Agents.AlteredAgent;
 import nodes.Agents.BiasAgent;
 import nodes.Agents.ExtendedYamauchiHashimotoAgent;
 import nodes.Agents.ProbabalityAgent;
@@ -24,10 +23,6 @@ public class NodeFactory {
 		switch (type) {
 		case YamauchiHashimoto2010Agent:
 			retVal = new YamauchiHashimoto2010();
-			break;
-			
-		case AlteredAgent:
-			retVal = new AlteredAgent();
 			break;
 			
 		case BiasAgent:
@@ -65,7 +60,6 @@ public class NodeFactory {
 		switch (type) {
 		default:
 		case YamauchiHashimoto2010Agent:
-		case AlteredAgent:
 		case BiasAgent:
 		case ExtendedYamauchiHashimotoAgent:
 		case ProbabilityAgent:
@@ -80,7 +74,6 @@ public class NodeFactory {
 		case SimpleConfigurableModel:
 			retVal.getParameter(AbstractNode.NODE_TYPE).removeListOption(new Object[]{
 					AbstractNode.NodeType.YamauchiHashimoto2010Agent,
-					AbstractNode.NodeType.AlteredAgent,
 					AbstractNode.NodeType.BiasAgent,
 					AbstractNode.NodeType.ExtendedYamauchiHashimotoAgent,
 					AbstractNode.NodeType.ProbabilityAgent,
