@@ -50,7 +50,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		for (int i = 0; i < config.getParameter(NUMBER_OF_MEANINGS).getInteger(); i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
+			chromosome.add(randomGenerator.nextInt(config.getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 		}
 	}
 	
@@ -65,7 +65,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
@@ -78,8 +78,8 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		
 		//Mutation
 		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < getDoubleParameter(MUTATION_RATE)){
-				chromosome.set(j, randomGenerator.randomInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
+			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
+				chromosome.set(j, randomGenerator.nextInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
 	}
@@ -95,7 +95,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		int chances = getIntegerParameter(INVENTION_CHANCES);
 		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
-			if(randomGenerator.random() < getDoubleParameter(INVENTION_PROBABILITY)){
+			if(randomGenerator.nextDouble() < getDoubleParameter(INVENTION_PROBABILITY)){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -108,9 +108,9 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 				}
 				
 				//Choose a random null element to invent a new value for
-				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
+				Integer index = nullIndexes.get(randomGenerator.nextInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomInt(getIntegerParameter(SYNTACTIC_STATE_SPACE_SIZE)));
+				grammar.set(index, randomGenerator.nextInt(getIntegerParameter(SYNTACTIC_STATE_SPACE_SIZE)));
 			}
 		}
 	}
@@ -125,13 +125,13 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		
 		if(u.signal == chromosome.get(u.meaning)){//Matches this agents UG
 
-			if(randomGenerator.random() < getDoubleParameter(LEARNING_PROBABILITY_ON_MATCH)){
+			if(randomGenerator.nextDouble() < getDoubleParameter(LEARNING_PROBABILITY_ON_MATCH)){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}
 		}else{//Doesn't match this agents UG
 
-			if(randomGenerator.random() < getDoubleParameter(LEARNING_PROBABILITY_ON_MISMATCH)){
+			if(randomGenerator.nextDouble() < getDoubleParameter(LEARNING_PROBABILITY_ON_MISMATCH)){
 				grammar.set(u.meaning, u.signal);
 				grammarAdjustmentCount++;
 			}

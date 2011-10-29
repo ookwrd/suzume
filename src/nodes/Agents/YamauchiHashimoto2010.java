@@ -67,7 +67,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		learningTokensViewable = getIntegerParameter(CRITICAL_PERIOD);
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
@@ -80,8 +80,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		
 		//Mutation
 		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
-			if(randomGenerator.random() < getDoubleParameter(MUTATION_RATE)){
-				chromosome.set(j, randomGenerator.randomBoolean()?0:1);
+			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
+				chromosome.set(j, randomGenerator.nextBoolean()?0:1);
 			}
 		}
 	}
@@ -100,7 +100,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		
 		while(grammar.contains(Utterance.SIGNAL_NULL_VALUE) && learningResource > 0){
 			learningResource--;
-			if(randomGenerator.random() < getDoubleParameter(INVENTION_PROBABILITY)){
+			if(randomGenerator.nextDouble() < getDoubleParameter(INVENTION_PROBABILITY)){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -113,9 +113,9 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 				}
 				
 				//Choose a random null element to invent a new value for
-				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
+				Integer index = nullIndexes.get(randomGenerator.nextInt(nullIndexes.size()));
 				
-				grammar.set(index, randomGenerator.randomBoolean()?0:1);
+				grammar.set(index, randomGenerator.nextBoolean()?0:1);
 			}
 		}
 	}

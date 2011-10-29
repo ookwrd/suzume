@@ -97,7 +97,7 @@ public class SynonymAgent extends AbstractAgent {
 
 		int size;
 		//Heredity
-		if(randomGenerator.randomBoolean()){
+		if(randomGenerator.nextBoolean()){
 			size = agent1.lexiconCapacity;
 		}else{
 			size = agent2.lexiconCapacity;
@@ -106,14 +106,14 @@ public class SynonymAgent extends AbstractAgent {
 		//Mutation
 		switch ((MutationType)getListParameter(MUTATION_TYPE)[0]) {
 		case Linear:
-			size += randomGenerator.randomInt(3) - 1;
+			size += randomGenerator.nextInt(3) - 1;
 			if(size < 1){
 				size = 1;
 			}
 			break;
 			
 		case Multiplicative:
-			switch (randomGenerator.randomInt(3)) {
+			switch (randomGenerator.nextInt(3)) {
 			case 0:
 				size = (int) (size * 0.8);
 				break;
@@ -167,7 +167,7 @@ public class SynonymAgent extends AbstractAgent {
 	public void invent(){
 		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){
 			int meaning = getMeaning();
-			int value = randomGenerator.randomInt(10000);
+			int value = randomGenerator.nextInt(10000);
 			learnUtterance(new Utterance(meaning, value));
 		}
 	}
@@ -243,7 +243,7 @@ public class SynonymAgent extends AbstractAgent {
 		Utterance toTeach = getUtterance();
 		
 		if(toTeach.isNull() && getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.AsNeeded){
-			toTeach.signal = randomGenerator.randomInt(10000);
+			toTeach.signal = randomGenerator.nextInt(10000);
 			learnUtterance(toTeach);
 		}
 		
@@ -258,10 +258,10 @@ public class SynonymAgent extends AbstractAgent {
 	private int getMeaning(){	
 		switch ((MeaningDistribution)getListParameter(MEANING_DISTRIBUTION)[0]) {
 		case Squared:
-			return (int)(randomGenerator.random()*randomGenerator.random()*lexicon.length);
+			return (int)(randomGenerator.nextDouble()*randomGenerator.nextDouble()*lexicon.length);
 
 		case Uniform:
-			return randomGenerator.randomInt(lexicon.length);
+			return randomGenerator.nextInt(lexicon.length);
 			
 		default:
 			System.err.println("Shouldn't be here");
@@ -284,7 +284,7 @@ public class SynonymAgent extends AbstractAgent {
 			return lexicon[meaning].get(tokensForMeaning-1).first;
 			
 		case Random:
-			return lexicon[meaning].get(randomGenerator.randomInt(tokensForMeaning)).first;
+			return lexicon[meaning].get(randomGenerator.nextInt(tokensForMeaning)).first;
 			
 		case MostCommon:
 			Pair<Integer, Integer> bestSoFar = lexicon[meaning].get(0);
@@ -301,7 +301,7 @@ public class SynonymAgent extends AbstractAgent {
 			for(Pair<Integer, Integer> pair : lexicon[meaning]){
 				encounters += pair.second;
 			}
-			int selectionPoint = randomGenerator.randomInt(encounters);
+			int selectionPoint = randomGenerator.nextInt(encounters);
 			int pointer = 0;
 			for(Pair<Integer, Integer> pair : lexicon[meaning]){
 				pointer += pair.second;

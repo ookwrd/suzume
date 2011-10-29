@@ -32,7 +32,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
 		
 		for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) { // all alleles are initially set to a random value initially
-			chromosome.add(randomGenerator.randomInt(getIntegerParameter(NUMBER_OF_TOKENS)));
+			chromosome.add(randomGenerator.nextInt(getIntegerParameter(NUMBER_OF_TOKENS)));
 		}
 	}
 	
