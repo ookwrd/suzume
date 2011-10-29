@@ -25,7 +25,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	protected ArrayList<Integer> grammar;
 	
 	public AbstractGrammarAgent(){
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.PHENOTYPE}));
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
 	}

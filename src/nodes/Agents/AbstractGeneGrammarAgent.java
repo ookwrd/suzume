@@ -24,7 +24,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 
 	public AbstractGeneGrammarAgent(){
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), false));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE}));
 		setDefaultParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(2));
 	}
 	
