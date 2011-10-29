@@ -11,31 +11,24 @@ import javax.swing.JScrollPane;
 
 import autoconfiguration.ConfigurationPanel;
 
-
-
 @SuppressWarnings("serial")
-public class Launcher extends JPanel {
-
-	private JFrame window;
+public class Launcher extends JFrame {
 	
 	private ConfigurationPanel modelOptions;
 	
-	private JPanel menuBar;
-	private JButton createButton;
-	
 	public Launcher(){
-		window = new JFrame();
-		window.setTitle("Simulation Launcher");
+		setTitle("Simulation Launcher");
 		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		JPanel internalPanel = new JPanel();
+		internalPanel.setLayout(new BoxLayout(internalPanel, BoxLayout.Y_AXIS));
 		
 		modelOptions = new ModelController().getConfigurationPanel();
-		add(modelOptions);
+		internalPanel.add(modelOptions);
 			
-		menuBar = new JPanel();
+		JPanel menuBar = new JPanel();
 		menuBar.setLayout(new FlowLayout());
 		
-		createButton = new JButton("Run Simulation");
+		JButton createButton = new JButton("Run Simulation");
 		createButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -43,25 +36,23 @@ public class Launcher extends JPanel {
 			}
 		});
 		menuBar.add(createButton);
+		internalPanel.add(menuBar);
 		
-		add(menuBar);
-		
-		JScrollPane scrollPane = new JScrollPane(this);
+		JScrollPane scrollPane = new JScrollPane(internalPanel);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);//Faster scrolling.
 		
-		window.add(scrollPane);
-		window.pack();
-		window.setVisible(true);
+		add(scrollPane);
+		pack();
+		setVisible(true);
 	}
 	
 	/**
 	 * Creates a simulation instance based on the current parameter settings and sets it running in a new thread.
 	 */
 	private void createSimulation(){
-		ModelController controller = new ModelController(modelOptions.getConfiguration());
-		
+		ModelController controller = new ModelController(modelOptions.getConfiguration());	
 		Thread thread = new Thread(controller);
 		thread.start();
 	}
