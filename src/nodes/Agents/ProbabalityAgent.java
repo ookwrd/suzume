@@ -133,6 +133,11 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	@Override
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		
+		if(!(visualizationKey instanceof VisualizationTypes)){
+			super.draw(baseDimension, type, visualizationKey, g);
+			return;
+		}
+		
 		Color c;
 		
 		switch((VisualizationTypes)visualizationKey){

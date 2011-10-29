@@ -190,22 +190,16 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		case NUMBER_NULLS:
 			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 
 		case GENE_GRAMMAR_MATCH:
 			int geneGrammarMatch = new Double(geneGrammarMatch()).intValue();
 			c = new Color(255, 255-geneGrammarMatch*16, 255-geneGrammarMatch);
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 			
 		case LEARNING_INTENSITY:
 			int learningIntensity = new Double(learningResource).intValue();
 			c = new Color(255, 255-learningIntensity*16, 255-learningIntensity);
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 			
 		case GENOTYPE:
@@ -214,8 +208,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 			
 		case PHENOTYPE:
@@ -224,8 +216,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
 					);
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 			
 		case SINGLE_WORD:
@@ -236,8 +226,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 			} else{
 				c = Color.RED;
 			}
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 			
 		case SINGLE_GENE:
@@ -248,13 +236,15 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 			} else{
 				c = Color.RED;
 			}
-			g.setColor(c);
-			g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 			break;
 			
 		default:
-			System.err.println("Unrecognized Visualization type in YamauchiHashimoto2010");
+			System.err.println("Unrecognized Visualization type in " + this.getClass().getCanonicalName());
+			return;
 		}
+		
+		g.setColor(c);
+		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
 	}
 
 	@Override
