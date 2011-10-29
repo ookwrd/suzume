@@ -130,7 +130,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	@Override
 	public void learnUtterance(Utterance u) {
 		
-		learningTokensViewable--;
+		updateLearningCount();
 		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
@@ -156,6 +156,10 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 			learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
 		}
 		
+	}
+	
+	protected void updateLearningCount(){
+		learningTokensViewable--;
 	}
 
 	@Override
