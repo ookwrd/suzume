@@ -30,7 +30,7 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Desc
 				return;
 			}
 			
-			if(randomGenerator.random() < getDoubleParameter(MATCH_LEARN_PROB)){
+			if(randomGenerator.nextDouble() < getDoubleParameter(MATCH_LEARN_PROB)){
 				grammar.set(u.meaning, u.signal);
 				learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
 			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){//still subtract
@@ -43,7 +43,7 @@ public class FixedProbabilityAgent extends YamauchiHashimoto2010 implements Desc
 				return;
 			}
 			
-			if(randomGenerator.random() < getParameter(NON_MATCH_LEARN_PROB).getDouble()){
+			if(randomGenerator.nextDouble() < getParameter(NON_MATCH_LEARN_PROB).getDouble()){
 				grammar.set(u.meaning, u.signal);
 				learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
 			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){

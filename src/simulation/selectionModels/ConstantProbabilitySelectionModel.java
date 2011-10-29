@@ -12,7 +12,7 @@ public class ConstantProbabilitySelectionModel extends SelectionModel {
 		ArrayList<Node> toReturn = new ArrayList<Node>();
 		int inputSize = nodes.size();
 		while(toReturn.size() < number){
-			toReturn.add(nodes.get(randomGenerator.randomInt(inputSize)));
+			toReturn.add(nodes.get(randomGenerator.nextInt(inputSize)));
 		}
 		return toReturn;
 	}

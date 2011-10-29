@@ -16,14 +16,14 @@ public class RandomProbabilitySelectionModel extends
 		ArrayList<Integer> fitnessValues = new ArrayList<Integer>();
 		double totalFitness = 0;
 		for(int i = 0; i< nodes.size(); i++){
-			int newInt = lowerFitness + randomGenerator.randomInt(upperFitness-lowerFitness);
+			int newInt = lowerFitness + randomGenerator.nextInt(upperFitness-lowerFitness);
 			fitnessValues.add(newInt);
 			totalFitness += newInt;
 		}
 		
 		ArrayList<Node> toReturn = new ArrayList<Node>();
 		for(int i = 0; i < number; i++){
-			double selectionPoint = randomGenerator.random()*totalFitness;
+			double selectionPoint = randomGenerator.nextDouble()*totalFitness;
 			double pointer = 0;
 
 			for(int j = 0; j < nodes.size(); j++){

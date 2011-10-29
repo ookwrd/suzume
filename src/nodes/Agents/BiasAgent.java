@@ -46,7 +46,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 			double biasSoFar = 0;
 			//Random Biases
 			for(int j = 0; j < dimensions; j++){
-				biases[j] = randomGenerator.random();
+				biases[j] = randomGenerator.nextDouble();
 				biasSoFar += biases[j];
 			}
 			//Norminalization to add to 1
@@ -77,7 +77,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		this.randomGenerator = randomGenerator;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.randomInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
@@ -90,7 +90,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		
 		//Mutation
 		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
-			if(randomGenerator.random() < mutationRate){
+			if(randomGenerator.nextDouble() < mutationRate){
 				double[] gene = chromosome.get(j).clone();
 				
 			/*	double updateAmount = (randomGenerator.random()-0.5)/DIMENSIONS;
@@ -108,10 +108,10 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 				
 				double updateAmount = 0.1;
 				
-				int update1 = randomGenerator.randomInt(dimensions);
-				int update2 = randomGenerator.randomInt(dimensions);
+				int update1 = randomGenerator.nextInt(dimensions);
+				int update2 = randomGenerator.nextInt(dimensions);
 				while(update2 == update1){
-					update2 = randomGenerator.randomInt(dimensions);
+					update2 = randomGenerator.nextInt(dimensions);
 				}
 				
 				
@@ -141,7 +141,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		
 		if(grammar.contains(Utterance.SIGNAL_NULL_VALUE)){//Single iteration... max 1 invention per turn.
 			
-			if(randomGenerator.random() < inventionProbability){
+			if(randomGenerator.nextDouble() < inventionProbability){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
@@ -154,11 +154,11 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 				}
 				
 				//Choose a random null element to invent a new value for
-				Integer index = nullIndexes.get(randomGenerator.randomInt(nullIndexes.size()));
+				Integer index = nullIndexes.get(randomGenerator.nextInt(nullIndexes.size()));
 				
 				int dimensionIndex = -1;
 				double seenSoFar = 0;
-				double threshold = randomGenerator.random();
+				double threshold = randomGenerator.nextDouble();
 				do{
 					dimensionIndex++;
 					seenSoFar += chromosome.get(index)[dimensionIndex];
@@ -179,7 +179,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 			return;
 		}
 		
-		double random = randomGenerator.random();
+		double random = randomGenerator.nextDouble();
 		if(chromosome.get(u.meaning)[u.signal] <= random){
 			grammar.set(u.meaning, u.signal);
 		}

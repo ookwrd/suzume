@@ -51,7 +51,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	}
 
 	public Utterance getRandomUtterance() {
-		int index = randomGenerator.randomInt(grammar.size());
+		int index = randomGenerator.nextInt(grammar.size());
 		Integer value = grammar.get(index);
 		return new Utterance(index, value);
 	}

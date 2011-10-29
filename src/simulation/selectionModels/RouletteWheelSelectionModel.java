@@ -19,7 +19,7 @@ public class RouletteWheelSelectionModel extends SelectionModel {
 
 		//Loop once for each individual
 		for(int i = 0; i < toSelect; i++){
-			double selectionPoint = randomGenerator.random()*totalFitness;
+			double selectionPoint = randomGenerator.nextDouble()*totalFitness;
 			double pointer = 0;
 
 			for(Node node : nodes){//TODO binary search, all of the selection points in an ordered list?
