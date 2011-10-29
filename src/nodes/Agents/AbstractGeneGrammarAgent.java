@@ -18,14 +18,12 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 
 	protected enum VisualizationTypes {GENOTYPE, SINGLE_GENE, GENE_GRAMMAR_MATCH}
 	protected enum StatisticsTypes {NUMBER_GENOTYPES, GENE_GRAMMAR_MATCH}
-	protected static final String SYNTACTIC_SPACE_SIZE = "Syntactic space size";
 	
 	protected ArrayList<Integer> chromosome;
 
 	public AbstractGeneGrammarAgent(){
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE}));
-		setDefaultParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(2));
 	}
 	
 	@Override
@@ -56,35 +54,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 		break;
 		
 		case SINGLE_GENE:
-			int value;
-			if(visualizationKey.equals("singleWord")){
-				value = grammar.get(0);
-			}else{
-				value = chromosome.get(0);
-			}		
-			if(value == 0){
-				c = Color.WHITE;
-			} else if (value == 1){
-				c = Color.BLACK;
-			} else if (value == 2){
-				c = Color.BLUE;
-			}else if (value == 3){
-				c = Color.GREEN;
-			}else if (value == 4){
-				c = Color.YELLOW;
-			}else if (value == 5){
-				c = Color.ORANGE;
-			}else if (value == 6){
-				c = Color.CYAN;
-			}else if (value == 7){
-				c = Color.DARK_GRAY;
-			}else if (value == 8){
-				c = Color.GRAY;
-			}else if (value == 9){
-				c = Color.MAGENTA;
-			}else{
-				c = Color.RED;
-			}
+			c = mapValueToRainbow(chromosome.get(0), getIntegerParameter(SYNTACTIC_SPACE_SIZE));
 			break;
 			
 		case GENE_GRAMMAR_MATCH:

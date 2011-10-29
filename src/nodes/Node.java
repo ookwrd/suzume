@@ -21,7 +21,7 @@ public interface Node extends Visualizable, Configurable {
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator);
 	
 	//General Properties
-	public String getName();
+	public String getName();//TODO check relevance
 	public int getId();
 	public BasicConfigurable getConfiguration();
 

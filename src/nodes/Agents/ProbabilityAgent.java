@@ -35,7 +35,7 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
 		
-		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(8));
+		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(3));
 	}
 	
 	@Override
@@ -68,7 +68,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	
 	@Override
 	public void invent() {
-		
 		int chances = getIntegerParameter(INVENTION_CHANCES);
 		for(int j = 0; j < chances && grammar.contains(Utterance.SIGNAL_NULL_VALUE); j++){
 			
@@ -76,7 +75,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
 				for(int i = 0; i < grammar.size(); i++){
-					
 					Integer allele = grammar.get(i);
 					if(allele == Utterance.SIGNAL_NULL_VALUE){
 						nullIndexes.add(i);
@@ -92,7 +90,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 
 	@Override
 	public void learnUtterance(Utterance u) {
-		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
@@ -141,7 +138,6 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		}
 		
 		switch((StatisticsTypes)statisticsKey){
-		
 		case GRAMMAR_ADJUST_COUNT:
 			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Grammar Adjustment count") {
 				@Override
@@ -151,7 +147,7 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 			};
 			
 		default:
-			System.err.println(YamauchiHashimoto2010.class.getName() + ": Unknown StatisticsType");
+			System.err.println(ProbabilityAgent.class.getName() + ": Unknown StatisticsType");
 			return null;
 		}
 	}
@@ -163,7 +159,16 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	
 	@Override
 	public String getDescription() {
-		return "Agent I cant be bothered to describe that can take more than just 2 different types of values for each bias";
+		return "Agent that learns encountered items with a probability determined by whether or not they match its internal UG bias or not." +
+				"\n\n" +
+				LEARNING_PROBABILITY_ON_MATCH + ":\n" +
+						"Probability of learning from a token that matches the agent's UG value." +
+						"\n\n" +
+						LEARNING_PROBABILITY_ON_MISMATCH + ":\n" +
+								"Probability of learning from a token that does not match the agent's UG value." +
+								"\n\n" +
+								SYNTACTIC_SPACE_SIZE + ":\n" +
+										"The number of possible syntactic tokens learnable for each meaning.";
 	}
 
 }

@@ -21,6 +21,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	protected enum StatisticsTypes {NUMBER_NULLS, NUMBER_PHENOTYPES}
 	
 	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
+	protected static final String SYNTACTIC_SPACE_SIZE = "Syntactic space size";
 	
 	protected ArrayList<Integer> grammar;
 	
@@ -28,6 +29,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.PHENOTYPE}));
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
+		setDefaultParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(2));
 	}
 
 	@Override
@@ -71,8 +73,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		Color c;
 		switch((VisualizationTypes)visualizationKey){
 		case NUMBER_NULLS:
-			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
-			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
+			c= mapValueToYellowRed(numberOfNullsInGrammar(), getIntegerParameter(NUMBER_OF_MEANINGS));
 			break;
 
 		case PHENOTYPE:
@@ -84,31 +85,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		break;
 		
 		case SINGLE_WORD:
-			int value;
-			value = grammar.get(0);		
-			if(value == 0){
-				c = Color.WHITE;
-			} else if (value == 1){
-				c = Color.BLACK;
-			} else if (value == 2){
-				c = Color.BLUE;
-			}else if (value == 3){
-				c = Color.GREEN;
-			}else if (value == 4){
-				c = Color.YELLOW;
-			}else if (value == 5){
-				c = Color.ORANGE;
-			}else if (value == 6){
-				c = Color.CYAN;
-			}else if (value == 7){
-				c = Color.DARK_GRAY;
-			}else if (value == 8){
-				c = Color.GRAY;
-			}else if (value == 9){
-				c = Color.MAGENTA;
-			}else{
-				c = Color.RED;
-			}
+			c = mapValueToRainbow(grammar.get(0), getIntegerParameter(SYNTACTIC_SPACE_SIZE));
 			break;
 			
 		default:
