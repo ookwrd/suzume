@@ -1,5 +1,6 @@
 package nodes.Agents;
 
+import nodes.AbstractNode;
 import nodes.Utterance;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
@@ -12,8 +13,8 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 	protected static final String LEFTOVER_RESOURCE_MULTIPLIER = "Leftover Resource Multiplier";
 	
 	public ExtendedYamauchiHashimotoAgent(){
-		setDefaultParameter(MATCH_LEARN_PROB, new ConfigurationParameter(0.8));
-		setDefaultParameter(NON_MATCH_LEARN_PROB, new ConfigurationParameter(0.4));
+		setDefaultParameter(MATCH_LEARN_PROB, new ConfigurationParameter(1.0));
+		setDefaultParameter(NON_MATCH_LEARN_PROB, new ConfigurationParameter(1.0));
 		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, new ConfigurationParameter(true));
 		setDefaultParameter(LEFTOVER_RESOURCE_MULTIPLIER, new ConfigurationParameter(0.0));
 	}
@@ -72,11 +73,19 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 	
 	@Override
 	public String getDescription(){
-		return "Extended version of YamauchiHashimoto2010 in which learning is not guranteed " +
-				"on encountering a particular token.\n\n" +
-				"MatchingLearnProbability = probability of learning when token matches UG\n" +
-				"NonMatchingLearnProbability = probability of learning when token doesn't match UG\n" +
-				"Deduct Cost on attempt = does it cost just to attempt? or only to learn?";
+		return "Extended version of "+ AbstractNode.NodeType.YamauchiHashimoto2010Agent + " which adds several extra configuration options.\n\n" +
+				MATCH_LEARN_PROB + ":\n" +
+				"Probability of learning when the encountered token matches the agent's UG value. Setting this option to 1.0 results in behaviour " +
+				"identical to that of the original agent.\n\n" +
+				NON_MATCH_LEARN_PROB +":\n" +
+				"Probability of learning when the encountered token doesn't match the agent's UG value. Setting this option to 1.0 results in behaviour" +
+				"identical to that of the original agent.\n\n" +
+				DEDUCT_COST_ON_ATTEMPT + ":\n" +
+				"Determines if the cost of learning is deducted even when learning fails.\n\n" +
+				LEFTOVER_RESOURCE_MULTIPLIER + ":\n" +
+				"At the completion of the simulation any leftover learning resources are multiplied by this value and added to the agent's fitness score. " +
+				"This is intended to reward agents that don't utilize their full learning potential. Setting this option to 0.0 results in behaviour" +
+				"identical to that of the original agent.";
 	}
 	
 }
