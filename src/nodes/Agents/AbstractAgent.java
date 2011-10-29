@@ -190,13 +190,30 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	protected Color mapValueToYellowRed(double value, int range){
+		return mapValueToColor(value, range, 255, 255, 0, 255, 0, 0);
+	}
+	
+	protected Color mapValueToColor(
+			double value, 
+			int range, 
+			int initialRed, 
+			int initialGreen, 
+			int initialBlue,
+			int finalRed,
+			int finalGreen, 
+			int finalBlue){
+		
 		if(value < 0 || value > range){
 			return Color.BLACK;
 		}
 		
-		//Scaling into 0-range
-		int colorVal = (int)((value/range)*255);
+		double proportion = value/range;
+		double inverseProportion = 1-proportion;
 		
-		return new Color(255,255-colorVal,0);
+		return new Color(
+				(int)(initialRed*inverseProportion+finalRed*proportion),
+				(int)(initialGreen*inverseProportion+finalGreen*proportion),
+				(int)(initialBlue*inverseProportion+finalBlue*proportion)
+				);
 	}
 }
