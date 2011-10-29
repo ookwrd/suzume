@@ -170,4 +170,33 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		return new ArrayList<Object>(Arrays.asList(getParameter(Node.STATISTICS_TYPE).getSelectedValues()));
 	}
 	
+	protected Color mapValueToRainbow(double value, int range){
+		if(value < 0 || value > range){
+			return Color.BLACK;
+		}
+		
+		//Scaling into 0-range
+		int colorVal = (int)((value/range)*1023);
+		
+		if(colorVal < 256){//Red->Yellow
+			return new Color(255, colorVal, 0);
+		}else if(colorVal < 512){//Yellow-Green
+			return new Color(511-colorVal,255,0);
+		}else if(colorVal < 768){//Green->Cyan
+			return new Color(0,255,colorVal - 512);
+		}else{//Cyan->Blue
+			return new Color(0,1023-colorVal,255);
+		}
+	}
+	
+	protected Color mapValueToYellowRed(double value, int range){
+		if(value < 0 || value > range){
+			return Color.BLACK;
+		}
+		
+		//Scaling into 0-range
+		int colorVal = (int)((value/range)*255);
+		
+		return new Color(255,255-colorVal,0);
+	}
 }
