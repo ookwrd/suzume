@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import nodes.Node;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 

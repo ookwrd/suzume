@@ -61,8 +61,8 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public boolean canStillLearn(int utterancesSeen){
-		return true;
+	public boolean canStillLearn(int utteranceSeen){
+		return utteranceSeen > 200;
 	}
 	
 	@Override

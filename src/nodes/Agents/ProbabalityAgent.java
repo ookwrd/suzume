@@ -16,8 +16,7 @@ import simulation.RandomGenerator;
 
 public class ProbabalityAgent extends AbstractGrammarAgent implements Describable {
 
-	protected static final String[] visualizationTypes = {"numberNulls","genotype","phenotype","singleWord","singleGene"};//TODO
-	
+	private enum VisualizationTypes {NUMBER_NULLS,GENOTYPE,PHENOTYPE,SINGLE_WORD,SINGLE_GENE};//TODO
 	private enum StatisticsTypes {GRAMMAR_ADJUST_COUNT}
 	
 	private static final String LEARNING_PROBABILITY_ON_MATCH = "Learning probability match";
@@ -39,7 +38,7 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
 		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
+		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values()));
 	}
 	
 	@Override
@@ -80,11 +79,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 				chromosome.set(j, randomGenerator.nextInt(getParameter(SYNTACTIC_STATE_SPACE_SIZE).getInteger()));
 			}
 		}
-	}
-	
-	@Override
-	public String getName(){
-		return "Probability Agent";
 	}
 	
 	@Override
@@ -141,38 +135,36 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		
 		Color c;
 		
-		if(visualizationKey.equals("numberNulls")){
+		switch((VisualizationTypes)visualizationKey){
+		case NUMBER_NULLS:
 			int numberOfNulls = new Double(numberOfNullsInGrammar()).intValue();
 			c = new Color(255, 255-numberOfNulls*16, 255-numberOfNulls*16);
-		}else if (visualizationKey.equals("genotype")){
+			break;
 			
-			System.out.println(chromosome.get(0));
-			System.out.println(Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16));
-			System.out.println(
-					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16));
-			System.out.println(Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16));
-			System.out.println();
-			
+		case GENOTYPE:
 			c = new Color(
 					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
 					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
 					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
 			);
-		}else if (visualizationKey.equals("phenotype")){
+			break;
+			
+		case PHENOTYPE:
 			c = new Color(
 					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
 					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
 					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
-					);
-		} else if (visualizationKey.equals("singleWord") || visualizationKey.equals("singleGene")) {
-		
+			);
+			break;
+			
+		case SINGLE_WORD:
+		case SINGLE_GENE:
 			int value;
 			if(visualizationKey.equals("singleWord")){
 				value = grammar.get(0);
 			}else{
 				value = chromosome.get(0);
-			}
-			
+			}		
 			if(value == 0){
 				c = Color.WHITE;
 			} else if (value == 1){
@@ -196,9 +188,10 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 			}else{
 				c = Color.RED;
 			}
+			break;
 			
-		} else {
-			System.out.println("Unrecognized visualization type");
+		default:
+			System.err.println("Unrecognized visualization type");
 			return;
 		}
 
@@ -227,6 +220,11 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 			System.err.println(YamauchiHashimoto2010.class.getName() + ": Unknown StatisticsType");
 			return null;
 		}
+	}
+	
+	@Override
+	public String getName(){
+		return "Probability Agent";
 	}
 	
 	@Override
