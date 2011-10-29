@@ -2,36 +2,13 @@ package simulation;
 
 import java.util.Random;
 
-import javax.swing.border.TitledBorder;
-
-import autoconfiguration.BasicConfigurable;
-import autoconfiguration.Configurable;
-import autoconfiguration.ConfigurationPanel;
-import autoconfiguration.ConfigurationParameter;
-
-
-
-public class RandomGenerator extends BasicConfigurable {
-	
-	private static final String KEY_SET = "Use Current time as seed";
-	private static final String SEED = "Seed";
-	
-	{
-		setDefaultParameter(KEY_SET, new ConfigurationParameter(true));
-		setDefaultParameter(SEED, new ConfigurationParameter(new Long(0)));
-	}
+public class RandomGenerator {
 	
 	private Random random;
 	private long randomSeed;
 	
-	public RandomGenerator(){};
-	
-	public RandomGenerator(Configurable config){
-		if(!config.getParameter(KEY_SET).getBoolean()){
-			randomSeed = config.getParameter(SEED).getLong();
-		} else {
-			randomSeed = System.currentTimeMillis();
-		}
+	public RandomGenerator(long randomSeed){
+		this.randomSeed = randomSeed;
 		random = new Random(randomSeed);
 	}
 	
@@ -49,12 +26,5 @@ public class RandomGenerator extends BasicConfigurable {
 	
 	public long getSeed(){
 		return randomSeed;
-	}
-	
-	@Override
-	public ConfigurationPanel getConfigurationPanel(){
-		ConfigurationPanel ret = super.getConfigurationPanel();
-		ret.setBorder(new TitledBorder("Random Number Generator"));
-		return ret;
 	}
 }
