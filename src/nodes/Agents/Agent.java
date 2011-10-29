@@ -8,7 +8,7 @@ public interface Agent extends Node {
 	public void reset();
 	
 	//Learning Phase
-	public boolean canStillLearn();
+	public boolean canStillLearn(int utterancesSeen);
 	
 	//Invention Phase
 	public void invent();

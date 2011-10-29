@@ -8,11 +8,9 @@ import java.util.ArrayList;
 import nodes.Node;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
-
 
 import simulation.RandomGenerator;
 
@@ -29,7 +27,11 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 	private static final String INVENTION_PROBABILITY = "Invention Probability";
 	private static final String INVENTION_CHANCES = "Invention Chances";
 
-	{
+	protected ArrayList<Integer> chromosome;
+	
+	private double grammarAdjustmentCount = 0;
+	
+	public ProbabalityAgent(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
@@ -39,10 +41,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(visualizationTypes));
 	}
-	
-	protected ArrayList<Integer> chromosome;
-	
-	private double grammarAdjustmentCount = 0;
 	
 	@Override
 	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
@@ -136,8 +134,6 @@ public class ProbabalityAgent extends AbstractGrammarAgent implements Describabl
 				grammarAdjustmentCount++;
 			}
 		}
-		
-
 	}
 	
 	@Override

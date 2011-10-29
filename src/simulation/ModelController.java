@@ -212,7 +212,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 			//get its teachers
 			ArrayList<Node> teachers = population.getPossibleTeachers(learner);
 
-			while(learner.canStillLearn()){//Get random teacher
+			for(int utterancesSeen = 0; learner.canStillLearn(utterancesSeen); utterancesSeen++){//Get random teacher
 				Node teacher = teachers.get(randomGenerator.nextInt(teachers.size()));
 				teacher.teach(learner);
 			}

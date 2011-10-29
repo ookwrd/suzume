@@ -47,8 +47,6 @@ public class SynonymAgent extends AbstractAgent {
 	private int lexiconCapacity;
 	private int lexiconSize;
 	
-	private int utterancesSeen = 0;
-	
 	public SynonymAgent(){
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(),false));
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
@@ -144,8 +142,6 @@ public class SynonymAgent extends AbstractAgent {
 
 	@Override
 	public void learnUtterance(Utterance utterance) {
-		utterancesSeen++;
-		
 		if(utterance.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
 		}
@@ -173,7 +169,7 @@ public class SynonymAgent extends AbstractAgent {
 	}
 	
 	@Override
-	public boolean canStillLearn() {
+	public boolean canStillLearn(int utterancesSeen) {
 		if(lexiconSize >= lexiconCapacity){
 			return false;
 		}
