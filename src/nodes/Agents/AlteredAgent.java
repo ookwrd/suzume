@@ -1,7 +1,6 @@
 package nodes.Agents;
 
 import nodes.Node;
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
@@ -10,14 +9,11 @@ import simulation.RandomGenerator;
 public class AlteredAgent extends YamauchiHashimoto2010 implements Agent,
 		Describable {
 
-	{
-		setDefaultParameter("Leftover Resource Multiplier",
-				new ConfigurationParameter(1.0));
-	}
-
 	private double resourceMultiplier;
 
 	public AlteredAgent() {
+		setDefaultParameter("Leftover Resource Multiplier",
+				new ConfigurationParameter(1.0));
 	}
 
 	@Override

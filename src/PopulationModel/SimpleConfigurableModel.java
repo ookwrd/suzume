@@ -1,5 +1,7 @@
 package PopulationModel;
 
+import nodes.AbstractNode;
+import nodes.NodeFactory;
 import PopulationModel.graphs.Graph;
 import PopulationModel.graphs.GraphFactory;
 import PopulationModel.graphs.Grid;
@@ -8,7 +10,7 @@ import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 
-public class SimpleConfigurableModel extends ConfigurableModel {
+public class SimpleConfigurableModel extends AdvancedConfigurableModel {
 
 	public static final String GRAPH = "Graph:";
 	
@@ -34,4 +36,9 @@ public class SimpleConfigurableModel extends ConfigurableModel {
 		super.initialize(config, id, randomGenerator);
 	}
 	
+	@Override
+	public String getDescription() {
+		return AbstractNode.NodeType.SimpleConfigurableModel + " is a population model in which learning, communication and reproduction all take place based on the same graph. " +
+				"To configure these interaction seperately make use of a " + AbstractNode.NodeType.AdvancedConfigurableModel + ".";
+	}
 }

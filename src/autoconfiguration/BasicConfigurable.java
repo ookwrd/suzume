@@ -89,11 +89,6 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public void overrideParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
-		parameters.put(key, parameter);
-	}
-	
-	@Override
 	public void setFixedParameter(String key, ConfigurationParameter parameter){
 		overrideParameter(key, parameter);
 		fixParameter(key);
@@ -121,6 +116,11 @@ public class BasicConfigurable implements Configurable {
 		}else{
 			System.err.println("Duplicate parameter key in BasicConfigurable:setDefaultParameter ("+ key + ") for non-list parameter");
 		}
+	}
+
+	@Override
+	public void overrideParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
+		parameters.put(key, parameter);
 	}
 	
 	@Override

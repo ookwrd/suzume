@@ -23,7 +23,7 @@ import simulation.selectionModels.SelectionModel.SelectionModels;
 import statisticsVisualizer.StatisticsVisualizer;
 import tools.Pair;
 
-import PopulationModel.ConfigurableModel;
+import PopulationModel.AdvancedConfigurableModel;
 import PopulationModel.PopulationModel;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
@@ -90,7 +90,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private void initializePopulation(){
 		Configurable nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
 		
-		ConfigurableModel node = (ConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
+		AdvancedConfigurableModel node = (AdvancedConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 		node.initialize(nodeConfiguration, NodeFactory.nextNodeID++, randomGenerator);
 		population = node;
 	}
