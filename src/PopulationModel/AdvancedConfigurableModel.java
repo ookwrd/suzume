@@ -25,7 +25,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 
 	private enum VisualizationStructure {LEARNING_GRAPH, COMMUNICATION_GRAPH, REPRODUCTION_GRAPH}
 	
-	public static final String SUB_NODE = "Sub Model:";
+	public static final String SUB_NODE = "Agent:";
 	public static final String REPRODUCTION_GRAPH = "Reproduction Graph";
 	public static final String COMMUNICATION_GRAPH = "Communication Graph";	
 	public static final String COMMUNICATIONS_PER_NEIGHBOUR = "CommunicationsPerNeighbour:";
