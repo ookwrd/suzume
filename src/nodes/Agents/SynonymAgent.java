@@ -14,7 +14,9 @@ import nodes.Agents.statisticaggregators.BaseStatisticsAggregator;
 import simulation.RandomGenerator;
 import tools.Pair;
 
-public class SynonymAgent extends AbstractAgent {
+import autoconfiguration.Configurable.Describable;
+
+public class SynonymAgent extends AbstractAgent implements Describable {
 	
 	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS}
 	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
@@ -396,6 +398,37 @@ public class SynonymAgent extends AbstractAgent {
 		
 		g.setColor(c);
 		g.fillRect(0, 0, baseDimension.width, baseDimension.height);
+	}
+
+	@Override
+	public String getDescription() {
+		return "An agent designed to study the evolution of the lexicon. It agent has a lexicon of a fixed size which it fills through" +
+				"learning interactions with other agents. The agent can learn multiple words for each meaning so is capable of learning" +
+				" synonyms, and equally may never learn a word for significant parts of its possible semantic space. Agents reproduce via" +
+				" asexual reproduction with the possibility of mutating the maximum size of their offspring's lexicon (Lexicon Capacity). " +
+				"Fitness is determined by taking determining if a random utterance produced by a neighbour is present in the agent's lexi" +
+				"con. An increased Communications Per Neighbour is reccomended for this agent." +
+				"\n\n" +
+				INIT_LEXICAL_CAPACITY+ ":\n" +
+				"Size of agent's lexicons in the first generation.\n\n" +
+				MEANING_SPACE_SIZE + "\n" +
+				"The number of different meanings which the agent may learn words for.\n\n" +
+				MEANING_DISTRIBUTION + "\n" +
+				"Method for determining what the agents will talk about during learning and communication. " + MeaningDistribution.Uniform + 
+				"; all meanings equally likely. " + MeaningDistribution.Squared + "; Math.random()^2*range. " + MeaningDistribution.Gausian + "" +
+				"; normally distributed focused around meaning 0.\n\n" +
+				WORD_CHOICE_STRATERGY +"\n" +
+				"How the agent chooses words from its lexicon when several exist for the desired meaning. " + WordChoiceStratergy.FirstLearnt + "; " +
+				"always use the first word learnt. " + WordChoiceStratergy.LastLearnt + "; always use the last word learnt. " + WordChoiceStratergy.MostCommon
+				+ "; use only most commonly encountered word. " + WordChoiceStratergy.Random + "; use a word at random with equal probability. " +
+				WordChoiceStratergy.Probabalistic + "; randomly choose a word proportional to how often they have been encountered.\n\n" +
+				MUTATION_TYPE + "\n" +
+				"Determines how mutations effect the agents lexicon capacity. " + MutationType.Linear + "; Adds or subtracts 1 to the lexicon capacity. " +
+				MutationType.Multiplicative +"; Multiplies/devides the lexicon capacity of the lexicon.\n\n" +
+				FITNESS_ADJUSTMENT + "\n" +
+				"Modifications that should be made to the final fitness value before selection. " + FitnessAdjustment.CAPACITY_COST + "; " +
+				"decreases fitness based on lexiconCapacity*" + LEXICON_CAPACITY_COST + " to account for the opportunity costs incured to the agent by" +
+				" having a larger capacity. " + FitnessAdjustment.COVERAGE + "; raises fitness of agents with better coverage of the lexical space.";
 	}
 		
 }
