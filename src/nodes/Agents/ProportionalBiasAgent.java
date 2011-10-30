@@ -5,52 +5,46 @@ import nodes.Node;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 
-import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
 
-public class BiasAgent extends AbstractGrammarAgent implements Describable{
+public class ProportionalBiasAgent extends AbstractGrammarAgent implements Describable{
 	
 	private enum StatisticsTypes {GENE_GRAMMAR_MATCH_PROB}
 	
-	private int dimensions;
-	private double mutationRate;
-	private double inventionProbability;
+	protected static final String DIMENSIONS = "Dimensions";
+	protected static final String MUTATION_RATE = "Mutation Rate";
+	protected static final String INVENTION_PROB = "Invention Probability";
 	
 	public ArrayList<double[]> chromosome;
 	
-	private RandomGenerator randomGenerator;
-	
-	public BiasAgent(){
+	public ProportionalBiasAgent(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
-		setDefaultParameter("Dimensions", new ConfigurationParameter(2));
-		setDefaultParameter("Mutation rate", new ConfigurationParameter(0.01));
-		setDefaultParameter("Invention Probability", new ConfigurationParameter(0.1));
+		setDefaultParameter(DIMENSIONS, new ConfigurationParameter(2));
+		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.01));
+		setDefaultParameter(INVENTION_PROB, new ConfigurationParameter(0.1));
 	}
 	
 	@Override
 	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
-		initializeParameters(config);
-		
-		this.randomGenerator = randomGenerator;
 		
 		chromosome = new ArrayList<double[]>();
 		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			
-			double[] biases = new double[dimensions];
+			double[] biases = new double[getIntegerParameter(DIMENSIONS)];
 			
 			double biasSoFar = 0;
 			//Random Biases
-			for(int j = 0; j < dimensions; j++){
+			for(int j = 0; j < getIntegerParameter(DIMENSIONS); j++){
 				biases[j] = randomGenerator.nextDouble();
 				biasSoFar += biases[j];
 			}
 			//Norminalization to add to 1
-			for(int j = 0; j < dimensions; j++){
+			for(int j = 0; j < getIntegerParameter(DIMENSIONS); j++){
 				biases[j] = biases[j]/biasSoFar;
 			}
 			
@@ -58,23 +52,13 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		}
 	}
 	
-	/**
-	 * Sexual reproduction of a new agent.
-	 * 
-	 * @param parent1
-	 * @param Parent2
-	 * @param id
-	 */
 	@Override
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
-		BiasAgent parent1 = (BiasAgent)parentA;
-		BiasAgent parent2 = (BiasAgent)parentB;
+		ProportionalBiasAgent parent1 = (ProportionalBiasAgent)parentA;
+		ProportionalBiasAgent parent2 = (ProportionalBiasAgent)parentB;
 		super.initialize(parent1, id, randomGenerator);
-		initializeParameters((BiasAgent)parentA);
 		
 		chromosome = new ArrayList<double[]>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
-		
-		this.randomGenerator = randomGenerator;
 		
 		//Crossover
 		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
@@ -90,7 +74,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		
 		//Mutation
 		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
-			if(randomGenerator.nextDouble() < mutationRate){
+			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
 				double[] gene = chromosome.get(j).clone();
 				
 			/*	double updateAmount = (randomGenerator.random()-0.5)/DIMENSIONS;
@@ -108,10 +92,10 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 				
 				double updateAmount = 0.1;
 				
-				int update1 = randomGenerator.nextInt(dimensions);
-				int update2 = randomGenerator.nextInt(dimensions);
+				int update1 = randomGenerator.nextInt(getIntegerParameter(DIMENSIONS));
+				int update2 = randomGenerator.nextInt(getIntegerParameter(DIMENSIONS));
 				while(update2 == update1){
-					update2 = randomGenerator.nextInt(dimensions);
+					update2 = randomGenerator.nextInt(getIntegerParameter(DIMENSIONS));
 				}
 				
 				
@@ -119,10 +103,8 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 						&& gene[update1]+updateAmount >= 0
 						&& gene[update2]-updateAmount <= 1
 						&& gene[update2]-updateAmount >= 0){
-					//System.out.println("Before" + gene[update1]);
 					gene[update1] = gene[update1] + updateAmount;
 					gene[update2] = gene[update2] - updateAmount;
-					//System.out.println("after" + gene[update1]);
 				}
 				
 				chromosome.set(j, gene);
@@ -130,23 +112,16 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		}
 	}
 	
-	private void initializeParameters(Configurable config){
-		dimensions = config.getParameter("Dimensions").getInteger();
-		mutationRate = config.getParameter("Mutation rate").getDouble();
-		inventionProbability= config.getParameter("Invention Probability").getDouble();
-	}
-	
 	@Override
 	public void invent() {
 		
-		if(grammar.contains(Utterance.SIGNAL_NULL_VALUE)){//Single iteration... max 1 invention per turn.
-			
-			if(randomGenerator.nextDouble() < inventionProbability){
+		if(grammar.contains(Utterance.SIGNAL_NULL_VALUE)){
+			//Single iteration... max 1 invention per turn.
+			if(randomGenerator.nextDouble() < getDoubleParameter(INVENTION_PROB)){
 				
 				//Collect indexes of all null elements
 				ArrayList<Integer> nullIndexes = new ArrayList<Integer>();
 				for(int i = 0; i < grammar.size(); i++){
-					
 					Integer allele = grammar.get(i);
 					if(allele == Utterance.SIGNAL_NULL_VALUE){
 						nullIndexes.add(i);
@@ -173,34 +148,14 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	
 	@Override
 	public void learnUtterance(Utterance u) {
-		
 		//agents agree on value or NULL utterance
 		if(u.signal == grammar.get(u.meaning) || u.signal == Utterance.SIGNAL_NULL_VALUE){
 			return;
 		}
 		
-		double random = randomGenerator.nextDouble();
-		if(chromosome.get(u.meaning)[u.signal] <= random){
+		if(chromosome.get(u.meaning)[u.signal] <= randomGenerator.nextDouble()){
 			grammar.set(u.meaning, u.signal);
 		}
-		
-	}
-	
-	public void printAgent(){
-		System.out.println("Agent " + getId() + ":");
-		for(int j = 0; j < dimensions; j++){
-			System.out.print("Dimension " + j + ":\t");
-			for (int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++) {
-				System.out.print(chromosome.get(i)[j] + "\t");
-			}
-			System.out.println();
-		}
-		System.out.print("Grammar:\t");
-		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
-			System.out.print(grammar.get(i) + "\t\t\t");
-		}
-		
-		System.out.println();
 	}
 	
 	@Override
@@ -215,12 +170,12 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Gene-Grammar Match Probability") {
 				@Override
 				protected double getValue(Node agent) {
-					return ((BiasAgent)agent).geneGrammarMatch();
+					return ((ProportionalBiasAgent)agent).geneGrammarMatch();
 				}
 			};
 			
 		default:
-			System.err.println(BiasAgent.class.getName() + ": Unknown StatisticsType");
+			System.err.println(ProportionalBiasAgent.class.getName() + ": Unknown StatisticsType");
 			return null;
 		}
 	}
@@ -231,13 +186,9 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 	public Double geneGrammarMatch() {
 
 		double count = 0;
-		
-		double antiCount = 0;
-		
 		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
-				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];
 			}
 		}
 
@@ -246,6 +197,8 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 
 	@Override
 	public String getDescription() {
-		return "Unfinished agent that isn't biased in a binary fashion, but proportionally in a number of generations, with learning probability based on the degree";
+		return "Experiment agent whose UG biased towards particular values is not binary. Rather the agent is proportionally" +
+				" towards a number of values, with the probability of learning each based on the degree of the bias towards " +
+				"that particuar value. This agent is still being developed and its behaviour isn't guranteed to be correct.";
 	}
 }
