@@ -20,7 +20,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	protected enum VisualizationTypes {NUMBER_NULLS, PHENOTYPE, SINGLE_WORD}
 	protected enum StatisticsTypes {NUMBER_NULLS, NUMBER_PHENOTYPES}
 	
-	protected static final String NUMBER_OF_MEANINGS = "Meaning space size";
+	protected static final String SEMANTIC_SPACE_SIZE = "Semantic space size";
 	protected static final String SYNTACTIC_SPACE_SIZE = "Syntactic space size";
 	
 	protected ArrayList<Integer> grammar;
@@ -28,7 +28,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	public AbstractGrammarAgent(){
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.PHENOTYPE}));
 		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
-		setDefaultParameter(NUMBER_OF_MEANINGS, new ConfigurationParameter(12));
+		setDefaultParameter(SEMANTIC_SPACE_SIZE, new ConfigurationParameter(12));
 		setDefaultParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(2));
 	}
 
@@ -36,8 +36,8 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	public void initialize(Configurable config, int id, RandomGenerator randomGenerator){
 		super.initialize(config, id, randomGenerator);
 
-		grammar = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
-		for (int j = 0; j < getIntegerParameter(NUMBER_OF_MEANINGS); j++){
+		grammar = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
+		for (int j = 0; j < getIntegerParameter(SEMANTIC_SPACE_SIZE); j++){
 			grammar.add(Utterance.SIGNAL_NULL_VALUE);
 		}
 	}
@@ -73,14 +73,15 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 		Color c;
 		switch((VisualizationTypes)visualizationKey){
 		case NUMBER_NULLS:
-			c= mapValueToYellowRed(numberOfNullsInGrammar(), getIntegerParameter(NUMBER_OF_MEANINGS));
+			c= mapValueToYellowRed(numberOfNullsInGrammar(), getIntegerParameter(SEMANTIC_SPACE_SIZE));
 			break;
 
 		case PHENOTYPE:
+			double range = getIntegerParameter(SYNTACTIC_SPACE_SIZE) - 1;
 			c = new Color(
-					Math.abs(grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16),
-					Math.abs(grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16),
-					Math.abs(grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)
+					Math.abs((int)((grammar.get(0)*128+grammar.get(1)*64+grammar.get(2)*32+grammar.get(3)*16)/range)),
+					Math.abs((int)((grammar.get(4)*128+grammar.get(5)*64+grammar.get(6)*32+grammar.get(7)*16)/range)),
+					Math.abs((int)((grammar.get(8)*128+grammar.get(9)*64+grammar.get(10)*32+grammar.get(11)*16)/range))
 			);
 		break;
 		
@@ -128,7 +129,7 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	
 	public Double numberOfNullsInGrammar() {
 		double count = 0;
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
+		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			if(grammar.get(i).equals(Utterance.SIGNAL_NULL_VALUE)){
 				count++;
 			}

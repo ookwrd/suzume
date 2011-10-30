@@ -17,7 +17,7 @@ import simulation.RandomGenerator;
 
 public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements Agent, Describable {
 
-	private enum VisualizationTypes {LEARNING_INTENSITY} 	
+	private enum VisualizationTypes {LEFTOVER_LEARNING_RESC} 	
 	private enum StatisticsTypes {LEFTOVER_LEARNING_RESC}
 	
 	protected static final String INVENTION_PROBABILITY = "Invention Probability";
@@ -55,24 +55,24 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
 		super.initialize(parent1,id,randomGenerator);
-		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
+		chromosome = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < getParameter(SEMANTIC_SPACE_SIZE).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
+		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){
 			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
 				chromosome.set(j, randomGenerator.nextBoolean()?0:1);
 			}
@@ -184,9 +184,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		
 		Color c;
 		switch ((VisualizationTypes)visualizationKey) {
-		case LEARNING_INTENSITY:
-			int learningIntensity = new Double(learningResource).intValue();
-			c = new Color(255, 255-learningIntensity*16, 255-learningIntensity);
+		case LEFTOVER_LEARNING_RESC:
+			c = mapValueToWhiteBlue(learningResource, getIntegerParameter(LEARNING_RESOURCE));
 			break;
 			
 		default:

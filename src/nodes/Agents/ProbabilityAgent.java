@@ -47,19 +47,19 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		ProbabilityAgent parent2 = (ProbabilityAgent)parentB;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.set(i, parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < getParameter(SEMANTIC_SPACE_SIZE).getInteger()){
 			chromosome.set(i, parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){
+		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){
 			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
 				chromosome.set(j, randomGenerator.nextInt(getParameter(SYNTACTIC_SPACE_SIZE).getInteger()));
 			}
@@ -118,8 +118,7 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		Color c;
 		switch((VisualizationTypes)visualizationKey){
 		case ADJUSTMENT_COUNT:
-			int adjustmentCount = new Double(grammarAdjustmentCount).intValue();
-			c = new Color(255, 255-adjustmentCount, 255-adjustmentCount);
+			c= mapValueToWhiteBlue(grammarAdjustmentCount, 100);
 			break;
 			
 		default:

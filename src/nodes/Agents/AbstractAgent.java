@@ -102,8 +102,7 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		Color c;
 		switch ((VisualizationTypes)visualizationKey) {
 		case FITNESS:
-			int fitness = new Double(getFitness()).intValue();
-			c = new Color(fitness*8,0,0);
+			c = mapValueToWhiteRed(fitness, 50);//TODO caluclate the max value somehow
 			break;
 			
 		case ALIVE:
@@ -191,6 +190,18 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	
 	protected Color mapValueToYellowRed(double value, int range){
 		return mapValueToColor(value, range, 255, 255, 0, 255, 0, 0);
+	}
+	
+	protected Color mapValueToWhiteRed(double value, int range){
+		return mapValueToColor(value, range, 0, 0, 0, 255, 0, 0);
+	}
+	
+	protected Color mapValueToWhiteGreen(double value, int range){
+		return mapValueToColor(value, range, 0, 0, 0, 0, 255, 0);
+	}
+	
+	protected Color mapValueToWhiteBlue(double value, int range){
+		return mapValueToColor(value, range, 0, 0, 0, 0, 0, 255);
 	}
 	
 	protected Color mapValueToColor(
