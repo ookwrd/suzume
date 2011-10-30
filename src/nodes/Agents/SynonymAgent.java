@@ -19,7 +19,7 @@ public class SynonymAgent extends AbstractAgent {
 	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS}
 	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
 	
-	private enum MeaningDistribution {Squared, Uniform}
+	private enum MeaningDistribution {Squared, Gausian, Uniform}
 	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon, Probabalistic}
 	private enum InventionStratergy {OnePerGeneration, AsNeeded}
 	private enum CriticalPeriodStratergy {Fixed, CapacityRelative}
@@ -256,6 +256,12 @@ public class SynonymAgent extends AbstractAgent {
 
 		case Uniform:
 			return randomGenerator.nextInt(lexicon.length);
+			
+		case Gausian:
+			double gaussian = randomGenerator.nextGaussian()*lexicon.length/5;
+			int retVal = (int)Math.abs(gaussian);
+			if(retVal >= lexicon.length){retVal=lexicon.length-1;}
+			return retVal;
 			
 		default:
 			System.err.println("Shouldn't be here");
