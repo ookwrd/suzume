@@ -39,7 +39,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		this.randomGenerator = randomGenerator;
 		
 		chromosome = new ArrayList<double[]>();
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
+		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			
 			double[] biases = new double[dimensions];
 			
@@ -72,24 +72,24 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		super.initialize(parent1, id, randomGenerator);
 		initializeParameters((BiasAgent)parentA);
 		
-		chromosome = new ArrayList<double[]>(getIntegerParameter(NUMBER_OF_MEANINGS));
+		chromosome = new ArrayList<double[]>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		
 		this.randomGenerator = randomGenerator;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.nextInt(getParameter(NUMBER_OF_MEANINGS).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < getParameter(NUMBER_OF_MEANINGS).getInteger()){
+		while(i < getParameter(SEMANTIC_SPACE_SIZE).getInteger()){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < getParameter(NUMBER_OF_MEANINGS).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
+		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
 			if(randomGenerator.nextDouble() < mutationRate){
 				double[] gene = chromosome.get(j).clone();
 				
@@ -190,13 +190,13 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		System.out.println("Agent " + getId() + ":");
 		for(int j = 0; j < dimensions; j++){
 			System.out.print("Dimension " + j + ":\t");
-			for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) {
+			for (int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++) {
 				System.out.print(chromosome.get(i)[j] + "\t");
 			}
 			System.out.println();
 		}
 		System.out.print("Grammar:\t");
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
+		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			System.out.print(grammar.get(i) + "\t\t\t");
 		}
 		
@@ -234,7 +234,7 @@ public class BiasAgent extends AbstractGrammarAgent implements Describable{
 		
 		double antiCount = 0;
 		
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
+		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			if(grammar.get(i) != Utterance.SIGNAL_NULL_VALUE){
 				count += chromosome.get(i)[grammar.get(i)];	
 				antiCount += chromosome.get(i)[grammar.get(i)==0?1:0];

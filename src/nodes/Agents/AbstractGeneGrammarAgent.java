@@ -30,8 +30,8 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
 		super.initialize(config, id, randomGenerator);
 		
-		chromosome = new ArrayList<Integer>(getIntegerParameter(NUMBER_OF_MEANINGS));
-		for (int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++) { // all alleles are initially set to a random value initially
+		chromosome = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
+		for (int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++) { // all alleles are initially set to a random value initially
 			chromosome.add(randomGenerator.nextInt(getIntegerParameter(SYNTACTIC_SPACE_SIZE)));
 		}
 	}
@@ -46,10 +46,11 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 		Color c;
 		switch((VisualizationTypes)visualizationKey){
 		case GENOTYPE:
+			double range = getIntegerParameter(SYNTACTIC_SPACE_SIZE) - 1;
 			c = new Color(
-					Math.abs(chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16),
-					Math.abs(chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16),
-					Math.abs(chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)
+					Math.abs((int)((chromosome.get(0)*128+chromosome.get(1)*64+chromosome.get(2)*32+chromosome.get(3)*16)/range)),
+					Math.abs((int)((chromosome.get(4)*128+chromosome.get(5)*64+chromosome.get(6)*32+chromosome.get(7)*16)/range)),
+					Math.abs((int)((chromosome.get(8)*128+chromosome.get(9)*64+chromosome.get(10)*32+chromosome.get(11)*16)/range))
 			);
 		break;
 		
@@ -58,8 +59,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 			break;
 			
 		case GENE_GRAMMAR_MATCH:
-			int geneGrammarMatch = new Double(geneGrammarMatch()).intValue();
-			c = new Color(255, 255-geneGrammarMatch*16, 255-geneGrammarMatch);
+			c = mapValueToWhiteGreen(geneGrammarMatch(), getIntegerParameter(SEMANTIC_SPACE_SIZE));
 			break;
 			
 		default:
@@ -102,7 +102,7 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	
 	public int geneGrammarMatch(){
 		int count = 0;
-		for(int i = 0; i < getIntegerParameter(NUMBER_OF_MEANINGS); i++){
+		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
 			if(chromosome.get(i).equals(grammar.get(i))){
 				count++;
 			}
