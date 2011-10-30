@@ -11,7 +11,7 @@ import simulation.RandomGenerator;
 
 public class SimpleConfigurableModel extends AdvancedConfigurableModel {
 
-	public static final String GRAPH = "Graph:";
+	public static final String GRAPH = "Agent Interaction Graph:";
 	
 	public SimpleConfigurableModel(){
 		fixParameter(REPRODUCTION_GRAPH);
