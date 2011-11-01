@@ -1,9 +1,11 @@
 package autoconfiguration;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -201,14 +204,35 @@ public class ConfigurationPanel extends JPanel {
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(5, 5, 5, 5);
 		
-		JTextArea field = new JTextArea();
+		JTextArea field = new JTextArea(){
+			@Override
+			public Dimension getPreferredScrollableViewportSize(){
+				Dimension size = super.getPreferredScrollableViewportSize();
+				Insets insets = getInsets();
+				int maxHeight = getRowHeight() * 12 + insets.top + insets.bottom;
+				if(size.height > maxHeight) {
+					size.height = maxHeight;
+				}
+				return size;
+			}
+		};
 		field.setWrapStyleWord(true);
 		field.setLineWrap(true);
 		field.setBackground(getBackground());
-		field.setColumns(20);
 		field.setText(message);
-		
-		add(field, constraints);
+		field.setEditable(false);
+		field.setCaretPosition(0);
+
+		//TODO swap this for expand/minimize buttons on long descriptions.
+		//Add a scrollpane only if necessary (avoid adding it if possible to make vertical scrolling easier) 
+		if(field.getText().length() > 600){//Nasty hack using text length to determine if a scrollpanel is needed or not, can't use row count because that is dependent on the width
+			JScrollPane areaScrollPane = new JScrollPane(field);
+			areaScrollPane.setVerticalScrollBarPolicy(
+			                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			add(areaScrollPane, constraints);
+		} else {
+			add(field,constraints);
+		}
 		
 		return field;
 	} 
