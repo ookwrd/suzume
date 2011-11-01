@@ -110,7 +110,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getIntegerParameter(RUN_COUNT)];
 		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
-			for(Object key : getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter("Sub Model:").getNodeConfiguration().getParameter(Node.STATISTICS_TYPE).getSelectedValues()){
+			for(Object key : getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter(AdvancedConfigurableModel.SUB_NODE).getNodeConfiguration().getParameter(Node.STATISTICS_TYPE).getSelectedValues()){
 				arrayLists[i].add(population.getStatisticsAggregator(key));
 			}
 		}
