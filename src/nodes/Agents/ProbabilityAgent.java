@@ -28,11 +28,11 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	
 	public ProbabilityAgent(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
-		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, new ConfigurationParameter(0.7));
-		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, new ConfigurationParameter(0.5));
-		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
-		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
-		setDefaultParameter(INVENTION_CHANCES, new ConfigurationParameter(5));
+		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, 0.7);
+		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, 0.5);
+		setDefaultParameter(MUTATION_RATE, 0.00025);
+		setDefaultParameter(INVENTION_PROBABILITY, 0.01);
+		setDefaultParameter(INVENTION_CHANCES, 5);
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
 		
 		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(3));
@@ -161,13 +161,13 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		return "Agent that learns encountered items with a probability determined by whether or not they match its internal UG bias or not." +
 				"\n\n" +
 				LEARNING_PROBABILITY_ON_MATCH + ":\n" +
-						"Probability of learning from a token that matches the agent's UG value." +
-						"\n\n" +
-						LEARNING_PROBABILITY_ON_MISMATCH + ":\n" +
-								"Probability of learning from a token that does not match the agent's UG value." +
-								"\n\n" +
-								SYNTACTIC_SPACE_SIZE + ":\n" +
-										"The number of possible syntactic tokens learnable for each meaning.";
+				"Probability of learning from a token that matches the agent's UG value." +
+				"\n\n" +
+				LEARNING_PROBABILITY_ON_MISMATCH + ":\n" +
+				"Probability of learning from a token that does not match the agent's UG value." +
+				"\n\n" +
+				SYNTACTIC_SPACE_SIZE + ":\n" +
+				"The number of possible syntactic tokens learnable for each meaning.";
 	}
 
 }
