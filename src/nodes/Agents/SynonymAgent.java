@@ -69,8 +69,8 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	}
 
 	@Override
-	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
-		super.initialize(config, id, randomGenerator);
+	public void initialize(Configurable config, RandomGenerator randomGenerator) {
+		super.initialize(config, randomGenerator);
 		this.lexiconCapacity = getIntegerParameter(INIT_LEXICAL_CAPACITY);
 		this.lexiconSize = 0;
 		
@@ -91,7 +91,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 		SynonymAgent agent1 = (SynonymAgent)parentA;
 		SynonymAgent agent2 = (SynonymAgent)parentB;
 		
-		super.initialize(agent1, id, randomGenerator);
+		super.initialize(agent1, randomGenerator);
 
 		int size;
 		//Heredity

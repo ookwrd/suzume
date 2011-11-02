@@ -37,8 +37,8 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 	}
 	
 	@Override
-	public void initialize(Configurable config, int id, RandomGenerator randomGenerator){
-		super.initialize(config, id, randomGenerator);
+	public void initialize(Configurable config, RandomGenerator randomGenerator){
+		super.initialize(config, randomGenerator);
 	}
 	
 	@Override

@@ -101,6 +101,7 @@ public class NodeFactory {
 	}
 	
 	public static int getNewNodeId(){
+		System.out.println(nextNodeID);
 		return nextNodeID++;
 	}
 	
