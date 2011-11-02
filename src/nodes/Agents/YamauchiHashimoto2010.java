@@ -10,7 +10,6 @@ import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 
 import autoconfiguration.Configurable;
-import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
@@ -30,14 +29,15 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	protected double learningResource;
 	
 	public YamauchiHashimoto2010(){
-		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
+		
+		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
 		setDefaultParameter(LEARNING_RESOURCE, 24);
 		setDefaultParameter(CRITICAL_PERIOD, 200);
 		setDefaultParameter(LEARNING_COST_ON_MATCH, 1);
 		setDefaultParameter(LEARNING_COST_ON_MISMATCH, 4);
 		setDefaultParameter(MUTATION_RATE, 0.00025);
 		setDefaultParameter(INVENTION_PROBABILITY, 0.01);
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
+		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{});
 		
 		fixParameter(SYNTACTIC_SPACE_SIZE);
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	

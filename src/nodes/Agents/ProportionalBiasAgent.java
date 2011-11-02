@@ -6,7 +6,6 @@ import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 
 import autoconfiguration.Configurable;
-import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
 import simulation.RandomGenerator;
@@ -22,10 +21,10 @@ public class ProportionalBiasAgent extends AbstractGrammarAgent implements Descr
 	public ArrayList<double[]> chromosome;
 	
 	public ProportionalBiasAgent(){
-		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
-		setDefaultParameter(DIMENSIONS, new ConfigurationParameter(2));
-		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.01));
-		setDefaultParameter(INVENTION_PROB, new ConfigurationParameter(0.1));
+		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
+		setDefaultParameter(DIMENSIONS, 2);
+		setDefaultParameter(MUTATION_RATE, 0.01);
+		setDefaultParameter(INVENTION_PROB, 0.1);
 	}
 	
 	@Override

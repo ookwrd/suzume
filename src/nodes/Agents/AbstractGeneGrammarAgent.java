@@ -10,7 +10,6 @@ import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
 
 import autoconfiguration.Configurable;
-import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
 
@@ -22,8 +21,8 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 	protected ArrayList<Integer> chromosome;
 
 	public AbstractGeneGrammarAgent(){
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE}));
+		setDefaultParameter(STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
+		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE});
 	}
 	
 	@Override
