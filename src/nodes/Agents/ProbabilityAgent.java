@@ -47,21 +47,21 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		ProbabilityAgent parent2 = (ProbabilityAgent)parentB;
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.set(i, parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < getParameter(SEMANTIC_SPACE_SIZE).getInteger()){
+		while(i < getIntegerParameter(SEMANTIC_SPACE_SIZE)){
 			chromosome.set(i, parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){
+		for(int j = 0; j < getIntegerParameter(SEMANTIC_SPACE_SIZE); j++){
 			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
-				chromosome.set(j, randomGenerator.nextInt(getParameter(SYNTACTIC_SPACE_SIZE).getInteger()));
+				chromosome.set(j, randomGenerator.nextInt(getIntegerParameter(SYNTACTIC_SPACE_SIZE)));
 			}
 		}
 	}

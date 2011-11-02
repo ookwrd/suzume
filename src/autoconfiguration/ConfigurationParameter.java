@@ -154,7 +154,7 @@ public class ConfigurationParameter {
 		if(selected.length > 0){
 			return selected[0];
 		}else{
-			return ((Object[])value)[0];
+			return ((Object[])value)[0];//TODO
 		}
 	}
 	

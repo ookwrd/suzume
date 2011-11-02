@@ -9,7 +9,6 @@ public interface Configurable {
 	
 	public void overrideParameter(String key, ConfigurationParameter parameter);
 	public void setFixedParameter(String key, ConfigurationParameter parameter);
-	public void fixParameter(String key);
 	
 	public ConfigurationParameter getParameter(String key);
 	public HashMap<String, ConfigurationParameter> getParameters();

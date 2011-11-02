@@ -20,6 +20,7 @@ public abstract class AbstractNode extends BasicConfigurable implements Node{
 		SynonymAgent, 
 		ProportionalBiasAgent
 		}
+	
 	public static final String NODE_TYPE = "Node type";
 	
 	private int id;
@@ -52,7 +53,7 @@ public abstract class AbstractNode extends BasicConfigurable implements Node{
 		return baseDimension;
 	}
 	
-	@Override
+	@Override //TODO remove
 	public void draw(Dimension baseDimension, VisualizationStyle type, Object visualizationKey, Graphics g){
 		System.out.println(AbstractNode.class.getName() + ": Method draw() shouldnt be reached.");
 		g.setColor(Color.green);
