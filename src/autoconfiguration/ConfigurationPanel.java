@@ -63,12 +63,12 @@ public class ConfigurationPanel extends JPanel {
 			addTextField(((Describable)toConfigure).getDescription());
 		}
 		
-		this.parameters = toConfigure.getParameters();
+		this.parameters = new HashMap<String, ConfigurationParameter>();
 		
 		ArrayList<String> fixedParameters = toConfigure.getFixedParameters(); 
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
-		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
+		for(Map.Entry<String, ConfigurationParameter> entry : toConfigure.getParameters().entrySet()){
 			
 			String key = entry.getKey();
 			ConfigurationParameter parameter = entry.getValue();
@@ -76,6 +76,8 @@ public class ConfigurationPanel extends JPanel {
 			if(fixedParameters.contains(key)){
 				continue;
 			}
+			
+			this.parameters.put(key, parameter);
 			
 			switch (parameter.type) {
 			case INTEGER:
