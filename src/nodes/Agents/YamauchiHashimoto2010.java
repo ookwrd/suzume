@@ -44,8 +44,8 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	}
 	
 	@Override
-	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
-		super.initialize(config, id, randomGenerator);
+	public void initialize(Configurable config, RandomGenerator randomGenerator) {
+		super.initialize(config, randomGenerator);
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 	}
 	
@@ -54,7 +54,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
-		super.initialize(parent1,id,randomGenerator);
+		super.initialize(parent1,randomGenerator);
 		chromosome = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);

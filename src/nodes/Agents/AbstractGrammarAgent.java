@@ -32,8 +32,8 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void initialize(Configurable config, int id, RandomGenerator randomGenerator){
-		super.initialize(config, id, randomGenerator);
+	public void initialize(Configurable config, RandomGenerator randomGenerator){
+		super.initialize(config, randomGenerator);
 
 		grammar = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		for (int j = 0; j < getIntegerParameter(SEMANTIC_SPACE_SIZE); j++){

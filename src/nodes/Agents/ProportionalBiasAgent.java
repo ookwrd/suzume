@@ -28,8 +28,8 @@ public class ProportionalBiasAgent extends AbstractGrammarAgent implements Descr
 	}
 	
 	@Override
-	public void initialize(Configurable config, int id, RandomGenerator randomGenerator) {
-		super.initialize(config, id, randomGenerator);
+	public void initialize(Configurable config, RandomGenerator randomGenerator) {
+		super.initialize(config, randomGenerator);
 		
 		chromosome = new ArrayList<double[]>();
 		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){
@@ -55,7 +55,7 @@ public class ProportionalBiasAgent extends AbstractGrammarAgent implements Descr
 	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
 		ProportionalBiasAgent parent1 = (ProportionalBiasAgent)parentA;
 		ProportionalBiasAgent parent2 = (ProportionalBiasAgent)parentB;
-		super.initialize(parent1, id, randomGenerator);
+		super.initialize(parent1, randomGenerator);
 		
 		chromosome = new ArrayList<double[]>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		
