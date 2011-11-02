@@ -125,7 +125,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
-			int id, RandomGenerator randomGenerator) {
+			RandomGenerator randomGenerator) {
 		System.err.println("In population mode this should never be called.");
 	}
 

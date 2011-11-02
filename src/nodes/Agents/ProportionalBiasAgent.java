@@ -52,7 +52,7 @@ public class ProportionalBiasAgent extends AbstractGrammarAgent implements Descr
 	}
 	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(Node parentA, Node parentB, RandomGenerator randomGenerator){
 		ProportionalBiasAgent parent1 = (ProportionalBiasAgent)parentA;
 		ProportionalBiasAgent parent2 = (ProportionalBiasAgent)parentB;
 		super.initialize(parent1, randomGenerator);

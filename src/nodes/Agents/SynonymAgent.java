@@ -86,7 +86,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	}
 	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB, int id,
+	public void initializeAgent(Node parentA, Node parentB,
 			RandomGenerator randomGenerator) {
 		SynonymAgent agent1 = (SynonymAgent)parentA;
 		SynonymAgent agent2 = (SynonymAgent)parentB;

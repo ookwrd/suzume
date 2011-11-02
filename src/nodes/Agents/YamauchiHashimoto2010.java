@@ -50,7 +50,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	}
 	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB, int id, RandomGenerator randomGenerator){
+	public void initializeAgent(Node parentA, Node parentB, RandomGenerator randomGenerator){
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
