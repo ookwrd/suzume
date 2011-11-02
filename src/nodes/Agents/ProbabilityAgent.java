@@ -40,7 +40,7 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	
 	@Override
 	public void initializeAgent(Node parentA, Node parentB,
-			int id, RandomGenerator randomGenerator) {
+			 RandomGenerator randomGenerator) {
 		super.initialize(parentA, randomGenerator);
 		
 		ProbabilityAgent parent1 = (ProbabilityAgent)parentA;

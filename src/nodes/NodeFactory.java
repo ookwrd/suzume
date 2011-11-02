@@ -96,12 +96,11 @@ public class NodeFactory {
 		
 		Node returnVal = constructUninitializedNode(type);
 		
-		returnVal.initializeAgent(parentA, parentB, getNewNodeId(), randomGenerator);
+		returnVal.initializeAgent(parentA, parentB, randomGenerator);
 		return returnVal;
 	}
 	
 	public static int getNewNodeId(){
-		System.out.println(nextNodeID);
 		return nextNodeID++;
 	}
 	
