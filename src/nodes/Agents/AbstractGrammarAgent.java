@@ -11,7 +11,6 @@ import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
 import nodes.Agents.statisticaggregators.AbstractUniquenessAggregator;
 
 import autoconfiguration.Configurable;
-import autoconfiguration.ConfigurationParameter;
 
 import simulation.RandomGenerator;
 
@@ -26,10 +25,10 @@ public abstract class AbstractGrammarAgent extends AbstractAgent {
 	protected ArrayList<Integer> grammar;
 	
 	public AbstractGrammarAgent(){
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{VisualizationTypes.PHENOTYPE}));
-		setDefaultParameter(STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
-		setDefaultParameter(SEMANTIC_SPACE_SIZE, new ConfigurationParameter(12));
-		setDefaultParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(2));
+		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{VisualizationTypes.PHENOTYPE});
+		setDefaultParameter(STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
+		setDefaultParameter(SEMANTIC_SPACE_SIZE, 12);
+		setDefaultParameter(SYNTACTIC_SPACE_SIZE, 2);
 	}
 
 	@Override

@@ -136,7 +136,15 @@ public class BasicConfigurable implements Configurable {
 	protected void setDefaultParameter(String key, Long value){
 		setDefaultParameter(key, new ConfigurationParameter(value));
 	}
+	
+	protected void setDefaultParameter(String key, Object[] values, Object[] selected){
+		setDefaultParameter(key, new ConfigurationParameter(values,selected));
+	}
 
+	protected void setDefaultParameter(String key, Object[] values, Object selected){
+		setDefaultParameter(key, new ConfigurationParameter(values,selected));
+	}
+	
 	@Override
 	public void overrideParameter(String key, ConfigurationParameter parameter){//TODO can this and setDefault parameter be merged?
 		parameters.put(key, parameter);

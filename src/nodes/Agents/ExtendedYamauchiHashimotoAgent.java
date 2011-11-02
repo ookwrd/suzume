@@ -2,7 +2,6 @@ package nodes.Agents;
 
 import nodes.AbstractNode;
 import nodes.Utterance;
-import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
 public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implements Describable {
@@ -13,10 +12,10 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 	protected static final String LEFTOVER_RESOURCE_MULTIPLIER = "Leftover Resource Multiplier";
 	
 	public ExtendedYamauchiHashimotoAgent(){
-		setDefaultParameter(MATCH_LEARN_PROB, new ConfigurationParameter(1.0));
-		setDefaultParameter(NON_MATCH_LEARN_PROB, new ConfigurationParameter(1.0));
-		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, new ConfigurationParameter(true));
-		setDefaultParameter(LEFTOVER_RESOURCE_MULTIPLIER, new ConfigurationParameter(0.0));
+		setDefaultParameter(MATCH_LEARN_PROB, 1.0);
+		setDefaultParameter(NON_MATCH_LEARN_PROB, 1.0);
+		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, true);
+		setDefaultParameter(LEFTOVER_RESOURCE_MULTIPLIER, 0.0);
 	}
 	
 	@Override

@@ -27,13 +27,13 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	private double grammarAdjustmentCount = 0;
 	
 	public ProbabilityAgent(){
-		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(),StatisticsTypes.values()));
+		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MATCH, 0.7);
 		setDefaultParameter(LEARNING_PROBABILITY_ON_MISMATCH, 0.5);
 		setDefaultParameter(MUTATION_RATE, 0.00025);
 		setDefaultParameter(INVENTION_PROBABILITY, 0.01);
 		setDefaultParameter(INVENTION_CHANCES, 5);
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
+		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{});
 		
 		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(3));
 	}

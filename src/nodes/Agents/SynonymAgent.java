@@ -48,22 +48,22 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	private int lexiconSize;
 	
 	public SynonymAgent(){
-		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
-		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
+		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{});
+		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
 		
-		setDefaultParameter(INIT_LEXICAL_CAPACITY, new ConfigurationParameter(10));
-		setDefaultParameter(MEANING_SPACE_SIZE, new ConfigurationParameter(100));
-		setDefaultParameter(MEANING_DISTRIBUTION, new ConfigurationParameter(MeaningDistribution.values(), MeaningDistribution.Squared));
-		setDefaultParameter(WORD_CHOICE_STRATERGY, new ConfigurationParameter(WordChoiceStratergy.values(), WordChoiceStratergy.Random));
-		setDefaultParameter(INVENTION_STRATERGY, new ConfigurationParameter(InventionStratergy.values(), InventionStratergy.OnePerGeneration));
+		setDefaultParameter(INIT_LEXICAL_CAPACITY, 10);
+		setDefaultParameter(MEANING_SPACE_SIZE, 100);
+		setDefaultParameter(MEANING_DISTRIBUTION, MeaningDistribution.values(), MeaningDistribution.Squared);
+		setDefaultParameter(WORD_CHOICE_STRATERGY, WordChoiceStratergy.values(), WordChoiceStratergy.Random);
+		setDefaultParameter(INVENTION_STRATERGY, InventionStratergy.values(), InventionStratergy.OnePerGeneration);
 		
-		setDefaultParameter(CRITICAL_PERIOD_STRATERGY, new ConfigurationParameter(CriticalPeriodStratergy.values(), CriticalPeriodStratergy.Fixed));
-		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(1000));
-		setDefaultParameter(RELATIVE_MODIFIER, new ConfigurationParameter(5));
+		setDefaultParameter(CRITICAL_PERIOD_STRATERGY, CriticalPeriodStratergy.values(), CriticalPeriodStratergy.Fixed);
+		setDefaultParameter(CRITICAL_PERIOD, 1000);
+		setDefaultParameter(RELATIVE_MODIFIER, 5);
 		
-		setDefaultParameter(MUTATION_TYPE, new ConfigurationParameter(MutationType.values(),MutationType.Linear));
-		setDefaultParameter(FITNESS_ADJUSTMENT, new ConfigurationParameter(FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST}));
-		setDefaultParameter(LEXICON_CAPACITY_COST, new ConfigurationParameter(0.1));
+		setDefaultParameter(MUTATION_TYPE, MutationType.values(),MutationType.Linear);
+		setDefaultParameter(FITNESS_ADJUSTMENT, FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST});
+		setDefaultParameter(LEXICON_CAPACITY_COST, 0.1);
 		
 		overrideParameter(BASE_FITNESS, new ConfigurationParameter(10));
 	}
