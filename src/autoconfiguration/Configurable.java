@@ -13,7 +13,6 @@ public interface Configurable {
 	public ConfigurationParameter getParameter(String key);
 	public HashMap<String, ConfigurationParameter> getParameters();
 	public ArrayList<String> getFixedParameters();
-	public HashMap<String, ConfigurationParameter> getEditableParameters();
 	
 	public ConfigurationPanel getConfigurationPanel();
 	

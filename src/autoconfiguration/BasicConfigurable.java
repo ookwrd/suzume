@@ -34,19 +34,6 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public HashMap<String, ConfigurationParameter> getEditableParameters(){
-		LinkedHashMap<String, ConfigurationParameter> retVal = new LinkedHashMap<String, ConfigurationParameter>();
-		
-		for(String key : parameters.keySet()){
-			if(!fixedParameters.contains(key)){
-				retVal.put(key, parameters.get(key));
-			}
-		}
-		
-		return retVal;
-	}
-	
-	@Override
 	public ArrayList<String> getFixedParameters(){
 		return fixedParameters;
 	}
