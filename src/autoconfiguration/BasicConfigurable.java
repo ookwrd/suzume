@@ -29,11 +29,6 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public ConfigurationParameter getParameter(String key){
-		return parameters.get(key);
-	}
-	
-	@Override
 	public HashMap<String, ConfigurationParameter> getParameters(){
 		return parameters;
 	}
@@ -54,6 +49,11 @@ public class BasicConfigurable implements Configurable {
 	@Override
 	public ArrayList<String> getFixedParameters(){
 		return fixedParameters;
+	}
+	
+	@Override
+	public ConfigurationParameter getParameter(String key){
+		return parameters.get(key);
 	}
 	
 	public String getStringParameter(String key){
@@ -94,7 +94,6 @@ public class BasicConfigurable implements Configurable {
 		fixParameter(key);
 	}
 	
-	@Override
 	public void fixParameter(String key){
 		fixedParameters.add(key);
 	}
@@ -116,6 +115,26 @@ public class BasicConfigurable implements Configurable {
 		}else{
 			System.err.println("Duplicate parameter key in BasicConfigurable:setDefaultParameter ("+ key + ") for non-list parameter");
 		}
+	}
+	
+	protected void setDefaultParameter(String key, String value){
+		setDefaultParameter(key, new ConfigurationParameter(value));
+	}
+	
+	protected void setDefaultParameter(String key, Integer value){
+		setDefaultParameter(key, new ConfigurationParameter(value));
+	}
+	
+	protected void setDefaultParameter(String key, Boolean value){
+		setDefaultParameter(key, new ConfigurationParameter(value));
+	}
+	
+	protected void setDefaultParameter(String key, Double value){
+		setDefaultParameter(key, new ConfigurationParameter(value));
+	}
+	
+	protected void setDefaultParameter(String key, Long value){
+		setDefaultParameter(key, new ConfigurationParameter(value));
 	}
 
 	@Override

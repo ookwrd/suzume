@@ -108,7 +108,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private ArrayList<StatisticsAggregator>[] getInitializedStatisticsAggregators(){
 		@SuppressWarnings("unchecked")
 		ArrayList<StatisticsAggregator>[] arrayLists = new ArrayList[getIntegerParameter(RUN_COUNT)];
-		for(int i = 0;i < getParameter(RUN_COUNT).getInteger(); i++){
+		for(int i = 0;i < getIntegerParameter(RUN_COUNT); i++){
 			arrayLists[i] = new ArrayList<StatisticsAggregator>();
 			for(Object key : getParameter(TOP_LEVEL_MODEL).getNodeConfiguration().getParameter(AdvancedConfigurableModel.SUB_NODE).getNodeConfiguration().getParameter(Node.STATISTICS_TYPE).getSelectedValues()){
 				arrayLists[i].add(population.getStatisticsAggregator(key));
@@ -123,7 +123,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		startTimer();
 		
 		if(population.getVisualizationKeys().size() != 0){
-			this.visualizer = new RuntimeVisualizer("Runtime Visualizer: " +getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
+			this.visualizer = new RuntimeVisualizer("Suzume: Runtime Visualizer - " +getTitleString(),getIntegerParameter(GENERATION_COUNT), population, this);
 		}
 		
 		runSimulation();
@@ -150,7 +150,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 				iterateGeneration();
 	
 				//Print progress information
-				if(getParameter(PRINT_TO_CONSOLE).getBoolean() && currentGeneration % getIntegerParameter(PRINT_EACH_X_GENERATIONS) == 0){
+				if(getBooleanParameter(PRINT_TO_CONSOLE) && currentGeneration % getIntegerParameter(PRINT_EACH_X_GENERATIONS) == 0){
 					printGenerationCount();
 				}
 	
@@ -325,7 +325,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getTitleString(){
-		return "[Start time: " + new Time(simulationStartTime) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName() + "]";
+		return "Start time: " + new Time(simulationStartTime) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName();
 	}
 	
 	private String getPrintName(){

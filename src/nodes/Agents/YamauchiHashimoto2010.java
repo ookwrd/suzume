@@ -31,15 +31,15 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	
 	public YamauchiHashimoto2010(){
 		setDefaultParameter(Node.STATISTICS_TYPE, new ConfigurationParameter(StatisticsTypes.values(), StatisticsTypes.values()));
-		setDefaultParameter(LEARNING_RESOURCE, new ConfigurationParameter(24));
-		setDefaultParameter(CRITICAL_PERIOD, new ConfigurationParameter(200));
-		setDefaultParameter(LEARNING_COST_ON_MATCH, new ConfigurationParameter(1));
-		setDefaultParameter(LEARNING_COST_ON_MISMATCH, new ConfigurationParameter(4));
-		setDefaultParameter(MUTATION_RATE, new ConfigurationParameter(0.00025));
-		setDefaultParameter(INVENTION_PROBABILITY, new ConfigurationParameter(0.01));
+		setDefaultParameter(LEARNING_RESOURCE, 24);
+		setDefaultParameter(CRITICAL_PERIOD, 200);
+		setDefaultParameter(LEARNING_COST_ON_MATCH, 1);
+		setDefaultParameter(LEARNING_COST_ON_MISMATCH, 4);
+		setDefaultParameter(MUTATION_RATE, 0.00025);
+		setDefaultParameter(INVENTION_PROBABILITY, 0.01);
 		setDefaultParameter(VISUALIZATION_TYPE, new ConfigurationParameter(VisualizationTypes.values(), new Object[]{}));
 		
-		fixParameter(SYNTACTIC_SPACE_SIZE);
+		setFixedParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(12));
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
 	}
 	
@@ -60,19 +60,19 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < getParameter(SEMANTIC_SPACE_SIZE).getInteger()){
+		while(i < getIntegerParameter(SEMANTIC_SPACE_SIZE)){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){
+		for(int j = 0; j < getIntegerParameter(SEMANTIC_SPACE_SIZE); j++){
 			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
 				chromosome.set(j, randomGenerator.nextBoolean()?0:1);
 			}
@@ -135,16 +135,16 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
+			learningResource -= getIntegerParameter(LEARNING_COST_ON_MATCH);
 			
 		}else{//Doesn't match this agents UG
-			if(learningResource < getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
+			if(learningResource < getIntegerParameter(LEARNING_COST_ON_MISMATCH)){
 				learningResource = 0;
 				return;
 			}
 			
 			grammar.set(u.meaning, u.signal);
-			learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
+			learningResource -= getIntegerParameter(LEARNING_COST_ON_MISMATCH);
 		}
 		
 	}
@@ -199,10 +199,10 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 
 	@Override
 	public String getDescription() {
-		return "An agent as described in Yamauchi and Hashimoto 2010 \"Relaxation of Selection, Niche Construction, and " +
-				"the Baldwin Effect in Language Evolution\" which was designed to study the interaction of biological and " +
-				"cultural evolution on the evolution of language. Please see the paper for model description. For a discussion" +
-				"of model behaviour please also see also McCrohon and Witkowski 2011 \"Devil in the details: Analysis of a " +
+		return "An implementation of the agent described in Yamauchi and Hashimoto 2010 \"Relaxation of Selection, Niche Construction, and " +
+				"the Baldwin Effect in Language Evolution\". This agent was designed to study aspects of the interaction of biological and " +
+				"cultural evolution during the evolution of language. For a complete agent description please see the original paper. For a " +
+				"discussion of the behaviour demonstrated by this model please also see McCrohon and Witkowski 2011 \"Devil in the details: Analysis of a " +
 				"coevolutionary model of language evolution via relaxation of selection\".";
 	}
 }

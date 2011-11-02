@@ -36,7 +36,7 @@ public class SimpleConfigurableModel extends AdvancedConfigurableModel {
 	
 	@Override
 	public String getDescription() {
-		return AbstractNode.NodeType.SimpleConfigurableModel + " is a population model in which learning, communication and reproduction all take place based on the same graph. " +
-				"To configure these interaction seperately make use of a " + AbstractNode.NodeType.AdvancedConfigurableModel + ".";
+		return AbstractNode.NodeType.SimpleConfigurableModel + " is a population model in which learning, communication and reproduction all take place on the same interaction graph. " +
+				"To configure these interactions seperately make use of an " + AbstractNode.NodeType.AdvancedConfigurableModel + " instead.";
 	}
 }

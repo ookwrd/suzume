@@ -35,22 +35,22 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 			
 			if(randomGenerator.nextDouble() < getDoubleParameter(MATCH_LEARN_PROB)){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
-			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){//still subtract
-				learningResource -= getParameter(LEARNING_COST_ON_MATCH).getInteger();
+				learningResource -= getIntegerParameter(LEARNING_COST_ON_MATCH);
+			}else if (getBooleanParameter(DEDUCT_COST_ON_ATTEMPT)){//still subtract
+				learningResource -= getIntegerParameter(LEARNING_COST_ON_MATCH);
 			}
 			
 		}else{//Doesn't match this agents UG
-			if(learningResource < getParameter(LEARNING_COST_ON_MISMATCH).getInteger()){
+			if(learningResource < getIntegerParameter(LEARNING_COST_ON_MISMATCH)){
 				learningResource = 0;
 				return;
 			}
 			
-			if(randomGenerator.nextDouble() < getParameter(NON_MATCH_LEARN_PROB).getDouble()){
+			if(randomGenerator.nextDouble() < getDoubleParameter(NON_MATCH_LEARN_PROB)){
 				grammar.set(u.meaning, u.signal);
-				learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
-			}else if (getParameter(DEDUCT_COST_ON_ATTEMPT).getBoolean()){
-				learningResource -= getParameter(LEARNING_COST_ON_MISMATCH).getInteger();
+				learningResource -= getIntegerParameter(LEARNING_COST_ON_MISMATCH);
+			}else if (getBooleanParameter(DEDUCT_COST_ON_ATTEMPT)){
+				learningResource -= getIntegerParameter(LEARNING_COST_ON_MISMATCH);
 			}
 		}
 	}

@@ -17,7 +17,7 @@ public class Launcher extends JFrame {
 	private ConfigurationPanel modelOptions;
 	
 	public Launcher(){
-		setTitle("Simulation Launcher");
+		setTitle("Suzume: Simulation Launcher");
 		
 		JPanel internalPanel = new JPanel();
 		internalPanel.setLayout(new BoxLayout(internalPanel, BoxLayout.Y_AXIS));
@@ -28,7 +28,7 @@ public class Launcher extends JFrame {
 		JPanel menuBar = new JPanel();
 		menuBar.setLayout(new FlowLayout());
 		
-		JButton createButton = new JButton("Run Simulation");
+		JButton createButton = new JButton("Launch Simulation");
 		createButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {

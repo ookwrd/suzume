@@ -61,19 +61,19 @@ public class ProportionalBiasAgent extends AbstractGrammarAgent implements Descr
 		chromosome = new ArrayList<double[]>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		
 		//Crossover
-		int crossoverPoint = randomGenerator.nextInt(getParameter(SEMANTIC_SPACE_SIZE).getInteger());
+		int crossoverPoint = randomGenerator.nextInt(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		int i = 0;
 		while(i < crossoverPoint){
 			chromosome.add(parent1.chromosome.get(i));
 			i++;
 		}
-		while(i < getParameter(SEMANTIC_SPACE_SIZE).getInteger()){
+		while(i < getIntegerParameter(SEMANTIC_SPACE_SIZE)){
 			chromosome.add(parent2.chromosome.get(i));
 			i++;
 		}
 		
 		//Mutation
-		for(int j = 0; j < getParameter(SEMANTIC_SPACE_SIZE).getInteger(); j++){//TODO different mutation stratergies... fixed values. 80% or something
+		for(int j = 0; j < getIntegerParameter(SEMANTIC_SPACE_SIZE); j++){//TODO different mutation stratergies... fixed values. 80% or something
 			if(randomGenerator.nextDouble() < getDoubleParameter(MUTATION_RATE)){
 				double[] gene = chromosome.get(j).clone();
 				

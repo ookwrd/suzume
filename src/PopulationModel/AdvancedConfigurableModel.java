@@ -64,7 +64,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 		Configurable sub = getParameter(SUB_NODE).getNodeConfiguration();
 		
 		ArrayList<Node> nodes = new ArrayList<Node>();
-		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
+		for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
 			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
@@ -72,7 +72,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 		currentGeneration = nodes;
 		
 		nodes = new ArrayList<Node>();
-		for (int i = 1; i <= getParameter(POPULATION_SIZE).getInteger(); i++) {
+		for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
 			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
 			node.initialize(sub, NodeFactory.nextNodeID++, randomGenerator);
 			nodes.add(node);
