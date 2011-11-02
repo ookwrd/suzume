@@ -308,17 +308,12 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		String configName = (getPrintName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		for(int i = 0; i < statsAggregators[0].size(); i++){
-			ArrayList[] array = new ArrayList[getIntegerParameter(RUN_COUNT)];
+			ArrayList<Pair<Double, Double>>[] array = new ArrayList[getIntegerParameter(RUN_COUNT)];
 			for(int run = 0; run < statsAggregators.length; run++){
 				StatisticsAggregator aggregator = statsAggregators[run].get(i);
 				array[run] = aggregator.getStatistics();
 			}
 			statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, false);
-	
-			//TODO remove temp code to add atleast a single density plot
-			if(i == 3){
-				statisticsWindow.addDataSeries(array, statsAggregators[0].get(i).getTitle(), statsAggregators[0].get(i).getTitle(), configName, true);
-			}
 		}
 		
 		statisticsWindow.display();
@@ -346,35 +341,6 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	private String longTimeToString(long period){
 		long seconds = period/1000;
 		return "Seconds " + seconds;
-	}
-	
-	//TODO put this somewhere else.
-	private void clustering(ArrayList<Pair<Double, Double>>[] data) {
-	/*	ArrayList<Pair<Double, Double>>[] pairData = data;
-		
-		ArrayList<Double>[] array = new ArrayList[pairData.length];
-		
-		for (int i = 0; i < pairData.length; i++) {
-			array[i] = new ArrayList<Double>();
-			for (int j = 0; j < pairData[0].size(); j++) {
-				ArrayList<Pair<Double, Double>> tmp = pairData[i];
-				Pair<Double, Double> tmp2 = tmp.get(j);
-				double d = tmp2.second;
-				array[i].add(d);
-			}
-		}
-		SimpleClustering geneClustering = new SimpleClustering(array);
-		
-		//geneClustering.findMarkov();
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=20)", 20), "Clustering Graph (step=20)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=50)", 50), "Clustering Graph (step=50)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=100)", 100), "Clustering Graph (step=100)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=200)", 200), "Clustering Graph (step=200)");
-		this.statisticsWindow.addGraph(geneClustering.visualize("Clustering Graph (step=500)", 500), "Clustering Graph (step=500)");
-		
-		this.statisticsWindow.saveGraphs("state-transition-graphs-"+this.getTitleString());
-		this.statisticsWindow.updateConsoleText(geneClustering.clusteringConsole); // has to be done after the graph rendering
-	*/
 	}
 
 	@Override
