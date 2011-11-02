@@ -14,7 +14,7 @@ import PopulationModel.SimpleConfigurableModel;
 
 public class NodeFactory {
 
-	public static int nextNodeID = 0; // keeps count of all the next nodes from this world
+	private static int nextNodeID = 0; // keeps count of all the next nodes from this world
 	
 	public static Node constructUninitializedNode(NodeType type){
 		
@@ -96,8 +96,12 @@ public class NodeFactory {
 		
 		Node returnVal = constructUninitializedNode(type);
 		
-		returnVal.initializeAgent(parentA, parentB, nextNodeID++, randomGenerator);
+		returnVal.initializeAgent(parentA, parentB, getNewNodeId(), randomGenerator);
 		return returnVal;
+	}
+	
+	public static int getNewNodeId(){
+		return nextNodeID++;
 	}
 	
 	/*
