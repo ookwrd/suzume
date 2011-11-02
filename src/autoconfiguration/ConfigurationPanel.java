@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,13 +63,19 @@ public class ConfigurationPanel extends JPanel {
 			addTextField(((Describable)toConfigure).getDescription());
 		}
 		
-		this.parameters = toConfigure.getEditableParameters();
+		this.parameters = toConfigure.getParameters();
+		
+		ArrayList<String> fixedParameters = toConfigure.getFixedParameters(); 
 		
 		//For each specified parameter add the appropriate configuration field to the configuration panel.
 		for(Map.Entry<String, ConfigurationParameter> entry : parameters.entrySet()){
 			
 			String key = entry.getKey();
 			ConfigurationParameter parameter = entry.getValue();
+			
+			if(fixedParameters.contains(key)){
+				continue;
+			}
 			
 			switch (parameter.type) {
 			case INTEGER:
