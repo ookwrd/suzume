@@ -30,7 +30,6 @@ public abstract class AbstractNode extends BasicConfigurable implements Node{
 		id = NodeFactory.getNewNodeId();
 	}
 	
-	@Override
 	public void initialize(Configurable config, RandomGenerator randomGenerator){
 		initialize(config);
 		this.randomGenerator = randomGenerator;

@@ -29,7 +29,6 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	protected double learningResource;
 	
 	public YamauchiHashimoto2010(){
-		
 		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
 		setDefaultParameter(LEARNING_RESOURCE, 24);
 		setDefaultParameter(CRITICAL_PERIOD, 200);
@@ -43,18 +42,16 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 		removeListOptions(VISUALIZATION_TYPE, new Object[]{AbstractAgent.VisualizationTypes.ALIVE});	
 	}
 	
-	@Override
-	public void initialize(Configurable config, RandomGenerator randomGenerator) {
+	public YamauchiHashimoto2010(Configurable config, RandomGenerator randomGenerator){
 		super.initialize(config, randomGenerator);
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 	}
 	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB, RandomGenerator randomGenerator){
+	public void initializeAgent(Node parentA, Node parentB){
 		YamauchiHashimoto2010 parent1 = (YamauchiHashimoto2010)parentA;
 		YamauchiHashimoto2010 parent2 = (YamauchiHashimoto2010)parentB;
 		
-		super.initialize(parent1,randomGenerator);
 		chromosome = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);

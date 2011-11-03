@@ -56,8 +56,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 		setDefaultParameter(SUB_NODE, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.YamauchiHashimoto2010Agent).getConfiguration()));
 	}
 	
-	@Override
-	public void initialize(Configurable config, RandomGenerator randomGenerator){
+	public AdvancedConfigurableModel(Configurable config, RandomGenerator randomGenerator){
 		super.initialize(config, randomGenerator);
 			
 		//Initialize SubNodes
@@ -65,16 +64,14 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 		
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
-			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
-			node.initialize(sub, randomGenerator);
+			Node node = NodeFactory.constructInitializedNode(sub, randomGenerator);
 			nodes.add(node);
 		}
 		currentGeneration = nodes;
 		
 		nodes = new ArrayList<Node>();
 		for (int i = 1; i <= getIntegerParameter(POPULATION_SIZE); i++) {
-			Node node = NodeFactory.constructUninitializedNode((NodeType) sub.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
-			node.initialize(sub, randomGenerator);
+			Node node = NodeFactory.constructInitializedNode(sub, randomGenerator);
 			nodes.add(node);
 		}
 		previousGeneration = nodes;
@@ -124,8 +121,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 	}
 	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB,
-			RandomGenerator randomGenerator) {
+	public void initializeAgent(Node parentA, Node parentB) {
 		System.err.println("In population mode this should never be called.");
 	}
 

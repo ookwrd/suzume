@@ -7,6 +7,7 @@ import nodes.Agents.ExtendedYamauchiHashimotoAgent;
 import nodes.Agents.ProbabilityAgent;
 import nodes.Agents.SynonymAgent;
 import nodes.Agents.YamauchiHashimoto2010;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import simulation.RandomGenerator;
 import PopulationModel.AdvancedConfigurableModel;
@@ -15,6 +16,49 @@ import PopulationModel.SimpleConfigurableModel;
 public class NodeFactory {
 
 	private static int nextNodeID = 0; // keeps count of all the next nodes from this world
+	
+	public static Node constructInitializedNode(Configurable template, RandomGenerator randomGenerator){
+		
+		Node retVal;
+		
+		NodeType type = (NodeType)template.getParameter(AbstractNode.NODE_TYPE).getSelectedValue();
+		
+		switch (type) {
+		case YamauchiHashimoto2010Agent:
+			retVal = new YamauchiHashimoto2010(template, randomGenerator);
+			break;
+			
+		case ProportionalBiasAgent:
+			retVal = new ProportionalBiasAgent(template, randomGenerator);
+			break;
+			
+		case ExtendedYamauchiHashimoto2010Agent:
+			retVal = new ExtendedYamauchiHashimotoAgent(template, randomGenerator);
+			break;
+			
+		case ProbabilityAgent:
+			retVal = new ProbabilityAgent(template, randomGenerator);
+			break;
+		
+		case AdvancedConfigurableModel:
+			retVal = new AdvancedConfigurableModel(template, randomGenerator);
+			break;
+			
+		case SimpleConfigurableModel:
+			retVal = new SimpleConfigurableModel(template, randomGenerator);
+			break;
+			
+		case SynonymAgent:
+			retVal = new SynonymAgent(template, randomGenerator);
+			break;
+
+		default:
+			System.err.println("Unrecognized agent type in AgentFactory.");
+			retVal = null;
+		}
+		
+		return retVal;
+	}
 	
 	public static Node constructUninitializedNode(NodeType type){
 		
@@ -94,9 +138,9 @@ public class NodeFactory {
 			return null;
 		}	
 		
-		Node returnVal = constructUninitializedNode(type);
+		Node returnVal = constructInitializedNode(parentA.getConfiguration(), randomGenerator);
 		
-		returnVal.initializeAgent(parentA, parentB, randomGenerator);
+		returnVal.initializeAgent(parentA, parentB);
 		return returnVal;
 	}
 	
