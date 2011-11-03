@@ -97,8 +97,6 @@ public class BasicConfigurable implements Configurable {
 				&& (parameter.type == ConfigurationParameterType.LIST)){
 			
 			parameters.get(key).addListOptions(parameter);
-			
-			//TODO check how many are being constructed
 		}else{
 			System.err.println("Duplicate parameter key in BasicConfigurable:setDefaultParameter ("+ key + ") for non-list parameter");
 		}
