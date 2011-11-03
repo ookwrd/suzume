@@ -69,7 +69,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	}
 	
 	public SynonymAgent(Configurable config, RandomGenerator random){
-		super.initialize(config, randomGenerator);
+		super(config, random);
 		this.lexiconCapacity = getIntegerParameter(INIT_LEXICAL_CAPACITY);
 		this.lexiconSize = 0;	
 		initializeLexicon();

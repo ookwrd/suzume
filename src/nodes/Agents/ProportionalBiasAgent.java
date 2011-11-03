@@ -28,7 +28,7 @@ public class ProportionalBiasAgent extends AbstractGrammarAgent implements Descr
 	}
 	
 	public ProportionalBiasAgent(Configurable config, RandomGenerator generator){
-		super.initialize(config, randomGenerator);
+		super(config, generator);
 		
 		chromosome = new ArrayList<double[]>();
 		for(int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++){

@@ -43,7 +43,7 @@ public class YamauchiHashimoto2010 extends AbstractGeneGrammarAgent implements A
 	}
 	
 	public YamauchiHashimoto2010(Configurable config, RandomGenerator randomGenerator){
-		super.initialize(config, randomGenerator);
+		super(config, randomGenerator);
 		learningResource = getIntegerParameter(LEARNING_RESOURCE);
 	}
 	

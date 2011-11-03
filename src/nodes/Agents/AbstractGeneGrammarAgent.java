@@ -25,9 +25,8 @@ public abstract class AbstractGeneGrammarAgent extends AbstractGrammarAgent {
 		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{VisualizationTypes.GENOTYPE});
 	}
 	
-	@Override
-	public void initialize(Configurable config, RandomGenerator randomGenerator) {
-		super.initialize(config, randomGenerator);
+	public AbstractGeneGrammarAgent(Configurable config, RandomGenerator randomGenerator) {
+		super(config, randomGenerator);
 		
 		chromosome = new ArrayList<Integer>(getIntegerParameter(SEMANTIC_SPACE_SIZE));
 		for (int i = 0; i < getIntegerParameter(SEMANTIC_SPACE_SIZE); i++) { // all alleles are initially set to a random value initially

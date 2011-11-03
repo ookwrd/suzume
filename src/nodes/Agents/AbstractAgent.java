@@ -36,9 +36,8 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		setDefaultParameter(MIN_FITNESS, 1);
 	}
 	
-	@Override
-	public void initialize(Configurable config, RandomGenerator randomGenerator){
-		super.initialize(config, randomGenerator);
+	public AbstractAgent(Configurable config, RandomGenerator randomGenerator){
+		super(config, randomGenerator);
 	}
 	
 	@Override
