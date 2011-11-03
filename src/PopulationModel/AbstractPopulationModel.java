@@ -2,6 +2,10 @@ package PopulationModel;
 
 import java.util.ArrayList;
 
+import simulation.RandomGenerator;
+
+import autoconfiguration.Configurable;
+
 import nodes.AbstractNode;
 import nodes.Node;
 import nodes.Agents.Agent;
@@ -9,6 +13,12 @@ import nodes.Agents.Agent;
 public abstract class AbstractPopulationModel extends AbstractNode implements PopulationModel {
 
 	protected ArrayList<Node> currentGeneration = new ArrayList<Node>();
+	
+	public AbstractPopulationModel(){}
+	
+	public AbstractPopulationModel(Configurable config, RandomGenerator random){
+		super(config, random);
+	}
 	
 	@Override
 	public ArrayList<Agent> getBaseAgents() {	

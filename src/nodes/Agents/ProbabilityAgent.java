@@ -40,7 +40,7 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 	}
 	
 	public ProbabilityAgent(Configurable config, RandomGenerator generator){
-		super.initialize(config, generator);
+		super(config, generator);
 	}
 	
 	@Override

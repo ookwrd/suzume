@@ -57,7 +57,7 @@ public class AdvancedConfigurableModel extends AbstractPopulationModel implement
 	}
 	
 	public AdvancedConfigurableModel(Configurable config, RandomGenerator randomGenerator){
-		super.initialize(config, randomGenerator);
+		super(config, randomGenerator);
 			
 		//Initialize SubNodes
 		Configurable sub = getParameter(SUB_NODE).getNodeConfiguration();

@@ -26,16 +26,14 @@ public class SimpleConfigurableModel extends AdvancedConfigurableModel {
 	}
 	
 	public SimpleConfigurableModel(Configurable config, RandomGenerator generator){
-		initialize(config, generator);
+		super(fixConfiguration(config), generator);
 	}
 	
-	@Override
-	public void initialize(Configurable config, RandomGenerator randomGenerator){
+	private static Configurable fixConfiguration(Configurable config){
 		config.overrideParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
 		config.overrideParameter(COMMUNICATION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
 		config.overrideParameter(LEARNING_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
-		
-		super.initialize(config, randomGenerator);
+		return config;
 	}
 	
 	@Override
