@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import nodes.Node;
 import nodes.Utterance;
 import nodes.Agents.statisticaggregators.AbstractCountingAggregator;
+import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
 import autoconfiguration.Configurable.Describable;
 
@@ -38,10 +39,12 @@ public class ProbabilityAgent extends AbstractGeneGrammarAgent implements Descri
 		overrideParameter(SYNTACTIC_SPACE_SIZE, new ConfigurationParameter(3));
 	}
 	
+	public ProbabilityAgent(Configurable config, RandomGenerator generator){
+		super.initialize(config, generator);
+	}
+	
 	@Override
-	public void initializeAgent(Node parentA, Node parentB,
-			 RandomGenerator randomGenerator) {
-		super.initialize(parentA, randomGenerator);
+	public void initializeAgent(Node parentA, Node parentB) {
 		
 		ProbabilityAgent parent1 = (ProbabilityAgent)parentA;
 		ProbabilityAgent parent2 = (ProbabilityAgent)parentB;

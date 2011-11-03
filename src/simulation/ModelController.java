@@ -99,9 +99,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 
 	private void initializePopulation(){
 		Configurable nodeConfiguration = getParameter(TOP_LEVEL_MODEL).getNodeConfiguration();
-		
-		AdvancedConfigurableModel node = (AdvancedConfigurableModel)NodeFactory.constructUninitializedNode((NodeType) nodeConfiguration.getParameter(AbstractNode.NODE_TYPE).getSelectedValue());
-		node.initialize(nodeConfiguration, randomGenerator);
+		AdvancedConfigurableModel node = (AdvancedConfigurableModel)NodeFactory.constructInitializedNode(nodeConfiguration,randomGenerator);
 		population = node;
 	}
 	

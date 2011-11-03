@@ -1,7 +1,9 @@
 package nodes.Agents;
 
+import simulation.RandomGenerator;
 import nodes.AbstractNode;
 import nodes.Utterance;
+import autoconfiguration.Configurable;
 import autoconfiguration.Configurable.Describable;
 
 public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implements Describable {
@@ -16,6 +18,10 @@ public class ExtendedYamauchiHashimotoAgent extends YamauchiHashimoto2010 implem
 		setDefaultParameter(NON_MATCH_LEARN_PROB, 1.0);
 		setDefaultParameter(DEDUCT_COST_ON_ATTEMPT, true);
 		setDefaultParameter(LEFTOVER_RESOURCE_MULTIPLIER, 0.0);
+	}
+	
+	public ExtendedYamauchiHashimotoAgent(Configurable config, RandomGenerator generator){
+		super(config, generator);
 	}
 	
 	@Override

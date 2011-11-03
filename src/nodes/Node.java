@@ -7,9 +7,7 @@ import nodes.Agents.Agent;
 import autoconfiguration.BasicConfigurable;
 import autoconfiguration.Configurable;
 
-
 import runTimeVisualization.Visualizable;
-import simulation.RandomGenerator;
 import tools.Pair;
 
 public interface Node extends Visualizable, Configurable {
@@ -17,8 +15,7 @@ public interface Node extends Visualizable, Configurable {
 	public static final String STATISTICS_TYPE = "Statistics Types:";
 
 	//Initialization
-	public void initialize(Configurable config, RandomGenerator randomGenerator);
-	public void initializeAgent(Node parentA, Node parentB, RandomGenerator randomGenerator);
+	public void initializeAgent(Node parentA, Node parentB);
 	
 	//General Properties
 	public String getName();//TODO check relevance

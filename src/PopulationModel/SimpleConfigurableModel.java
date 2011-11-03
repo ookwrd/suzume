@@ -25,6 +25,10 @@ public class SimpleConfigurableModel extends AdvancedConfigurableModel {
 		setDefaultParameter(GRAPH, new ConfigurationParameter(graph));
 	}
 	
+	public SimpleConfigurableModel(Configurable config, RandomGenerator generator){
+		initialize(config, generator);
+	}
+	
 	@Override
 	public void initialize(Configurable config, RandomGenerator randomGenerator){
 		config.overrideParameter(REPRODUCTION_GRAPH, new ConfigurationParameter(config.getParameter(GRAPH).getGraphConfiguration()));
