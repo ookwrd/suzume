@@ -18,7 +18,7 @@ import autoconfiguration.Configurable.Describable;
 
 public class SynonymAgent extends AbstractAgent implements Describable {
 	
-	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS}
+	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, FINAL_SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS,COVERAGE,SURPLUS_CAPACITY}
 	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
 	
 	private enum MeaningDistribution {Squared, Gausian, Uniform}
@@ -165,7 +165,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	
 	@Override
 	public boolean canStillLearn(int utterancesSeen) {
-		if(lexiconSize >= lexiconCapacity){
+		if(lexiconSize+1 >= lexiconCapacity){
 			return false;
 		}
 		
@@ -199,7 +199,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 				}
 			}; 
 			
-		case SEMANTIC_CONVERAGE:
+		case FINAL_SEMANTIC_CONVERAGE:
 			return new BaseStatisticsAggregator(null, "Final Lexical Distribution:") {
 				@Override
 				public void endRun(Integer run, ArrayList<Agent> agents) {
@@ -220,6 +220,30 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 				protected double getValue(Node in) {
 					SynonymAgent agent = (SynonymAgent)in;
 					return ((double)agent.lexiconSize)/agent.lexicalCoverage();
+				}
+			};
+			
+		case SURPLUS_CAPACITY:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Surplus Capacity") {
+				@Override
+				protected double getValue(Node in) {
+					SynonymAgent agent = (SynonymAgent)in;
+					return agent.lexiconCapacity-agent.lexiconSize;
+				}
+			};
+			
+		case COVERAGE:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Semantic Coverage") {
+				@Override
+				protected double getValue(Node in) {
+					SynonymAgent agent = (SynonymAgent)in;
+					double count = 0;
+					for(ArrayList<Pair<Integer, Integer>> pairs : agent.lexicon){
+						if (pairs.size() > 0) {
+							count++;
+						}
+					}
+					return count;
 				}
 			};
 		
