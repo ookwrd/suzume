@@ -42,10 +42,19 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	public final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
 	public final String MUTATION_TYPE = "Mutation Type:";
 	
+	
+	//Array position shows the meaning
+	//First is the token, Second is the count
 	private ArrayList<Pair<Integer, Integer>>[] lexicon;
 	
 	private int lexiconCapacity;
 	private int lexiconSize;
+	
+	//For statistics, so we don't have to calculate each time
+	private int lexicalCoverage = 0;
+	
+	
+	private int temp = 0;
 	
 	public SynonymAgent(){
 		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{});
@@ -141,7 +150,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 			return;
 		}
 		
-		//Update count if it is already known
+		//Update count if it is already known and count is needed
 		for(Pair<Integer,Integer> pair : lexicon[utterance.meaning]){
 			if(pair.first == utterance.signal){
 				pair.second++;
@@ -152,13 +161,16 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 		//Else update lexicon with new word
 		lexicon[utterance.meaning].add(new Pair<Integer,Integer>(utterance.signal,1));
 		lexiconSize++;
+		if(lexicon[utterance.meaning].size()==1){//If the recently added was the first.
+			lexicalCoverage++;
+		}
 	}
 
 	@Override
 	public void invent(){
 		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){
 			int meaning = getMeaning();
-			int value = randomGenerator.nextInt(10000);
+			int value = randomGenerator.nextInt(10000);//Wow homonyms are possible
 			learnUtterance(new Utterance(meaning, value));
 		}
 	}
@@ -237,13 +249,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 				@Override
 				protected double getValue(Node in) {
 					SynonymAgent agent = (SynonymAgent)in;
-					double count = 0;
-					for(ArrayList<Pair<Integer, Integer>> pairs : agent.lexicon){
-						if (pairs.size() > 0) {
-							count++;
-						}
-					}
-					return count;
+					return agent.lexicalCoverage();
 				}
 			};
 		
@@ -341,6 +347,8 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	public void communicate(Node partner) {
 		SynonymAgent opposite = (SynonymAgent)partner;
 		
+		//TODO add AS Needed invention stratergy here
+		
 		if(opposite.canYouUnderstand(getUtterance())){
 			setFitness(getFitness()+1);
 		}
@@ -384,13 +392,14 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	}
 	
 	private int lexicalCoverage(){
-		int count = 0;
+		/*int count = 0;
 		for(ArrayList<Pair<Integer,Integer>> meaning : lexicon){
 			if(meaning.size() > 0){
 				count++;
 			}
 		}
-		return count;
+		return count;*/
+		return lexicalCoverage;
 	}
 	
 	@Override

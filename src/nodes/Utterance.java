@@ -15,5 +15,9 @@ public class Utterance {
 	public boolean isNull(){
 		return signal == SIGNAL_NULL_VALUE;
 	}
+	
+	public String toString(){
+		return "<Utterance:"+meaning+","+signal+">";
+	}
 
 }
