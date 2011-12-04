@@ -168,7 +168,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 
 	@Override
 	public void invent(){
-		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){
+		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){// && lexiconSize + 1 <= lexiconCapacity){ Needed to keep up cultural pressure
 			int meaning = getMeaning();
 			int value = randomGenerator.nextInt(10000);//Wow homonyms are possible
 			learnUtterance(new Utterance(meaning, value));
@@ -177,7 +177,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	
 	@Override
 	public boolean canStillLearn(int utterancesSeen) {
-		if(lexiconSize+1 >= lexiconCapacity){
+		if(lexiconSize+1 > lexiconCapacity){
 			return false;
 		}
 		
