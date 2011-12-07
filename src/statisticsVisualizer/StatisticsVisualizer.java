@@ -275,7 +275,7 @@ public class StatisticsVisualizer extends JPanel {
 		}
 	}
 
-	public void saveGraphs(String imageFileName) {
+	public void saveGraphs(String imageFileName) {//NEVER CALLED???
 
 		   BufferedImage bufImage = ScreenImage.createImage((JComponent) graphPanel);
 		   try {
