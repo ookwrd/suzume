@@ -14,8 +14,6 @@ public interface Configurable {
 	public HashMap<String, ConfigurationParameter> getParameters();
 	public ArrayList<String> getFixedParameters();
 	
-	public ConfigurationPanel getConfigurationPanel();
-	
 	//Special Subclass of Configurable objects
 	public interface Describable{
 		public String getDescription();

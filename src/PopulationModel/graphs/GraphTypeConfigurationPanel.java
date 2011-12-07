@@ -36,7 +36,7 @@ public class GraphTypeConfigurationPanel extends JPanel {
 		
 		add(graphTypesBox,BorderLayout.NORTH);
 		
-		subPanel = initialValue.getConfigurationPanel();
+		subPanel = new ConfigurationPanel(initialValue);
 		add(subPanel,BorderLayout.SOUTH);
 		
 		currentlySelected = initialValue.getParameter(GRAPH_TYPE).getSelectedValue();
@@ -54,7 +54,7 @@ public class GraphTypeConfigurationPanel extends JPanel {
 		
 		remove(subPanel);
 		
-		subPanel = GraphFactory.constructGraph(selected).getConfigurationPanel();	
+		subPanel = new ConfigurationPanel(GraphFactory.constructGraph(selected));	
 		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();

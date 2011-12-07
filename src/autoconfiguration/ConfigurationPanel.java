@@ -44,7 +44,7 @@ public class ConfigurationPanel extends JPanel {
 	
 	private Configurable configurationTarget;
 	
-	public ConfigurationPanel(){
+	private ConfigurationPanel(){
 		setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;

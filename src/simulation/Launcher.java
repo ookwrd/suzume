@@ -22,7 +22,7 @@ public class Launcher extends JFrame {
 		JPanel internalPanel = new JPanel();
 		internalPanel.setLayout(new BoxLayout(internalPanel, BoxLayout.Y_AXIS));
 		
-		modelOptions = new ModelController().getConfigurationPanel();
+		modelOptions = new ConfigurationPanel(new ModelController());
 		internalPanel.add(modelOptions);
 			
 		JPanel menuBar = new JPanel();

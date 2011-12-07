@@ -136,11 +136,6 @@ public class BasicConfigurable implements Configurable {
 	}
 	
 	@Override
-	public ConfigurationPanel getConfigurationPanel(){
-		return new ConfigurationPanel(this);
-	}
-	
-	@Override
 	public String toString(){
 		String retVal = "\n";
 		int i = 1;

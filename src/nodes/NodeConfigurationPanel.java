@@ -33,7 +33,7 @@ public class NodeConfigurationPanel extends JPanel {
 		
 		add(agentTypesBox,BorderLayout.NORTH);
 		
-		subPanel = initialValue.getConfigurationPanel();
+		subPanel = new ConfigurationPanel(initialValue);
 		add(subPanel,BorderLayout.SOUTH);
 		
 		currentlySelected = initialValue.getParameter(AbstractNode.NODE_TYPE).getSelectedValue();
@@ -49,7 +49,7 @@ public class NodeConfigurationPanel extends JPanel {
 		
 		remove(subPanel);
 		
-		subPanel = NodeFactory.constructUninitializedNode(selected).getConfigurationPanel();	
+		subPanel = new ConfigurationPanel(NodeFactory.constructUninitializedNode(selected));	
 		add(subPanel,BorderLayout.SOUTH);
 		
 		revalidate();
