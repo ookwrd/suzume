@@ -21,7 +21,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, FINAL_SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS,COVERAGE,SURPLUS_CAPACITY}
 	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
 	
-	private enum MeaningDistribution {Squared, Gausian, Uniform}
+	private enum MeaningDistribution {Squared, SquaredPlus, Gausian, Uniform}
 	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon, Probabalistic}
 	private enum InventionStratergy {OnePerGeneration, AsNeeded}
 	private enum CriticalPeriodStratergy {Fixed, CapacityRelative}
@@ -281,6 +281,14 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 		case Squared:
 			return (int)(randomGenerator.nextDouble()*randomGenerator.nextDouble()*lexicon.length);
 
+		case SquaredPlus:
+			int val = (lexicon.length);
+			while(val >= lexicon.length){
+				val = (int)(randomGenerator.nextDouble()*randomGenerator.nextDouble()*(lexicon.length*2));
+			}
+			return val;
+			
+			
 		case Uniform:
 			return randomGenerator.nextInt(lexicon.length);
 			
