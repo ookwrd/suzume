@@ -519,9 +519,9 @@ public class ChartPanel extends JPanel implements ConfigurationParameterChangedL
 		mkdir(location);
 		
 		try {
-
-			ChartUtilities.saveChartAsJPEG(
-					new File(location + "/" + config.getTitle().replaceAll(" ", "") + "-" + config.getConfigName() + "-" + printSize.height + "x" + printSize.width + ".jpg"), 
+			System.out.println("printing");
+			ChartUtilities.saveChartAsPNG(
+					new File(location + "/" + config.getTitle().replaceAll(" ", "") + "-" + config.getConfigName() + "-" + printSize.height + "x" + printSize.width + ".png"), 
 					chart,
 					printSize.width, 
 					printSize.height
