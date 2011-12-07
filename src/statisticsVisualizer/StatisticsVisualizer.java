@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
 
+import nodes.Node.StatisticsAggregator;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
@@ -207,7 +209,7 @@ public class StatisticsVisualizer extends JPanel {
 
 	}
 	
-	public void addDataPanel(DataPanel chartPanel){
+	private void addDataPanel(DataPanel chartPanel){
 		
 		add(chartPanel);
 		dataPanels.add(chartPanel);
@@ -242,7 +244,7 @@ public class StatisticsVisualizer extends JPanel {
 		frame.validate();
 	}
 	
-	public void removeDataPanel(DataPanel panel){
+	protected void removeDataPanel(DataPanel panel){
 		
 		remove(panel);
 		dataPanels.remove(panel);
@@ -251,7 +253,7 @@ public class StatisticsVisualizer extends JPanel {
 
 	}
 	
-	public void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
+	protected void addGraph(BasicVisualizationServer<Integer, String> vv, String title) {
 		
 		if (this.graphPanel==null) addGraphPanel(vv, title); // lazy
 		else {
@@ -264,7 +266,7 @@ public class StatisticsVisualizer extends JPanel {
 		}
 	}
 	
-	public void updateConsoleText(String text) {
+	public void updateConsoleText(String text) {//TODO since when do we have a console?
 		
 		if (textArea==null) {// lazy
 			addConsolePanel(text);
@@ -300,11 +302,12 @@ public class StatisticsVisualizer extends JPanel {
 	private void exportAll(String location){
 		for(DataPanel panel : dataPanels){
 			//TODO
+			System.err.println("Export not implemented");
 		}
 	}
 	
 	private void importDataset(){
 		//TODO
-		System.out.println("Should be importing data set right now.");
+		System.err.println("Should be importing data set right now.");
 	}
 }
