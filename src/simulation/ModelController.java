@@ -306,6 +306,8 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 		String configName = (getPrintName()+"-"+randomGenerator.getSeed()).replaceAll("  "," ").replaceAll("  "," ").replaceAll(":", "").replaceAll(" ", "-");
 
 		for(int i = 0; i < statsAggregators[0].size(); i++){
+			//TODO something like this statisticsWindow.addDataSeries(statsAggregators[i], configName, false);
+			
 			ArrayList<Pair<Double, Double>>[] array = new ArrayList[getIntegerParameter(RUN_COUNT)];
 			for(int run = 0; run < statsAggregators.length; run++){
 				StatisticsAggregator aggregator = statsAggregators[run].get(i);

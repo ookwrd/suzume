@@ -7,7 +7,7 @@ public interface Configurable {
 
 	public void initialize(HashMap<String, ConfigurationParameter> parameters);
 	
-	public void overrideParameter(String key, ConfigurationParameter parameter);
+	public void overrideParameter(String key, ConfigurationParameter parameter);//TODO these should be moved into BasicConfigurable
 	public void setFixedParameter(String key, ConfigurationParameter parameter);
 	
 	public ConfigurationParameter getParameter(String key);
