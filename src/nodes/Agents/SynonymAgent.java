@@ -23,24 +23,24 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	
 	private enum MeaningDistribution {Squared, SquaredPlus, Gausian, Uniform}
 	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon, Probabalistic}
-	private enum InventionStratergy {OnePerGeneration, AsNeeded}
+	private enum InventionStratergy {OnePerGeneration, AsNeeded, UntilFull}
 	private enum CriticalPeriodStratergy {Fixed, CapacityRelative}
-	private enum MutationType {Linear, Multiplicative}
+	private enum MutationType {Linear, Multiplicative,Disabled}
 	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE}
 	
-	public final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
-	public final String MEANING_SPACE_SIZE = "Meaning space size";
-	public final String MEANING_DISTRIBUTION = "Meaning distribution";
-	public final String WORD_CHOICE_STRATERGY = "Word choice stratergy:";
-	public final String INVENTION_STRATERGY = "Invention stratergy:";
+	public static final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
+	public static final String MEANING_SPACE_SIZE = "Meaning space size";
+	public static final String MEANING_DISTRIBUTION = "Meaning distribution";
+	public static final String WORD_CHOICE_STRATERGY = "Word choice stratergy:";
+	public static final String INVENTION_STRATERGY = "Invention stratergy:";
 	
-	public final String CRITICAL_PERIOD_STRATERGY = "Critical period:";
-	public final String CRITICAL_PERIOD = "Fixed critical period:";
-	public final String RELATIVE_MODIFIER = "Relative critical period:";
+	public static final String CRITICAL_PERIOD_STRATERGY = "Critical period:";
+	public static final String CRITICAL_PERIOD = "Fixed critical period:";
+	public static final String RELATIVE_MODIFIER = "Relative critical period:";
 	
-	public final String FITNESS_ADJUSTMENT = "Fitness adjustment stratergy:";
-	public final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
-	public final String MUTATION_TYPE = "Mutation Type:";
+	public static final String FITNESS_ADJUSTMENT = "Fitness adjustment stratergy:";
+	public static final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
+	public static final String MUTATION_TYPE = "Mutation Type:";
 	
 	
 	//Array position shows the meaning
@@ -128,6 +128,11 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 				break;
 			}
 			break;
+			
+		case Disabled:
+			//Do nothing.
+			break;
+			
 
 		default:
 			System.err.println("Unrecognized mutation type");
@@ -172,6 +177,12 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 			int meaning = getMeaning();
 			int value = randomGenerator.nextInt(10000);//Wow homonyms are possible
 			learnUtterance(new Utterance(meaning, value));
+		}else if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.UntilFull){
+			while(lexiconSize < lexiconCapacity){
+				int meaning = getMeaning();
+				int value = randomGenerator.nextInt(10000);//Wow homonyms are possible
+				learnUtterance(new Utterance(meaning, value));
+			}
 		}
 	}
 	
@@ -400,13 +411,6 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	}
 	
 	private int lexicalCoverage(){
-		/*int count = 0;
-		for(ArrayList<Pair<Integer,Integer>> meaning : lexicon){
-			if(meaning.size() > 0){
-				count++;
-			}
-		}
-		return count;*/
 		return lexicalCoverage;
 	}
 	
@@ -466,5 +470,19 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 				"decreases fitness based on lexiconCapacity*" + LEXICON_CAPACITY_COST + " to account for the opportunity costs incured to the agent by" +
 				" having a larger capacity. " + FitnessAdjustment.COVERAGE + "; raises fitness of agents with better coverage of the lexical space.";
 	}
+	
+	/** 
+	 * Tester to find the shape of a probability distribution.
+	 */
+	/*public static void main(String[] args){
+		
+		SynonymAgent agent = new SynonymAgent();
+		agent.setDefaultParameter(MEANING_DISTRIBUTION, MeaningDistribution.values(), MeaningDistribution.Squared);
+		
+		SynonymAgent agentFinalAgent = new SynonymAgent(agent, new RandomGenerator(System.currentTimeMillis()));
+		
+		for(int)
+		agentFinalAgent.getMeaning()
+	}*/
 		
 }
