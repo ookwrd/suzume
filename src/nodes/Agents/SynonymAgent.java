@@ -18,7 +18,7 @@ import autoconfiguration.Configurable.Describable;
 
 public class SynonymAgent extends AbstractAgent implements Describable {
 	
-	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, FINAL_SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS,COVERAGE,SURPLUS_CAPACITY}
+	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, FINAL_SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS,COVERAGE,SURPLUS_CAPACITY, AGREEMENT}
 	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
 	
 	private enum MeaningDistribution {Squared, SquaredPlus, Gausian, Uniform}
@@ -42,6 +42,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	public static final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
 	public static final String MUTATION_TYPE = "Mutation Type:";
 	
+	public static final String THESIS_COMPATIBILITY = "Thesis compatibility mode:";
 	
 	//Array position shows the meaning
 	//First is the token, Second is the count
@@ -53,6 +54,8 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	//For statistics, so we don't have to calculate each time
 	private int lexicalCoverage = 0;
 	
+	private double communicativeAgreement = 0;
+	private double communcativeDisagreement = 0;
 	
 	private int temp = 0;
 	
@@ -73,6 +76,8 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 		setDefaultParameter(MUTATION_TYPE, MutationType.values(),MutationType.Linear);
 		setDefaultParameter(FITNESS_ADJUSTMENT, FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST});
 		setDefaultParameter(LEXICON_CAPACITY_COST, 0.1);
+		
+		setDefaultParameter(THESIS_COMPATIBILITY, true);
 		
 		overrideParameter(BASE_FITNESS, new ConfigurationParameter(10));
 	}
@@ -263,6 +268,15 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 					return agent.lexicalCoverage();
 				}
 			};
+			
+		case AGREEMENT: 
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Communicative Agreement") {
+				@Override
+				protected double getValue(Node in) {
+					SynonymAgent agent = (SynonymAgent)in;
+					return agent.communicativeAgreement/(agent.communicativeAgreement + agent.communcativeDisagreement);
+				}
+			};
 		
 		default:
 			System.err.println(SynonymAgent.class.getName() + ": Unknown StatisticsType");
@@ -369,7 +383,12 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 		//TODO add AS Needed invention stratergy here
 		
 		if(opposite.canYouUnderstand(getUtterance())){
-			setFitness(getFitness()+1);
+			communicativeAgreement++;
+			if(!getBooleanParameter(THESIS_COMPATIBILITY)){
+				setFitness(getFitness()+1);
+			}
+		}else{
+			communcativeDisagreement++;
 		}
 		
 	}
@@ -385,7 +404,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 		if(retVal){
 			setFitness(getFitness()+1);
 		}
-		return false;
+		return retVal;
 	}
 	
 	@Override
