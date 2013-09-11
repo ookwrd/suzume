@@ -28,6 +28,8 @@ import PopulationModel.PopulationModel;
 
 public class ModelController extends BasicConfigurable implements Runnable, Stoppable {
 
+	public static final String NOTES_FIELD = "Run Description:";
+	
 	public static final String TOP_LEVEL_MODEL = "Population Model:";
 	public static final String GENERATION_COUNT = "Number of Generations:";
 	public static final String RUN_COUNT = "Number of Runs";
@@ -61,12 +63,14 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	//Stoppable
 	private boolean continueSimulation = true;
 	
-	public ModelController(){
+	public ModelController(){		
 		setDefaultParameter(GENERATION_COUNT, new ConfigurationParameter(5000));
 		setDefaultParameter(RUN_COUNT, new ConfigurationParameter(5));
 		
 		setDefaultParameter(SELECTION_MODEL, new ConfigurationParameter(SelectionModels.values(), SelectionModels.RouletteWheelSelection));
 
+		setDefaultParameter(NOTES_FIELD, "No Description");
+		
 		setDefaultParameter(TOP_LEVEL_MODEL, new ConfigurationParameter(NodeFactory.constructUninitializedNode(AbstractNode.NodeType.AdvancedConfigurableModel).getConfiguration()));
 		
 		setDefaultParameter(PRINT_TO_CONSOLE, new ConfigurationParameter(true));
@@ -320,7 +324,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	}
 	
 	private String getTitleString(){
-		return "Start time: " + new Time(simulationStartTime) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName();
+		return "Start time: " + new Time(simulationStartTime) + " Seed: " + randomGenerator.getSeed() + "   " + getPrintName() + "  " + getStringParameter(NOTES_FIELD);
 	}
 	
 	private String getPrintName(){
