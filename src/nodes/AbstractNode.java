@@ -17,7 +17,8 @@ public abstract class AbstractNode extends BasicConfigurable implements Node{
 		YamauchiHashimoto2010Agent, 
 		ExtendedYamauchiHashimoto2010Agent, 
 		ProbabilityAgent, 
-		SynonymAgent, 
+		SynonymAgent,
+		SynonymAgentLearningRate,
 		ProportionalBiasAgent
 		}
 	

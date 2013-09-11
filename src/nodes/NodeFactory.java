@@ -6,6 +6,7 @@ import nodes.Agents.ProportionalBiasAgent;
 import nodes.Agents.ExtendedYamauchiHashimotoAgent;
 import nodes.Agents.ProbabilityAgent;
 import nodes.Agents.SynonymAgent;
+import nodes.Agents.SynonymAgentLearningRate;
 import nodes.Agents.YamauchiHashimoto2010;
 import autoconfiguration.Configurable;
 import autoconfiguration.ConfigurationParameter;
@@ -51,6 +52,10 @@ public class NodeFactory {
 		case SynonymAgent:
 			retVal = new SynonymAgent(template, randomGenerator);
 			break;
+			
+		case SynonymAgentLearningRate:
+			retVal = new SynonymAgentLearningRate(template, randomGenerator);
+			break;
 
 		default:
 			System.err.println("Unrecognized agent type in AgentFactory.");
@@ -93,6 +98,10 @@ public class NodeFactory {
 			retVal = new SynonymAgent();
 			break;
 
+		case SynonymAgentLearningRate:
+			retVal = new SynonymAgentLearningRate();
+			break;
+			
 		default:
 			System.err.println("Unrecognized agent type in AgentFactory.");
 			retVal = null;
@@ -121,7 +130,8 @@ public class NodeFactory {
 					AbstractNode.NodeType.ProportionalBiasAgent,
 					AbstractNode.NodeType.ExtendedYamauchiHashimoto2010Agent,
 					AbstractNode.NodeType.ProbabilityAgent,
-					AbstractNode.NodeType.SynonymAgent
+					AbstractNode.NodeType.SynonymAgent,
+					AbstractNode.NodeType.SynonymAgentLearningRate
 			});
 			break;
 		}
