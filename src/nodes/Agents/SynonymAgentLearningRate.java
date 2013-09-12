@@ -23,7 +23,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 	
 	private enum MeaningDistribution {Squared, SquaredPlus, Gausian, Uniform}
 	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon, Probabalistic}
-	private enum InventionStratergy {OnePerGeneration, AsNeeded, UntilFull}
+	private enum InventionStratergy {OnePerGeneration, AsNeeded}
 	private enum CriticalPeriodStratergy {Fixed, CapacityRelative}
 	private enum MutationType {Linear, Multiplicative,Disabled}
 	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE}
