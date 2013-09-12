@@ -80,8 +80,13 @@ public abstract class AbstractAgent extends AbstractNode implements Agent {
 		isAlive = false;
 	}
 	
-	@Override
+	//TODO remove the need for this
 	public void finalizeFitnessValue(){}
+	
+	@Override
+	public void finalizeFitnessValue(int generation){
+		finalizeFitnessValue();
+	}
 	
 	@Override
 	public ArrayList<Agent> getBaseAgents(){

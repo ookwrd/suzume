@@ -240,7 +240,7 @@ public class ModelController extends BasicConfigurable implements Runnable, Stop
 	
 	private void finalizeFitnessPhase(){
 		for(Agent agent : population.getBaseAgents()){
-			agent.finalizeFitnessValue();
+			agent.finalizeFitnessValue(currentGeneration);
 		}
 	}
 	
