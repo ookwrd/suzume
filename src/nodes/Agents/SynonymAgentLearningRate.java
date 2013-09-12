@@ -18,8 +18,8 @@ import autoconfiguration.Configurable.Describable;
 
 public class SynonymAgentLearningRate extends AbstractAgent implements Describable {
 	
-	private enum StatisticsTypes {LEXICON_CAPACITY, LEXICON_SIZE, FINAL_SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS,COVERAGE,SURPLUS_CAPACITY, AGREEMENT}
-	private enum VisualizationTypes {LexiconCapacity, LexiconSize}
+	private enum StatisticsTypes {LEARNING_RATE, LEXICON_SIZE, FINAL_SEMANTIC_CONVERAGE, PROPORTION_SYNONYMS, COVERAGE, AGREEMENT}
+	private enum VisualizationTypes {LearningRate, LexiconSize}
 	
 	private enum MeaningDistribution {Squared, SquaredPlus, Gausian, Uniform}
 	private enum WordChoiceStratergy {Random, FirstLearnt, LastLearnt, MostCommon, Probabalistic}
@@ -28,7 +28,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 	private enum MutationType {Linear, Multiplicative,Disabled}
 	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE}
 	
-	public static final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
+	public static final String INIT_LEARNING_RATE = "Initial learning rate:";
 	public static final String MEANING_SPACE_SIZE = "Meaning space size";
 	public static final String MEANING_DISTRIBUTION = "Meaning distribution";
 	public static final String WORD_CHOICE_STRATERGY = "Word choice stratergy:";
@@ -39,7 +39,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 	public static final String RELATIVE_MODIFIER = "Relative critical period:";
 	
 	public static final String FITNESS_ADJUSTMENT = "Fitness adjustment stratergy:";
-	public static final String LEXICON_CAPACITY_COST = "Cost of lexical capacity:";
+	public static final String LEARNING_RATE_COST = "Cost of learning rate:";
 	public static final String MUTATION_TYPE = "Mutation Type:";
 	
 	public static final String THESIS_COMPATIBILITY = "Thesis compatibility mode:";
@@ -48,7 +48,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 	//First is the token, Second is the count
 	private ArrayList<Pair<Integer, Integer>>[] lexicon;
 	
-	private int lexiconCapacity;
+	private double learningRate;
 	private int lexiconSize;
 	
 	//For statistics, so we don't have to calculate each time
@@ -57,13 +57,11 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 	private double communicativeAgreement = 0;
 	private double communcativeDisagreement = 0;
 	
-	private int temp = 0;
-	
 	public SynonymAgentLearningRate(){
 		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{});
 		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
 		
-		setDefaultParameter(INIT_LEXICAL_CAPACITY, 10);
+		setDefaultParameter(INIT_LEARNING_RATE, 0.01);
 		setDefaultParameter(MEANING_SPACE_SIZE, 100);
 		setDefaultParameter(MEANING_DISTRIBUTION, MeaningDistribution.values(), MeaningDistribution.Squared);
 		setDefaultParameter(WORD_CHOICE_STRATERGY, WordChoiceStratergy.values(), WordChoiceStratergy.Random);
@@ -75,7 +73,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 		
 		setDefaultParameter(MUTATION_TYPE, MutationType.values(),MutationType.Linear);
 		setDefaultParameter(FITNESS_ADJUSTMENT, FitnessAdjustment.values(),new Object[]{FitnessAdjustment.CAPACITY_COST});
-		setDefaultParameter(LEXICON_CAPACITY_COST, 0.1);
+		setDefaultParameter(LEARNING_RATE_COST, 100.0);
 		
 		setDefaultParameter(THESIS_COMPATIBILITY, true);
 		
@@ -84,7 +82,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 	
 	public SynonymAgentLearningRate(Configurable config, RandomGenerator random){
 		super(config, random);
-		this.lexiconCapacity = getIntegerParameter(INIT_LEXICAL_CAPACITY);
+		this.learningRate = getDoubleParameter(INIT_LEARNING_RATE);
 		this.lexiconSize = 0;	
 		initializeLexicon();
 	}
@@ -102,31 +100,40 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 		SynonymAgentLearningRate agent1 = (SynonymAgentLearningRate)parentA;
 		SynonymAgentLearningRate agent2 = (SynonymAgentLearningRate)parentB;
 
-		int size;
+		double rate;//TODO rename
 		//Heredity
 		if(randomGenerator.nextBoolean()){
-			size = agent1.lexiconCapacity;
+			rate = agent1.learningRate;
 		}else{
-			size = agent2.lexiconCapacity;
+			rate = agent2.learningRate;
 		}
 		
 		//Mutation
 		switch ((MutationType)getListParameter(MUTATION_TYPE)[0]) {
 		case Linear:
-			size += randomGenerator.nextInt(3) - 1;
-			if(size < 1){
-				size = 1;
+			switch(randomGenerator.nextInt(3) - 1){
+			case 0:
+				rate += 0.001;
+				break;
+			
+			case 1:
+				rate -= 0.001;
+				break;
+			}
+			
+			if(rate < 0.001){
+				rate = 0.001;
 			}
 			break;
 			
 		case Multiplicative:
 			switch (randomGenerator.nextInt(3)) {
 			case 0:
-				size = (int) (size * 0.8);
+				rate *= 0.8;
 				break;
 				
 			case 2:
-				size = (int) (size * 1.2);
+				rate *= 1.2;
 				break;
 
 			default:
@@ -144,7 +151,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 			break;
 		}
 		
-		lexiconCapacity = size;
+		learningRate = rate;
 		
 		initializeLexicon();
 	}
@@ -169,39 +176,31 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 		}
 		
 		//Else update lexicon with new word
-		lexicon[utterance.meaning].add(new Pair<Integer,Integer>(utterance.signal,1));
-		lexiconSize++;
-		if(lexicon[utterance.meaning].size()==1){//If the recently added was the first.
-			lexicalCoverage++;
+		if(randomGenerator.nextDouble() < learningRate){
+			lexicon[utterance.meaning].add(new Pair<Integer,Integer>(utterance.signal,1));
+			lexiconSize++;
+			if(lexicon[utterance.meaning].size()==1){//If the recently added was the first.
+				lexicalCoverage++;
+			}
 		}
 	}
 
 	@Override
 	public void invent(){
-		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){// && lexiconSize + 1 <= lexiconCapacity){ Needed to keep up cultural pressure
+		if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.OnePerGeneration){
 			int meaning = getMeaning();
-			int value = randomGenerator.nextInt(10000);//Wow homonyms are possible
-			learnUtterance(new Utterance(meaning, value));
-		}else if(getListParameter(INVENTION_STRATERGY)[0] == InventionStratergy.UntilFull){
-			while(lexiconSize < lexiconCapacity){
-				int meaning = getMeaning();
-				int value = randomGenerator.nextInt(10000);//Wow homonyms are possible
-				learnUtterance(new Utterance(meaning, value));
+			int signal = randomGenerator.nextInt(10000);//Wow homonyms are possible
+			lexicon[meaning].add(new Pair<Integer,Integer>(signal,1));
+			lexiconSize++;
+			if(lexicon[meaning].size()==1){//If the recently added was the first.
+				lexicalCoverage++;
 			}
 		}
 	}
 	
 	@Override
 	public boolean canStillLearn(int utterancesSeen) {
-		if(lexiconSize+1 > lexiconCapacity){
-			return false;
-		}
-		
-		if(getListParameter(CRITICAL_PERIOD_STRATERGY)[0] == CriticalPeriodStratergy.Fixed){
-			return utterancesSeen < getIntegerParameter(CRITICAL_PERIOD);
-		}else{
-			return utterancesSeen < getIntegerParameter(RELATIVE_MODIFIER)*lexiconCapacity;
-		}
+		return utterancesSeen < getIntegerParameter(CRITICAL_PERIOD);
 	}
 
 	@Override
@@ -219,11 +218,11 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 				}
 			};
 			
-		case LEXICON_CAPACITY:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Lexicon Capacity:") {
+		case LEARNING_RATE:
+			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Learning Rate:") {
 				@Override
 				protected double getValue(Node agent) {
-					return ((SynonymAgentLearningRate)agent).lexiconCapacity;
+					return ((SynonymAgentLearningRate)agent).learningRate;
 				}
 			}; 
 			
@@ -248,15 +247,6 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 				protected double getValue(Node in) {
 					SynonymAgentLearningRate agent = (SynonymAgentLearningRate)in;
 					return ((double)agent.lexiconSize)/agent.lexicalCoverage();
-				}
-			};
-			
-		case SURPLUS_CAPACITY:
-			return new AbstractCountingAggregator(StatisticsCollectionPoint.PostFinalizeFitness, "Surplus Capacity") {
-				@Override
-				protected double getValue(Node in) {
-					SynonymAgentLearningRate agent = (SynonymAgentLearningRate)in;
-					return agent.lexiconCapacity-agent.lexiconSize;
 				}
 			};
 			
@@ -415,7 +405,7 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 			switch ((FitnessAdjustment)key) {
 			
 			case CAPACITY_COST:
-				setFitness(getFitness()-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST));
+				setFitness(getFitness()-learningRate*getDoubleParameter(LEARNING_RATE_COST));
 				break;
 				
 			case COVERAGE:
@@ -442,8 +432,8 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 		
 		Color c;
 		switch ((VisualizationTypes)visualizationKey) {
-		case LexiconCapacity:
-			c = new Color(lexiconCapacity,lexiconCapacity,0);
+		case LearningRate:
+			c = new Color((int)(learningRate*255),(int)(learningRate*255),0);
 			break;
 			
 		case LexiconSize:
@@ -468,8 +458,8 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 				"Fitness is determined by taking determining if a random utterance produced by a neighbour is present in the agent's lexi" +
 				"con. An increased Communications Per Neighbour is reccomended for this agent." +
 				"\n\n" +
-				INIT_LEXICAL_CAPACITY+ ":\n" +
-				"Size of agent's lexicons in the first generation.\n\n" +
+				INIT_LEARNING_RATE+ ":\n" +
+				"Probability of an agent in the first generation learning a lexeme when heard once.\n\n" +
 				MEANING_SPACE_SIZE + "\n" +
 				"The number of different meanings which the agent may learn words for.\n\n" +
 				MEANING_DISTRIBUTION + "\n" +
@@ -486,8 +476,8 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 				MutationType.Multiplicative +"; Multiplies/devides the lexicon capacity of the lexicon.\n\n" +
 				FITNESS_ADJUSTMENT + "\n" +
 				"Modifications that should be made to the final fitness value before selection. " + FitnessAdjustment.CAPACITY_COST + "; " +
-				"decreases fitness based on lexiconCapacity*" + LEXICON_CAPACITY_COST + " to account for the opportunity costs incured to the agent by" +
-				" having a larger capacity. " + FitnessAdjustment.COVERAGE + "; raises fitness of agents with better coverage of the lexical space.";
+				"decreases fitness based on lexiconCapacity*" + LEARNING_RATE_COST + " to account for the opportunity costs incured to the agent by" +
+				" having a faster learning rate. " + FitnessAdjustment.COVERAGE + "; raises fitness of agents with better coverage of the lexical space.";
 	}
 	
 	/** 
