@@ -111,18 +111,20 @@ public class SynonymAgentLearningRate extends AbstractAgent implements Describab
 		//Mutation
 		switch ((MutationType)getListParameter(MUTATION_TYPE)[0]) {
 		case Linear:
-			switch(randomGenerator.nextInt(3) - 1){
+			switch(randomGenerator.nextInt(3)){
 			case 0:
-				rate += 0.001;
+				rate += 0.01;
 				break;
 			
 			case 1:
-				rate -= 0.001;
+				rate -= 0.01;
 				break;
 			}
 			
 			if(rate < 0.001){
 				rate = 0.001;
+			}else if (rate > 1){
+				rate = 0;
 			}
 			break;
 			
