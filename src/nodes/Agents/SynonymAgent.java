@@ -26,7 +26,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	private enum InventionStratergy {OnePerGeneration, AsNeeded, UntilFull}
 	private enum CriticalPeriodStratergy {Fixed, CapacityRelative}
 	private enum MutationType {Linear, Multiplicative,Disabled}
-	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE}
+	private enum FitnessAdjustment {CAPACITY_COST, COVERAGE, DOUBLE_AT_TEN}
 	
 	public static final String INIT_LEXICAL_CAPACITY = "Initial lexical capacity:";
 	public static final String MEANING_SPACE_SIZE = "Meaning space size";
@@ -56,9 +56,6 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	
 	private double communicativeAgreement = 0;
 	private double communcativeDisagreement = 0;
-	
-	private int temp = 0;
-	
 	public SynonymAgent(){
 		setDefaultParameter(VISUALIZATION_TYPE, VisualizationTypes.values(), new Object[]{});
 		setDefaultParameter(Node.STATISTICS_TYPE, StatisticsTypes.values(), StatisticsTypes.values());
@@ -408,7 +405,7 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 	}
 	
 	@Override
-	public void finalizeFitnessValue() {
+	public void finalizeFitnessValue(int generation) {
 		
 		for(Object key : getListParameter(FITNESS_ADJUSTMENT)){
 			
@@ -420,6 +417,10 @@ public class SynonymAgent extends AbstractAgent implements Describable {
 				
 			case COVERAGE:
 				setFitness(getFitness()+lexicalCoverage());
+				break;
+				
+			case DOUBLE_AT_TEN:
+				setFitness(generation > 10000 ? getFitness()*2-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST) : getFitness()-lexiconCapacity*getDoubleParameter(LEXICON_CAPACITY_COST));
 				break;
 				
 			default:

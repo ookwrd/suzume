@@ -18,4 +18,6 @@ public interface Agent extends Node {
 	
 	//Reproduction Phase
 	public boolean isAlive();
+	
+	public void finalizeFitnessValue(int generation);
 }
