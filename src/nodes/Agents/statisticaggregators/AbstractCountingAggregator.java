@@ -23,7 +23,10 @@ public abstract class AbstractCountingAggregator extends BaseStatisticsAggregato
 			}
 			
 			agentCount++;
-			count += getValue(agent);
+			double value = getValue(agent);
+			if(value != Double.NaN){
+				count += value;
+			}
 		}
 		
 		protected abstract double getValue(Node agent);
